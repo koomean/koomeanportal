@@ -1,703 +1,109 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Koo Mean Portal</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Koo Mean Portal Coming Soon...</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@700&display=swap" rel="stylesheet">
 <style>
-  /* =====================================================================
-     KOO MEAN PORTAL
-     ก่อนใช้งานจริง แก้ค่าใน CONFIG (ในแท็ก <script> ด้านล่างสุดของไฟล์นี้):
-       - APPS_SCRIPT_URL  : URL ของ Web App ที่ deploy จาก Code.gs
-       - GOOGLE_CLIENT_ID : ต้องตรงกับ CONFIG.GOOGLE_CLIENT_ID ใน Code.gs เป๊ะๆ
-       - PORTAL_NAME / PORTAL_TAGLINE : ชื่อ/แท็กไลน์ของเว็บนี้โดยเฉพาะ
-         (ตั้งใจไม่ใช้ WebTitle จากชีต Profile เพราะชีตนั้นใช้ร่วมกับเว็บ Blog เดิม)
-     ===================================================================== */
-
-  :root{
-    --bg:#070b14;
-    --bg-2:#0b1120;
-    --panel:rgba(17,24,39,.72);
-    --panel-solid:#111827;
-    --panel-2:#151e31;
-    --line:rgba(148,163,184,.14);
-    --line-strong:rgba(148,163,184,.24);
-    --text:#f8fafc;
-    --text-2:#cbd5e1;
-    --muted:#8290a8;
-    --accent:#f5b85a;
-    --accent-2:#ff8b4a;
-    --teal:#5eead4;
-    --violet:#a78bfa;
-    --danger:#fb7185;
-    --shadow:0 24px 70px rgba(0,0,0,.28);
-    --radius-xl:24px;
-    --radius-lg:18px;
-    --radius-md:14px;
-    --ease:cubic-bezier(.22,1,.36,1);
-    --font-head:'Space Grotesk','Noto Sans Thai',sans-serif;
-    --font-body:'Inter','Noto Sans Thai',sans-serif;
-    --font-mono:'JetBrains Mono',monospace;
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #0a0a0a;
+    font-family: 'Inter', sans-serif;
   }
-
-  *{box-sizing:border-box}
-  html,body{margin:0;padding:0}
-  html{scroll-behavior:smooth}
-  body{
-    min-height:100vh;
-    color:var(--text);
-    font-family:var(--font-body);
-    -webkit-font-smoothing:antialiased;
-    overflow-x:hidden;
-    background:
-      radial-gradient(900px 500px at 8% -8%, rgba(245,184,90,.13), transparent 58%),
-      radial-gradient(700px 480px at 100% 96%, rgba(94,234,212,.10), transparent 60%),
-      var(--bg);
+  .lines {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1em;
   }
-  a{color:inherit}
-  button,input,textarea{font-family:inherit}
-  button{appearance:none}
-  ::selection{background:rgba(245,184,90,.22);color:#fff}
-
-  .backdrop{position:fixed;inset:0;z-index:-2;overflow:hidden;background:linear-gradient(180deg,#070b14 0%,#0a1020 100%)}
-  .backdrop::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(148,163,184,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(148,163,184,.035) 1px,transparent 1px);background-size:36px 36px;mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),transparent 82%)}
-  .backdrop::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at center,transparent 35%,rgba(0,0,0,.24) 100%)}
-  .blob{position:absolute;border-radius:50%;filter:blur(100px);opacity:.24;will-change:transform}
-  .blob-a{width:520px;height:520px;background:radial-gradient(circle,rgba(245,184,90,.55),transparent 70%);top:-200px;left:-170px;animation:floatA 24s ease-in-out infinite}
-  .blob-b{width:500px;height:500px;background:radial-gradient(circle,rgba(94,234,212,.42),transparent 72%);right:-180px;bottom:-200px;animation:floatB 28s ease-in-out infinite}
-  .blob-c{width:340px;height:340px;background:radial-gradient(circle,rgba(167,139,250,.34),transparent 72%);right:8%;top:33%;opacity:.14;animation:floatC 30s ease-in-out infinite}
-  @keyframes floatA{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(70px,45px,0) scale(1.08)}}
-  @keyframes floatB{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(-55px,-45px,0) scale(1.06)}}
-  @keyframes floatC{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(-40px,60px,0)}}
-
-  .app-shell{width:min(1180px,100%);margin:0 auto;padding:20px 22px 90px;position:relative}
-
-  .top-loader{position:fixed;top:0;left:0;width:0;height:3px;z-index:300;background:linear-gradient(90deg,var(--accent),var(--teal));box-shadow:0 0 18px rgba(245,184,90,.45);opacity:0;transition:width .3s var(--ease),opacity .3s}
-  .top-loader.active{width:72%;opacity:1}
-  .top-loader.done{width:100%;opacity:0;transition:width .2s ease,opacity .4s .15s}
-
-  .topbar{
-    position:sticky;top:16px;z-index:40;
-    display:flex;align-items:center;justify-content:space-between;gap:14px;
-    padding:9px 10px 9px 12px;margin-bottom:54px;
-    border:1px solid var(--line);border-radius:18px;
-    background:rgba(10,16,29,.72);backdrop-filter:blur(20px) saturate(135%);
-    box-shadow:0 12px 35px rgba(0,0,0,.18);
-    animation:dropIn .55s var(--ease) both;
+  .line {
+    font-size: clamp(3rem, 14vw, 9rem);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.05;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 0;
+    border-right: 0.06em solid transparent;
   }
-  .brand{display:flex;align-items:center;gap:12px;min-width:0}
-  .brand-mark{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;flex:none;background:linear-gradient(145deg,#ffd477,#e79235);color:#171006;font:700 15px var(--font-head);box-shadow:0 10px 26px rgba(245,184,90,.23);position:relative}
-  .brand-mark::after{content:'';position:absolute;inset:-4px;border-radius:16px;border:1px solid rgba(245,184,90,.34);animation:pulseRing 2.8s ease-out infinite}
-  .brand-text{min-width:0}.brand-title{font:700 15.5px var(--font-head);letter-spacing:.01em;white-space:nowrap}.brand-handle{margin-top:2px;font:500 10.5px var(--font-mono);color:var(--muted)}
-  .userbox{display:flex;align-items:center;gap:9px}.userbox img{width:34px;height:34px;border-radius:50%;border:1px solid var(--line-strong);object-fit:cover}.userbox .who{text-align:right;line-height:1.25}.userbox .who .name{font-size:12.5px;font-weight:600}.userbox .who .role{font:500 10px var(--font-mono);color:var(--accent);margin-top:2px}
-  .icon-btn{width:35px;height:35px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text-2);display:grid;place-items:center;cursor:pointer;transition:.2s var(--ease)}
-  .icon-btn:hover{border-color:rgba(245,184,90,.5);color:var(--accent);background:rgba(245,184,90,.08);transform:translateY(-1px)}.icon-btn:active{transform:scale(.95)}
-  .signin-pill{display:flex;align-items:center;gap:8px;border:1px solid rgba(245,184,90,.18);background:linear-gradient(135deg,#f8c56a,#e99638);color:#1b1205;padding:10px 15px;border-radius:12px;font-size:12.5px;font-weight:700;cursor:pointer;box-shadow:0 12px 28px rgba(245,184,90,.16);transition:.2s var(--ease)}
-  .signin-pill:hover{transform:translateY(-1px);filter:brightness(1.05)}.signin-pill:active{transform:scale(.97)}
-
-  .hero{position:relative;padding:0 4px 30px;max-width:840px}
-  .hero::after{content:'';position:absolute;left:0;bottom:0;width:100%;height:1px;background:linear-gradient(90deg,rgba(148,163,184,.18),transparent 75%)}
-  .hero-byline{display:inline-flex;align-items:center;gap:9px;padding:6px 12px 6px 6px;border:1px solid var(--line);background:rgba(255,255,255,.03);border-radius:999px;margin-bottom:18px;animation:fadeUp .55s .04s var(--ease) both}
-  .hero-byline img,.hero-byline .dot-fallback{width:24px;height:24px;border-radius:50%;object-fit:cover}.hero-byline .dot-fallback{display:grid;place-items:center;background:rgba(245,184,90,.11);color:var(--accent);font-size:10px;font-weight:800}.hero-byline span{font-size:11.5px;color:var(--text-2)}.hero-byline strong{color:#fff}
-  .hero-title{font:700 clamp(38px,6vw,66px)/.98 var(--font-head);letter-spacing:-.045em;margin:0 0 16px;max-width:780px;animation:fadeUp .65s .1s var(--ease) both}
-  .hero-title .accent-underline{display:block;width:120px;height:5px;border-radius:999px;margin-top:20px;background:linear-gradient(90deg,var(--accent),var(--teal));box-shadow:0 0 24px rgba(245,184,90,.15);animation:growLine .9s .45s var(--ease) both;transform-origin:left}
-  .hero-sub{max-width:680px;margin:0;color:var(--text-2);font-size:14.5px;line-height:1.75;animation:fadeUp .65s .17s var(--ease) both}
-  @keyframes dropIn{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}@keyframes fadeUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}@keyframes growLine{from{transform:scaleX(0)}to{transform:scaleX(1)}}@keyframes pulseRing{0%{transform:scale(.94);opacity:.45}100%{transform:scale(1.28);opacity:0}}
-
-  .toolbar{display:flex;align-items:center;gap:10px;margin:26px 0 16px;flex-wrap:wrap;animation:fadeUp .5s .22s var(--ease) both}
-  .search-wrap{flex:1;min-width:260px;position:relative}.search-wrap svg{position:absolute;left:15px;top:50%;transform:translateY(-50%);color:#94a3b8;pointer-events:none}.search-wrap input{width:100%;height:46px;padding:0 16px 0 42px;border-radius:14px;border:1px solid var(--line);outline:none;background:rgba(17,24,39,.72);color:var(--text);font-size:13px;box-shadow:inset 0 1px 0 rgba(255,255,255,.025);transition:.2s var(--ease)}.search-wrap input::placeholder{color:#64748b}.search-wrap input:focus{border-color:rgba(245,184,90,.48);box-shadow:0 0 0 4px rgba(245,184,90,.08)}
-  .section-count{padding:0 8px;font:500 11px var(--font-mono);color:var(--muted);white-space:nowrap}.section-count b{color:var(--teal)}
-  .add-app-btn{display:flex;align-items:center;gap:7px;height:46px;padding:0 15px;border-radius:14px;border:1px dashed var(--line-strong);background:rgba(255,255,255,.025);color:var(--text-2);font-size:12.5px;font-weight:700;cursor:pointer;transition:.2s var(--ease)}.add-app-btn:hover{border-style:solid;border-color:rgba(245,184,90,.45);background:rgba(245,184,90,.07);color:var(--accent);transform:translateY(-1px)}.add-app-btn:active{transform:scale(.98)}
-
-  .grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
-  .tile{--tile-accent:var(--accent);--tile-accent-dim:rgba(245,184,90,.09);position:relative;display:flex;flex-direction:column;gap:11px;min-height:178px;padding:17px 16px 15px;border-radius:18px;border:1px solid var(--line);background:linear-gradient(180deg,rgba(19,28,45,.9),rgba(12,19,32,.9));box-shadow:0 12px 30px rgba(0,0,0,.1);text-decoration:none;overflow:hidden;opacity:0;transform:translateY(16px) scale(.985);animation:tileIn .52s var(--ease) forwards;animation-delay:calc(var(--i,0)*38ms);transition:transform .28s var(--ease),border-color .2s,box-shadow .28s var(--ease),background .2s}
-  @keyframes tileIn{to{opacity:1;transform:none}}
-  .tile::before{content:'';position:absolute;inset:0 0 auto;height:2px;background:linear-gradient(90deg,var(--tile-accent),rgba(94,234,212,.8));opacity:.65}.tile::after{content:'';position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 100% 0,rgba(255,255,255,.07),transparent 38%);opacity:.7}
-  .tile:hover{transform:translateY(-5px);border-color:color-mix(in srgb,var(--tile-accent) 42%,rgba(148,163,184,.22));box-shadow:0 18px 40px rgba(0,0,0,.23),0 0 0 1px var(--tile-accent-dim);background:linear-gradient(180deg,rgba(24,34,53,.94),rgba(12,19,32,.96))}
-  .tile:focus-visible{outline:2px solid var(--accent);outline-offset:3px}.tile:hover .tile-icon{transform:translateY(-2px) scale(1.04)}.tile:hover .tile-name{color:#fff}
-  .tile-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;position:relative;z-index:1}
-  .tile-icon{width:44px;height:44px;border-radius:13px;display:grid;place-items:center;flex:none;background:var(--tile-accent-dim);border:1px solid rgba(255,255,255,.07);font-size:21px;transition:.25s var(--ease)}
-  .tile-star{width:8px;height:8px;border-radius:50%;margin-top:6px;background:var(--accent);box-shadow:0 0 0 4px rgba(245,184,90,.10),0 0 16px rgba(245,184,90,.45);animation:starPulse 2.3s ease-in-out infinite}.tile-name{position:relative;z-index:1;font:600 15px/1.25 var(--font-head);margin:0;letter-spacing:-.01em;transition:color .2s}.tile-desc{position:relative;z-index:1;font-size:12px;line-height:1.55;color:#aebbd0;margin:0;flex:1;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.tile-url{position:relative;z-index:1;display:flex;align-items:center;gap:6px;min-width:0;padding-top:10px;border-top:1px solid rgba(148,163,184,.09);font:500 10px var(--font-mono);color:#66758d;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tile-url svg{flex:none;opacity:.72}.tile-admin-actions{position:absolute;right:12px;top:12px;z-index:5;display:flex;gap:6px;opacity:0;transform:translateY(-4px);transition:.18s var(--ease)}.tile:hover .tile-admin-actions{opacity:1;transform:none}.tile-admin-actions button{width:29px;height:29px;display:grid;place-items:center;border:1px solid rgba(148,163,184,.18);border-radius:9px;background:rgba(6,10,18,.78);color:#d5deeb;cursor:pointer;transition:.15s var(--ease)}.tile-admin-actions button:hover{border-color:rgba(245,184,90,.4);color:var(--accent);transform:scale(1.05)}.tile-admin-actions button.danger:hover{border-color:rgba(251,113,133,.45);color:var(--danger)}
-  @keyframes starPulse{0%,100%{box-shadow:0 0 0 4px rgba(245,184,90,.10),0 0 16px rgba(245,184,90,.3)}50%{box-shadow:0 0 0 7px rgba(245,184,90,0),0 0 20px rgba(245,184,90,.42)}}
-
-  .skel{position:relative;overflow:hidden;background:rgba(17,24,39,.75)}.skel::after{content:'';position:absolute;inset:0;transform:translateX(-100%);background:linear-gradient(90deg,transparent,rgba(255,255,255,.055),transparent);animation:shimmer 1.4s infinite}.skel-tile{height:178px;border-radius:18px;border:1px solid var(--line);padding:17px 16px;display:flex;flex-direction:column;gap:13px}.skel-bar{height:9px;border-radius:999px;background:rgba(148,163,184,.08)}.skel-icon{width:44px;height:44px;border-radius:13px;background:rgba(148,163,184,.08)}@keyframes shimmer{100%{transform:translateX(100%)}}
-  .empty-state{text-align:center;padding:74px 20px;border:1px dashed var(--line-strong);border-radius:18px;color:var(--muted);background:rgba(255,255,255,.018);animation:fadeUp .4s var(--ease)}.empty-state .glyph{font-size:30px;margin-bottom:10px}.empty-state p{margin:4px 0;font-size:13px}.banner{display:flex;align-items:flex-start;gap:10px;padding:13px 14px;margin-bottom:18px;border:1px solid rgba(251,113,133,.24);border-radius:14px;background:rgba(251,113,133,.075);color:#f7b2bc;font-size:12px;line-height:1.55}.banner button{border:1px solid rgba(251,113,133,.32);border-radius:9px;background:transparent;color:#f7b2bc;padding:5px 10px;font-size:11px;cursor:pointer}
-
-  .modal-overlay{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(4,7,14,.72);backdrop-filter:blur(0);opacity:0;pointer-events:none;transition:opacity .25s var(--ease),backdrop-filter .25s}.modal-overlay.open{opacity:1;pointer-events:auto;backdrop-filter:blur(8px)}
-  .modal{width:100%;max-width:470px;max-height:88vh;overflow:auto;padding:28px;border-radius:22px;border:1px solid var(--line-strong);background:linear-gradient(180deg,rgba(24,34,53,.98),rgba(14,21,35,.98));box-shadow:var(--shadow);transform:translateY(12px) scale(.96);opacity:0;transition:.28s var(--ease)}.modal-overlay.open .modal{transform:none;opacity:1}.modal h2{font:700 19px var(--font-head);margin:0 0 7px}.modal .modal-sub{font-size:12.5px;line-height:1.65;color:var(--text-2);margin:0 0 21px}
-  .field{margin-bottom:14px}.field label{display:block;margin-bottom:7px;font-size:11.5px;color:var(--text-2)}.field input,.field textarea{width:100%;padding:11px 12px;border-radius:11px;border:1px solid var(--line);outline:none;background:rgba(7,11,20,.55);color:#fff;font-size:13px;transition:.18s var(--ease)}.field textarea{resize:vertical;min-height:72px}.field input:focus,.field textarea:focus{border-color:rgba(245,184,90,.45);box-shadow:0 0 0 3px rgba(245,184,90,.08)}.field-row{display:flex;gap:10px}.field-row .field{flex:1}.field-hint{margin-top:5px;font-size:10px;line-height:1.55;color:var(--muted)}.checkbox-row{display:flex;align-items:center;gap:8px;margin-bottom:16px}.checkbox-row input{accent-color:var(--accent)}.checkbox-row label{font-size:12px;color:var(--text-2)}
-  .modal-actions{display:flex;gap:10px;margin-top:18px}.btn{flex:1;padding:11px 14px;border-radius:11px;border:1px solid var(--line);font-size:13px;font-weight:700;cursor:pointer;transition:.15s var(--ease)}.btn:active{transform:scale(.97)}.btn-primary{border-color:transparent;background:linear-gradient(135deg,#f8c56a,#e99638);color:#1b1205;box-shadow:0 10px 24px rgba(245,184,90,.15)}.btn-primary:hover{filter:brightness(1.06)}.btn-primary:disabled{opacity:.6;cursor:default}.btn-ghost{background:transparent;color:var(--text-2)}.btn-ghost:hover{border-color:var(--line-strong);background:rgba(255,255,255,.03)}.modal-error{min-height:14px;margin-top:10px;font-size:11.5px;color:var(--danger)}
-  #gsi-signin-mark{width:54px;height:54px;border-radius:16px;display:grid;place-items:center;margin:0 auto 15px;background:linear-gradient(145deg,#ffd477,#e79235);color:#1b1205;font:700 20px var(--font-head);box-shadow:0 14px 32px rgba(245,184,90,.22)}#gsi-button-wrap{display:flex;justify-content:center;min-height:44px;margin-top:7px}.signin-note{margin:16px 0 0;color:var(--muted);font-size:10.5px;text-align:center}
-  .toast{position:fixed;left:50%;bottom:24px;z-index:200;transform:translateX(-50%) translateY(10px);padding:11px 18px;border:1px solid var(--line-strong);border-radius:999px;background:rgba(21,30,49,.95);color:#fff;font-size:12px;box-shadow:0 16px 38px rgba(0,0,0,.36);animation:toastIn .35s var(--ease) forwards,toastOut .35s var(--ease) 1.9s forwards}@keyframes toastIn{to{opacity:1;transform:translateX(-50%) translateY(0)}}@keyframes toastOut{to{opacity:0;transform:translateX(-50%) translateY(8px)}}
-  [hidden]{display:none!important}
-  @media (max-width:1020px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.hero-title{font-size:clamp(36px,6vw,58px)}}
-  @media (max-width:760px){.app-shell{padding:16px 14px 70px}.topbar{position:static;margin-bottom:38px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero-title{font-size:clamp(36px,10vw,52px)}.userbox .who{display:none}.toolbar{align-items:stretch}.section-count{display:none}.search-wrap{min-width:0;flex-basis:100%}.add-app-btn{flex:none}}
-  @media (max-width:520px){.topbar{padding:8px}.brand-title{font-size:14px}.signin-pill{padding:9px 12px}.hero{padding-bottom:24px}.hero-title{font-size:41px}.hero-sub{font-size:13px}.grid{grid-template-columns:1fr}.tile{min-height:168px}.field-row{flex-direction:column;gap:0}.modal{padding:23px}.tile-admin-actions{opacity:1;transform:none}}
-  @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}.blob{display:none}}
+  .line.last.typing { border-right-color: #fff; }
+  @keyframes blink { 50% { border-color: transparent; } }
+  .line.last.done {
+    border-right-color: #fff;
+    animation: blink 0.7s step-end infinite;
+  }
 </style>
 </head>
 <body>
-
-<div class="backdrop"><div class="blob blob-a"></div><div class="blob blob-b"></div><div class="blob blob-c"></div></div>
-<div id="topLoader" class="top-loader"></div>
-
-<div class="app-shell">
-
-  <div class="topbar">
-    <div class="brand">
-      <div class="brand-mark">KM</div>
-      <div class="brand-text">
-        <div class="brand-title" id="brandTitle">Koo Mean Portal</div>
-        <div class="brand-handle" id="brandHandle">@koomean</div>
-      </div>
-    </div>
-    <div class="userbox" id="userboxLoggedIn" hidden>
-      <div class="who">
-        <div class="name" id="userName">—</div>
-        <div class="role" id="userRole">public</div>
-      </div>
-      <img id="userPic" src="" alt="" hidden>
-      <button class="icon-btn" id="signOutBtn" title="ออกจากระบบ">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-      </button>
-    </div>
-    <button class="signin-pill" id="openSigninBtn">
-      <svg width="15" height="15" viewBox="0 0 24 24"><path fill="#1A1204" d="M21.35 11.1h-9.17v2.73h6.51c-.33 3.81-3.5 5.44-6.5 5.44C8.36 19.27 5 16.25 5 12c0-4.1 3.2-7.27 7.2-7.27 3.09 0 4.9 1.97 4.9 1.97L19 4.72S16.56 2 12.1 2C6.42 2 2.03 6.8 2.03 12c0 5.05 4.13 10 10.22 10 5.35 0 9.25-3.67 9.25-9.09 0-1.15-.15-1.81-.15-1.81Z"/></svg>
-      เข้าสู่ระบบ
-    </button>
+  <div class="lines">
+    <div class="line">Koo Mean</div>
+    <div class="line">Portal</div>
+    <div class="line last">Coming Soon...</div>
   </div>
-
-  <div id="errorBanner" class="banner" hidden></div>
-
-  <div class="hero">
-    <div class="hero-byline" id="heroByline" hidden>
-      <img id="heroAvatar" src="" alt="" hidden>
-      <div id="heroAvatarFallback" class="dot-fallback">KM</div>
-      <span>โดย <strong id="heroOwnerName">Koo Mean</strong></span>
-    </div>
-    <h1 class="hero-title">
-      Koo Mean Portal
-      <span class="accent-underline"></span>
-    </h1>
-    <p class="hero-sub" id="heroSub">ทางลัดเข้าถึงทุกแอปพลิเคชันของ Koo Mean ในที่เดียว เลือกแอปที่ต้องการด้านล่างเพื่อเริ่มใช้งานได้เลย ไม่ต้องเข้าสู่ระบบก็ดูได้</p>
-  </div>
-
-  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:2px;">
-    <div style="display:flex;align-items:center;gap:8px;color:#75839a;font:500 10px var(--font-mono);text-transform:uppercase;letter-spacing:.14em;"><span style="width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 12px rgba(94,234,212,.5);"></span>Applications</div>
-    <div style="font-size:10.5px;color:#5f6d83;">Koo Mean Workspace</div>
-  </div>
-
-  <div class="toolbar">
-    <div class="search-wrap">
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      <input type="text" id="searchInput" placeholder="ค้นหาแอป...">
-    </div>
-    <span class="section-count" id="appCount">— แอป</span>
-    <button class="add-app-btn" id="addAppBtn" hidden>
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-      เพิ่มแอป
-    </button>
-  </div>
-
-  <div id="skeletonGrid" class="grid"></div>
-  <div id="grid" class="grid" hidden></div>
-  <div id="emptyState" class="empty-state" hidden>
-    <div class="glyph">🗂️</div>
-    <p id="emptyTitle">ยังไม่มีแอปพลิเคชันให้แสดงตอนนี้</p>
-    <p id="emptySub" style="font-size:11.5px;">แอดมินสามารถเพิ่มแอปได้จากปุ่ม "เพิ่มแอป" ด้านบน หรือกรอกข้อมูลในชีต Application โดยตรง</p>
-  </div>
-
-</div>
-
-<!-- ================= SIGN-IN MODAL ================= -->
-<div id="signinOverlay" class="modal-overlay">
-  <div class="modal" style="text-align:center;">
-    <div id="gsi-signin-mark">KM</div>
-    <h2>เข้าสู่ระบบ Koo Mean Portal</h2>
-    <p class="modal-sub">ล็อกอินด้วยบัญชี Google เดียวกับที่คุณใช้ในเว็บอื่นๆ ของ Koo Mean เพื่อดูแอปส่วนตัวและสิทธิ์เพิ่มเติม</p>
-    <div id="gsi-button-wrap"></div>
-    <div id="signinBanner"></div>
-    <p class="signin-note">ไม่เข้าสู่ระบบก็ดูแอปสาธารณะได้ตามปกติ</p>
-    <div class="modal-actions">
-      <button type="button" class="btn btn-ghost" id="signinCancel" style="flex:1;">ปิด</button>
-    </div>
-  </div>
-</div>
-
-<!-- ================= APP FORM MODAL ================= -->
-<div id="appModalOverlay" class="modal-overlay">
-  <div class="modal">
-    <h2 id="appModalTitle">เพิ่มแอปใหม่</h2>
-    <form id="appForm">
-      <div class="field">
-        <label>ชื่อแอป</label>
-        <input type="text" id="fName" maxlength="100" required placeholder="เช่น LidarSeePro">
-      </div>
-      <div class="field">
-        <label>ลิงก์ (URL)</label>
-        <input type="url" id="fUrl" maxlength="500" required placeholder="https://...">
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label>ไอคอน (อีโมจิ)</label>
-          <input type="text" id="fIcon" maxlength="10" placeholder="🛰️">
-        </div>
-        <div class="field">
-          <label>สีประจำแอป (ไม่บังคับ)</label>
-          <input type="text" id="fColor" maxlength="20" placeholder="#57E0C9">
-        </div>
-      </div>
-      <div class="field">
-        <label>คำอธิบายสั้นๆ</label>
-        <textarea id="fDesc" rows="2" maxlength="300" placeholder="อธิบายว่าแอปนี้ใช้ทำอะไร"></textarea>
-      </div>
-      <div class="field">
-        <label>กลุ่มผู้ใช้ที่เข้าถึงได้ (คั่นด้วยจุลภาค)</label>
-        <input type="text" id="fGroup" maxlength="200" placeholder="public">
-        <div class="field-hint">เว้นว่างหรือใส่ "public" = ทุกคนเห็นแม้ไม่ล็อกอิน, ใส่ role อื่นเพื่อจำกัดสิทธิ์ (admin เห็นทุกแอปเสมอ)</div>
-      </div>
-      <div class="checkbox-row">
-        <input type="checkbox" id="fStarred">
-        <label for="fStarred">ปักหมุดแอปนี้ไว้เด่น</label>
-      </div>
-      <div class="modal-actions">
-        <button type="button" class="btn btn-ghost" id="appModalCancel">ยกเลิก</button>
-        <button type="submit" class="btn btn-primary" id="appModalSave">บันทึก</button>
-      </div>
-      <div class="modal-error" id="appModalError"></div>
-    </form>
-  </div>
-</div>
 
 <script>
-/* =====================================================================
-   CONFIG
-   ===================================================================== */
-const CONFIG = {
-  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwBYhFTW68AfN4cYUJYS1DG7vw-Ocykx5kslSUQIeJJlfu0oeBIdi9xAhVmorVWQ4q7rg/exec',
-  GOOGLE_CLIENT_ID: '906677442222-kmjgsmta70n24aoaq7osm9c1l7g1fb89.apps.googleusercontent.com',
-  PORTAL_NAME: 'Koo Mean Portal',
-  PORTAL_TAGLINE: 'ทางลัดเข้าถึงทุกแอปพลิเคชันของ Koo Mean ในที่เดียว เลือกแอปที่ต้องการด้านล่างเพื่อเริ่มใช้งานได้เลย ไม่ต้องเข้าสู่ระบบก็ดูได้'
-};
+  const lines = Array.from(document.querySelectorAll('.line'));
 
-/* =====================================================================
-   STATE
-   ===================================================================== */
-let session = null;
-let editingRowIdx = null;
-let gsiButtonRendered = false;
-
-const $ = (id) => document.getElementById(id);
-
-/* top loading bar for background refetches (post-first-load) */
-let loaderTimer = null;
-function loaderStart(){
-  const el = $('topLoader');
-  clearTimeout(loaderTimer);
-  el.classList.remove('done');
-  requestAnimationFrame(() => el.classList.add('active'));
-}
-function loaderEnd(){
-  const el = $('topLoader');
-  el.classList.add('done');
-  loaderTimer = setTimeout(() => { el.classList.remove('active','done'); }, 400);
-}
-
-/* =====================================================================
-   BACKEND CALL
-   ===================================================================== */
-async function callBackend(action, params){
-  params = params || {};
-  const body = new URLSearchParams({ action, idToken: (session && session.idToken) || '', ...params });
-  const res = await fetch(CONFIG.APPS_SCRIPT_URL, { method: 'POST', body });
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-  return res.json();
-}
-
-/* =====================================================================
-   GOOGLE SIGN-IN
-   ===================================================================== */
-function decodeJwt(token){
-  try {
-    const payload = token.split('.')[1];
-    const json = decodeURIComponent(atob(payload.replace(/-/g,'+').replace(/_/g,'/'))
-      .split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
-    return JSON.parse(json);
-  } catch(e){ return null; }
-}
-
-function saveSession(idToken){
-  const claims = decodeJwt(idToken);
-  if (!claims) return null;
-  const s = { idToken, email: claims.email, name: claims.name || '', picture: claims.picture || '', exp: claims.exp };
-  try { localStorage.setItem('kmp_session', JSON.stringify(s)); } catch(_){}
-  return s;
-}
-
-function loadSession(){
-  try {
-    const raw = localStorage.getItem('kmp_session');
-    if (!raw) return null;
-    const s = JSON.parse(raw);
-    if (!s || !s.exp || s.exp * 1000 <= Date.now()) return null;
-    return s;
-  } catch(_){ return null; }
-}
-
-function clearSession(){
-  try { localStorage.removeItem('kmp_session'); } catch(_){}
-  session = null;
-  try { google.accounts.id.disableAutoSelect(); } catch(_){}
-}
-
-function handleCredentialResponse(response){
-  session = saveSession(response.credential);
-  if (!session) { showSigninError('ล็อกอินไม่สำเร็จ กรุณาลองใหม่'); return; }
-  closeSigninModal();
-  refreshPortal();
-}
-
-function initGoogleSignIn(){
-  google.accounts.id.initialize({
-    client_id: CONFIG.GOOGLE_CLIENT_ID,
-    callback: handleCredentialResponse,
-    auto_select: true
-  });
-}
-
-function showSigninError(msg){
-  $('signinBanner').innerHTML = '<div class="banner" style="text-align:left;">' + msg + '</div>';
-}
-
-function openSigninModal(){
-  $('signinBanner').innerHTML = '';
-  $('signinOverlay').classList.add('open');
-  if (!gsiButtonRendered) {
-    google.accounts.id.renderButton($('gsi-button-wrap'), {
-      theme: 'filled_black', size: 'large', shape: 'pill', text: 'signin_with', width: 260
+  // Measure natural width of each line
+  function widths() {
+    return lines.map(el => {
+      const prev = el.style.width;
+      el.style.width = 'max-content';
+      const w = el.getBoundingClientRect().width;
+      el.style.width = prev;
+      return w;
     });
-    gsiButtonRendered = true;
-  }
-}
-function closeSigninModal(){ $('signinOverlay').classList.remove('open'); }
-
-/* =====================================================================
-   BOOTSTRAP / REFRESH FLOW
-   guest (no idToken) และ logged-in ใช้ path เดียวกันหมด — backend รองรับทั้งสองแบบ
-   ===================================================================== */
-let firstLoadDone = false;
-
-async function refreshPortal(){
-  if (firstLoadDone) loaderStart();
-  hideError();
-  try {
-    let data = await callBackend('bootstrap');
-
-    if (data.authError === 'INVALID_TOKEN') {
-      clearSession();
-      data = await callBackend('bootstrap'); // fall back to guest view
-    }
-
-    if (data.requireRegistration) {
-      await callBackend('register');
-      data = await callBackend('bootstrap');
-    }
-
-    renderPortal(data);
-  } catch (err) {
-    showError('เชื่อมต่อ backend ไม่สำเร็จ — ตรวจสอบว่าตั้งค่า APPS_SCRIPT_URL ถูกต้องและ deploy เป็น "Anyone" แล้ว', () => refreshPortal());
-    if (!firstLoadDone) { $('skeletonGrid').hidden = true; $('grid').hidden = false; }
-  } finally {
-    firstLoadDone = true;
-    if ($('topLoader').classList.contains('active')) loaderEnd();
-  }
-}
-
-function showError(msg, retryFn){
-  const el = $('errorBanner');
-  el.hidden = false;
-  el.innerHTML = '<span style="flex:1;">' + msg + '</span>';
-  if (retryFn) {
-    const btn = document.createElement('button');
-    btn.textContent = 'ลองใหม่';
-    btn.onclick = retryFn;
-    el.appendChild(btn);
-  }
-}
-function hideError(){ $('errorBanner').hidden = true; $('errorBanner').innerHTML=''; }
-
-/* =====================================================================
-   RENDER
-   ===================================================================== */
-function renderPortal(data){
-  const pf = data.profile || {};
-  const user = data.user || { role: 'public' };
-  const isLoggedIn = !!user.email;
-  const isAdmin = String(user.role||'').toLowerCase().split(/[,;|]+/).indexOf('admin') > -1;
-
-  document.title = CONFIG.PORTAL_NAME;
-  $('brandTitle').textContent = CONFIG.PORTAL_NAME;
-
-  const ownerName = pf.name || 'Koo Mean';
-  const ownerImg = pf.imageUrl || '';
-  $('heroOwnerName').textContent = ownerName;
-  if (ownerImg) { $('heroAvatar').src = ownerImg; $('heroAvatar').hidden = false; $('heroAvatarFallback').hidden = true; }
-  else { $('heroAvatarFallback').textContent = ownerName.slice(0,1).toUpperCase(); }
-  $('heroByline').hidden = false;
-  $('heroSub').textContent = CONFIG.PORTAL_TAGLINE;
-
-  if (isLoggedIn) {
-    $('userboxLoggedIn').hidden = false;
-    $('openSigninBtn').hidden = true;
-    $('userName').textContent = user.name || user.email.split('@')[0];
-    $('userRole').textContent = user.role || 'public';
-    if (user.pic) { $('userPic').src = user.pic; $('userPic').hidden = false; } else { $('userPic').hidden = true; }
-  } else {
-    $('userboxLoggedIn').hidden = true;
-    $('openSigninBtn').hidden = false;
   }
 
-  $('addAppBtn').hidden = !isAdmin;
+  function typeLine(el, targetW, perCharMs) {
+    return new Promise(resolve => {
+      const isLast = el.classList.contains('last');
+      el.style.borderRightColor = '#fff';
+      if (isLast) el.classList.add('typing');
 
-  // merge Application sheet items with legacy Apps sheet items (backward-compat fallback)
-  const apps = Array.isArray(data.applications) ? data.applications.slice() : [];
-  const seenUrls = new Set(apps.map(a => a.url));
-  (data.apps || []).forEach(a => {
-    if (a && a.url && !seenUrls.has(a.url)) {
-      apps.push({ name: a.name, url: a.url, icon: '', description: '', starred: false, color: '' });
-      seenUrls.add(a.url);
-    }
-  });
+      const steps = Math.max(el.textContent.length, 1);
+      const duration = steps * perCharMs;
+      const start = performance.now();
 
-  window.__allApps = apps;
-  window.__isAdmin = isAdmin;
-  applyFilterAndRender();
-}
-
-function applyFilterAndRender(){
-  const q = ($('searchInput').value || '').trim().toLowerCase();
-  const all = window.__allApps || [];
-  const filtered = q
-    ? all.filter(a => (a.name||'').toLowerCase().includes(q) || (a.description||'').toLowerCase().includes(q))
-    : all;
-
-  animateCount($('appCount'), filtered.length);
-
-  $('skeletonGrid').hidden = true;
-  const grid = $('grid');
-  grid.hidden = false;
-  grid.innerHTML = '';
-
-  if (!filtered.length) {
-    $('emptyState').hidden = false;
-    $('emptyTitle').textContent = q ? ('ไม่พบแอปที่ตรงกับ "' + q + '"') : 'ยังไม่มีแอปพลิเคชันให้แสดงตอนนี้';
-    return;
-  }
-  $('emptyState').hidden = true;
-
-  filtered.forEach((app, i) => {
-    const tile = renderTile(app);
-    tile.style.setProperty('--i', i);
-    grid.appendChild(tile);
-  });
-}
-
-function animateCount(el, target){
-  const suffix = ' แอป';
-  const current = parseInt(el.textContent) || 0;
-  if (current === target) { el.innerHTML = target + suffix; return; }
-  const steps = Math.min(12, Math.max(1, Math.abs(target - current)));
-  let i = 0;
-  const start = current;
-  const timer = setInterval(() => {
-    i++;
-    const v = Math.round(start + (target - start) * (i/steps));
-    el.textContent = v + suffix;
-    if (i >= steps) clearInterval(timer);
-  }, 18);
-}
-
-function renderTile(app){
-  const a = document.createElement('a');
-  a.className = 'tile';
-  a.href = app.url || '#';
-  a.target = '_blank';
-  a.rel = 'noopener noreferrer';
-  if (app.color) {
-    a.style.setProperty('--tile-accent', app.color);
-    a.style.setProperty('--tile-accent-dim', app.color + '29');
-  }
-
-  const initials = (app.name || '?').trim().slice(0,1).toUpperCase();
-
-  a.innerHTML = `
-    <div class="tile-top">
-      <div class="tile-icon">${app.icon ? escapeHtml(app.icon) : initials}</div>
-      ${app.starred ? '<div class="tile-star" title="ปักหมุด"></div>' : ''}
-    </div>
-    <p class="tile-name">${escapeHtml(app.name || 'Untitled')}</p>
-    ${app.description ? `<p class="tile-desc">${escapeHtml(app.description)}</p>` : '<div style="flex:1"></div>'}
-    <div class="tile-url">
-      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6"/><path d="M10 14 21 3"/></svg>
-      ${escapeHtml((app.url||'').replace(/^https?:\/\//,''))}
-    </div>
-  `;
-
-  if (window.__isAdmin && app.rowIdx) {
-    const actions = document.createElement('div');
-    actions.className = 'tile-admin-actions';
-    actions.innerHTML = `
-      <button type="button" data-act="edit" title="แก้ไข">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.12 2.12 0 0 1 3 3L12 15l-4 1 1-4Z"/></svg>
-      </button>
-      <button type="button" data-act="delete" class="danger" title="ลบ">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
-      </button>
-    `;
-    actions.addEventListener('click', (ev) => {
-      ev.preventDefault(); ev.stopPropagation();
-      const act = ev.target.closest('button')?.dataset.act;
-      if (act === 'edit') openAppModal(app);
-      if (act === 'delete') deleteApp(app);
+      function frame(now) {
+        const t = Math.min((now - start) / duration, 1);
+        const stepped = Math.floor(t * steps) / steps;
+        el.style.width = (targetW * stepped) + 'px';
+        if (t < 1) {
+          requestAnimationFrame(frame);
+        } else {
+          el.style.width = targetW + 'px';
+          if (isLast) {
+            el.classList.remove('typing');
+            el.classList.add('done');
+          } else {
+            el.style.borderRightColor = 'transparent';
+          }
+          resolve();
+        }
+      }
+      requestAnimationFrame(frame);
     });
-    a.appendChild(actions);
   }
 
-  return a;
-}
+  function wait(ms) { return new Promise(r => setTimeout(r, ms)); }
 
-function escapeHtml(s){
-  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-}
-
-function buildSkeletonGrid(){
-  const el = $('skeletonGrid');
-  el.innerHTML = '';
-  for (let i = 0; i < 8; i++) {
-    const d = document.createElement('div');
-    d.className = 'skel-tile skel';
-    d.style.animationDelay = (i*40) + 'ms';
-    d.innerHTML = `
-      <div class="skel-icon skel"></div>
-      <div class="skel-bar skel" style="width:60%"></div>
-      <div class="skel-bar skel" style="width:90%;height:8px;"></div>
-      <div class="skel-bar skel" style="width:40%;height:8px;"></div>
-    `;
-    el.appendChild(d);
+  async function run() {
+    await document.fonts.ready;
+    const w = widths();
+    await wait(300);
+    await typeLine(lines[0], w[0], 150);
+    await wait(250);
+    await typeLine(lines[1], w[1], 200);
+    await wait(250);
+    await typeLine(lines[2], w[2], 180);
   }
-}
 
-/* =====================================================================
-   ADMIN — ADD / EDIT / DELETE APP
-   ===================================================================== */
-function openAppModal(app){
-  editingRowIdx = app ? app.rowIdx : null;
-  $('appModalTitle').textContent = app ? 'แก้ไขแอป' : 'เพิ่มแอปใหม่';
-  $('fName').value = app ? (app.name||'') : '';
-  $('fUrl').value = app ? (app.url||'') : '';
-  $('fIcon').value = app ? (app.icon||'') : '';
-  $('fColor').value = app ? (app.color||'') : '';
-  $('fDesc').value = app ? (app.description||'') : '';
-  $('fGroup').value = app ? (app.group||'') : '';
-  $('fStarred').checked = !!(app && app.starred);
-  $('appModalError').textContent = '';
-  $('appModalOverlay').classList.add('open');
-  setTimeout(() => $('fName').focus(), 200);
-}
-function closeAppModal(){ $('appModalOverlay').classList.remove('open'); editingRowIdx = null; }
-
-async function submitAppForm(ev){
-  ev.preventDefault();
-  const saveBtn = $('appModalSave');
-  saveBtn.disabled = true;
-  $('appModalError').textContent = '';
-
-  const payload = {
-    name: $('fName').value.trim(), url: $('fUrl').value.trim(),
-    icon: $('fIcon').value.trim(), color: $('fColor').value.trim(),
-    description: $('fDesc').value.trim(), group: $('fGroup').value.trim(),
-    starred: $('fStarred').checked ? '1' : '0'
-  };
-
-  try {
-    let res;
-    if (editingRowIdx) res = await callBackend('updateApplication', { rowIdx: editingRowIdx, ...payload });
-    else res = await callBackend('addApplication', payload);
-    if (!res.success) throw new Error(res.message || 'บันทึกไม่สำเร็จ');
-    closeAppModal();
-    showToast(editingRowIdx ? 'แก้ไขแอปแล้ว' : 'เพิ่มแอปแล้ว');
-    await refreshPortal();
-  } catch (err) {
-    $('appModalError').textContent = err.message || 'เกิดข้อผิดพลาด';
-  } finally {
-    saveBtn.disabled = false;
-  }
-}
-
-async function deleteApp(app){
-  if (!confirm('ลบแอป "' + app.name + '" ใช่หรือไม่?')) return;
-  try {
-    const res = await callBackend('deleteApplication', { rowIdx: app.rowIdx });
-    if (!res.success) throw new Error(res.message || 'ลบไม่สำเร็จ');
-    showToast('ลบแอปแล้ว');
-    await refreshPortal();
-  } catch (err) {
-    alert(err.message || 'เกิดข้อผิดพลาด');
-  }
-}
-
-function showToast(msg){
-  const t = document.createElement('div');
-  t.className = 'toast';
-  t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(() => t.remove(), 2300);
-}
-
-/* =====================================================================
-   EVENTS
-   ===================================================================== */
-$('searchInput').addEventListener('input', applyFilterAndRender);
-$('addAppBtn').addEventListener('click', () => openAppModal(null));
-$('appModalCancel').addEventListener('click', closeAppModal);
-$('appModalOverlay').addEventListener('click', (e) => { if (e.target.id === 'appModalOverlay') closeAppModal(); });
-$('appForm').addEventListener('submit', submitAppForm);
-
-$('openSigninBtn').addEventListener('click', openSigninModal);
-$('signinCancel').addEventListener('click', closeSigninModal);
-$('signinOverlay').addEventListener('click', (e) => { if (e.target.id === 'signinOverlay') closeSigninModal(); });
-
-$('signOutBtn').addEventListener('click', () => {
-  clearSession();
-  showToast('ออกจากระบบแล้ว');
-  refreshPortal();
-});
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') { closeAppModal(); closeSigninModal(); }
-});
-
-/* ---------- topbar shadow-on-scroll (subtle, desktop only via sticky) ---------- */
-window.addEventListener('scroll', () => {
-  const tb = document.querySelector('.topbar');
-  if (window.scrollY > 8) tb.style.boxShadow = '0 10px 28px -14px rgba(0,0,0,0.6)';
-  else tb.style.boxShadow = 'none';
-}, { passive:true });
-
-/* =====================================================================
-   BOOT — โหลดข้อมูลทันทีไม่ว่าจะล็อกอินหรือไม่ (guest ดูแอป public ได้เสมอ)
-   ===================================================================== */
-window.addEventListener('load', () => {
-  buildSkeletonGrid();
-  initGoogleSignIn();
-  session = loadSession();
-  refreshPortal();
-});
+  run();
 </script>
 </body>
 </html>
