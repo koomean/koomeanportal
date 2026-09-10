@@ -1,9 +1,11 @@
 <!doctype html>
-<html lang="th">
+<html lang="th" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#07090f">
+  <meta name="theme-color" content="#06080e" id="theme-color-meta">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <title>Koo Mean Portal</title>
   <link rel="preconnect" href="https://koomean-proxy.meanchannel52.workers.dev" crossorigin>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -11,28 +13,532 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,800&display=swap" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
   <style>
-    :root{--bg:#07090f;--panel:#0d1220;--panel2:#111827;--border:rgba(255,255,255,.08);--border-h:rgba(255,255,255,.16);--text:#e8edf7;--muted:#8794ad;--dim:#52617b;--blue:#4b8fff;--violet:#8065ed;--green:#22d17a;--red:#ff5572;--shadow:0 18px 60px rgba(0,0,0,.38);--font:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;--display:'Bricolage Grotesque',var(--font)}
+    :root{
+      --font:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+      --display:'Bricolage Grotesque',var(--font);
+      --radius:14px;--radius-sm:10px;--radius-lg:22px;
+      --ease:cubic-bezier(.4,0,.2,1);
+    }
+
+    /* DARK THEME (default) */
+    [data-theme="dark"]{
+      --bg:#06080e;--bg-2:#0a0e1a;
+      --panel:rgba(15,20,32,.7);--panel-solid:#0f1420;--panel-2:#111827;
+      --panel-hover:rgba(20,25,38,.85);
+      --border:rgba(255,255,255,.07);--border-h:rgba(255,255,255,.14);
+      --text:#e8edf7;--text-2:#c8d2e8;--muted:#8794ad;--dim:#52617b;
+      --blue:#5b8fff;--blue-h:#7ba5ff;--violet:#8b6cf0;--violet-h:#a082ff;
+      --green:#22d17a;--red:#ff5572;--amber:#f5b942;
+      --shadow:0 20px 70px rgba(0,0,0,.45);--shadow-sm:0 8px 24px rgba(0,0,0,.2);
+      --topbar-bg:rgba(13,16,20,.55);
+      --hero-text-from:#ffffff;--hero-text-to:#c8d2e8;
+      --bg-gradient-1:rgba(91,143,255,.12);--bg-gradient-2:rgba(139,108,240,.10);
+      --modal-bg:linear-gradient(145deg,#111a2d,#0c111e);
+    }
+
+    /* LIGHT THEME */
+    [data-theme="light"]{
+      --bg:#f5f7fb;--bg-2:#eef1f8;
+      --panel:rgba(255,255,255,.8);--panel-solid:#ffffff;--panel-2:#f1f4fa;
+      --panel-hover:rgba(255,255,255,.95);
+      --border:rgba(15,20,32,.08);--border-h:rgba(15,20,32,.16);
+      --text:#0f172a;--text-2:#334155;--muted:#64748b;--dim:#94a3b8;
+      --blue:#2563eb;--blue-h:#1d4ed8;--violet:#7c3aed;--violet-h:#6d28d9;
+      --green:#16a34a;--red:#dc2626;--amber:#d97706;
+      --shadow:0 20px 70px rgba(15,23,42,.08);--shadow-sm:0 8px 24px rgba(15,23,42,.06);
+      --topbar-bg:rgba(255,255,255,.7);
+      --hero-text-from:#0f172a;--hero-text-to:#475569;
+      --bg-gradient-1:rgba(37,99,235,.08);--bg-gradient-2:rgba(124,58,237,.06);
+      --modal-bg:linear-gradient(145deg,#ffffff,#f8fafc);
+    }
+
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
     html{scroll-behavior:smooth}
-    body{min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--font);overflow-x:hidden}
-    body:before{display:none}
-    button,input{font:inherit}button{cursor:pointer}a{color:inherit;text-decoration:none}
+    body{
+      min-height:100vh;background:var(--bg);color:var(--text);font-family:var(--font);
+      overflow-x:hidden;position:relative;
+      background-image:
+        radial-gradient(ellipse 800px 600px at 10% -10%, var(--bg-gradient-1), transparent 60%),
+        radial-gradient(ellipse 700px 500px at 95% 110%, var(--bg-gradient-2), transparent 60%),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 100%);
+      background-attachment: fixed;
+      transition: background-color .3s var(--ease), color .3s var(--ease);
+    }
+    body::before{
+      content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
+      background-image:
+        radial-gradient(1px 1px at 20% 30%, rgba(155,155,155,.3), transparent),
+        radial-gradient(1px 1px at 70% 80%, rgba(155,155,155,.2), transparent),
+        radial-gradient(1px 1px at 40% 60%, rgba(155,155,155,.15), transparent);
+      background-size: 300px 300px;opacity:.5;
+    }
+    [data-theme="light"] body::before{opacity:.3}
+
+    ::-webkit-scrollbar{width:10px;height:10px}
+    ::-webkit-scrollbar-track{background:transparent}
+    ::-webkit-scrollbar-thumb{background:rgba(155,155,155,.12);border-radius:10px;border:2px solid transparent;background-clip:padding-box}
+    ::-webkit-scrollbar-thumb:hover{background:rgba(155,155,155,.22);background-clip:padding-box}
+    [data-theme="light"] ::-webkit-scrollbar-thumb{background:rgba(15,23,42,.15)}
+    [data-theme="light"] ::-webkit-scrollbar-thumb:hover{background:rgba(15,23,42,.28)}
+
+    button,input,select,textarea{font:inherit;color:inherit}
+    button{cursor:pointer;border:none;background:none}
+    a{color:inherit;text-decoration:none}
+    :focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+
     .shell{width:min(1080px,100%);margin:auto;padding:18px 28px 44px}
-    .topbar{position:sticky;top:12px;z-index:10;height:58px;display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:64px;padding:7px 9px 7px 11px;border:1px solid #20252d;border-radius:14px;background:#0d1014;box-shadow:0 8px 24px rgba(0,0,0,.18)}
-    .brand{display:flex;align-items:center;gap:11px;min-width:0}.brand-mark{width:36px;height:36px;display:grid;place-items:center;border-radius:10px;background:#182b4c;color:#8db9ff;font-size:.9rem}.brand-copy{min-width:0}.brand-title{font:800 1rem var(--display);letter-spacing:-.3px}.brand-sub{color:var(--muted);font-size:.65rem;margin-top:2px;letter-spacing:.7px;text-transform:uppercase}
-    .topnav{display:flex;align-items:center;gap:4px;margin-left:auto}.nav-link{border:0;background:transparent;display:inline-flex;align-items:center;gap:7px;padding:9px 12px;border-radius:11px;color:var(--muted);font-size:.76rem;font-weight:700;transition:.2s}.nav-link:hover,.nav-link.active{color:var(--text);background:rgba(255,255,255,.07)}.nav-link.active{box-shadow:inset 0 -2px 0 var(--blue)}
-    .user-area{display:flex;align-items:center;gap:10px}.user-chip{display:none;align-items:center;gap:9px;padding:5px 12px 5px 5px;border:1px solid var(--border);background:rgba(255,255,255,.04);border-radius:99px;color:var(--muted);font-size:.78rem}.user-chip.visible{display:flex}.user-chip img{width:29px;height:29px;border-radius:50%;object-fit:cover;background:var(--panel2)}.user-name{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.btn{border:1px solid transparent;border-radius:99px;padding:10px 17px;color:#fff;font-weight:700;font-size:.82rem;transition:.22s ease;display:inline-flex;align-items:center;justify-content:center;gap:8px}.btn:hover{transform:translateY(-2px)}#auth-btn{min-width:0;height:38px;padding:0 13px;white-space:nowrap}.btn-primary{background:linear-gradient(135deg,var(--blue),var(--violet));box-shadow:0 8px 24px rgba(75,143,255,.22)}.btn-ghost{background:rgba(255,255,255,.045);border-color:var(--border);color:var(--muted)}.btn-ghost:hover{color:var(--text);border-color:var(--border-h)}
-    .hero{display:block;margin-bottom:42px;scroll-margin-top:100px}.eyebrow{display:flex;align-items:center;gap:8px;color:#8db9ff;font-size:.7rem;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:13px}.eyebrow i{font-size:.65rem}.hero h1{font:800 clamp(2.25rem,6vw,4.4rem)/1 var(--display);letter-spacing:-2.5px;max-width:680px}.hero-line{display:block;line-height:1.14}.hero-line-accent{color:var(--blue);margin-top:.16em}.hero-copy{color:var(--muted);line-height:1.7;margin-top:16px;max-width:610px;font-size:.9rem}
-    .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:23px}.search{position:relative;flex:1;min-width:220px}.search i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:.82rem}.search input{width:100%;background:#0d1014;border:1px solid #20252d;border-radius:10px;color:var(--text);padding:11px 13px 11px 39px;outline:0;font-size:.82rem;transition:.2s}.search input:focus{border-color:#3b6fc8;box-shadow:0 0 0 2px rgba(75,143,255,.12)}.filter{background:#0d1014;border:1px solid #20252d;border-radius:10px;color:var(--muted);padding:11px 35px 11px 12px;outline:0;font-size:.8rem}.filter:focus{border-color:#3b6fc8}.refresh-btn{width:40px;height:40px;padding:0;border:1px solid #20252d;border-radius:10px;background:#0d1014;color:var(--muted);font-size:.8rem}.refresh-btn:hover{color:var(--text);border-color:#3b6fc8;background:#111a29}.refresh-btn:disabled{opacity:.55;cursor:wait}.refresh-btn.loading i{animation:portal-spin .8s linear infinite}.updated-at{color:var(--dim);font-size:.68rem;white-space:nowrap}@keyframes portal-spin{to{transform:rotate(360deg)}}
-    .stats{display:flex;align-items:center;gap:16px;color:var(--muted);font-size:.78rem;margin-bottom:18px}.stats strong{color:var(--text);font-size:1.05rem}.status{display:inline-flex;align-items:center;gap:7px}.status-dot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 10px rgba(34,209,122,.7)}.status.connecting .status-dot{background:var(--blue);box-shadow:0 0 10px rgba(75,143,255,.7)}.status.offline .status-dot{background:var(--red);box-shadow:0 0 10px rgba(255,85,114,.7)}
-    .loading,.empty,.error{padding:52px 24px;text-align:center;border:1px solid #20252d;border-radius:14px;background:#0d1014;color:var(--muted)}.loading i{color:var(--blue);font-size:1.45rem;margin-bottom:13px}.empty i,.error i{display:block;font-size:1.7rem;margin-bottom:13px;color:var(--dim)}.error i{color:var(--red)}.empty strong,.error strong{display:block;color:var(--text);margin-bottom:7px}.empty p,.error p{font-size:.8rem;line-height:1.6}
-    .group{margin-top:28px}.group-head{display:flex;align-items:center;gap:9px;margin-bottom:12px}.group-head h2{font:800 1rem var(--display);letter-spacing:-.3px}.group-head span{font-size:.65rem;color:var(--dim);background:#15191f;padding:3px 7px;border-radius:99px}.group-head:after{content:"";height:1px;flex:1;background:#20252d}.apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}.app-card{position:relative;display:flex;align-items:flex-start;gap:13px;min-height:112px;padding:16px;border:1px solid #20252d;border-radius:12px;background:#0d1014;overflow:hidden;transition:border-color .2s,background .2s}.app-card:before{content:"";position:absolute;inset:0 auto 0 0;width:2px;background:var(--card-color,var(--blue));opacity:.9}.app-card:hover{border-color:#3a4451;background:#11151b}.app-icon{width:43px;height:43px;flex:0 0 43px;display:grid;place-items:center;border-radius:11px;background:color-mix(in srgb,var(--card-color,var(--blue)) 13%,transparent);color:var(--card-color,var(--blue));font-size:1rem;border:1px solid color-mix(in srgb,var(--card-color,var(--blue)) 18%,transparent)}.app-icon img{width:25px;height:25px;object-fit:contain}.app-info{min-width:0;flex:1;padding-right:18px}.app-name{font:800 .92rem var(--display);line-height:1.3;margin-bottom:6px;padding-right:10px;overflow-wrap:anywhere}.app-description{font-size:.74rem;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.app-open{position:absolute;right:13px;bottom:12px;color:var(--dim);font-size:.68rem;transition:.2s}.app-card:hover .app-open{color:var(--card-color,var(--blue))}.star{position:absolute;top:11px;right:12px;color:#f5b942;font-size:.65rem}.group-public .app-card{--card-color:#4b8fff}.group-starred .app-card{--card-color:#f5b942}
-    .modal-backdrop{position:fixed;inset:0;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(1,3,8,.76);backdrop-filter:blur(12px);z-index:20}.modal-backdrop.open{display:flex}.modal{width:min(100%,420px);border:1px solid var(--border-h);border-radius:22px;background:linear-gradient(145deg,#111a2d,#0c111e);box-shadow:var(--shadow);padding:27px}.modal.account-wide{width:min(100%,520px)}.modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:23px}.modal-head h2{font:800 1.45rem var(--display);letter-spacing:-.6px}.modal-head p{color:var(--muted);font-size:.78rem;line-height:1.55;margin-top:6px}.close{border:0;background:transparent;color:var(--muted);font-size:1.15rem;padding:2px 0}.close:hover{color:var(--text)}.google-wrap{min-height:44px;display:flex;justify-content:center}.login-help{color:var(--dim);font-size:.7rem;line-height:1.6;text-align:center;margin-top:18px}.field-label{display:block;color:var(--muted);font-size:.76rem;font-weight:700;margin-bottom:8px}.field{width:100%;padding:12px 13px;border:1px solid var(--border);border-radius:12px;background:rgba(0,0,0,.2);color:var(--text);outline:0;margin-bottom:15px}.field:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(75,143,255,.12)}.modal-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:5px}.modal-actions .btn{min-width:100px}.user-detail{display:flex;align-items:center;gap:12px;padding:13px;border-radius:14px;background:rgba(255,255,255,.04);margin-bottom:18px}.user-detail img{width:44px;height:44px;border-radius:50%;object-fit:cover}.user-detail strong{display:block;font-size:.88rem}.user-detail span{display:block;color:var(--muted);font-size:.72rem;margin-top:3px;overflow-wrap:anywhere}.account-section{padding-top:19px;margin-top:19px;border-top:1px solid var(--border)}.account-section-title{font-size:.84rem;font-weight:800;margin-bottom:4px}.account-section-copy{font-size:.73rem;color:var(--muted);line-height:1.55;margin-bottom:14px}.name-row{display:flex;gap:9px}.name-row .field{margin-bottom:0;flex:1}.name-row .btn{flex:0 0 auto}.role-badge{display:inline-block;margin-top:10px;color:#8db9ff;background:rgba(75,143,255,.12);padding:4px 9px;border-radius:99px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px}.toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,20px);opacity:0;pointer-events:none;z-index:40;padding:12px 17px;border-radius:99px;background:#18243a;border:1px solid var(--border-h);box-shadow:var(--shadow);font-size:.79rem;transition:.25s;white-space:nowrap;max-width:calc(100% - 32px);overflow:hidden;text-overflow:ellipsis}.toast.show{opacity:1;transform:translate(-50%,0)}.toast.success{border-color:rgba(34,209,122,.4)}.toast.error{border-color:rgba(255,85,114,.45)}
-    .footer{display:flex;justify-content:space-between;gap:16px;color:var(--dim);font-size:.7rem;margin-top:52px;padding-top:18px;border-top:1px solid var(--border)}
-    .admin-wide{width:min(100%,900px)}.admin-layout{display:grid;grid-template-columns:minmax(240px,.8fr) minmax(340px,1.2fr);gap:20px}.admin-panel{border:1px solid #20252d;border-radius:12px;background:#0d1014;padding:16px}.admin-panel-title{font-size:.84rem;font-weight:800;margin-bottom:4px}.admin-panel-copy{font-size:.72rem;color:var(--muted);line-height:1.55;margin-bottom:15px}.admin-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}.admin-form-grid .full{grid-column:1/-1}.admin-form-grid .field{margin-bottom:12px}.icon-select{display:flex;align-items:center;gap:10px;margin:2px 0 8px;padding:10px;border:1px solid #20252d;border-radius:11px;background:#10141a}.selected-icon{width:40px;height:40px;display:grid;place-items:center;border-radius:10px;background:#182b4c;color:#8db9ff;font-size:1rem;overflow:hidden;flex:0 0 40px}.selected-icon[hidden]{display:none}.selected-icon img{width:25px;height:25px;object-fit:contain}.icon-media{display:contents}.icon-select-copy{min-width:0;flex:1}.icon-select-copy strong{display:block;font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.icon-select-copy span{display:block;color:var(--dim);font-size:.66rem;margin-top:3px}.icon-select .btn{padding:7px 10px;font-size:.7rem;flex:0 0 auto}.manual-icon{display:flex;gap:7px;margin-bottom:14px}.manual-icon .field{margin:0;min-width:0;flex:1;padding:9px 11px;font-size:.72rem}.manual-icon .btn{padding:8px 10px;font-size:.7rem}.admin-form-actions{display:flex;gap:8px;margin-top:3px}.admin-form-actions .btn{flex:1}.admin-items{display:flex;flex-direction:column;gap:7px;max-height:430px;overflow:auto;padding-right:2px}.admin-item{display:flex;align-items:center;gap:9px;padding:10px;border:1px solid #20252d;border-radius:10px;background:#10141a}.admin-item-icon{width:32px;height:32px;border-radius:8px;display:grid;place-items:center;background:#182b4c;color:#8db9ff;overflow:hidden;flex:0 0 32px}.admin-item-icon img{width:21px;height:21px;object-fit:contain}.admin-item-info{min-width:0;flex:1}.admin-item-name{font-weight:700;font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.admin-item-meta{color:var(--dim);font-size:.65rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}.admin-item-actions{display:flex;gap:3px;flex:0 0 auto}.icon-btn{width:27px;height:27px;border:1px solid #29313b;border-radius:7px;background:transparent;color:var(--muted);font-size:.68rem}.icon-btn:hover{color:var(--text);border-color:#4b8fff;background:#182238}.icon-btn:disabled{opacity:.28;cursor:not-allowed}.icon-btn:disabled:hover{color:var(--muted);border-color:#29313b;background:transparent}.icon-btn.danger:hover{color:#ff7c91;border-color:#ff5572;background:#29151b}.picker-wide{width:min(100%,760px)}.logo-search{margin-bottom:14px}.logo-results{display:grid;grid-template-columns:repeat(auto-fill,minmax(122px,1fr));gap:7px;max-height:420px;overflow:auto}.logo-result{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:92px;padding:10px 7px;border:1px solid #20252d;border-radius:10px;background:#10141a;color:var(--muted);transition:.18s;cursor:pointer}.logo-result:hover{border-color:#3b6fc8;background:#151d2b;color:var(--text)}.logo-result img{width:34px;height:34px;object-fit:contain}.logo-result span{width:100%;font-size:.67rem;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.picker-note{color:var(--dim);font-size:.68rem;line-height:1.5;margin-top:12px}.picker-note a{color:#8db9ff}
-    .admin-tabs{display:flex;gap:5px;border-bottom:1px solid #20252d;margin:-5px 0 18px;padding-bottom:7px}.admin-tab-btn{border:0;background:transparent;color:var(--muted);padding:8px 12px;border-radius:8px;font-size:.76rem;font-weight:700}.admin-tab-btn:hover{color:var(--text);background:#15191f}.admin-tab-btn.active{color:#fff;background:#182b4c}.admin-tab-pane[hidden]{display:none}.user-search{margin-bottom:12px}.admin-users{display:flex;flex-direction:column;gap:7px;max-height:510px;overflow:auto}.admin-user{display:flex;align-items:center;gap:11px;padding:10px;border:1px solid #20252d;border-radius:10px;background:#10141a}.admin-user-avatar{width:34px;height:34px;border-radius:50%;object-fit:cover;background:#182b4c;flex:0 0 34px}.admin-user-info{min-width:0;flex:1}.admin-user-name{font-size:.77rem;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.admin-user-email{font-size:.65rem;color:var(--dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}.admin-user-controls{display:flex;align-items:center;gap:7px;flex:0 0 auto}.admin-role{width:135px;padding:8px 9px;border:1px solid #29313b;border-radius:8px;background:#0d1014;color:var(--text);font-size:.7rem;outline:0}.admin-role:focus{border-color:#3b6fc8}.admin-save{padding:8px 10px!important;font-size:.7rem!important}
+
+    /* TOPBAR */
+    .topbar{
+      position:sticky;top:12px;z-index:10;height:62px;display:flex;align-items:center;
+      justify-content:space-between;gap:12px;margin-bottom:64px;padding:7px 9px 7px 11px;
+      border:1px solid var(--border);border-radius:var(--radius);
+      background:var(--topbar-bg);
+      backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+      box-shadow:var(--shadow-sm);
+      transition:all .3s var(--ease);
+    }
+    .topbar:hover{border-color:var(--border-h)}
+
+    .brand{display:flex;align-items:center;gap:11px;min-width:0}
+    .brand-mark{
+      width:38px;height:38px;display:grid;place-items:center;border-radius:11px;
+      background:linear-gradient(135deg,#1a2f5c,#2b4a8a);color:#8db9ff;font-size:.95rem;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.12), 0 4px 12px rgba(27,59,120,.4);
+    }
+    [data-theme="light"] .brand-mark{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff}
+    .brand-copy{min-width:0}
+    .brand-title{font:800 1.02rem var(--display);letter-spacing:-.3px}
+    .brand-sub{color:var(--muted);font-size:.63rem;margin-top:2px;letter-spacing:.7px;text-transform:uppercase}
+
+    .topnav{display:flex;align-items:center;gap:4px;margin-left:auto}
+    .nav-link{
+      border:0;background:transparent;display:inline-flex;align-items:center;gap:7px;
+      padding:9px 13px;border-radius:11px;color:var(--muted);font-size:.76rem;font-weight:700;
+      transition:all .2s var(--ease);position:relative;
+    }
+    .nav-link i{font-size:.82rem}
+    .nav-link:hover{color:var(--text);background:rgba(155,155,155,.06)}
+    [data-theme="light"] .nav-link:hover{background:rgba(15,23,42,.05)}
+    .nav-link.active{color:var(--text);background:rgba(91,143,255,.12)}
+    [data-theme="light"] .nav-link.active{background:rgba(37,99,235,.1)}
+    .nav-link.active::after{
+      content:"";position:absolute;bottom:3px;left:50%;transform:translateX(-50%);
+      width:18px;height:2px;background:linear-gradient(90deg,var(--blue),var(--violet));
+      border-radius:2px;
+    }
+    .nav-link[hidden]{display:none}
+    .nav-icon-btn{
+      width:40px;height:40px;border-radius:11px;color:var(--muted);
+      display:inline-flex;align-items:center;justify-content:center;
+      transition:all .2s var(--ease);font-size:.88rem;
+    }
+    .nav-icon-btn:hover{color:var(--text);background:rgba(155,155,155,.06)}
+    [data-theme="light"] .nav-icon-btn:hover{background:rgba(15,23,42,.05)}
+
+    .user-area{display:flex;align-items:center;gap:8px}
+    .user-chip{
+      display:none;align-items:center;gap:9px;padding:5px 12px 5px 5px;
+      border:1px solid var(--border);background:rgba(155,155,155,.04);
+      border-radius:99px;color:var(--muted);font-size:.78rem;transition:all .2s var(--ease);
+    }
+    .user-chip:hover{background:rgba(155,155,155,.08);border-color:var(--border-h)}
+    .user-chip.visible{display:flex}
+    .user-chip img{width:29px;height:29px;border-radius:50%;object-fit:cover;background:var(--panel-2)}
+    .user-name{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+    .btn{
+      border:1px solid transparent;border-radius:99px;padding:10px 17px;color:#fff;
+      font-weight:700;font-size:.82rem;transition:all .25s var(--ease);
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      white-space:nowrap;
+    }
+    .btn:hover:not(:disabled){transform:translateY(-2px)}
+    .btn:active:not(:disabled){transform:translateY(0)}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    #auth-btn{min-width:0;height:38px;padding:0 14px}
+    .btn-primary{
+      background:linear-gradient(135deg,var(--blue),var(--violet));
+      box-shadow:0 8px 24px rgba(75,143,255,.25), inset 0 1px 0 rgba(255,255,255,.15);
+    }
+    .btn-primary:hover:not(:disabled){box-shadow:0 12px 30px rgba(75,143,255,.4), inset 0 1px 0 rgba(255,255,255,.2);filter:brightness(1.08)}
+    .btn-ghost{background:rgba(155,155,155,.045);border-color:var(--border);color:var(--muted)}
+    .btn-ghost:hover:not(:disabled){color:var(--text);border-color:var(--border-h);background:rgba(155,155,155,.08)}
+    [data-theme="light"] .btn-ghost{background:rgba(15,23,42,.04);color:var(--muted)}
+    [data-theme="light"] .btn-ghost:hover:not(:disabled){background:rgba(15,23,42,.08);color:var(--text)}
+
+    /* HERO */
+    .hero{display:block;margin-bottom:46px;scroll-margin-top:100px}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;padding:6px 12px;
+      background:rgba(91,143,255,.08);border:1px solid rgba(91,143,255,.18);
+      color:var(--blue);font-size:.7rem;font-weight:800;letter-spacing:1.5px;
+      text-transform:uppercase;margin-bottom:18px;border-radius:99px;
+    }
+    .eyebrow i{font-size:.65rem;color:var(--amber)}
+    .hero h1{
+      font:800 clamp(2.4rem,6.5vw,4.6rem)/1.02 var(--display);
+      letter-spacing:-2.5px;max-width:700px;
+    }
+    .hero-line{
+      display:block;line-height:1.14;
+      background:linear-gradient(180deg, var(--hero-text-from) 0%, var(--hero-text-to) 100%);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+    }
+    .hero-line-accent{
+      margin-top:.1em;
+      background:linear-gradient(135deg, var(--blue) 0%, var(--violet) 60%, #c290ff 100%);
+      -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+      filter:drop-shadow(0 2px 20px rgba(139,108,240,.3));
+    }
+    .hero-copy{color:var(--muted);line-height:1.75;margin-top:20px;max-width:610px;font-size:.95rem}
+
+    /* TOOLBAR */
+    .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:22px}
+    .search{position:relative;flex:1;min-width:220px}
+    .search i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:.82rem;transition:color .2s}
+    .search input{
+      width:100%;background:var(--panel);backdrop-filter:blur(10px);
+      border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);
+      padding:12px 14px 12px 40px;outline:0;font-size:.84rem;transition:all .2s var(--ease);
+    }
+    .search input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(91,143,255,.15)}
+    .search input:focus+i{color:var(--blue)}
+    .search input::placeholder{color:var(--dim)}
+    .filter{
+      background:var(--panel);backdrop-filter:blur(10px);
+      border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);
+      padding:12px 36px 12px 14px;outline:0;font-size:.82rem;cursor:pointer;
+      transition:all .2s var(--ease);
+      appearance:none;-webkit-appearance:none;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238794ad' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat:no-repeat;background-position:right 12px center;
+    }
+    .filter:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(91,143,255,.15)}
+    .filter option{background:var(--panel-solid);color:var(--text)}
+    .refresh-btn{
+      width:42px;height:42px;padding:0;border:1px solid var(--border);
+      border-radius:var(--radius-sm);background:var(--panel);backdrop-filter:blur(10px);
+      color:var(--muted);font-size:.85rem;transition:all .25s var(--ease);
+    }
+    .refresh-btn:hover:not(:disabled){color:var(--text);border-color:var(--blue);background:rgba(91,143,255,.1);transform:rotate(90deg)}
+    .refresh-btn:disabled{opacity:.55;cursor:wait;transform:none}
+    .refresh-btn.loading i{animation:portal-spin .8s linear infinite}
+    .updated-at{color:var(--dim);font-size:.72rem;white-space:nowrap}
+    @keyframes portal-spin{to{transform:rotate(360deg)}}
+
+    /* STATS */
+    .stats{display:flex;align-items:center;gap:18px;color:var(--muted);font-size:.8rem;margin-bottom:20px;flex-wrap:wrap}
+    .stats strong{color:var(--text);font-size:1.15rem;font-weight:800;margin-right:4px}
+    .status{display:inline-flex;align-items:center;gap:8px;padding:4px 11px 4px 8px;background:rgba(155,155,155,.04);border-radius:99px;border:1px solid var(--border)}
+    .status-dot{
+      width:8px;height:8px;border-radius:50%;background:var(--green);
+      box-shadow:0 0 10px color-mix(in srgb, var(--green) 80%, transparent);
+      animation:pulse 2s ease-in-out infinite;
+    }
+    .status.connecting .status-dot{background:var(--blue);box-shadow:0 0 10px color-mix(in srgb, var(--blue) 80%, transparent)}
+    .status.offline .status-dot{background:var(--red);box-shadow:0 0 10px color-mix(in srgb, var(--red) 80%, transparent);animation:none}
+    @keyframes pulse{
+      0%,100%{opacity:1;transform:scale(1)}
+      50%{opacity:.6;transform:scale(1.3)}
+    }
+
+    /* LOADING / EMPTY / ERROR */
+    .loading,.empty,.error{
+      padding:58px 24px;text-align:center;border:1px solid var(--border);
+      border-radius:var(--radius);background:var(--panel);backdrop-filter:blur(10px);
+      color:var(--muted);
+    }
+    .loading i{color:var(--blue);font-size:1.6rem;margin-bottom:14px;filter:drop-shadow(0 0 10px color-mix(in srgb, var(--blue) 50%, transparent))}
+    .empty i,.error i{display:block;font-size:1.8rem;margin-bottom:14px;color:var(--dim)}
+    .error i{color:var(--red);filter:drop-shadow(0 0 10px color-mix(in srgb, var(--red) 40%, transparent))}
+    .empty strong,.error strong{display:block;color:var(--text);margin-bottom:8px;font-size:1rem}
+    .empty p,.error p{font-size:.85rem;line-height:1.6;max-width:420px;margin:0 auto}
+
+    /* APP GROUPS */
+    .group{margin-top:32px}
+    .group-head{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+    .group-head h2{font:800 1.05rem var(--display);letter-spacing:-.3px;display:flex;align-items:center;gap:8px}
+    .group-head h2::before{
+      content:"";width:4px;height:18px;border-radius:2px;
+      background:linear-gradient(180deg,var(--blue),var(--violet));
+    }
+    .group-head span{font-size:.65rem;color:var(--dim);background:rgba(155,155,155,.05);padding:3px 9px;border-radius:99px;font-weight:700}
+    .group-head:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,var(--border),transparent)}
+
+    .apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+    .app-card{
+      position:relative;display:flex;align-items:flex-start;gap:13px;min-height:118px;padding:17px;
+      border:1px solid var(--border);border-radius:var(--radius);
+      background:var(--panel);backdrop-filter:blur(10px);
+      overflow:hidden;transition:all .3s var(--ease);
+      animation:cardIn .4s var(--ease) both;
+    }
+    @keyframes cardIn{
+      from{opacity:0;transform:translateY(8px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+    .app-card::before{
+      content:"";position:absolute;inset:0 auto 0 0;width:3px;
+      background:linear-gradient(180deg,var(--card-color,var(--blue)),transparent);
+      opacity:.9;transition:width .3s var(--ease);
+    }
+    .app-card::after{
+      content:"";position:absolute;inset:0;
+      background:radial-gradient(circle at var(--mouse-x,50%) var(--mouse-y,50%),rgba(155,155,155,.08),transparent 50%);
+      opacity:0;transition:opacity .3s var(--ease);pointer-events:none;
+    }
+    [data-theme="light"] .app-card::after{background:radial-gradient(circle at var(--mouse-x,50%) var(--mouse-y,50%),rgba(15,23,42,.04),transparent 50%)}
+    .app-card:hover{
+      transform:translateY(-4px);border-color:var(--border-h);
+      box-shadow:0 20px 40px -15px rgba(0,0,0,.15), 0 0 0 1px rgba(155,155,155,.05);
+    }
+    [data-theme="dark"] .app-card:hover{box-shadow:0 20px 40px -15px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.05)}
+    .app-card:hover::before{width:4px}
+    .app-card:hover::after{opacity:1}
+
+    .app-icon{
+      width:44px;height:44px;flex:0 0 44px;display:grid;place-items:center;
+      border-radius:12px;
+      background:color-mix(in srgb,var(--card-color,var(--blue)) 15%,transparent);
+      color:var(--card-color,var(--blue));font-size:1.05rem;
+      border:1px solid color-mix(in srgb,var(--card-color,var(--blue)) 25%,transparent);
+      box-shadow:inset 0 1px 0 rgba(155,155,155,.08);
+      transition:transform .3s var(--ease);
+    }
+    .app-card:hover .app-icon{transform:scale(1.08) rotate(-3deg)}
+    .app-icon img{width:26px;height:26px;object-fit:contain}
+    .app-info{min-width:0;flex:1;padding-right:20px}
+    .app-name{font:800 .94rem var(--display);line-height:1.3;margin-bottom:7px;padding-right:10px;overflow-wrap:anywhere;word-break:break-word}
+    .app-description{font-size:.76rem;color:var(--muted);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .app-open{
+      position:absolute;right:14px;bottom:14px;color:var(--dim);font-size:.72rem;
+      padding:6px 10px;border-radius:99px;background:rgba(155,155,155,.04);
+      opacity:0;transform:translateX(-4px);transition:all .3s var(--ease);
+    }
+    .app-card:hover .app-open{opacity:1;transform:translateX(0);color:var(--card-color,var(--blue))}
+    .star{position:absolute;top:12px;right:12px;color:var(--amber);font-size:.7rem;filter:drop-shadow(0 0 4px color-mix(in srgb, var(--amber) 50%, transparent))}
+
+    .group-public .app-card{--card-color:var(--blue)}
+    .group-starred .app-card{--card-color:var(--amber)}
+
+    /* MODAL */
+    .modal-backdrop{
+      position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;
+      background:rgba(1,3,8,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+      z-index:20;opacity:0;visibility:hidden;transition:opacity .3s var(--ease), visibility .3s var(--ease);
+    }
+    [data-theme="light"] .modal-backdrop{background:rgba(15,23,42,.5)}
+    .modal-backdrop.open{opacity:1;visibility:visible}
+    .modal{
+      width:min(100%,420px);border:1px solid var(--border-h);border-radius:var(--radius-lg);
+      background:var(--modal-bg);
+      box-shadow:var(--shadow), inset 0 1px 0 rgba(155,155,155,.05);
+      padding:28px;max-height:calc(100vh - 40px);overflow:auto;
+      transform:translateY(20px) scale(.96);transition:transform .3s var(--ease);
+    }
+    .modal-backdrop.open .modal{transform:translateY(0) scale(1)}
+    .modal.account-wide{width:min(100%,520px)}
+    .modal.wide{width:min(100%,560px)}
+    .modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:24px}
+    .modal-head h2{font:800 1.5rem var(--display);letter-spacing:-.6px}
+    .modal-head p{color:var(--muted);font-size:.82rem;line-height:1.6;margin-top:6px}
+    .close{border:0;background:transparent;color:var(--muted);font-size:1.2rem;padding:4px;border-radius:8px;transition:all .2s}
+    .close:hover{color:var(--text);background:rgba(155,155,155,.06)}
+    .google-wrap{min-height:44px;display:flex;justify-content:center;padding:8px 0}
+    .login-help{color:var(--dim);font-size:.73rem;line-height:1.7;text-align:center;margin-top:20px;padding:12px;background:rgba(155,155,155,.02);border-radius:10px;border:1px dashed var(--border)}
+    .field-label{display:block;color:var(--muted);font-size:.76rem;font-weight:700;margin-bottom:8px}
+    .field{
+      width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:12px;
+      background:rgba(0,0,0,.2);color:var(--text);outline:0;margin-bottom:15px;
+      transition:all .2s var(--ease);
+    }
+    [data-theme="light"] .field{background:rgba(15,23,42,.02)}
+    .field:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(91,143,255,.15)}
+    textarea.field{resize:vertical;min-height:80px}
+    .modal-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:5px}
+    .modal-actions .btn{min-width:100px}
+    .user-detail{display:flex;align-items:center;gap:13px;padding:14px;border-radius:14px;background:rgba(155,155,155,.04);margin-bottom:20px;border:1px solid var(--border)}
+    .user-detail img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--border-h)}
+    .user-detail strong{display:block;font-size:.92rem}
+    .user-detail span{display:block;color:var(--muted);font-size:.74rem;margin-top:3px;overflow-wrap:anywhere;word-break:break-word}
+    .account-section{padding-top:20px;margin-top:20px;border-top:1px solid var(--border)}
+    .account-section-title{font-size:.88rem;font-weight:800;margin-bottom:6px}
+    .account-section-copy{font-size:.76rem;color:var(--muted);line-height:1.6;margin-bottom:14px}
+    .name-row{display:flex;gap:9px}
+    .name-row .field{margin-bottom:0;flex:1}
+    .name-row .btn{flex:0 0 auto}
+    .role-badge{
+      display:inline-block;margin-top:10px;color:var(--blue-h);
+      background:rgba(91,143,255,.15);padding:4px 10px;border-radius:99px;
+      font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+      border:1px solid rgba(91,143,255,.25);
+    }
+
+    /* SETTINGS */
+    .settings-grid{display:grid;gap:14px;margin-top:6px}
+    .settings-row{
+      display:flex;align-items:center;justify-content:space-between;gap:16px;
+      padding:14px;border:1px solid var(--border);border-radius:12px;
+      background:rgba(155,155,155,.03);
+    }
+    .settings-row-info{flex:1;min-width:0}
+    .settings-row-title{font-weight:700;font-size:.88rem;margin-bottom:3px}
+    .settings-row-desc{color:var(--muted);font-size:.74rem;line-height:1.45}
+    .seg-ctrl{display:inline-flex;border:1px solid var(--border);border-radius:99px;padding:3px;background:rgba(0,0,0,.2);gap:2px}
+    [data-theme="light"] .seg-ctrl{background:rgba(15,23,42,.03)}
+    .seg-opt{
+      border:0;background:transparent;padding:7px 13px;border-radius:99px;
+      color:var(--muted);font-size:.74rem;font-weight:700;transition:all .2s var(--ease);
+      display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
+    }
+    .seg-opt:hover{color:var(--text)}
+    .seg-opt.active{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;box-shadow:0 2px 8px rgba(91,143,255,.3)}
+
+    .kbd-list{display:grid;gap:8px;margin-top:6px}
+    .kbd-row{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:10px;background:rgba(155,155,155,.03);border:1px solid var(--border)}
+    .kbd-label{font-size:.82rem;color:var(--text-2)}
+    .kbd-keys{display:inline-flex;gap:4px}
+    kbd{
+      display:inline-block;padding:3px 8px;border-radius:6px;
+      background:rgba(155,155,155,.08);border:1px solid var(--border);
+      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+      font-size:.7rem;font-weight:600;color:var(--text);
+      box-shadow:inset 0 -1px 0 rgba(155,155,155,.1);
+    }
+
+    /* TOAST */
+    .toast{
+      position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);
+      opacity:0;pointer-events:none;z-index:40;padding:12px 18px;border-radius:99px;
+      background:rgba(24,36,58,.95);backdrop-filter:blur(20px);
+      border:1px solid var(--border-h);box-shadow:var(--shadow);
+      font-size:.82rem;transition:all .3s var(--ease);
+      white-space:nowrap;max-width:calc(100% - 32px);overflow:hidden;text-overflow:ellipsis;
+      display:flex;align-items:center;gap:9px;color:var(--text);
+    }
+    [data-theme="light"] .toast{background:rgba(255,255,255,.95);color:var(--text)}
+    .toast i{font-size:.9rem}
+    .toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+    .toast.success{border-color:rgba(34,209,122,.45)}
+    .toast.success i{color:var(--green)}
+    .toast.error{border-color:rgba(255,85,114,.5)}
+    .toast.error i{color:var(--red)}
+    .toast.info i{color:var(--blue)}
+
+    /* FOOTER */
+    .footer{display:flex;justify-content:space-between;gap:16px;color:var(--dim);font-size:.72rem;margin-top:60px;padding-top:20px;border-top:1px solid var(--border);flex-wrap:wrap}
+    .footer-btn{background:transparent;color:var(--dim);font-size:.72rem;padding:4px 8px;border-radius:6px;transition:color .2s}
+    .footer-btn:hover{color:var(--text)}
+
+    /* ADMIN */
+    .admin-wide{width:min(100%,920px)}
+    .admin-layout{display:grid;grid-template-columns:minmax(240px,.8fr) minmax(340px,1.2fr);gap:20px}
+    .admin-panel{border:1px solid var(--border);border-radius:var(--radius);background:var(--panel);backdrop-filter:blur(10px);padding:18px}
+    .admin-panel-title{font-size:.88rem;font-weight:800;margin-bottom:4px}
+    .admin-panel-copy{font-size:.74rem;color:var(--muted);line-height:1.55;margin-bottom:16px}
+    .admin-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
+    .admin-form-grid .full{grid-column:1/-1}
+    .admin-form-grid .field{margin-bottom:12px}
+    .icon-select{display:flex;align-items:center;gap:11px;margin:2px 0 10px;padding:11px;border:1px solid var(--border);border-radius:12px;background:rgba(16,20,26,.5)}
+    .selected-icon{
+      width:42px;height:42px;display:grid;place-items:center;border-radius:11px;
+      background:linear-gradient(135deg,#1a2f5c,#2b4a8a);color:#8db9ff;font-size:1rem;
+      overflow:hidden;flex:0 0 42px;
+    }
+    .selected-icon[hidden]{display:none}
+    .selected-icon img{width:26px;height:26px;object-fit:contain}
+    .icon-media{display:contents}
+    .icon-select-copy{min-width:0;flex:1}
+    .icon-select-copy strong{display:block;font-size:.8rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .icon-select-copy span{display:block;color:var(--dim);font-size:.68rem;margin-top:3px}
+    .icon-select .btn{padding:8px 12px;font-size:.72rem;flex:0 0 auto}
+    .manual-icon{display:flex;gap:8px;margin-bottom:14px}
+    .manual-icon .field{margin:0;min-width:0;flex:1;padding:9px 12px;font-size:.74rem}
+    .manual-icon .btn{padding:9px 12px;font-size:.72rem}
+    .admin-form-actions{display:flex;gap:9px;margin-top:5px}
+    .admin-form-actions .btn{flex:1}
+    .admin-items,.admin-users{display:flex;flex-direction:column;gap:8px;max-height:450px;overflow:auto;padding-right:4px}
+    .admin-item,.admin-user{display:flex;align-items:center;gap:10px;padding:11px;border:1px solid var(--border);border-radius:11px;background:rgba(16,20,26,.5);transition:all .2s var(--ease)}
+    .admin-item:hover,.admin-user:hover{border-color:var(--border-h);background:rgba(20,25,35,.7)}
+    .admin-item-icon{
+      width:34px;height:34px;border-radius:9px;display:grid;place-items:center;
+      background:linear-gradient(135deg,#1a2f5c,#2b4a8a);color:#8db9ff;
+      overflow:hidden;flex:0 0 34px;
+    }
+    .admin-item-icon img{width:22px;height:22px;object-fit:contain}
+    .admin-item-info,.admin-user-info{min-width:0;flex:1}
+    .admin-item-name,.admin-user-name{font-weight:700;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .admin-item-meta,.admin-user-email{color:var(--dim);font-size:.66rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
+    .admin-item-actions,.admin-user-controls{display:flex;gap:4px;flex:0 0 auto}
+    .icon-btn{
+      width:28px;height:28px;border:1px solid #29313b;border-radius:8px;
+      background:transparent;color:var(--muted);font-size:.7rem;
+      transition:all .2s var(--ease);
+    }
+    .icon-btn:hover:not(:disabled){color:var(--text);border-color:var(--blue);background:rgba(91,143,255,.1)}
+    .icon-btn:disabled{opacity:.3;cursor:not-allowed}
+    .icon-btn.danger:hover:not(:disabled){color:#ff7c91;border-color:var(--red);background:rgba(255,85,114,.1)}
+
+    /* LOGO PICKER */
+    .picker-wide{width:min(100%,780px)}
+    .logo-search{margin-bottom:14px}
+    .logo-results{display:grid;grid-template-columns:repeat(auto-fill,minmax(126px,1fr));gap:8px;max-height:430px;overflow:auto;padding-right:4px}
+    .logo-result{
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+      min-height:96px;padding:11px 8px;border:1px solid var(--border);border-radius:11px;
+      background:rgba(16,20,26,.5);color:var(--muted);transition:all .2s var(--ease);cursor:pointer;
+    }
+    .logo-result:hover{border-color:var(--blue);background:rgba(91,143,255,.08);color:var(--text);transform:translateY(-2px)}
+    .logo-result img{width:34px;height:34px;object-fit:contain}
+    .logo-result span{width:100%;font-size:.68rem;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .picker-note{color:var(--dim);font-size:.7rem;line-height:1.6;margin-top:14px;padding:10px;background:rgba(155,155,155,.02);border-radius:10px;border:1px dashed var(--border)}
+    .picker-note a{color:var(--blue-h);text-decoration:underline;text-underline-offset:2px}
+
+    .admin-tabs{display:flex;gap:5px;border-bottom:1px solid var(--border);margin:-5px 0 20px;padding-bottom:8px}
+    .admin-tab-btn{border:0;background:transparent;color:var(--muted);padding:9px 14px;border-radius:9px;font-size:.78rem;font-weight:700;display:inline-flex;align-items:center;gap:7px;transition:all .2s var(--ease)}
+    .admin-tab-btn:hover{color:var(--text);background:rgba(155,155,155,.04)}
+    .admin-tab-btn.active{color:#fff;background:linear-gradient(135deg,rgba(91,143,255,.25),rgba(139,108,240,.25));border:1px solid rgba(91,143,255,.3)}
+    .admin-tab-pane[hidden]{display:none}
+    .user-search{margin-bottom:14px}
+    .admin-user-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#182b4c;flex:0 0 36px;border:2px solid var(--border-h)}
+    .admin-role{width:138px;padding:8px 10px;border:1px solid #29313b;border-radius:9px;background:rgba(13,16,20,.5);color:var(--text);font-size:.72rem;outline:0;transition:all .2s}
+    .admin-role:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(91,143,255,.12)}
+    .admin-save{padding:8px 11px!important;font-size:.72rem!important}
+
+    .skeleton{background:linear-gradient(90deg,rgba(155,155,155,.04) 0%,rgba(155,155,155,.08) 50%,rgba(155,155,155,.04) 100%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}
+    [data-theme="light"] .skeleton{background:linear-gradient(90deg,rgba(15,23,42,.04) 0%,rgba(15,23,42,.08) 50%,rgba(15,23,42,.04) 100%);background-size:200% 100%}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    .skeleton-card{height:118px;border-radius:var(--radius);border:1px solid var(--border)}
+    .skeleton-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:14px}
+
     @media(max-width:900px){.shell{padding-left:22px;padding-right:22px}.apps-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:760px){.shell{padding:15px 15px 38px}.topbar{top:8px;margin-bottom:42px;padding-left:9px}.brand-sub{display:none}.topnav{position:absolute;top:72px;left:0;right:0;justify-content:center;overflow-x:auto;padding:4px;border:1px solid #20252d;border-radius:11px;background:#0d1014}.nav-link{white-space:nowrap}.user-name{display:none}.hero{margin-bottom:30px}.hero h1{letter-spacing:-1.6px}.hero-line{line-height:1.17}.hero-line-accent{margin-top:.2em}.apps-grid{grid-template-columns:1fr}.toolbar{margin-bottom:23px}.footer{flex-direction:column}.modal{padding:22px}.name-row{flex-direction:column}.name-row .btn{width:100%}.admin-layout{grid-template-columns:1fr}.admin-items{max-height:300px}.admin-form-grid{grid-template-columns:1fr}.admin-form-grid .full{grid-column:auto}.picker-wide{padding:18px}.logo-results{grid-template-columns:repeat(3,minmax(0,1fr))}}
+    @media(max-width:760px){
+      .shell{padding:15px 15px 38px}
+      .topbar{top:8px;margin-bottom:42px;padding-left:9px;gap:8px}
+      .brand-sub{display:none}
+      .topnav{position:absolute;top:72px;left:0;right:0;justify-content:center;overflow-x:auto;padding:4px;border:1px solid var(--border);border-radius:11px;background:var(--panel);backdrop-filter:blur(20px)}
+      .nav-link{white-space:nowrap}
+      .user-name{display:none}
+      .hero{margin-bottom:30px}
+      .hero h1{letter-spacing:-1.6px}
+      .hero-line{line-height:1.17}
+      .hero-line-accent{margin-top:.2em}
+      .apps-grid{grid-template-columns:1fr}
+      .toolbar{margin-bottom:23px}
+      .footer{flex-direction:column;gap:8px}
+      .modal{padding:22px}
+      .name-row{flex-direction:column}
+      .name-row .btn{width:100%}
+      .admin-layout{grid-template-columns:1fr}
+      .admin-items,.admin-users{max-height:320px}
+      .admin-form-grid{grid-template-columns:1fr}
+      .admin-form-grid .full{grid-column:auto}
+      .picker-wide{padding:18px}
+      .logo-results{grid-template-columns:repeat(3,minmax(0,1fr))}
+      .settings-row{flex-direction:column;align-items:flex-start;gap:10px}
+      .seg-ctrl{width:100%;justify-content:space-between}
+    }
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
   </style>
 </head>
@@ -41,209 +547,1325 @@
     <header class="topbar">
       <a class="brand" href="./" aria-label="Koo Mean Portal">
         <span class="brand-mark"><i class="fas fa-table-cells"></i></span>
-        <span class="brand-copy"><span class="brand-title">Koo Mean Portal</span><span class="brand-sub">Application space</span></span>
+        <span class="brand-copy"><span class="brand-title" data-i18n="brand_title">Koo Mean Portal</span><span class="brand-sub" data-i18n="brand_sub">Application space</span></span>
       </a>
-      <nav class="topnav" aria-label="เมนูหลัก">
-        <a class="nav-link active" id="nav-home" href="#home"><i class="fas fa-house"></i><span>หน้าแรก</span></a>
-        <button class="nav-link" id="nav-account" type="button"><i class="fas fa-circle-user"></i><span>บัญชี</span></button>
-        <button class="nav-link" id="nav-admin" type="button" hidden><i class="fas fa-sliders"></i><span>จัดการบัญชี</span></button>
+      <nav class="topnav" aria-label="Main menu">
+        <a class="nav-link active" id="nav-home" href="#home"><i class="fas fa-house"></i><span data-i18n="nav_home">หน้าแรก</span></a>
+        <button class="nav-link" id="nav-account" type="button"><i class="fas fa-circle-user"></i><span data-i18n="nav_account">บัญชี</span></button>
+        <button class="nav-link" id="nav-admin" type="button" hidden><i class="fas fa-sliders"></i><span data-i18n="nav_admin">จัดการระบบ</span></button>
+        <button class="nav-icon-btn" id="nav-settings" type="button" title="Settings" aria-label="Settings"><i class="fas fa-gear"></i></button>
       </nav>
       <div class="user-area">
         <div class="user-chip" id="user-chip"><img id="user-avatar" alt=""><span class="user-name" id="user-name"></span></div>
-        <button class="btn btn-primary" id="auth-btn" type="button"><i class="fas fa-arrow-right-to-bracket"></i> เข้าสู่ระบบ</button>
+        <button class="btn btn-primary" id="auth-btn" type="button"><i class="fas fa-arrow-right-to-bracket"></i> <span data-i18n="btn_login">เข้าสู่ระบบ</span></button>
       </div>
     </header>
 
     <section class="hero" id="home">
       <div>
-        <div class="eyebrow"><i class="fas fa-sparkles"></i><span id="eyebrow-text">Your application hub</span></div>
-        <h1 id="hero-title"><span class="hero-line">รวมทุกแอป</span><span class="hero-line hero-line-accent">ไว้ในที่เดียว</span></h1>
-        <p class="hero-copy" id="hero-copy">ศูนย์รวมเครื่องมือและแอปพลิเคชันสำหรับการใช้งานของคุณ เลือกแอปที่ต้องการ แล้วเริ่มใช้งานได้ทันที</p>
+        <div class="eyebrow"><i class="fas fa-sparkles"></i><span id="eyebrow-text" data-i18n="hero_eyebrow">Your application hub</span></div>
+        <h1 id="hero-title">
+          <span class="hero-line" data-i18n="hero_line1">รวมทุกแอป</span>
+          <span class="hero-line hero-line-accent" data-i18n="hero_line2">ไว้ในที่เดียว</span>
+        </h1>
+        <p class="hero-copy" id="hero-copy" data-i18n="hero_copy">ศูนย์รวมเครื่องมือและแอปพลิเคชันสำหรับการใช้งานของคุณ เลือกแอปที่ต้องการ แล้วเริ่มใช้งานได้ทันที</p>
       </div>
     </section>
 
     <section id="applications-section" aria-label="Application list">
       <div class="toolbar">
-        <label class="search"><i class="fas fa-magnifying-glass"></i><input id="search" type="search" placeholder="ค้นหาแอปพลิเคชัน..." autocomplete="off"></label>
-        <select class="filter" id="group-filter" aria-label="กรองตามกลุ่ม"><option value="all">ทุกกลุ่ม</option></select>
-        <button class="refresh-btn" id="refresh-btn" type="button" title="รีเฟรชข้อมูล" aria-label="รีเฟรชข้อมูล"><i class="fas fa-rotate-right"></i></button>
+        <label class="search"><input id="search" type="search" data-i18n-placeholder="search_placeholder" placeholder="ค้นหาแอปพลิเคชัน..." autocomplete="off"><i class="fas fa-magnifying-glass"></i></label>
+        <select class="filter" id="group-filter" aria-label="Filter by group"><option value="all" data-i18n="filter_all">ทุกกลุ่ม</option></select>
+        <button class="refresh-btn" id="refresh-btn" type="button" data-i18n-title="btn_refresh" title="รีเฟรชข้อมูล" aria-label="Refresh"><i class="fas fa-rotate-right"></i></button>
         <span class="updated-at" id="updated-at" aria-live="polite"></span>
       </div>
-      <div class="stats"><span><strong id="app-count">—</strong> แอปที่พร้อมใช้งาน</span><span class="status connecting" id="connection-status"><i class="status-dot"></i><span id="status-text">กำลังเชื่อมต่อ</span></span></div>
-      <div id="applications"><div class="loading"><i class="fas fa-circle-notch fa-spin"></i><p>กำลังโหลด Application Portal...</p></div></div>
+      <div class="stats">
+        <span><strong id="app-count">—</strong> <span data-i18n="apps_available">แอปที่พร้อมใช้งาน</span></span>
+        <span class="status connecting" id="connection-status"><i class="status-dot"></i><span id="status-text" data-i18n="status_connecting">กำลังเชื่อมต่อ</span></span>
+      </div>
+      <div id="applications">
+        <div class="skeleton-grid">
+          <div class="skeleton skeleton-card"></div>
+          <div class="skeleton skeleton-card"></div>
+          <div class="skeleton skeleton-card"></div>
+          <div class="skeleton skeleton-card"></div>
+        </div>
+      </div>
     </section>
 
-    <footer class="footer"><span id="footer-title">Koo Mean Portal</span><span>ข้อมูลและสิทธิ์การเข้าถึงจัดการจากระบบส่วนกลาง</span></footer>
+    <footer class="footer">
+      <span id="footer-title">Koo Mean Portal</span>
+      <span>
+        <span data-i18n="footer_info">ข้อมูลและสิทธิ์การเข้าถึงจัดการจากระบบส่วนกลาง</span>
+        · <button class="footer-btn" id="footer-help" type="button" data-i18n="footer_help">ช่วยเหลือ</button>
+      </span>
+    </footer>
   </main>
 
   <div class="modal-backdrop" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
     <div class="modal">
-      <div class="modal-head"><div><h2 id="login-title">เข้าสู่ระบบ</h2><p>ใช้ Google Account เพื่อดูแอปที่คุณมีสิทธิ์ใช้งาน</p></div><button class="close" type="button" data-close="login-modal" aria-label="ปิด"><i class="fas fa-xmark"></i></button></div>
+      <div class="modal-head"><div><h2 id="login-title" data-i18n="login_title">เข้าสู่ระบบ</h2><p data-i18n="login_desc">ใช้ Google Account เพื่อดูแอปที่คุณมีสิทธิ์ใช้งาน</p></div><button class="close" type="button" data-close="login-modal" aria-label="Close"><i class="fas fa-xmark"></i></button></div>
       <div class="google-wrap"><div id="g_id_onload"></div><div class="g_id_signin"></div></div>
-      <p class="login-help">การเข้าสู่ระบบจะใช้ token ที่ตรวจสอบโดย backend เดิม ไม่มีการเก็บรหัสผ่านไว้ในเว็บนี้</p>
+      <p class="login-help"><i class="fas fa-shield-halved" style="color:var(--blue);margin-right:6px"></i><span data-i18n="login_help">การเข้าสู่ระบบจะใช้ token ที่ตรวจสอบโดย backend เดิม ไม่มีการเก็บรหัสผ่านไว้ในเว็บนี้</span></p>
     </div>
   </div>
 
   <div class="modal-backdrop" id="register-modal" role="dialog" aria-modal="true" aria-labelledby="register-title">
     <div class="modal">
-      <div class="modal-head"><div><h2 id="register-title">ขอลงทะเบียน</h2><p>บัญชีนี้ยังไม่อยู่ในระบบ กรุณาแจ้งข้อมูลสั้น ๆ เพื่อส่งคำขอ</p></div><button class="close" type="button" data-close="register-modal" aria-label="ปิด"><i class="fas fa-xmark"></i></button></div>
-      <label class="field-label" for="register-note">ข้อมูลเพิ่มเติม (ไม่บังคับ)</label>
-      <textarea class="field" id="register-note" rows="4" maxlength="500" placeholder="เช่น ทีม / หน้าที่ / แอปที่ต้องการใช้งาน"></textarea>
-      <div class="modal-actions"><button class="btn btn-ghost" type="button" data-close="register-modal">ยกเลิก</button><button class="btn btn-primary" id="register-btn" type="button">ส่งคำขอ</button></div>
+      <div class="modal-head"><div><h2 id="register-title" data-i18n="register_title">ขอลงทะเบียน</h2><p data-i18n="register_desc">บัญชีนี้ยังไม่อยู่ในระบบ กรุณาแจ้งข้อมูลสั้น ๆ เพื่อส่งคำขอ</p></div><button class="close" type="button" data-close="register-modal" aria-label="Close"><i class="fas fa-xmark"></i></button></div>
+      <label class="field-label" for="register-note" data-i18n="register_note_label">ข้อมูลเพิ่มเติม (ไม่บังคับ)</label>
+      <textarea class="field" id="register-note" rows="4" maxlength="500" data-i18n-placeholder="register_note_placeholder" placeholder="เช่น ทีม / หน้าที่ / แอปที่ต้องการใช้งาน"></textarea>
+      <div class="modal-actions"><button class="btn btn-ghost" type="button" data-close="register-modal" data-i18n="btn_cancel">ยกเลิก</button><button class="btn btn-primary" id="register-btn" type="button" data-i18n="btn_submit_request">ส่งคำขอ</button></div>
     </div>
   </div>
 
   <div class="modal-backdrop" id="account-modal" role="dialog" aria-modal="true" aria-labelledby="account-title">
-    <div class="modal account-wide"><div class="modal-head"><div><h2 id="account-title">บัญชีของคุณ</h2><p>จัดการข้อมูลบัญชีที่ใช้เชื่อมต่อกับ Portal</p></div><button class="close" type="button" data-close="account-modal" aria-label="ปิด"><i class="fas fa-xmark"></i></button></div><div class="user-detail"><img id="account-avatar" alt=""><div><strong id="account-name"></strong><span id="account-email"></span><span class="role-badge" id="account-role"></span></div></div><div class="account-section"><div class="account-section-title">ชื่อที่แสดง</div><p class="account-section-copy">ชื่อใหม่นี้จะถูกบันทึกในบัญชีส่วนกลาง และใช้แสดงในเว็บที่เชื่อมต่อกับระบบ</p><div class="name-row"><input class="field" id="new-name" type="text" maxlength="50" autocomplete="name" placeholder="กรอกชื่อที่ต้องการแสดง"><button class="btn btn-primary" id="save-name-btn" type="button"><i class="fas fa-check"></i> บันทึก</button></div></div><div class="account-section"><button class="btn btn-ghost" id="logout-btn" type="button" style="width:100%"><i class="fas fa-right-from-bracket"></i> ออกจากระบบ</button></div></div>
+    <div class="modal account-wide">
+      <div class="modal-head"><div><h2 id="account-title" data-i18n="account_title">บัญชีของคุณ</h2><p data-i18n="account_desc">จัดการข้อมูลบัญชีที่ใช้เชื่อมต่อกับ Portal</p></div><button class="close" type="button" data-close="account-modal" aria-label="Close"><i class="fas fa-xmark"></i></button></div>
+      <div class="user-detail"><img id="account-avatar" alt=""><div><strong id="account-name"></strong><span id="account-email"></span><span class="role-badge" id="account-role"></span></div></div>
+      <div class="account-section">
+        <div class="account-section-title" data-i18n="display_name_title">ชื่อที่แสดง</div>
+        <p class="account-section-copy" data-i18n="display_name_desc">ชื่อใหม่นี้จะถูกบันทึกในบัญชีส่วนกลาง และใช้แสดงในเว็บที่เชื่อมต่อกับระบบ</p>
+        <div class="name-row"><input class="field" id="new-name" type="text" maxlength="50" autocomplete="name" data-i18n-placeholder="display_name_placeholder" placeholder="กรอกชื่อที่ต้องการแสดง"><button class="btn btn-primary" id="save-name-btn" type="button"><i class="fas fa-check"></i> <span data-i18n="btn_save">บันทึก</span></button></div>
+      </div>
+      <div class="account-section"><button class="btn btn-ghost" id="logout-btn" type="button" style="width:100%"><i class="fas fa-right-from-bracket"></i> <span data-i18n="btn_logout">ออกจากระบบ</span></button></div>
+    </div>
   </div>
+
   <div class="modal-backdrop" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-title">
     <div class="modal admin-wide">
-      <div class="modal-head"><div><h2 id="admin-title">จัดการระบบ</h2><p id="admin-subtitle">เพิ่ม แก้ไข และจัดลำดับรายการจาก Application Sheet</p></div><button class="close" type="button" data-close="admin-modal" aria-label="ปิด"><i class="fas fa-xmark"></i></button></div>
-      <div class="admin-tabs"><button class="admin-tab-btn active" id="admin-apps-tab-btn" type="button"><i class="fas fa-table-cells-large"></i> แอปพลิเคชัน</button><button class="admin-tab-btn" id="admin-users-tab-btn" type="button"><i class="fas fa-users"></i> ผู้ใช้</button></div>
+      <div class="modal-head"><div><h2 id="admin-title" data-i18n="admin_title">จัดการระบบ</h2><p id="admin-subtitle" data-i18n="admin_subtitle_apps">เพิ่ม แก้ไข และจัดลำดับรายการจาก Application Sheet</p></div><button class="close" type="button" data-close="admin-modal" aria-label="Close"><i class="fas fa-xmark"></i></button></div>
+      <div class="admin-tabs">
+        <button class="admin-tab-btn active" id="admin-apps-tab-btn" type="button"><i class="fas fa-table-cells-large"></i> <span data-i18n="admin_tab_apps">แอปพลิเคชัน</span></button>
+        <button class="admin-tab-btn" id="admin-users-tab-btn" type="button"><i class="fas fa-users"></i> <span data-i18n="admin_tab_users">ผู้ใช้</span></button>
+      </div>
       <div id="admin-apps-tab" class="admin-tab-pane">
        <div class="admin-layout">
         <section class="admin-panel">
-          <div class="admin-panel-title" id="admin-form-title">เพิ่มแอปพลิเคชัน</div>
-          <p class="admin-panel-copy">ไอคอนจาก theSVG จะบันทึกเป็นชื่อ slug และระบบจะตรวจสอบ URL ซ้ำก่อนบันทึก</p>
+          <div class="admin-panel-title" id="admin-form-title" data-i18n="admin_add_app">เพิ่มแอปพลิเคชัน</div>
+          <p class="admin-panel-copy" data-i18n="admin_form_help">ไอคอนจาก theSVG จะบันทึกเป็นชื่อ slug และระบบจะตรวจสอบ URL ซ้ำก่อนบันทึก</p>
           <div class="admin-form-grid">
-            <div class="full"><label class="field-label" for="admin-name">ชื่อแอป</label><input class="field" id="admin-name" maxlength="100" placeholder="เช่น Dashboard"></div>
+            <div class="full"><label class="field-label" for="admin-name" data-i18n="field_app_name">ชื่อแอป</label><input class="field" id="admin-name" maxlength="100" placeholder="เช่น Dashboard"></div>
             <div class="full"><label class="field-label" for="admin-url">URL</label><input class="field" id="admin-url" type="url" maxlength="500" placeholder="https://..."></div>
-            <div class="full"><label class="field-label" for="admin-description">คำอธิบาย</label><textarea class="field" id="admin-description" rows="3" maxlength="300" placeholder="อธิบายสั้น ๆ"></textarea></div>
-            <div><label class="field-label" for="admin-group">กลุ่ม / Role</label><input class="field" id="admin-group" maxlength="50" placeholder="public หรือ admin"></div>
-            <div><label class="field-label" for="admin-color">สี (ไม่บังคับ)</label><input class="field" id="admin-color" maxlength="9" placeholder="#4b8fff"></div>
-            <label class="field-label" style="display:flex;align-items:center;gap:8px;padding:11px 0 0;cursor:pointer"><input id="admin-starred" type="checkbox" style="accent-color:var(--blue)"> แนะนำแอปนี้</label>
+            <div class="full"><label class="field-label" for="admin-description" data-i18n="field_description">คำอธิบาย</label><textarea class="field" id="admin-description" rows="3" maxlength="300" data-i18n-placeholder="field_desc_placeholder" placeholder="อธิบายสั้น ๆ"></textarea></div>
+            <div><label class="field-label" for="admin-group" data-i18n="field_group">กลุ่ม / Role</label><input class="field" id="admin-group" maxlength="50" placeholder="public หรือ admin"></div>
+            <div><label class="field-label" for="admin-color" data-i18n="field_color">สี (ไม่บังคับ)</label><input class="field" id="admin-color" maxlength="9" placeholder="#4b8fff"></div>
+            <label class="field-label" style="display:flex;align-items:center;gap:8px;padding:11px 0 0;cursor:pointer"><input id="admin-starred" type="checkbox" style="accent-color:var(--blue)"> <span data-i18n="field_featured">แนะนำแอปนี้</span></label>
           </div>
-          <div class="icon-select"><div class="selected-icon" id="admin-icon-preview" hidden></div><div class="icon-select-copy"><strong id="admin-icon-name">ยังไม่ได้เลือกไอคอน</strong><span id="admin-icon-value">—</span></div><button class="btn btn-ghost" id="choose-logo-btn" type="button"><i class="fas fa-shapes"></i> เลือกโลโก้</button></div>
-          <div class="manual-icon"><input class="field" id="admin-icon-manual" maxlength="31" placeholder="หรือกรอก theSVG slug เช่น github"><button class="btn btn-ghost" id="use-icon-btn" type="button">ใช้ slug</button></div>
-          <div class="admin-form-actions"><button class="btn btn-primary" id="admin-submit-btn" type="button"><i class="fas fa-plus"></i> เพิ่มแอป</button><button class="btn btn-ghost" id="admin-cancel-btn" type="button" hidden>ยกเลิกแก้ไข</button></div>
+          <div class="icon-select"><div class="selected-icon" id="admin-icon-preview" hidden></div><div class="icon-select-copy"><strong id="admin-icon-name" data-i18n="icon_not_selected">ยังไม่ได้เลือกไอคอน</strong><span id="admin-icon-value">—</span></div><button class="btn btn-ghost" id="choose-logo-btn" type="button"><i class="fas fa-shapes"></i> <span data-i18n="btn_choose_logo">เลือกโลโก้</span></button></div>
+          <div class="manual-icon"><input class="field" id="admin-icon-manual" maxlength="31" placeholder="หรือกรอก theSVG slug เช่น github"><button class="btn btn-ghost" id="use-icon-btn" type="button" data-i18n="btn_use_slug">ใช้ slug</button></div>
+          <div class="admin-form-actions"><button class="btn btn-primary" id="admin-submit-btn" type="button"><i class="fas fa-plus"></i> <span data-i18n="btn_add_app">เพิ่มแอป</span></button><button class="btn btn-ghost" id="admin-cancel-btn" type="button" hidden data-i18n="btn_cancel_edit">ยกเลิกแก้ไข</button></div>
         </section>
-        <section class="admin-panel"><div class="admin-panel-title">ลำดับแอป</div><p class="admin-panel-copy">ใช้ลูกศรขึ้นลงเพื่อกำหนดว่าแอปใดจะแสดงก่อนหลัง</p><div class="admin-items" id="admin-items"><div class="empty" style="padding:28px 10px"><p>ยังไม่มีข้อมูล</p></div></div></section>
+        <section class="admin-panel">
+          <div class="admin-panel-title" data-i18n="admin_order_title">ลำดับแอป</div>
+          <p class="admin-panel-copy" data-i18n="admin_order_help">ใช้ลูกศรขึ้นลงเพื่อกำหนดว่าแอปใดจะแสดงก่อนหลัง</p>
+          <div class="admin-items" id="admin-items"><div class="empty" style="padding:28px 10px"><p data-i18n="empty_no_data">ยังไม่มีข้อมูล</p></div></div>
+        </section>
        </div>
       </div>
       <div id="admin-users-tab" class="admin-tab-pane" hidden>
-        <div class="admin-panel"><div class="admin-panel-title">ผู้ใช้งานทั้งหมด</div><p class="admin-panel-copy">กำหนด Role เพื่อควบคุมสิทธิ์การเข้าถึงข้อมูลและฟังก์ชันในระบบ</p><label class="search user-search"><i class="fas fa-magnifying-glass"></i><input id="admin-user-search" type="search" placeholder="ค้นหาชื่อหรืออีเมล..." autocomplete="off"></label><div class="admin-users" id="admin-users"><div class="empty" style="padding:28px 10px"><p>ยังไม่มีข้อมูล</p></div></div></div>
+        <div class="admin-panel">
+          <div class="admin-panel-title" data-i18n="admin_users_title">ผู้ใช้งานทั้งหมด</div>
+          <p class="admin-panel-copy" data-i18n="admin_users_help">กำหนด Role เพื่อควบคุมสิทธิ์การเข้าถึงข้อมูลและฟังก์ชันในระบบ</p>
+          <label class="search user-search"><input id="admin-user-search" type="search" data-i18n-placeholder="search_users_placeholder" placeholder="ค้นหาชื่อหรืออีเมล..." autocomplete="off"><i class="fas fa-magnifying-glass"></i></label>
+          <div class="admin-users" id="admin-users"><div class="empty" style="padding:28px 10px"><p data-i18n="empty_no_data">ยังไม่มีข้อมูล</p></div></div>
+        </div>
       </div>
     </div>
   </div>
+
   <div class="modal-backdrop" id="logo-modal" role="dialog" aria-modal="true" aria-labelledby="logo-title">
-    <div class="modal picker-wide"><div class="modal-head"><div><h2 id="logo-title">เลือกโลโก้</h2><p>ค้นหาและเลือกโลโก้จากคลัง theSVG</p></div><button class="close" type="button" data-close="logo-modal" aria-label="ปิด"><i class="fas fa-xmark"></i></button></div><label class="search logo-search"><i class="fas fa-magnifying-glass"></i><input id="logo-search" type="search" placeholder="ค้นหา เช่น Google, Notion, OpenAI..." autocomplete="off"></label><div class="logo-results" id="logo-results"><div class="loading" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-circle-notch fa-spin"></i><p>กำลังโหลดโลโก้...</p></div></div><p class="picker-note">ที่มา: <a href="https://thesvg.org/" target="_blank" rel="noopener noreferrer">theSVG</a> · ไอคอนจะถูกโหลดจาก URL สาธารณะของ theSVG</p></div>
+    <div class="modal picker-wide"><div class="modal-head"><div><h2 id="logo-title" data-i18n="logo_picker_title">เลือกโลโก้</h2><p data-i18n="logo_picker_desc">ค้นหาและเลือกโลโก้จากคลัง theSVG</p></div><button class="close" type="button" data-close="logo-modal" aria-label="Close"><i class="fas fa-xmark"></i></button></div><label class="search logo-search"><input id="logo-search" type="search" data-i18n-placeholder="logo_search_placeholder" placeholder="ค้นหา เช่น Google, Notion, OpenAI..." autocomplete="off"><i class="fas fa-magnifying-glass"></i></label><div class="logo-results" id="logo-results"><div class="loading" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-circle-notch fa-spin"></i><p data-i18n="logo_loading">กำลังโหลดโลโก้...</p></div></div><p class="picker-note"><i class="fas fa-circle-info" style="color:var(--blue);margin-right:6px"></i><span data-i18n="logo_picker_note">ที่มา:</span> <a href="https://thesvg.org/" target="_blank" rel="noopener noreferrer">theSVG</a> · <span data-i18n="logo_picker_note2">ไอคอนจะถูกโหลดจาก URL สาธารณะของ theSVG</span></p></div>
   </div>
+
+  <div class="modal-backdrop" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <div class="modal wide">
+      <div class="modal-head">
+        <div><h2 id="settings-title" data-i18n="settings_title">การตั้งค่า</h2><p data-i18n="settings_desc">ปรับแต่งการแสดงผลและภาษาของ Portal</p></div>
+        <button class="close" type="button" data-close="settings-modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="settings-grid">
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <div class="settings-row-title"><i class="fas fa-palette" style="margin-right:8px;color:var(--blue)"></i><span data-i18n="settings_theme">ธีม</span></div>
+            <div class="settings-row-desc" data-i18n="settings_theme_desc">เลือกธีมสีสำหรับการแสดงผล (ระบบจะปรับตามค่าเครื่องเมื่อเลือกอัตโนมัติ)</div>
+          </div>
+          <div class="seg-ctrl" id="theme-ctrl" role="radiogroup" aria-label="Theme">
+            <button class="seg-opt" type="button" data-theme-value="light"><i class="fas fa-sun"></i> <span data-i18n="theme_light">สว่าง</span></button>
+            <button class="seg-opt" type="button" data-theme-value="dark"><i class="fas fa-moon"></i> <span data-i18n="theme_dark">มืด</span></button>
+            <button class="seg-opt" type="button" data-theme-value="auto"><i class="fas fa-circle-half-stroke"></i> <span data-i18n="theme_auto">อัตโนมัติ</span></button>
+          </div>
+        </div>
+        <div class="settings-row">
+          <div class="settings-row-info">
+            <div class="settings-row-title"><i class="fas fa-language" style="margin-right:8px;color:var(--violet)"></i><span data-i18n="settings_language">ภาษา</span></div>
+            <div class="settings-row-desc" data-i18n="settings_language_desc">เปลี่ยนภาษาที่ใช้ในหน้าเว็บ</div>
+          </div>
+          <div class="seg-ctrl" id="lang-ctrl" role="radiogroup" aria-label="Language">
+            <button class="seg-opt" type="button" data-lang-value="th">🇹🇭 TH</button>
+            <button class="seg-opt" type="button" data-lang-value="en">🇺🇸 EN</button>
+          </div>
+        </div>
+        <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:10px">
+          <div class="settings-row-info">
+            <div class="settings-row-title"><i class="fas fa-keyboard" style="margin-right:8px;color:var(--amber)"></i><span data-i18n="settings_shortcuts">ปุ่มลัด</span></div>
+            <div class="settings-row-desc" data-i18n="settings_shortcuts_desc">ปุ่มลัดสำหรับใช้บนคีย์บอร์ด</div>
+          </div>
+          <div class="kbd-list">
+            <div class="kbd-row"><span class="kbd-label" data-i18n="shortcut_search">ค้นหาแอปพลิเคชัน</span><span class="kbd-keys"><kbd>/</kbd></span></div>
+            <div class="kbd-row"><span class="kbd-label" data-i18n="shortcut_refresh">รีเฟรชข้อมูล</span><span class="kbd-keys"><kbd>R</kbd></span></div>
+            <div class="kbd-row"><span class="kbd-label" data-i18n="shortcut_settings">เปิดการตั้งค่า</span><span class="kbd-keys"><kbd>,</kbd></span></div>
+            <div class="kbd-row"><span class="kbd-label" data-i18n="shortcut_close">ปิด modal / ยกเลิก</span><span class="kbd-keys"><kbd>Esc</kbd></span></div>
+            <div class="kbd-row"><span class="kbd-label" data-i18n="shortcut_help">แสดงปุ่มลัด</span><span class="kbd-keys"><kbd>?</kbd></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-title">
+    <div class="modal wide">
+      <div class="modal-head">
+        <div><h2 id="help-title" data-i18n="help_title">ช่วยเหลือ &amp; เกี่ยวกับ</h2><p data-i18n="help_desc">ข้อมูลและคำตอบที่พบบ่อย</p></div>
+        <button class="close" type="button" data-close="help-modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="settings-grid">
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+          <div class="settings-row-title" data-i18n="help_what_is">Koo Mean Portal คืออะไร?</div>
+          <div class="settings-row-desc" data-i18n="help_what_is_desc">เป็นศูนย์รวมแอปพลิเคชันและเครื่องมือสำหรับผู้ใช้ที่ได้รับการอนุญาต ระบบจะแสดงเฉพาะแอปที่คุณมีสิทธิ์เข้าถึงเท่านั้น</div>
+        </div>
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+          <div class="settings-row-title" data-i18n="help_cannot_login">เข้าสู่ระบบไม่ได้?</div>
+          <div class="settings-row-desc" data-i18n="help_cannot_login_desc">ตรวจสอบว่าใช้อีเมลที่ได้รับอนุญาต และบัญชี Google ถูกเชื่อมต่อกับระบบ หากยังไม่สามารถเข้าได้ ให้ติดต่อผู้ดูแลระบบ</div>
+        </div>
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+          <div class="settings-row-title" data-i18n="help_missing_app">ไม่เห็นแอปบางตัว?</div>
+          <div class="settings-row-desc" data-i18n="help_missing_app_desc">การมองเห็นแอปขึ้นอยู่กับ Role และ Group ที่กำหนดให้บัญชีของคุณ หากคิดว่าควรเห็น ให้แจ้งผู้ดูแลระบบ</div>
+        </div>
+        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+          <div class="settings-row-title" data-i18n="help_privacy">ความเป็นส่วนตัว</div>
+          <div class="settings-row-desc" data-i18n="help_privacy_desc">ระบบไม่เก็บรหัสผ่าน ใช้ token จาก Google ในการยืนยันตัวตนเท่านั้น ข้อมูลผู้ใช้จะถูกเก็บเฉพาะที่จำเป็น</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script>
+  (function(){
     'use strict';
+
+    /* ===== i18n ===== */
+    const I18N = {
+      th: {
+        brand_title:'Koo Mean Portal', brand_sub:'Application space',
+        nav_home:'หน้าแรก', nav_account:'บัญชี', nav_admin:'จัดการระบบ',
+        btn_login:'เข้าสู่ระบบ', btn_account:'บัญชี',
+        hero_eyebrow:'Your application hub',
+        hero_line1:'รวมทุกแอป', hero_line2:'ไว้ในที่เดียว',
+        hero_copy:'ศูนย์รวมเครื่องมือและแอปพลิเคชันสำหรับการใช้งานของคุณ เลือกแอปที่ต้องการ แล้วเริ่มใช้งานได้ทันที',
+        search_placeholder:'ค้นหาแอปพลิเคชัน...',
+        filter_all:'ทุกกลุ่ม',
+        btn_refresh:'รีเฟรชข้อมูล',
+        apps_available:'แอปที่พร้อมใช้งาน',
+        status_connecting:'กำลังเชื่อมต่อ', status_connected:'เชื่อมต่อแล้ว',
+        status_offline:'ออฟไลน์', status_retrying:'กำลังลองใหม่...',
+        status_need_register:'ต้องลงทะเบียน', status_need_relogin:'ต้องเข้าสู่ระบบใหม่',
+        footer_info:'ข้อมูลและสิทธิ์การเข้าถึงจัดการจากระบบส่วนกลาง', footer_help:'ช่วยเหลือ',
+        login_title:'เข้าสู่ระบบ', login_desc:'ใช้ Google Account เพื่อดูแอปที่คุณมีสิทธิ์ใช้งาน',
+        login_help:'การเข้าสู่ระบบจะใช้ token ที่ตรวจสอบโดย backend เดิม ไม่มีการเก็บรหัสผ่านไว้ในเว็บนี้',
+        register_title:'ขอลงทะเบียน', register_desc:'บัญชีนี้ยังไม่อยู่ในระบบ กรุณาแจ้งข้อมูลสั้น ๆ เพื่อส่งคำขอ',
+        register_note_label:'ข้อมูลเพิ่มเติม (ไม่บังคับ)',
+        register_note_placeholder:'เช่น ทีม / หน้าที่ / แอปที่ต้องการใช้งาน',
+        btn_cancel:'ยกเลิก', btn_submit_request:'ส่งคำขอ', btn_save:'บันทึก',
+        account_title:'บัญชีของคุณ', account_desc:'จัดการข้อมูลบัญชีที่ใช้เชื่อมต่อกับ Portal',
+        display_name_title:'ชื่อที่แสดง',
+        display_name_desc:'ชื่อใหม่นี้จะถูกบันทึกในบัญชีส่วนกลาง และใช้แสดงในเว็บที่เชื่อมต่อกับระบบ',
+        display_name_placeholder:'กรอกชื่อที่ต้องการแสดง',
+        btn_logout:'ออกจากระบบ',
+        admin_title:'จัดการระบบ',
+        admin_subtitle_apps:'เพิ่ม แก้ไข และจัดลำดับรายการจาก Application Sheet',
+        admin_subtitle_users:'จัดการผู้ใช้และสิทธิ์การเข้าถึงจาก Users Sheet',
+        admin_tab_apps:'แอปพลิเคชัน', admin_tab_users:'ผู้ใช้',
+        admin_add_app:'เพิ่มแอปพลิเคชัน', admin_edit_app:'แก้ไขแอปพลิเคชัน',
+        admin_form_help:'ไอคอนจาก theSVG จะบันทึกเป็นชื่อ slug และระบบจะตรวจสอบ URL ซ้ำก่อนบันทึก',
+        field_app_name:'ชื่อแอป', field_description:'คำอธิบาย', field_desc_placeholder:'อธิบายสั้น ๆ',
+        field_group:'กลุ่ม / Role', field_color:'สี (ไม่บังคับ)', field_featured:'แนะนำแอปนี้',
+        icon_not_selected:'ยังไม่ได้เลือกไอคอน',
+        btn_choose_logo:'เลือกโลโก้', btn_use_slug:'ใช้ slug',
+        btn_add_app:'เพิ่มแอป', btn_save_changes:'บันทึกการแก้ไข', btn_cancel_edit:'ยกเลิกแก้ไข',
+        admin_order_title:'ลำดับแอป',
+        admin_order_help:'ใช้ลูกศรขึ้นลงเพื่อกำหนดว่าแอปใดจะแสดงก่อนหลัง',
+        admin_users_title:'ผู้ใช้งานทั้งหมด',
+        admin_users_help:'กำหนด Role เพื่อควบคุมสิทธิ์การเข้าถึงข้อมูลและฟังก์ชันในระบบ',
+        search_users_placeholder:'ค้นหาชื่อหรืออีเมล...',
+        empty_no_data:'ยังไม่มีข้อมูล', empty_no_app:'ยังไม่มีแอปพลิเคชัน',
+        empty_no_match:'ไม่พบแอปที่ตรงกับการค้นหา',
+        empty_no_match_desc:'ลองเปลี่ยนคำค้นหาหรือกลุ่ม',
+        empty_no_app_desc:'เมื่อมีข้อมูลใน Application Sheet รายการจะแสดงที่นี่',
+        error_load_failed:'โหลดข้อมูลไม่สำเร็จ', error_retry:'ลองใหม่',
+        logo_picker_title:'เลือกโลโก้', logo_picker_desc:'ค้นหาและเลือกโลโก้จากคลัง theSVG',
+        logo_search_placeholder:'ค้นหา เช่น Google, Notion, OpenAI...',
+        logo_loading:'กำลังโหลดโลโก้...',
+        logo_picker_note:'ที่มา:', logo_picker_note2:'ไอคอนจะถูกโหลดจาก URL สาธารณะของ theSVG',
+        settings_title:'การตั้งค่า', settings_desc:'ปรับแต่งการแสดงผลและภาษาของ Portal',
+        settings_theme:'ธีม', settings_theme_desc:'เลือกธีมสีสำหรับการแสดงผล (ระบบจะปรับตามค่าเครื่องเมื่อเลือกอัตโนมัติ)',
+        theme_light:'สว่าง', theme_dark:'มืด', theme_auto:'อัตโนมัติ',
+        settings_language:'ภาษา', settings_language_desc:'เปลี่ยนภาษาที่ใช้ในหน้าเว็บ',
+        settings_shortcuts:'ปุ่มลัด', settings_shortcuts_desc:'ปุ่มลัดสำหรับใช้บนคีย์บอร์ด',
+        shortcut_search:'ค้นหาแอปพลิเคชัน', shortcut_refresh:'รีเฟรชข้อมูล',
+        shortcut_settings:'เปิดการตั้งค่า', shortcut_close:'ปิด modal / ยกเลิก',
+        shortcut_help:'แสดงปุ่มลัด',
+        help_title:'ช่วยเหลือ & เกี่ยวกับ', help_desc:'ข้อมูลและคำตอบที่พบบ่อย',
+        help_what_is:'Koo Mean Portal คืออะไร?',
+        help_what_is_desc:'เป็นศูนย์รวมแอปพลิเคชันและเครื่องมือสำหรับผู้ใช้ที่ได้รับการอนุญาต ระบบจะแสดงเฉพาะแอปที่คุณมีสิทธิ์เข้าถึงเท่านั้น',
+        help_cannot_login:'เข้าสู่ระบบไม่ได้?',
+        help_cannot_login_desc:'ตรวจสอบว่าใช้อีเมลที่ได้รับอนุญาต และบัญชี Google ถูกเชื่อมต่อกับระบบ หากยังไม่สามารถเข้าได้ ให้ติดต่อผู้ดูแลระบบ',
+        help_missing_app:'ไม่เห็นแอปบางตัว?',
+        help_missing_app_desc:'การมองเห็นแอปขึ้นอยู่กับ Role และ Group ที่กำหนดให้บัญชีของคุณ หากคิดว่าควรเห็น ให้แจ้งผู้ดูแลระบบ',
+        help_privacy:'ความเป็นส่วนตัว',
+        help_privacy_desc:'ระบบไม่เก็บรหัสผ่าน ใช้ token จาก Google ในการยืนยันตัวตนเท่านั้น ข้อมูลผู้ใช้จะถูกเก็บเฉพาะที่จำเป็น',
+        toast_session_expired:'เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่',
+        toast_login_checking:'กำลังตรวจสอบบัญชี...',
+        toast_login_success:'เข้าสู่ระบบสำเร็จ',
+        toast_refreshed:'รีเฟรชข้อมูลแล้ว',
+        toast_logged_out:'ออกจากระบบแล้ว',
+        toast_saving:'กำลังบันทึก...',
+        toast_saved:'บันทึกเรียบร้อยแล้ว',
+        toast_name_saved:'เปลี่ยนชื่อเรียบร้อยแล้ว',
+        toast_register_sent:'ส่งคำขอลงทะเบียนแล้ว',
+        toast_login_failed:'เข้าสู่ระบบไม่สำเร็จ',
+        toast_google_invalid:'Google session ไม่ถูกต้องหรือหมดอายุ กรุณาลองใหม่',
+        toast_network_timeout:'การเชื่อมต่อใช้เวลานานเกินไป กรุณาลองใหม่',
+        toast_network_error:'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้',
+        toast_server_error:'เซิร์ฟเวอร์ตอบกลับไม่ถูกต้อง',
+        toast_role_updated:'อัปเดต Role เรียบร้อยแล้ว',
+        toast_app_added:'เพิ่มแอปเรียบร้อยแล้ว',
+        toast_app_updated:'แก้ไขแอปเรียบร้อยแล้ว',
+        toast_app_deleted:'ลบแอปเรียบร้อยแล้ว',
+        toast_retrying:'กำลังลองเชื่อมต่อใหม่อัตโนมัติ...',
+        msg_need_admin:'ต้องใช้บัญชี Admin',
+        msg_app_name_required:'กรุณากรอกชื่อแอป',
+        msg_invalid_url:'URL ต้องขึ้นต้นด้วย http:// หรือ https://',
+        msg_url_duplicate:'URL นี้ถูกใช้แล้วในแอป',
+        msg_invalid_color:'สีต้องอยู่ในรูปแบบ #4b8fff',
+        msg_invalid_slug:'Slug ต้องเป็น a-z, 0-9, - หรือ _',
+        msg_name_required:'กรุณากรอกชื่อที่ต้องการแสดง',
+        msg_name_too_long:'ชื่อยาวเกิน 50 ตัวอักษร',
+        msg_role_required:'กรุณากรอก Role',
+        msg_confirm_delete:'ลบแอป',
+        msg_confirm_delete_suffix:'ใช่หรือไม่?',
+        msg_retry_auto:'ระบบจะลองโหลดใหม่อัตโนมัติในไม่กี่วินาที',
+        group_public:'ทั่วไป',
+        app_open:'เปิด',
+        app_featured:'แนะนำ'
+      },
+      en: {
+        brand_title:'Koo Mean Portal', brand_sub:'Application space',
+        nav_home:'Home', nav_account:'Account', nav_admin:'Administration',
+        btn_login:'Sign in', btn_account:'Account',
+        hero_eyebrow:'Your application hub',
+        hero_line1:'All your apps', hero_line2:'in one place',
+        hero_copy:'Your central hub for tools and applications. Pick an app and start using it right away.',
+        search_placeholder:'Search applications...',
+        filter_all:'All groups',
+        btn_refresh:'Refresh',
+        apps_available:'apps available',
+        status_connecting:'Connecting', status_connected:'Connected',
+        status_offline:'Offline', status_retrying:'Retrying...',
+        status_need_register:'Registration required', status_need_relogin:'Please sign in again',
+        footer_info:'Access managed centrally', footer_help:'Help',
+        login_title:'Sign in', login_desc:'Use your Google Account to see apps you have access to',
+        login_help:'Sign-in uses a token verified by the backend. No password is stored on this site.',
+        register_title:'Request access', register_desc:'This account is not in the system. Please provide some details to submit a request.',
+        register_note_label:'Additional info (optional)',
+        register_note_placeholder:'e.g. Team / Role / Apps you need',
+        btn_cancel:'Cancel', btn_submit_request:'Submit request', btn_save:'Save',
+        account_title:'Your account', account_desc:'Manage the account linked to Portal',
+        display_name_title:'Display name',
+        display_name_desc:'This name is saved centrally and used across connected sites',
+        display_name_placeholder:'Enter your display name',
+        btn_logout:'Sign out',
+        admin_title:'Administration',
+        admin_subtitle_apps:'Add, edit and reorder items from Application Sheet',
+        admin_subtitle_users:'Manage users and access from Users Sheet',
+        admin_tab_apps:'Applications', admin_tab_users:'Users',
+        admin_add_app:'Add application', admin_edit_app:'Edit application',
+        admin_form_help:'Icon slug from theSVG is saved. The system checks for duplicate URLs before saving.',
+        field_app_name:'App name', field_description:'Description', field_desc_placeholder:'Short description',
+        field_group:'Group / Role', field_color:'Color (optional)', field_featured:'Featured app',
+        icon_not_selected:'No icon selected',
+        btn_choose_logo:'Choose logo', btn_use_slug:'Use slug',
+        btn_add_app:'Add app', btn_save_changes:'Save changes', btn_cancel_edit:'Cancel edit',
+        admin_order_title:'Order',
+        admin_order_help:'Use up/down arrows to set the display order',
+        admin_users_title:'All users',
+        admin_users_help:'Assign roles to control access across the system',
+        search_users_placeholder:'Search name or email...',
+        empty_no_data:'No data', empty_no_app:'No applications yet',
+        empty_no_match:'No matching apps',
+        empty_no_match_desc:'Try different keywords or groups',
+        empty_no_app_desc:'Apps from the Application Sheet will appear here',
+        error_load_failed:'Failed to load data', error_retry:'Retry',
+        logo_picker_title:'Choose logo', logo_picker_desc:'Search and pick a logo from theSVG',
+        logo_search_placeholder:'Search e.g. Google, Notion, OpenAI...',
+        logo_loading:'Loading logos...',
+        logo_picker_note:'Source:', logo_picker_note2:'Icons are loaded from public theSVG URLs',
+        settings_title:'Settings', settings_desc:'Customize display and language of Portal',
+        settings_theme:'Theme', settings_theme_desc:'Choose the display theme (Auto follows your device)',
+        theme_light:'Light', theme_dark:'Dark', theme_auto:'Auto',
+        settings_language:'Language', settings_language_desc:'Change the interface language',
+        settings_shortcuts:'Shortcuts', settings_shortcuts_desc:'Keyboard shortcuts',
+        shortcut_search:'Search apps', shortcut_refresh:'Refresh data',
+        shortcut_settings:'Open settings', shortcut_close:'Close modal / Cancel',
+        shortcut_help:'Show shortcuts',
+        help_title:'Help & About', help_desc:'Information and frequently asked questions',
+        help_what_is:'What is Koo Mean Portal?',
+        help_what_is_desc:'A hub of applications and tools for authorized users. Only apps you have access to will be shown.',
+        help_cannot_login:'Cannot sign in?',
+        help_cannot_login_desc:'Make sure you are using an authorized email and your Google Account is linked. Contact an admin if it still fails.',
+        help_missing_app:'Missing some apps?',
+        help_missing_app_desc:'Visibility depends on the role and group assigned to your account. Contact an admin if you believe it should be visible.',
+        help_privacy:'Privacy',
+        help_privacy_desc:'No password is stored. We only use a Google token for authentication. User data is kept minimal.',
+        toast_session_expired:'Session expired, please sign in again',
+        toast_login_checking:'Checking account...',
+        toast_login_success:'Signed in successfully',
+        toast_refreshed:'Refreshed',
+        toast_logged_out:'Signed out',
+        toast_saving:'Saving...',
+        toast_saved:'Saved successfully',
+        toast_name_saved:'Display name updated',
+        toast_register_sent:'Registration request sent',
+        toast_login_failed:'Sign-in failed',
+        toast_google_invalid:'Google session invalid or expired. Please try again',
+        toast_network_timeout:'Connection took too long, please retry',
+        toast_network_error:'Cannot reach the server',
+        toast_server_error:'Server returned an invalid response',
+        toast_role_updated:'Role updated',
+        toast_app_added:'App added',
+        toast_app_updated:'App updated',
+        toast_app_deleted:'App deleted',
+        toast_retrying:'Auto-retrying...',
+        msg_need_admin:'Admin account required',
+        msg_app_name_required:'App name is required',
+        msg_invalid_url:'URL must start with http:// or https://',
+        msg_url_duplicate:'URL is already used by app',
+        msg_invalid_color:'Color must be in #4b8fff format',
+        msg_invalid_slug:'Slug must be a-z, 0-9, - or _',
+        msg_name_required:'Display name is required',
+        msg_name_too_long:'Name exceeds 50 characters',
+        msg_role_required:'Role is required',
+        msg_confirm_delete:'Delete app',
+        msg_confirm_delete_suffix:'',
+        msg_retry_auto:'The system will retry loading in a few seconds',
+        group_public:'Public',
+        app_open:'Open',
+        app_featured:'Featured'
+      }
+    };
+    const t = (key)=> (I18N[state.lang] && I18N[state.lang][key]) || I18N.th[key] || key;
+
+    /* ===== Config ===== */
     const API_URL='https://koomean-proxy.meanchannel52.workers.dev';
     const API_TIMEOUT_MS=15000;
     const GOOGLE_CLIENT_ID='906677442222-kmjgsmta70n24aoaq7osm9c1l7g1fb89.apps.googleusercontent.com';
     const SESSION_KEY='koomean_portal_session_v1';
+    const PREFS_KEY='koomean_portal_prefs_v1';
     const CLIENT_UA=(navigator.userAgent||'').slice(0,300);
-    const state={idToken:null,user:null,authVerified:false,allUsers:[],applications:[],profile:null,spaceProfile:null,editingRow:0,selectedIcon:'',selectedIconName:'ยังไม่ได้เลือกไอคอน',logoRegistry:[],logosLoaded:false,isRefreshing:false,adminBusy:false};
+
+    const state={
+      idToken:null, user:null, authVerified:false,
+      allUsers:[], applications:[], profile:null, spaceProfile:null,
+      editingRow:0, selectedIcon:'', selectedIconName:'',
+      logoRegistry:[], logosLoaded:false,
+      isRefreshing:false, adminBusy:false,
+      loadError:null, lastErrorMessage:'',
+      retryTimer:0, retryAttempt:0,
+      theme:'auto', lang:'th'
+    };
+    state.selectedIconName = t('icon_not_selected');
+
     const $=id=>document.getElementById(id);
     let toastTimer=0, gsiPromise=null, sessionTimer=0;
+    let lastFocusedElement=null;
 
-    function escapeHtml(value){return String(value==null?'':value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
-    function safeUrl(value){try{const u=new URL(String(value||''));return /^https?:$/.test(u.protocol)?u.href:'';}catch{return '';}}
-    function canonicalAppUrl(value){try{const u=new URL(String(value||''));if(!/^https?:$/.test(u.protocol))return '';const path=u.pathname.replace(/\/+$/,'')||'/';return u.origin.toLowerCase()+path+u.search+u.hash;}catch{return '';}}
-    function decodeJwt(token){try{const b64=token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');return JSON.parse(decodeURIComponent(atob(b64).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));}catch{return null;}}
-    function expired(token){const p=decodeJwt(token);return !p||!p.exp||(p.exp*1000)<=Date.now();}
-    function showToast(message,type=''){const el=$('toast');clearTimeout(toastTimer);el.textContent=message;el.className='toast'+(type?' '+type:'')+' show';toastTimer=setTimeout(()=>el.classList.remove('show'),3200);}
-    function setConnectionStatus(mode,label){const el=$('connection-status');if(!el)return;el.classList.remove('connecting','offline');if(mode)el.classList.add(mode);$('status-text').textContent=label;}
+    /* ===== Safe helpers ===== */
+    function escapeHtml(value){
+      return String(value==null?'':value)
+        .replace(/[&<>"'`]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[c]));
+    }
+    function safeUrl(value){
+      try{
+        const u=new URL(String(value||''));
+        if(!/^https?:$/.test(u.protocol))return '';
+        return u.href;
+      }catch{return '';}
+    }
+    function canonicalAppUrl(value){
+      try{
+        const u=new URL(String(value||''));
+        if(!/^https?:$/.test(u.protocol))return '';
+        const path=(u.pathname.replace(/\/+$/,'')||'/').toLowerCase();
+        return u.origin.toLowerCase()+path+u.search.toLowerCase()+u.hash.toLowerCase();
+      }catch{return '';}
+    }
+    function decodeJwt(token){
+      try{
+        if(!token||typeof token!=='string')return null;
+        const parts=token.split('.');
+        if(parts.length!==3)return null;
+        const b64=parts[1].replace(/-/g,'+').replace(/_/g,'/');
+        const pad=b64.length%4;
+        const padded=pad?b64+'='.repeat(4-pad):b64;
+        const json=atob(padded);
+        return JSON.parse(decodeURIComponent(json.split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));
+      }catch{return null;}
+    }
+    function expired(token){
+      const p=decodeJwt(token);
+      return !p||!p.exp||(p.exp*1000)<=Date.now();
+    }
+    function debounce(fn,wait=250){
+      let t;return function(...args){clearTimeout(t);t=setTimeout(()=>fn.apply(this,args),wait);};
+    }
+    function isValidSlug(v){return /^[a-z0-9][a-z0-9_-]{0,30}$/.test(v);}
+    function isValidColor(v){return /^#[0-9a-f]{3,8}$/i.test(v);}
+
+    /* ===== Toast ===== */
+    function showToast(message,type='info'){
+      const el=$('toast');clearTimeout(toastTimer);
+      const iconMap={success:'fa-circle-check',error:'fa-circle-exclamation',info:'fa-circle-info'};
+      el.innerHTML='<i class="fas '+escapeHtml(iconMap[type]||iconMap.info)+'"></i><span>'+escapeHtml(message)+'</span>';
+      el.className='toast'+(type?' '+type:'')+' show';
+      toastTimer=setTimeout(()=>el.classList.remove('show'),3200);
+    }
+
+    function setConnectionStatus(mode,label){
+      const el=$('connection-status');if(!el)return;
+      el.classList.remove('connecting','offline');
+      if(mode)el.classList.add(mode);
+      const textEl=$('status-text');
+      if(textEl)textEl.textContent=label;
+    }
+
+    /* ===== Prefs: theme + language ===== */
+    function loadPrefs(){
+      try{
+        const raw=localStorage.getItem(PREFS_KEY);
+        if(raw){
+          const p=JSON.parse(raw);
+          if(p&&typeof p==='object'){
+            state.theme=(p.theme==='light'||p.theme==='dark'||p.theme==='auto')?p.theme:'auto';
+            state.lang=(p.lang==='en')?'en':'th';
+          }
+        }
+      }catch{}
+    }
+    function savePrefs(){
+      try{localStorage.setItem(PREFS_KEY,JSON.stringify({theme:state.theme,lang:state.lang}));}catch{}
+    }
+    function applyTheme(){
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = state.theme==='auto' ? (prefersDark?'dark':'light') : state.theme;
+      document.documentElement.setAttribute('data-theme', theme);
+      const meta=$('theme-color-meta');
+      if(meta) meta.setAttribute('content', theme==='dark'?'#06080e':'#f5f7fb');
+      document.querySelectorAll('#theme-ctrl .seg-opt').forEach(btn=>{
+        btn.classList.toggle('active', btn.dataset.themeValue===state.theme);
+        btn.setAttribute('aria-checked', btn.dataset.themeValue===state.theme);
+      });
+    }
+    function applyLang(){
+      document.documentElement.setAttribute('lang', state.lang);
+      document.querySelectorAll('[data-i18n]').forEach(el=>{
+        const key=el.getAttribute('data-i18n');
+        if(key && I18N[state.lang] && I18N[state.lang][key]!=null){
+          el.textContent=I18N[state.lang][key];
+        }
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
+        const key=el.getAttribute('data-i18n-placeholder');
+        if(key && I18N[state.lang] && I18N[state.lang][key]!=null){
+          el.setAttribute('placeholder', I18N[state.lang][key]);
+        }
+      });
+      document.querySelectorAll('[data-i18n-title]').forEach(el=>{
+        const key=el.getAttribute('data-i18n-title');
+        if(key && I18N[state.lang] && I18N[state.lang][key]!=null){
+          el.setAttribute('title', I18N[state.lang][key]);
+          el.setAttribute('aria-label', I18N[state.lang][key]);
+        }
+      });
+      document.querySelectorAll('#lang-ctrl .seg-opt').forEach(btn=>{
+        btn.classList.toggle('active', btn.dataset.langValue===state.lang);
+        btn.setAttribute('aria-checked', btn.dataset.langValue===state.lang);
+      });
+      // Refresh dynamic labels
+      const authBtn=$('auth-btn');
+      if(authBtn){
+        const span=authBtn.querySelector('span');
+        if(span) span.textContent = state.user ? t('btn_account') : t('btn_login');
+      }
+      // Re-render apps to apply translations in dynamic content
+      if(state.applications && state.applications.length) renderApplications();
+    }
+
+    /* ===== Session ===== */
     function saveSession(){try{localStorage.setItem(SESSION_KEY,JSON.stringify({idToken:state.idToken,user:state.user}));}catch{}}
     function clearSession(){try{localStorage.removeItem(SESSION_KEY);}catch{}}
     function clearSessionTimer(){if(sessionTimer){clearTimeout(sessionTimer);sessionTimer=0;}}
-    function expireSession(message='เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่'){clearSessionTimer();state.idToken=null;state.user=null;state.authVerified=false;clearSession();applyUser();setModal('account-modal',false);setModal('admin-modal',false);renderApplications(message);showToast(message,'error');}
-    function scheduleSessionExpiry(){clearSessionTimer();const claims=decodeJwt(state.idToken||'');if(!claims?.exp)return;const delay=Math.max(0,claims.exp*1000-Date.now()-30000);sessionTimer=setTimeout(()=>expireSession(),delay);}
-    function setModal(id,open){$(id).classList.toggle('open',open);if(open)document.body.style.overflow='hidden';else if(!document.querySelector('.modal-backdrop.open'))document.body.style.overflow='';}
 
+    function cancelAutoRetry(){
+      if(state.retryTimer){clearTimeout(state.retryTimer);state.retryTimer=0;}
+      state.retryAttempt=0;
+    }
+
+    function expireSession(message){
+      message = message || t('toast_session_expired');
+      clearSessionTimer();cancelAutoRetry();
+      state.idToken=null;state.user=null;state.authVerified=false;
+      clearSession();applyUser();setModal('account-modal',false);setModal('admin-modal',false);
+      renderApplications(message);showToast(message,'error');
+    }
+    function scheduleSessionExpiry(){
+      clearSessionTimer();
+      const claims=decodeJwt(state.idToken||'');
+      if(!claims?.exp)return;
+      const delay=Math.max(0,claims.exp*1000-Date.now()-30000);
+      sessionTimer=setTimeout(()=>expireSession(),delay);
+    }
+
+    /* ===== Modal ===== */
+    function setModal(id,open){
+      const modal=$(id);if(!modal)return;
+      if(open){
+        lastFocusedElement=document.activeElement;
+        modal.classList.add('open');
+        document.body.style.overflow='hidden';
+        setTimeout(()=>{
+          const focusable=modal.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"]),a[href]');
+          const target=modal.querySelector('[autofocus]')||(focusable.length?focusable[0]:null);
+          if(target)target.focus();
+        },100);
+      }else{
+        modal.classList.remove('open');
+        if(!document.querySelector('.modal-backdrop.open'))document.body.style.overflow='';
+        if(lastFocusedElement&&lastFocusedElement.isConnected)lastFocusedElement.focus();
+      }
+    }
+
+    /* ===== Google Sign-In ===== */
     async function loadGSI(){
       if(window.google?.accounts?.id)return;
       if(gsiPromise)return gsiPromise;
-      gsiPromise=new Promise((resolve,reject)=>{const s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';s.async=true;s.defer=true;s.onload=resolve;s.onerror=reject;document.head.appendChild(s);}).catch(()=>{gsiPromise=null;throw new Error('โหลด Google Login ไม่สำเร็จ');});
+      gsiPromise=new Promise((resolve,reject)=>{
+        const s=document.createElement('script');s.src='https://accounts.google.com/gsi/client';
+        s.async=true;s.defer=true;s.onload=resolve;s.onerror=reject;document.head.appendChild(s);
+      }).catch(()=>{gsiPromise=null;throw new Error('Cannot load Google login');});
       await gsiPromise;
     }
-    async function openLogin(){try{await loadGSI();window.google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleCredentialResponse,auto_select:false});const button=document.querySelector('.g_id_signin');button.innerHTML='';window.google.accounts.id.renderButton(button,{type:'standard',size:'large',theme:'filled_black',text:'signin_with',shape:'pill',logo_alignment:'left'});setModal('login-modal',true);}catch(e){showToast(e.message,'error');}}
-    function handleCredentialResponse(response){const claims=decodeJwt(response.credential);if(!claims?.email||expired(response.credential)){showToast('Google session ไม่ถูกต้องหรือหมดอายุ','error');return;}state.idToken=response.credential;state.user=null;state.authVerified=false;applyUser();scheduleSessionExpiry();setModal('login-modal',false);showToast('กำลังตรวจสอบบัญชี...');loadPortal(true);}
+    async function openLogin(){
+      try{
+        await loadGSI();
+        window.google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleCredentialResponse,auto_select:false});
+        const button=document.querySelector('.g_id_signin');
+        button.innerHTML='';
+        window.google.accounts.id.renderButton(button,{type:'standard',size:'large',theme:'filled_black',text:'signin_with',shape:'pill',logo_alignment:'left'});
+        setModal('login-modal',true);
+      }catch(e){showToast(e.message||'Cannot open login','error');}
+    }
+    function handleCredentialResponse(response){
+      const claims=decodeJwt(response.credential);
+      if(!claims?.email||expired(response.credential)){
+        showToast(t('toast_google_invalid'),'error');
+        return;
+      }
+      state.idToken=response.credential;
+      state.user=null;state.authVerified=false;
+      cancelAutoRetry();
+      scheduleSessionExpiry();
+      setModal('login-modal',false);
+      showToast(t('toast_login_checking'),'info');
+      loadPortal(true);
+    }
+    // Expose only what Google requires
+    window.handleCredentialResponse=handleCredentialResponse;
 
+    /* ===== API request ===== */
     async function request(action,extra={}){
-      if(state.idToken&&expired(state.idToken)){expireSession();throw new Error('เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่');}
-      const body=new URLSearchParams({action,ua:CLIENT_UA});if(state.idToken)body.set('idToken',state.idToken);Object.entries(extra).forEach(([key,value])=>body.set(key,String(value)));
+      if(state.idToken&&expired(state.idToken)){
+        expireSession();
+        throw new Error(t('toast_session_expired'));
+      }
+      const body=new URLSearchParams({action,ua:CLIENT_UA});
+      if(state.idToken)body.set('idToken',state.idToken);
+      Object.entries(extra).forEach(([key,value])=>{
+        if(value!=null) body.set(key,String(value));
+      });
       const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),API_TIMEOUT_MS);
-      let response;try{response=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body,cache:'no-store',signal:controller.signal});}catch(error){if(error?.name==='AbortError')throw new Error('การเชื่อมต่อใช้เวลานานเกินไป กรุณาลองใหม่');throw new Error('ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้ กรุณาตรวจสอบอินเทอร์เน็ต');}finally{clearTimeout(timeout);}
-      let data;try{data=await response.json();}catch{throw new Error('เซิร์ฟเวอร์ตอบกลับไม่ถูกต้อง');}
-      if(!response.ok||data?.code>=400)throw new Error(data?.message||`HTTP ${response.status}`);
+      let response;
+      try{
+        response=await fetch(API_URL,{
+          method:'POST',
+          headers:{'Content-Type':'application/x-www-form-urlencoded'},
+          body,cache:'no-store',signal:controller.signal,
+          credentials:'omit'
+        });
+      }catch(error){
+        if(error?.name==='AbortError')throw new Error(t('toast_network_timeout'));
+        throw new Error(t('toast_network_error'));
+      }finally{clearTimeout(timeout);}
+      let data;
+      try{data=await response.json();}catch{throw new Error(t('toast_server_error'));}
+      if(!response.ok||data?.code>=400)throw new Error(data?.message||'HTTP '+response.status);
       return data;
     }
+
+    /* ===== Portal ===== */
     async function loadPortal(isFreshLogin=false,forceRefresh=false){
+      cancelAutoRetry();
       try{
-        if(forceRefresh&&isAdmin()){try{await request('clearCache');}catch(error){console.warn('Cache refresh skipped:',error);}}
+        if(forceRefresh&&isAdmin()){
+          try{await request('clearCache');}catch(e){console.warn('Cache refresh skipped:',e);}
+        }
         const data=await request('bootstrap');
-        if(data.authError){expireSession();throw new Error('เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่');}
-        if(data.requireRegistration){state.user=null;state.authVerified=false;state.applications=[];applyUser();renderApplications();setConnectionStatus('offline','ต้องลงทะเบียน');setModal('register-modal',true);return false;}
-        state.user=data.user?.email?data.user:null;state.authVerified=!!(state.idToken&&state.user);state.allUsers=Array.isArray(data.allUsers)?data.allUsers:[];state.applications=Array.isArray(data.applications)?data.applications:[];state.profile=data.profile||null;state.spaceProfile=data.spaceProfile||null;
-        if(state.idToken)scheduleSessionExpiry();saveSession();applyMeta();applyUser();renderApplications();$('updated-at').textContent='อัปเดต '+new Date().toLocaleTimeString('th-TH',{hour:'2-digit',minute:'2-digit'});
-        if(isFreshLogin)showToast('เข้าสู่ระบบสำเร็จ','success');
+        if(data.authError){expireSession();throw new Error(t('toast_session_expired'));}
+        if(data.requireRegistration){
+          state.user=null;state.authVerified=false;state.applications=[];
+          applyUser();renderApplications();
+          setConnectionStatus('offline',t('status_need_register'));
+          setModal('register-modal',true);return false;
+        }
+        state.user=data.user?.email?data.user:null;
+        state.authVerified=!!(state.idToken&&state.user);
+        state.allUsers=Array.isArray(data.allUsers)?data.allUsers:[];
+        state.applications=Array.isArray(data.applications)?data.applications:[];
+        state.profile=data.profile||null;state.spaceProfile=data.spaceProfile||null;
+        state.loadError=null;state.lastErrorMessage='';state.retryAttempt=0;
+        if(state.idToken)scheduleSessionExpiry();
+        saveSession();applyMeta();applyUser();renderApplications();
+        const updatedAt=$('updated-at');
+        if(updatedAt) updatedAt.textContent=new Date().toLocaleTimeString(state.lang==='th'?'th-TH':'en-US',{hour:'2-digit',minute:'2-digit'});
+        if(isFreshLogin)showToast(t('toast_login_success'),'success');
         return true;
-      }catch(error){console.error(error);state.applications=[];renderApplications(error.message||'ไม่สามารถโหลดข้อมูลได้');setConnectionStatus('offline','เชื่อมต่อไม่สำเร็จ');showToast(error.message||'โหลดข้อมูลไม่สำเร็จ','error');return false;}
+      }catch(error){
+        console.error(error);
+        state.applications=state.applications||[];
+        state.loadError=error;
+        state.lastErrorMessage=error.message||t('error_load_failed');
+        renderApplications(state.lastErrorMessage);
+        setConnectionStatus('offline',t('status_offline'));
+        showToast(state.lastErrorMessage,'error');
+        scheduleAutoRetry();
+        return false;
+      }
     }
-    async function refreshPortal(){if(state.isRefreshing)return;const btn=$('refresh-btn');state.isRefreshing=true;btn.disabled=true;btn.classList.add('loading');try{const ok=await loadPortal(false,true);if(ok)showToast('รีเฟรชข้อมูลแล้ว','success');}finally{state.isRefreshing=false;btn.disabled=false;btn.classList.remove('loading');}}
-    function applyMeta(){const p=state.spaceProfile||{};if(p.webTitle)document.title=p.webTitle+' · Portal';$('footer-title').textContent='Koo Mean Portal';if(p.name)$('eyebrow-text').textContent=p.name+' · Application hub';if(p.bio)$('hero-copy').textContent=p.bio;}
-    function applyUser(){const signed=!!state.user;const isAdmin=signed&&state.authVerified&&String(state.user.role||'').toLowerCase().includes('admin');const btn=$('auth-btn');$('user-chip').classList.toggle('visible',signed);$('nav-admin').hidden=!isAdmin;btn.innerHTML=signed?'<i class="fas fa-user"></i> บัญชี':'<i class="fas fa-arrow-right-to-bracket"></i> เข้าสู่ระบบ';if(signed){const name=state.user.name||state.user.email.split('@')[0];$('user-name').textContent=name;$('user-avatar').src=state.user.pic||avatar(name);$('account-name').textContent=name;$('account-email').textContent=state.user.email;$('account-role').textContent=state.user.role||'public';$('account-avatar').src=state.user.pic||avatar(name);$('new-name').value=state.user.name||name;}else{$('user-avatar').removeAttribute('src');$('new-name').value='';}}
+    window.loadPortal=loadPortal;
+
+    function scheduleAutoRetry(){
+      cancelAutoRetry();
+      if(state.retryAttempt>=5)return;
+      state.retryAttempt++;
+      const delay = Math.min(2000*Math.pow(2, state.retryAttempt-1), 30000);
+      state.retryTimer=setTimeout(async ()=>{
+        if(state.loadError){
+          setConnectionStatus('connecting',t('status_retrying'));
+          showToast(t('toast_retrying'),'info');
+          await loadPortal(false,false);
+        }
+      }, delay);
+    }
+
+    async function refreshPortal(){
+      if(state.isRefreshing)return;
+      const btn=$('refresh-btn');state.isRefreshing=true;
+      cancelAutoRetry();
+      btn.disabled=true;btn.classList.add('loading');
+      try{const ok=await loadPortal(false,true);if(ok)showToast(t('toast_refreshed'),'success');}
+      finally{state.isRefreshing=false;btn.disabled=false;btn.classList.remove('loading');}
+    }
+
+    function applyMeta(){
+      const p=state.spaceProfile||{};
+      if(p.webTitle)document.title=p.webTitle+' · Portal';
+      const ft=$('footer-title'); if(ft) ft.textContent='Koo Mean Portal';
+      if(p.name){const eb=$('eyebrow-text'); if(eb) eb.textContent=p.name+' · Application hub';}
+      if(p.bio){const hc=$('hero-copy'); if(hc) hc.textContent=p.bio;}
+    }
+
+    function applyUser(){
+      const signed=!!state.user;
+      const isAdminUser=signed&&state.authVerified&&String(state.user.role||'').toLowerCase().includes('admin');
+      const btn=$('auth-btn');
+      const chip=$('user-chip');
+      const navAdmin=$('nav-admin');
+      if(chip) chip.classList.toggle('visible',signed);
+      if(navAdmin) navAdmin.hidden=!isAdminUser;
+      if(btn){
+        const span=btn.querySelector('span');
+        if(signed){
+          btn.innerHTML='<i class="fas fa-user"></i> <span>'+escapeHtml(t('btn_account'))+'</span>';
+        }else{
+          btn.innerHTML='<i class="fas fa-arrow-right-to-bracket"></i> <span>'+escapeHtml(t('btn_login'))+'</span>';
+        }
+      }
+      if(signed){
+        const name=state.user.name||state.user.email.split('@')[0];
+        const userN=$('user-name');if(userN)userN.textContent=name;
+        const userA=$('user-avatar');if(userA)userA.src=state.user.pic||avatar(name);
+        const aN=$('account-name');if(aN)aN.textContent=name;
+        const aE=$('account-email');if(aE)aE.textContent=state.user.email;
+        const aR=$('account-role');if(aR)aR.textContent=state.user.role||'public';
+        const aA=$('account-avatar');if(aA)aA.src=state.user.pic||avatar(name);
+        const nn=$('new-name');if(nn)nn.value=state.user.name||name;
+      }else{
+        const userA=$('user-avatar');if(userA)userA.removeAttribute('src');
+        const nn=$('new-name');if(nn)nn.value='';
+      }
+    }
+
     function avatar(name){return 'https://ui-avatars.com/api/?name='+encodeURIComponent(name||'U')+'&background=111827&color=8794ad&bold=true';}
     function normalizeGroup(value){return String(value||'public').trim()||'public';}
-    function iconClass(value){const raw=String(value||'').trim();if(!raw)return '';if(/^fa[srb] fa-/.test(raw))return raw;const clean=raw.replace(/^fa[srb]\s+/,'').replace(/^fa-/,'');return clean?'fas fa-'+clean:'';}
-    function color(value){const v=String(value||'').trim();return /^#[0-9a-f]{3,8}$/i.test(v)?v:'';}
-    function displayGroup(group){return group==='public'?'ทั่วไป':group.charAt(0).toUpperCase()+group.slice(1);}
-    function groupKey(app){return normalizeGroup(app.group).toLowerCase();}
-    function svgUrl(value,variant='default'){const raw=String(value||'').trim();if(/^https?:\/\/[^\s]+\.svg(?:[?#].*)?$/i.test(raw))return raw;if(!/^[a-z0-9][a-z0-9_-]{0,30}$/i.test(raw)||/^fa[srb]$/i.test(raw))return '';return 'https://thesvg.org/icons/'+encodeURIComponent(raw)+'/'+encodeURIComponent(variant)+'.svg';}
-    function iconMarkup(value,extraClass=''){const raw=String(value||'').trim();if(!raw)return '';const src=svgUrl(raw);if(src)return '<span class="icon-media"><img class="'+escapeHtml(extraClass)+'" src="'+escapeHtml(src)+'" alt="" loading="lazy" referrerpolicy="no-referrer" onerror="this.closest(\'.app-icon,.admin-item-icon,.selected-icon\')?.remove()"></span>';const cls=iconClass(raw);return cls?'<i class="'+escapeHtml(cls)+'"></i>':'';}
-    function selectedIconMarkup(){return iconMarkup(state.selectedIcon);}
-    function refreshSelectedIcon(){const preview=$('admin-icon-preview');preview.innerHTML=selectedIconMarkup();preview.hidden=!state.selectedIcon;$('admin-icon-name').textContent=state.selectedIconName||'ยังไม่ได้เลือกไอคอน';$('admin-icon-value').textContent=state.selectedIcon||'—';}
-    function isAdmin(){return !!state.user&&state.authVerified&&String(state.user.role||'').toLowerCase().includes('admin');}
-    function resetAdminForm(){state.editingRow=0;state.selectedIcon='';state.selectedIconName='ยังไม่ได้เลือกไอคอน';$('admin-form-title').textContent='เพิ่มแอปพลิเคชัน';$('admin-name').value='';$('admin-url').value='';$('admin-description').value='';$('admin-group').value='public';$('admin-color').value='';$('admin-starred').checked=false;$('admin-icon-manual').value='';$('admin-submit-btn').innerHTML='<i class="fas fa-plus"></i> เพิ่มแอป';$('admin-cancel-btn').hidden=true;refreshSelectedIcon();}
-    function fillAdminForm(app){state.editingRow=Number(app.rowIdx)||0;state.selectedIcon=String(app.icon||'').trim();state.selectedIconName=state.selectedIcon?(svgUrl(state.selectedIcon)?state.selectedIcon:'ไอคอน Font Awesome'):'ยังไม่ได้เลือกไอคอน';$('admin-form-title').textContent='แก้ไขแอปพลิเคชัน';$('admin-name').value=app.name||'';$('admin-url').value=app.url||'';$('admin-description').value=app.description||'';$('admin-group').value=app.group||'public';$('admin-color').value=app.color||'';$('admin-starred').checked=app.starred===true;$('admin-icon-manual').value='';$('admin-submit-btn').innerHTML='<i class="fas fa-check"></i> บันทึกการแก้ไข';$('admin-cancel-btn').hidden=false;refreshSelectedIcon();}
-    function useManualIcon(){const slug=$('admin-icon-manual').value.trim().toLowerCase();if(!/^[a-z0-9][a-z0-9_-]{0,30}$/.test(slug)){showToast('Slug ต้องเป็น a-z, 0-9, - หรือ _','error');return;}state.selectedIcon=slug;state.selectedIconName='theSVG · '+slug;refreshSelectedIcon();}
-    function showAdminTab(tab){const apps=tab==='apps';$('admin-apps-tab').hidden=!apps;$('admin-users-tab').hidden=apps;$('admin-apps-tab-btn').classList.toggle('active',apps);$('admin-users-tab-btn').classList.toggle('active',!apps);$('admin-subtitle').textContent=apps?'เพิ่ม แก้ไข และจัดลำดับรายการจาก Application Sheet':'จัดการผู้ใช้และสิทธิ์การเข้าถึงจาก Users Sheet';}
-    function openAdmin(){if(!isAdmin()){showToast('ต้องใช้บัญชี Admin','error');return;}resetAdminForm();showAdminTab('apps');renderAdminItems();renderAdminUsers();setModal('admin-modal',true);}
-    function adminItemIcon(app){const icon=iconMarkup(app.icon);return icon?'<div class="admin-item-icon">'+icon+'</div>':'';}
-    function renderAdminItems(){const root=$('admin-items');if(!state.applications.length){root.innerHTML='<div class="empty" style="padding:28px 10px"><p>ยังไม่มีข้อมูล</p></div>';return;}root.innerHTML=state.applications.map((app,index)=>`<div class="admin-item">${adminItemIcon(app)}<div class="admin-item-info"><div class="admin-item-name">${escapeHtml(app.name||'ไม่มีชื่อ')}</div><div class="admin-item-meta">${index+1}. ${escapeHtml(displayGroup(groupKey(app)))}</div></div><div class="admin-item-actions"><button class="icon-btn" type="button" title="เลื่อนขึ้น" aria-label="เลื่อน ${escapeHtml(app.name||'แอป')} ขึ้น" data-admin-action="up" data-row="${Number(app.rowIdx)||0}"${index===0?' disabled':''}><i class="fas fa-chevron-up"></i></button><button class="icon-btn" type="button" title="เลื่อนลง" aria-label="เลื่อน ${escapeHtml(app.name||'แอป')} ลง" data-admin-action="down" data-row="${Number(app.rowIdx)||0}"${index===state.applications.length-1?' disabled':''}><i class="fas fa-chevron-down"></i></button><button class="icon-btn" type="button" title="แก้ไข" aria-label="แก้ไข ${escapeHtml(app.name||'แอป')}" data-admin-action="edit" data-row="${Number(app.rowIdx)||0}"><i class="fas fa-pen"></i></button><button class="icon-btn danger" type="button" title="ลบ" aria-label="ลบ ${escapeHtml(app.name||'แอป')}" data-admin-action="delete" data-row="${Number(app.rowIdx)||0}"><i class="fas fa-trash"></i></button></div></div>`).join('');root.querySelectorAll('[data-admin-action]').forEach(btn=>btn.addEventListener('click',()=>handleAdminItem(btn.dataset.adminAction,Number(btn.dataset.row))));}
-    function renderAdminUsers(){const root=$('admin-users'),query=$('admin-user-search').value.trim().toLowerCase();const users=state.allUsers.filter(user=>(String(user.name||'')+' '+String(user.email||'')).toLowerCase().includes(query));if(!users.length){root.innerHTML='<div class="empty" style="padding:28px 10px"><p>'+ (state.allUsers.length?'ไม่พบผู้ใช้ที่ค้นหา':'ยังไม่มีข้อมูลผู้ใช้') +'</p></div>';return;}root.innerHTML=users.map(user=>{const name=user.name||String(user.email||'').split('@')[0]||'ไม่มีชื่อ';const pic=user.pic||avatar(name);return `<div class="admin-user"><img class="admin-user-avatar" src="${escapeHtml(pic)}" alt="" onerror="this.onerror=null;this.src='${escapeHtml(avatar(name))}'"><div class="admin-user-info"><div class="admin-user-name">${escapeHtml(name)}</div><div class="admin-user-email">${escapeHtml(user.email||'')}</div></div><div class="admin-user-controls"><input class="admin-role" type="text" maxlength="50" value="${escapeHtml(user.role||'public')}" aria-label="Role ของ ${escapeHtml(name)}"><button class="btn btn-primary admin-save" type="button" data-user-email="${escapeHtml(user.email||'')}"><i class="fas fa-check"></i> บันทึก</button></div></div>`;}).join('');root.querySelectorAll('[data-user-email]').forEach(btn=>btn.addEventListener('click',()=>saveUserRole(btn,btn.dataset.userEmail)));}
-    async function saveUserRole(btn,email){const input=btn.parentElement.querySelector('.admin-role'),role=input.value.trim();if(!role){showToast('กรุณากรอก Role','error');input.focus();return;}const old=btn.innerHTML;btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin"></i>';try{const data=await request('updateRole',{targetEmail:email,newRole:role});if(!data.success)throw Error(data.message||'บันทึก Role ไม่สำเร็จ');showToast('อัปเดต Role เรียบร้อยแล้ว','success');await loadPortal();renderAdminUsers();}catch(e){showToast(e.message||'บันทึก Role ไม่สำเร็จ','error');}finally{btn.disabled=false;btn.innerHTML=old;}}
-    async function handleAdminItem(action,rowIdx){if(state.adminBusy)return;const app=state.applications.find(item=>Number(item.rowIdx)===rowIdx);if(!app)return;if(action==='edit'){fillAdminForm(app);return;}if(action==='delete'){if(!confirm('ลบแอป “'+(app.name||'ไม่มีชื่อ')+'” ใช่หรือไม่?'))return;await adminRequest('deleteApplication',{rowIdx});return;}await adminRequest('moveApplication',{rowIdx,dir:action});}
-    function setAdminActionsBusy(busy){state.adminBusy=busy;document.querySelectorAll('[data-admin-action]').forEach(btn=>{btn.disabled=busy;});}
-    async function adminRequest(action,params){if(state.adminBusy)return;setAdminActionsBusy(true);showToast('กำลังบันทึก...');try{await request(action,params);showToast('บันทึกเรียบร้อยแล้ว','success');await loadPortal();if(isAdmin()){renderAdminItems();}}catch(e){showToast(e.message||'บันทึกไม่สำเร็จ','error');}finally{setAdminActionsBusy(false);}}
-    async function submitApplication(){if(!isAdmin())return;const name=$('admin-name').value.trim(),url=$('admin-url').value.trim(),description=$('admin-description').value.trim(),group=$('admin-group').value.trim()||'public',appColor=$('admin-color').value.trim(),starred=$('admin-starred').checked;if(!name){showToast('กรุณากรอกชื่อแอป','error');$('admin-name').focus();return;}if(!safeUrl(url)){showToast('URL ต้องขึ้นต้นด้วย http:// หรือ https://','error');$('admin-url').focus();return;}const duplicate=state.applications.find(app=>Number(app.rowIdx)!==state.editingRow&&canonicalAppUrl(app.url)===canonicalAppUrl(url));if(duplicate){showToast('URL นี้ถูกใช้แล้วในแอป “'+(duplicate.name||'ไม่มีชื่อ')+'”','error');$('admin-url').focus();return;}if(appColor&&!/^#[0-9a-f]{3,8}$/i.test(appColor)){showToast('สีต้องอยู่ในรูปแบบ #4b8fff','error');return;}const btn=$('admin-submit-btn'),old=btn.innerHTML;btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin"></i> กำลังบันทึก';try{const action=state.editingRow?'updateApplication':'addApplication';const params={name,url,description,group,icon:state.selectedIcon,starred,color:appColor};if(state.editingRow)params.rowIdx=state.editingRow;await request(action,params);showToast(state.editingRow?'แก้ไขแอปเรียบร้อยแล้ว':'เพิ่มแอปเรียบร้อยแล้ว','success');resetAdminForm();await loadPortal();renderAdminItems();}catch(e){showToast(e.message||'บันทึกไม่สำเร็จ','error');}finally{btn.disabled=false;btn.innerHTML=old;}}
-    async function loadLogoRegistry(){if(state.logosLoaded)return;const root=$('logo-results');try{const response=await fetch('https://thesvg.org/api/registry.json',{cache:'force-cache'});if(!response.ok)throw Error('โหลดรายการโลโก้ไม่สำเร็จ');const data=await response.json();state.logoRegistry=Array.isArray(data)?data:(Array.isArray(data.icons)?data.icons:[]);state.logosLoaded=true;renderLogoResults();}catch(e){root.innerHTML='<div class="error" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-triangle-exclamation"></i><strong>โหลดรายการโลโก้ไม่สำเร็จ</strong><p>ลองเปิด '+escapeHtml('https://thesvg.org/')+' แล้วคัดลอกชื่อ slug มาใช้แทน</p></div>';}}
-    function renderLogoResults(){const root=$('logo-results'),query=$('logo-search').value.trim().toLowerCase();const hits=state.logoRegistry.filter(item=>{const hay=[item.title,item.name,item.slug,item.aliases].flat().join(' ').toLowerCase();return !query||hay.includes(query);}).slice(0,120);if(!hits.length){root.innerHTML='<div class="empty" style="grid-column:1/-1;padding:30px 10px"><p>ไม่พบโลโก้ที่ค้นหา</p></div>';return;}root.innerHTML=hits.map(item=>{const slug=String(item.slug||item.name||'').trim();const title=String(item.title||item.name||slug);const src='https://thesvg.org/icons/'+encodeURIComponent(slug)+'/default.svg';return `<button class="logo-result" type="button" data-logo-slug="${escapeHtml(slug)}" data-logo-title="${escapeHtml(title)}"><img src="${escapeHtml(src)}" alt="" loading="lazy" referrerpolicy="no-referrer"><span>${escapeHtml(title)}</span></button>`;}).join('');root.querySelectorAll('[data-logo-slug]').forEach(btn=>btn.addEventListener('click',()=>{state.selectedIcon=btn.dataset.logoSlug;state.selectedIconName=btn.dataset.logoTitle;refreshSelectedIcon();setModal('logo-modal',false);setModal('admin-modal',true);}));}
-    async function openLogoPicker(){if(!isAdmin())return;setModal('admin-modal',false);setModal('logo-modal',true);if(!state.logosLoaded){$('logo-results').innerHTML='<div class="loading" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-circle-notch fa-spin"></i><p>กำลังโหลดโลโก้...</p></div>';await loadLogoRegistry();}else renderLogoResults();}
-
-    function renderApplications(errorMessage=''){
-      const root=$('applications');const query=$('search').value.trim().toLowerCase();const selected=$('group-filter').value;
-      const source=state.applications.filter(app=>safeUrl(app.url)).filter(app=>{const hay=(app.name+' '+app.description+' '+app.group).toLowerCase();return (!query||hay.includes(query))&& (selected==='all'||groupKey(app)===selected);});
-      $('app-count').textContent=source.length; setConnectionStatus(errorMessage?'offline':'',errorMessage?'ต้องเข้าสู่ระบบใหม่':'เชื่อมต่อแล้ว');
-      const groups=[...new Set(state.applications.filter(app=>safeUrl(app.url)).map(groupKey))].sort((a,b)=>a==='public'?-1:b==='public'?1:a.localeCompare(b));
-      const old=$('group-filter').value; $('group-filter').innerHTML='<option value="all">ทุกกลุ่ม</option>'+groups.map(g=>`<option value="${escapeHtml(g)}">${escapeHtml(displayGroup(g))}</option>`).join(''); $('group-filter').value=groups.includes(old)?old:'all';
-      if(errorMessage){root.innerHTML=`<div class="error"><i class="fas fa-triangle-exclamation"></i><strong>โหลดข้อมูลไม่สำเร็จ</strong><p>${escapeHtml(errorMessage)}<br><button class="btn btn-ghost" style="margin-top:16px" type="button" onclick="loadPortal()"><i class="fas fa-rotate-right"></i> ลองใหม่</button></p></div>`;return;}
-      if(!source.length){root.innerHTML='<div class="empty"><i class="fas fa-layer-group"></i><strong>'+ (state.applications.length?'ไม่พบแอปที่ตรงกับการค้นหา':'ยังไม่มีแอปพลิเคชัน')+'</strong><p>'+ (state.applications.length?'ลองเปลี่ยนคำค้นหาหรือกลุ่ม':'เมื่อมีข้อมูลใน Application Sheet รายการจะแสดงที่นี่')+'</p></div>';return;}
-      const byGroup=new Map();source.forEach(app=>{const key=groupKey(app);if(!byGroup.has(key))byGroup.set(key,[]);byGroup.get(key).push(app);});
-      root.innerHTML=[...byGroup.entries()].map(([group,apps])=>`<section class="group"><div class="group-head"><h2>${escapeHtml(displayGroup(group))}</h2><span>${apps.length}</span></div><div class="apps-grid">${apps.map(cardHtml).join('')}</div></section>`).join('');
+    function iconClass(value){
+      const raw=String(value||'').trim();if(!raw)return '';
+      if(/^fa[srb] fa-/.test(raw))return raw;
+      const clean=raw.replace(/^fa[srb]\s+/,'').replace(/^fa-/,'');
+      return clean?'fas fa-'+clean:'';
     }
-    function cardHtml(app){const url=safeUrl(app.url);const appColor=color(app.color)||'#4b8fff';const icon=iconMarkup(app.icon);return `<a class="app-card" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer" style="--card-color:${appColor}">${icon?'<div class="app-icon">'+icon+'</div>':''}<div class="app-info"><div class="app-name">${escapeHtml(app.name||'Untitled application')}</div><div class="app-description">${escapeHtml(app.description||'เปิดแอปพลิเคชัน')}</div></div>${app.starred?'<i class="star fas fa-star" title="แนะนำ"></i>':''}<i class="app-open fas fa-arrow-up-right-from-square"></i></a>`;}
-    function logout(){clearSessionTimer();state.idToken=null;state.user=null;state.authVerified=false;state.applications=[];clearSession();applyUser();renderApplications();setModal('account-modal',false);showToast('ออกจากระบบแล้ว','success');loadPortal();}
-    async function register(){const btn=$('register-btn');const note=$('register-note').value.trim();btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin"></i> กำลังส่ง';try{await request('register',{note});setModal('register-modal',false);await loadPortal(true);}catch(e){showToast(e.message||'ลงทะเบียนไม่สำเร็จ','error');}finally{btn.disabled=false;btn.textContent='ส่งคำขอ';}}
-    async function saveName(){if(!state.user||!state.idToken){showToast('กรุณาเข้าสู่ระบบก่อน','error');return;}const input=$('new-name'),btn=$('save-name-btn'),name=input.value.trim();if(!name){showToast('กรุณากรอกชื่อที่ต้องการแสดง','error');input.focus();return;}if(name.length>50){showToast('ชื่อยาวเกิน 50 ตัวอักษร','error');return;}const old=btn.innerHTML;btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin"></i> กำลังบันทึก';try{const data=await request('updateUserName',{newName:name});if(!data.success)throw new Error(data.message||'บันทึกชื่อไม่สำเร็จ');state.user.name=data.name||name;saveSession();applyUser();showToast('เปลี่ยนชื่อเรียบร้อยแล้ว','success');}catch(e){showToast(e.message||'บันทึกชื่อไม่สำเร็จ','error');}finally{btn.disabled=false;btn.innerHTML=old;}}
+    function color(value){const v=String(value||'').trim();return isValidColor(v)?v:'';}
+    function displayGroup(group){return group==='public'?t('group_public'):group.charAt(0).toUpperCase()+group.slice(1);}
+    function groupKey(app){return normalizeGroup(app.group).toLowerCase();}
+    function svgUrl(value,variant='default'){
+      const raw=String(value||'').trim();
+      if(/^https?:\/\/[^\s]+\.svg(?:[?#].*)?$/i.test(raw))return raw;
+      if(!isValidSlug(raw)||/^fa[srb]$/i.test(raw))return '';
+      return 'https://thesvg.org/icons/'+encodeURIComponent(raw)+'/'+encodeURIComponent(variant)+'.svg';
+    }
+    function iconMarkup(value,extraClass=''){
+      const raw=String(value||'').trim();if(!raw)return '';
+      const src=svgUrl(raw);
+      if(src){
+        return '<span class="icon-media"><img class="'+escapeHtml(extraClass)+'" src="'+escapeHtml(src)+'" alt="" loading="lazy" referrerpolicy="no-referrer"></span>';
+      }
+      const cls=iconClass(raw);
+      return cls?'<i class="'+escapeHtml(cls)+'"></i>':'';
+    }
+    function refreshSelectedIcon(){
+      const preview=$('admin-icon-preview');
+      preview.innerHTML=iconMarkup(state.selectedIcon);
+      preview.hidden=!state.selectedIcon;
+      const nameEl=$('admin-icon-name');
+      const valEl=$('admin-icon-value');
+      if(nameEl) nameEl.textContent=state.selectedIconName||t('icon_not_selected');
+      if(valEl) valEl.textContent=state.selectedIcon||'—';
+    }
+    function isAdmin(){return !!state.user&&state.authVerified&&String(state.user.role||'').toLowerCase().includes('admin');}
 
+    /* ===== Admin form ===== */
+    function resetAdminForm(){
+      state.editingRow=0;state.selectedIcon='';state.selectedIconName=t('icon_not_selected');
+      const title=$('admin-form-title'); if(title) title.textContent=t('admin_add_app');
+      ['admin-name','admin-url','admin-description','admin-color','admin-icon-manual'].forEach(id=>{
+        const el=$(id); if(el) el.value='';
+      });
+      const g=$('admin-group');if(g)g.value='public';
+      const s=$('admin-starred');if(s)s.checked=false;
+      const btn=$('admin-submit-btn');
+      if(btn) btn.innerHTML='<i class="fas fa-plus"></i> <span>'+escapeHtml(t('btn_add_app'))+'</span>';
+      const cancel=$('admin-cancel-btn'); if(cancel) cancel.hidden=true;
+      refreshSelectedIcon();
+    }
+    function fillAdminForm(app){
+      state.editingRow=Number(app.rowIdx)||0;
+      state.selectedIcon=String(app.icon||'').trim();
+      state.selectedIconName=state.selectedIcon?(svgUrl(state.selectedIcon)?state.selectedIcon:'Font Awesome'):t('icon_not_selected');
+      const title=$('admin-form-title'); if(title) title.textContent=t('admin_edit_app');
+      const f=(id,v)=>{const el=$(id);if(el)el.value=v||'';};
+      f('admin-name',app.name);f('admin-url',app.url);f('admin-description',app.description);
+      f('admin-group',app.group||'public');f('admin-color',app.color);
+      const star=$('admin-starred'); if(star) star.checked=app.starred===true;
+      f('admin-icon-manual','');
+      const btn=$('admin-submit-btn');
+      if(btn) btn.innerHTML='<i class="fas fa-check"></i> <span>'+escapeHtml(t('btn_save_changes'))+'</span>';
+      const cancel=$('admin-cancel-btn'); if(cancel) cancel.hidden=false;
+      refreshSelectedIcon();
+    }
+    function useManualIcon(){
+      const slug=$('admin-icon-manual').value.trim().toLowerCase();
+      if(!isValidSlug(slug)){showToast(t('msg_invalid_slug'),'error');return;}
+      state.selectedIcon=slug;state.selectedIconName='theSVG · '+slug;refreshSelectedIcon();
+    }
+    function showAdminTab(tab){
+      const apps=tab==='apps';
+      const atp=$('admin-apps-tab'),utp=$('admin-users-tab');
+      const abtn=$('admin-apps-tab-btn'),ubtn=$('admin-users-tab-btn');
+      if(atp) atp.hidden=!apps;
+      if(utp) utp.hidden=apps;
+      if(abtn) abtn.classList.toggle('active',apps);
+      if(ubtn) ubtn.classList.toggle('active',!apps);
+      const sub=$('admin-subtitle');
+      if(sub) sub.textContent=apps?t('admin_subtitle_apps'):t('admin_subtitle_users');
+    }
+    function openAdmin(){
+      if(!isAdmin()){showToast(t('msg_need_admin'),'error');return;}
+      resetAdminForm();showAdminTab('apps');renderAdminItems();renderAdminUsers();
+      setModal('admin-modal',true);
+    }
+    function adminItemIcon(app){const icon=iconMarkup(app.icon);return icon?'<div class="admin-item-icon">'+icon+'</div>':'';}
+    function renderAdminItems(){
+      const root=$('admin-items');if(!root)return;
+      if(!state.applications.length){
+        root.innerHTML='<div class="empty" style="padding:28px 10px"><p>'+escapeHtml(t('empty_no_data'))+'</p></div>';
+        return;
+      }
+      root.innerHTML=state.applications.map((app,index)=>{
+        const name=escapeHtml(app.name||'—');
+        const isFirst=index===0, isLast=index===state.applications.length-1;
+        const row=Number(app.rowIdx)||0;
+        return '<div class="admin-item">'+adminItemIcon(app)+
+          '<div class="admin-item-info"><div class="admin-item-name">'+name+'</div>'+
+          '<div class="admin-item-meta">'+(index+1)+'. '+escapeHtml(displayGroup(groupKey(app)))+'</div></div>'+
+          '<div class="admin-item-actions">'+
+          '<button class="icon-btn" type="button" title="Up" data-admin-action="up" data-row="'+row+'"'+(isFirst?' disabled':'')+'><i class="fas fa-chevron-up"></i></button>'+
+          '<button class="icon-btn" type="button" title="Down" data-admin-action="down" data-row="'+row+'"'+(isLast?' disabled':'')+'><i class="fas fa-chevron-down"></i></button>'+
+          '<button class="icon-btn" type="button" title="Edit" data-admin-action="edit" data-row="'+row+'"><i class="fas fa-pen"></i></button>'+
+          '<button class="icon-btn danger" type="button" title="Delete" data-admin-action="delete" data-row="'+row+'"><i class="fas fa-trash"></i></button>'+
+          '</div></div>';
+      }).join('');
+      bindAdminItemActions();
+    }
+    function bindAdminItemActions(){
+      const root=$('admin-items');if(!root)return;
+      root.querySelectorAll('[data-admin-action]').forEach(btn=>{
+        btn.addEventListener('click',()=>handleAdminItem(btn.dataset.adminAction,Number(btn.dataset.row)));
+      });
+    }
+    function renderAdminUsers(){
+      const root=$('admin-users'),search=$('admin-user-search');
+      if(!root)return;
+      const query=search?(search.value||'').trim().toLowerCase():'';
+      const users=state.allUsers.filter(user=>
+        (String(user.name||'')+' '+String(user.email||'')).toLowerCase().includes(query)
+      );
+      if(!users.length){
+        root.innerHTML='<div class="empty" style="padding:28px 10px"><p>'+escapeHtml(
+          state.allUsers.length?'No users':'empty_no_data'
+        )+'</p></div>';
+        return;
+      }
+      root.innerHTML=users.map(user=>{
+        const name=user.name||String(user.email||'').split('@')[0]||'—';
+        const pic=user.pic||avatar(name);
+        const email=escapeHtml(user.email||'');
+        const role=escapeHtml(user.role||'public');
+        return '<div class="admin-user"><img class="admin-user-avatar" src="'+escapeHtml(pic)+'" alt="">'+
+          '<div class="admin-user-info"><div class="admin-user-name">'+escapeHtml(name)+'</div>'+
+          '<div class="admin-user-email">'+email+'</div></div>'+
+          '<div class="admin-user-controls">'+
+          '<input class="admin-role" type="text" maxlength="50" value="'+role+'">'+
+          '<button class="btn btn-primary admin-save" type="button" data-user-email="'+email+'"><i class="fas fa-check"></i></button>'+
+          '</div></div>';
+      }).join('');
+      bindUserSaveButtons();
+    }
+    function bindUserSaveButtons(){
+      const root=$('admin-users');if(!root)return;
+      root.querySelectorAll('[data-user-email]').forEach(btn=>{
+        btn.addEventListener('click',()=>saveUserRole(btn,btn.dataset.userEmail));
+      });
+    }
+    async function saveUserRole(btn,email){
+      const input=btn.parentElement.querySelector('.admin-role');
+      const role=input?input.value.trim():'';
+      if(!role){showToast(t('msg_role_required'),'error');input&&input.focus();return;}
+      const old=btn.innerHTML;btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin"></i>';
+      try{
+        const data=await request('updateRole',{targetEmail:email,newRole:role});
+        if(!data.success)throw Error(data.message||'Failed');
+        showToast(t('toast_role_updated'),'success');
+        await loadPortal();renderAdminUsers();
+      }catch(e){showToast(e.message||'Failed','error');}
+      finally{btn.disabled=false;btn.innerHTML=old;}
+    }
+    async function handleAdminItem(action,rowIdx){
+      if(state.adminBusy)return;
+      const app=state.applications.find(item=>Number(item.rowIdx)===rowIdx);
+      if(!app)return;
+      if(action==='edit'){fillAdminForm(app);return;}
+      if(action==='delete'){
+        const msg = t('msg_confirm_delete')+' "'+(app.name||'—')+'" '+(state.lang==='th'?t('msg_confirm_delete_suffix'):'?');
+        if(!confirm(msg))return;
+        await adminRequest('deleteApplication',{rowIdx});return;
+      }
+      await adminRequest('moveApplication',{rowIdx,dir:action});
+    }
+    function setAdminActionsBusy(busy){
+      state.adminBusy=busy;
+      document.querySelectorAll('[data-admin-action]').forEach(btn=>{btn.disabled=busy;});
+    }
+    async function adminRequest(action,params){
+      if(state.adminBusy)return;
+      setAdminActionsBusy(true);showToast(t('toast_saving'),'info');
+      try{
+        await request(action,params);
+        showToast(t('toast_saved'),'success');
+        await loadPortal();
+        if(isAdmin())renderAdminItems();
+      }catch(e){showToast(e.message||'Failed','error');}
+      finally{setAdminActionsBusy(false);}
+    }
+    async function submitApplication(){
+      if(!isAdmin())return;
+      const name=$('admin-name').value.trim();
+      const url=$('admin-url').value.trim();
+      const description=$('admin-description').value.trim();
+      const group=$('admin-group').value.trim()||'public';
+      const appColor=$('admin-color').value.trim();
+      const starred=$('admin-starred').checked;
+      if(!name){showToast(t('msg_app_name_required'),'error');$('admin-name').focus();return;}
+      if(!safeUrl(url)){showToast(t('msg_invalid_url'),'error');$('admin-url').focus();return;}
+      const duplicate=state.applications.find(app=>Number(app.rowIdx)!==state.editingRow&&canonicalAppUrl(app.url)===canonicalAppUrl(url));
+      if(duplicate){
+        showToast(t('msg_url_duplicate')+' "'+(duplicate.name||'—')+'"','error');
+        $('admin-url').focus();return;
+      }
+      if(appColor&&!isValidColor(appColor)){showToast(t('msg_invalid_color'),'error');return;}
+      const btn=$('admin-submit-btn'),old=btn.innerHTML;
+      btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin"></i> '+escapeHtml(t('toast_saving'));
+      try{
+        const action=state.editingRow?'updateApplication':'addApplication';
+        const params={name,url,description,group,icon:state.selectedIcon,starred,color:appColor};
+        if(state.editingRow)params.rowIdx=state.editingRow;
+        await request(action,params);
+        showToast(state.editingRow?t('toast_app_updated'):t('toast_app_added'),'success');
+        resetAdminForm();await loadPortal();renderAdminItems();
+      }catch(e){showToast(e.message||'Failed','error');}
+      finally{btn.disabled=false;btn.innerHTML=old;}
+    }
+
+    /* ===== Logo picker ===== */
+    async function loadLogoRegistry(){
+      if(state.logosLoaded)return;
+      const root=$('logo-results');
+      try{
+        const response=await fetch('https://thesvg.org/api/registry.json',{cache:'force-cache'});
+        if(!response.ok)throw Error('Failed to load logos');
+        const data=await response.json();
+        state.logoRegistry=Array.isArray(data)?data:(Array.isArray(data.icons)?data.icons:[]);
+        state.logosLoaded=true;renderLogoResults();
+      }catch(e){
+        if(root) root.innerHTML='<div class="error" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-triangle-exclamation"></i><strong>Failed to load logos</strong><p>Try using a slug manually.</p></div>';
+      }
+    }
+    function renderLogoResults(){
+      const root=$('logo-results'),search=$('logo-search');
+      if(!root)return;
+      const query=search?(search.value||'').trim().toLowerCase():'';
+      const hits=state.logoRegistry.filter(item=>{
+        const hay=[item.title,item.name,item.slug,item.aliases].flat().filter(Boolean).join(' ').toLowerCase();
+        return !query||hay.includes(query);
+      }).slice(0,120);
+      if(!hits.length){
+        root.innerHTML='<div class="empty" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-magnifying-glass"></i><p>No logos found</p></div>';
+        return;
+      }
+      root.innerHTML=hits.map(item=>{
+        const slug=String(item.slug||item.name||'').trim();
+        const title=String(item.title||item.name||slug);
+        const src='https://thesvg.org/icons/'+encodeURIComponent(slug)+'/default.svg';
+        return '<button class="logo-result" type="button" data-logo-slug="'+escapeHtml(slug)+'" data-logo-title="'+escapeHtml(title)+'">'+
+          '<img src="'+escapeHtml(src)+'" alt="" loading="lazy" referrerpolicy="no-referrer">'+
+          '<span>'+escapeHtml(title)+'</span></button>';
+      }).join('');
+      bindLogoResults();
+    }
+    function bindLogoResults(){
+      const root=$('logo-results');if(!root)return;
+      root.querySelectorAll('[data-logo-slug]').forEach(btn=>{
+        btn.addEventListener('click',()=>{
+          state.selectedIcon=btn.dataset.logoSlug;
+          state.selectedIconName=btn.dataset.logoTitle;
+          refreshSelectedIcon();
+          setModal('logo-modal',false);
+          setModal('admin-modal',true);
+        });
+      });
+    }
+    async function openLogoPicker(){
+      if(!isAdmin())return;
+      setModal('admin-modal',false);setModal('logo-modal',true);
+      const results=$('logo-results');
+      if(!state.logosLoaded){
+        if(results) results.innerHTML='<div class="loading" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-circle-notch fa-spin"></i><p>'+escapeHtml(t('logo_loading'))+'</p></div>';
+        await loadLogoRegistry();
+      }else renderLogoResults();
+    }
+
+    /* ===== Render apps ===== */
+    function renderApplications(errorMessage){
+      const root=$('applications');if(!root)return;
+      const search=$('search'),filter=$('group-filter');
+      const query=search?(search.value||'').trim().toLowerCase():'';
+      const selected=filter?filter.value:'all';
+
+      // If user is actively searching, clear any previous error state first
+      // This fixes the "must refresh to see search results after error" bug
+      if(query && errorMessage===undefined && state.lastErrorMessage){
+        state.lastErrorMessage='';
+        errorMessage='';
+      }
+      // If errorMessage explicitly provided (from loadPortal error), update state
+      if(errorMessage!==undefined){
+        state.lastErrorMessage=errorMessage;
+      }
+
+      const source=state.applications.filter(app=>safeUrl(app.url)).filter(app=>{
+        const hay=((app.name||'')+' '+(app.description||'')+' '+(app.group||'')).toLowerCase();
+        return (!query||hay.includes(query))&&(selected==='all'||groupKey(app)===selected);
+      });
+
+      const countEl=$('app-count');if(countEl)countEl.textContent=source.length;
+
+      if(errorMessage){
+        setConnectionStatus('offline',t('status_offline'));
+        root.innerHTML='<div class="error"><i class="fas fa-triangle-exclamation"></i><strong>'+
+          escapeHtml(t('error_load_failed'))+'</strong><p>'+escapeHtml(errorMessage)+
+          '<br><button class="btn btn-ghost" style="margin-top:16px" type="button" id="retry-load-btn">'+
+          '<i class="fas fa-rotate-right"></i> '+escapeHtml(t('error_retry'))+
+          '</button></p></div>';
+        const retryBtn=$('retry-load-btn');
+        if(retryBtn) retryBtn.addEventListener('click', ()=>loadPortal(false,true));
+        return;
+      }
+
+      setConnectionStatus('',t('status_connected'));
+
+      const groups=[...new Set(state.applications.filter(app=>safeUrl(app.url)).map(groupKey))]
+        .sort((a,b)=>a==='public'?-1:b==='public'?1:a.localeCompare(b));
+      const oldVal=filter?filter.value:'all';
+      if(filter){
+        filter.innerHTML='<option value="all">'+escapeHtml(t('filter_all'))+'</option>'+
+          groups.map(g=>'<option value="'+escapeHtml(g)+'">'+escapeHtml(displayGroup(g))+'</option>').join('');
+        filter.value=groups.includes(oldVal)?oldVal:'all';
+      }
+
+      if(!source.length){
+        const hasQuery=!!query;
+        const hasApps=state.applications.length>0;
+        const icon=hasQuery?'fa-magnifying-glass':'fa-layer-group';
+        const title=hasQuery?t('empty_no_match'):(hasApps?t('empty_no_app'):t('empty_no_app'));
+        const desc=hasQuery?t('empty_no_match_desc'):(hasApps?'':t('empty_no_app_desc'));
+        root.innerHTML='<div class="empty"><i class="fas '+icon+'"></i><strong>'+
+          escapeHtml(title)+'</strong><p>'+escapeHtml(desc)+'</p></div>';
+        return;
+      }
+
+      const byGroup=new Map();
+      source.forEach(app=>{const key=groupKey(app);if(!byGroup.has(key))byGroup.set(key,[]);byGroup.get(key).push(app);});
+      root.innerHTML=[...byGroup.entries()].map(([group,apps])=>{
+        return '<section class="group"><div class="group-head"><h2>'+escapeHtml(displayGroup(group))+
+          '</h2><span>'+apps.length+'</span></div><div class="apps-grid">'+
+          apps.map(cardHtml).join('')+'</div></section>';
+      }).join('');
+      attachCardMouseEffect();
+    }
+
+    function cardHtml(app){
+      const url=safeUrl(app.url);
+      if(!url) return '';
+      const appColor=color(app.color)||'#5b8fff';
+      const icon=iconMarkup(app.icon);
+      const name=escapeHtml(app.name||'Untitled');
+      const desc=escapeHtml(app.description||'');
+      const starred=app.starred?'<i class="star fas fa-star" title="'+escapeHtml(t('app_featured'))+'"></i>':'';
+      return '<a class="app-card" href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer" style="--card-color:'+escapeHtml(appColor)+'">'+
+        (icon?'<div class="app-icon">'+icon+'</div>':'')+
+        '<div class="app-info"><div class="app-name">'+name+'</div>'+
+        '<div class="app-description">'+desc+'</div></div>'+
+        starred+
+        '<i class="app-open fas fa-arrow-up-right-from-square"></i></a>';
+    }
+    function attachCardMouseEffect(){
+      document.querySelectorAll('.app-card').forEach(card=>{
+        card.addEventListener('mousemove',e=>{
+          const rect=card.getBoundingClientRect();
+          const x=((e.clientX-rect.left)/rect.width*100).toFixed(1);
+          const y=((e.clientY-rect.top)/rect.height*100).toFixed(1);
+          card.style.setProperty('--mouse-x',x+'%');
+          card.style.setProperty('--mouse-y',y+'%');
+        });
+      });
+    }
+
+    /* ===== Account actions ===== */
+    function logout(){
+      clearSessionTimer();cancelAutoRetry();
+      state.idToken=null;state.user=null;state.authVerified=false;
+      state.applications=[];state.lastErrorMessage='';
+      clearSession();applyUser();renderApplications();
+      setModal('account-modal',false);showToast(t('toast_logged_out'),'success');loadPortal();
+    }
+    async function register(){
+      const btn=$('register-btn');const note=$('register-note');
+      const noteVal=note?note.value.trim():'';
+      btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin"></i>';
+      try{
+        await request('register',{note:noteVal});
+        setModal('register-modal',false);
+        showToast(t('toast_register_sent'),'success');
+        await loadPortal(true);
+      }catch(e){showToast(e.message||'Failed','error');}
+      finally{btn.disabled=false;btn.innerHTML=escapeHtml(t('btn_submit_request'));}
+    }
+    async function saveName(){
+      if(!state.user||!state.idToken){showToast(t('toast_session_expired'),'error');return;}
+      const input=$('new-name'),btn=$('save-name-btn');
+      const name=input?input.value.trim():'';
+      if(!name){showToast(t('msg_name_required'),'error');input&&input.focus();return;}
+      if(name.length>50){showToast(t('msg_name_too_long'),'error');return;}
+      const old=btn.innerHTML;btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin"></i>';
+      try{
+        const data=await request('updateUserName',{newName:name});
+        if(!data.success)throw new Error(data.message||'Failed');
+        state.user.name=data.name||name;saveSession();applyUser();
+        showToast(t('toast_name_saved'),'success');
+      }catch(e){showToast(e.message||'Failed','error');}
+      finally{btn.disabled=false;btn.innerHTML=old;}
+    }
+
+    /* ===== Event wiring ===== */
+    const debouncedRenderApps=debounce(()=>renderApplications(),220);
+    const debouncedRenderUsers=debounce(renderAdminUsers,220);
+    const debouncedRenderLogos=debounce(renderLogoResults,180);
+
+    // Top bar
     $('auth-btn').addEventListener('click',()=>state.user?setModal('account-modal',true):openLogin());
-    $('nav-account').addEventListener('click',()=>state.user?setModal('account-modal',true):openLogin());$('nav-admin').addEventListener('click',openAdmin);$('admin-apps-tab-btn').addEventListener('click',()=>showAdminTab('apps'));$('admin-users-tab-btn').addEventListener('click',()=>showAdminTab('users'));$('admin-user-search').addEventListener('input',renderAdminUsers);$('choose-logo-btn').addEventListener('click',openLogoPicker);$('use-icon-btn').addEventListener('click',useManualIcon);$('admin-icon-manual').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();useManualIcon();}});$('admin-submit-btn').addEventListener('click',submitApplication);$('admin-cancel-btn').addEventListener('click',resetAdminForm);$('logo-search').addEventListener('input',renderLogoResults);$('refresh-btn').addEventListener('click',refreshPortal);$('save-name-btn').addEventListener('click',saveName);$('new-name').addEventListener('keydown',e=>{if(e.key==='Enter')saveName();});$('logout-btn').addEventListener('click',logout);$('register-btn').addEventListener('click',register);$('search').addEventListener('input',renderApplications);$('group-filter').addEventListener('change',renderApplications);
-    document.querySelectorAll('.nav-link[href]').forEach(link=>link.addEventListener('click',()=>{document.querySelectorAll('.nav-link[href]').forEach(item=>item.classList.remove('active'));link.classList.add('active');}));
-    document.querySelectorAll('[data-close]').forEach(btn=>btn.addEventListener('click',()=>setModal(btn.dataset.close,false)));
-    document.querySelectorAll('.modal-backdrop').forEach(modal=>modal.addEventListener('click',e=>{if(e.target===modal)setModal(modal.id,false);}));
-    document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-backdrop.open').forEach(m=>setModal(m.id,false));});
-    window.handleCredentialResponse=handleCredentialResponse;window.loadPortal=loadPortal;
+    $('nav-account').addEventListener('click',()=>state.user?setModal('account-modal',true):openLogin());
+    $('nav-admin').addEventListener('click',openAdmin);
+    $('nav-settings').addEventListener('click',()=>setModal('settings-modal',true));
+    $('footer-help').addEventListener('click',()=>setModal('help-modal',true));
 
+    // Admin modal
+    $('admin-apps-tab-btn').addEventListener('click',()=>showAdminTab('apps'));
+    $('admin-users-tab-btn').addEventListener('click',()=>showAdminTab('users'));
+    $('admin-user-search').addEventListener('input',debouncedRenderUsers);
+    $('choose-logo-btn').addEventListener('click',openLogoPicker);
+    $('use-icon-btn').addEventListener('click',useManualIcon);
+    $('admin-icon-manual').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();useManualIcon();}});
+    $('admin-submit-btn').addEventListener('click',submitApplication);
+    $('admin-cancel-btn').addEventListener('click',resetAdminForm);
+    $('logo-search').addEventListener('input',debouncedRenderLogos);
+
+    // Tools
+    $('refresh-btn').addEventListener('click',refreshPortal);
+    $('save-name-btn').addEventListener('click',saveName);
+    $('new-name').addEventListener('keydown',e=>{if(e.key==='Enter')saveName();});
+    $('logout-btn').addEventListener('click',logout);
+    $('register-btn').addEventListener('click',register);
+    $('search').addEventListener('input',debouncedRenderApps);
+    $('group-filter').addEventListener('change',()=>renderApplications());
+
+    // Theme / language controls
+    document.querySelectorAll('#theme-ctrl .seg-opt').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        state.theme=btn.dataset.themeValue;
+        savePrefs();applyTheme();
+      });
+    });
+    document.querySelectorAll('#lang-ctrl .seg-opt').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        state.lang=btn.dataset.langValue;
+        savePrefs();applyLang();
+        // re-render dynamic parts
+        if(state.applications&&state.applications.length) renderApplications();
+        renderAdminItems();renderAdminUsers();
+        applyUser();
+      });
+    });
+
+    // Nav links
+    document.querySelectorAll('.nav-link[href]').forEach(link=>link.addEventListener('click',()=>{
+      document.querySelectorAll('.nav-link[href]').forEach(item=>item.classList.remove('active'));
+      link.classList.add('active');
+    }));
+
+    // Modal close
+    document.querySelectorAll('[data-close]').forEach(btn=>btn.addEventListener('click',()=>setModal(btn.dataset.close,false)));
+    document.querySelectorAll('.modal-backdrop').forEach(modal=>modal.addEventListener('click',e=>{
+      if(e.target===modal)setModal(modal.id,false);
+    }));
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown',e=>{
+      // Escape = close modals
+      if(e.key==='Escape'){
+        const open=document.querySelector('.modal-backdrop.open');
+        if(open) setModal(open.id,false);
+        return;
+      }
+      // Ignore shortcuts when typing in inputs/textareas or when modal is open
+      const tag=(document.activeElement?.tagName||'').toLowerCase();
+      const isTyping=tag==='input'||tag==='textarea'||tag==='select'||document.activeElement?.isContentEditable;
+      const modalOpen=!!document.querySelector('.modal-backdrop.open');
+
+      if(!isTyping && !modalOpen){
+        if(e.key==='/'){e.preventDefault();const s=$('search');if(s)s.focus();return;}
+        if(e.key==='r'||e.key==='R'){if(!e.ctrlKey&&!e.metaKey){e.preventDefault();refreshPortal();}return;}
+        if(e.key===','){e.preventDefault();setModal('settings-modal',true);return;}
+        if(e.key==='?'||e.key==='؟'){e.preventDefault();setModal('help-modal',true);return;}
+      }
+
+      // Focus trap in open modal
+      if(e.key==='Tab'){
+        const openModal=document.querySelector('.modal-backdrop.open .modal');
+        if(!openModal)return;
+        const focusable=openModal.querySelectorAll('button:not([disabled]),input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"]),a[href]');
+        if(!focusable.length)return;
+        const first=focusable[0],last=focusable[focusable.length-1];
+        if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+        else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+      }
+    });
+
+    // System theme change listener (for "auto" mode)
+    if(window.matchMedia){
+      try{
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{
+          if(state.theme==='auto') applyTheme();
+        });
+      }catch{}
+    }
+
+    // Handle broken images via event delegation (no inline onerror = safer CSP)
+    document.addEventListener('error',e=>{
+      const t=e.target;
+      if(t && t.tagName==='IMG' && t.closest('.app-icon,.admin-item-icon,.selected-icon,.admin-user-avatar,.user-detail img,.user-chip img')){
+        // Replace broken image with Font Awesome fallback
+        const parent=t.parentElement;
+        if(parent){
+          parent.innerHTML='<i class="fas fa-cube"></i>';
+        }
+      }
+    }, true);
+
+    /* ===== Init ===== */
     (async function init(){
-      try{const raw=localStorage.getItem(SESSION_KEY);const saved=raw?JSON.parse(raw):null;if(saved?.idToken&&!expired(saved.idToken)){state.idToken=saved.idToken;state.user=saved.user||null;scheduleSessionExpiry();applyUser();}else if(saved?.idToken){clearSession();}}catch{}
+      loadPrefs();
+      applyTheme();
+      applyLang();
+      try{
+        const raw=localStorage.getItem(SESSION_KEY);
+        const saved=raw?JSON.parse(raw):null;
+        if(saved?.idToken&&!expired(saved.idToken)){
+          state.idToken=saved.idToken;state.user=saved.user||null;
+          scheduleSessionExpiry();applyUser();
+        }else if(saved?.idToken){clearSession();}
+      }catch{}
       await loadPortal();
     }());
+  })();
   </script>
 </body>
 </html>
