@@ -20,7 +20,7 @@
       --ease:cubic-bezier(.4,0,.2,1);
     }
 
-    /* DARK THEME (default) */
+    /* ===== THEMES ===== */
     [data-theme="dark"]{
       --bg:#06080e;--bg-2:#0a0e1a;
       --panel:rgba(15,20,32,.7);--panel-solid:#0f1420;--panel-2:#111827;
@@ -35,8 +35,6 @@
       --bg-gradient-1:rgba(91,143,255,.12);--bg-gradient-2:rgba(139,108,240,.10);
       --modal-bg:linear-gradient(145deg,#111a2d,#0c111e);
     }
-
-    /* LIGHT THEME */
     [data-theme="light"]{
       --bg:#f5f7fb;--bg-2:#eef1f8;
       --panel:rgba(255,255,255,.8);--panel-solid:#ffffff;--panel-2:#f1f4fa;
@@ -70,16 +68,14 @@
         radial-gradient(1px 1px at 20% 30%, rgba(155,155,155,.3), transparent),
         radial-gradient(1px 1px at 70% 80%, rgba(155,155,155,.2), transparent),
         radial-gradient(1px 1px at 40% 60%, rgba(155,155,155,.15), transparent);
-      background-size: 300px 300px;opacity:.5;
+      background-size:300px 300px;opacity:.5;
     }
     [data-theme="light"] body::before{opacity:.3}
 
-    ::-webkit-scrollbar{width:10px;height:10px}
+    ::-webkit-scrollbar{width:8px;height:8px}
     ::-webkit-scrollbar-track{background:transparent}
-    ::-webkit-scrollbar-thumb{background:rgba(155,155,155,.12);border-radius:10px;border:2px solid transparent;background-clip:padding-box}
-    ::-webkit-scrollbar-thumb:hover{background:rgba(155,155,155,.22);background-clip:padding-box}
+    ::-webkit-scrollbar-thumb{background:rgba(155,155,155,.12);border-radius:10px}
     [data-theme="light"] ::-webkit-scrollbar-thumb{background:rgba(15,23,42,.15)}
-    [data-theme="light"] ::-webkit-scrollbar-thumb:hover{background:rgba(15,23,42,.28)}
 
     button,input,select,textarea{font:inherit;color:inherit}
     button{cursor:pointer;border:none;background:none}
@@ -88,477 +84,380 @@
 
     .shell{width:min(1080px,100%);margin:auto;padding:18px 28px 44px}
 
-    /* TOPBAR */
+    /* ===== TOPBAR ===== */
     .topbar{
-      position:sticky;top:12px;z-index:10;height:62px;display:flex;align-items:center;
-      justify-content:space-between;gap:12px;margin-bottom:64px;padding:7px 9px 7px 11px;
+      position:sticky;top:12px;z-index:10;display:flex;flex-direction:column;gap:8px;
+      margin-bottom:56px;padding:10px 12px;
       border:1px solid var(--border);border-radius:var(--radius);
       background:var(--topbar-bg);
       backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
       box-shadow:var(--shadow-sm);
       transition:all .3s var(--ease);
     }
-    .topbar:hover{border-color:var(--border-h)}
+    .topbar-main{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%}
 
-    .brand{display:flex;align-items:center;gap:11px;min-width:0}
+    .brand{display:flex;align-items:center;gap:10px;min-width:0}
     .brand-mark{
-      width:38px;height:38px;display:grid;place-items:center;border-radius:11px;
+      width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:11px;
       background:linear-gradient(135deg,#1a2f5c,#2b4a8a);color:#8db9ff;font-size:.95rem;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.12), 0 4px 12px rgba(27,59,120,.4);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 12px rgba(27,59,120,.4);
     }
     [data-theme="light"] .brand-mark{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff}
     .brand-copy{min-width:0}
-    .brand-title{font:800 1.02rem var(--display);letter-spacing:-.3px}
-    .brand-sub{color:var(--muted);font-size:.63rem;margin-top:2px;letter-spacing:.7px;text-transform:uppercase}
+    .brand-title{font:800 1rem var(--display);letter-spacing:-.3px;white-space:nowrap}
+    .brand-sub{color:var(--muted);font-size:.6rem;margin-top:2px;letter-spacing:.6px;text-transform:uppercase;display:none}
 
-    .topnav{display:flex;align-items:center;gap:4px;margin-left:auto}
-    .nav-link{
-      border:0;background:transparent;display:inline-flex;align-items:center;gap:7px;
-      padding:9px 13px;border-radius:11px;color:var(--muted);font-size:.76rem;font-weight:700;
-      transition:all .2s var(--ease);position:relative;
-    }
-    .nav-link i{font-size:.82rem}
-    .nav-link:hover{color:var(--text);background:rgba(155,155,155,.06)}
-    [data-theme="light"] .nav-link:hover{background:rgba(15,23,42,.05)}
-    .nav-link.active{color:var(--text);background:rgba(91,143,255,.12)}
-    [data-theme="light"] .nav-link.active{background:rgba(37,99,235,.1)}
-    .nav-link.active::after{
-      content:"";position:absolute;bottom:3px;left:50%;transform:translateX(-50%);
-      width:18px;height:2px;background:linear-gradient(90deg,var(--blue),var(--violet));
-      border-radius:2px;
-    }
-    .nav-link[hidden]{display:none}
-    .nav-icon-btn{
-      width:40px;height:40px;border-radius:11px;color:var(--muted);
-      display:inline-flex;align-items:center;justify-content:center;
-      transition:all .2s var(--ease);font-size:.88rem;
-    }
-    .nav-icon-btn:hover{color:var(--text);background:rgba(155,155,155,.06)}
-    [data-theme="light"] .nav-icon-btn:hover{background:rgba(15,23,42,.05)}
-
-    .user-area{display:flex;align-items:center;gap:8px}
+    .user-area{display:flex;align-items:center;gap:6px;margin-left:auto}
     .user-chip{
-      display:none;align-items:center;gap:9px;padding:5px 12px 5px 5px;
+      display:none;align-items:center;gap:8px;padding:5px 10px 5px 5px;
       border:1px solid var(--border);background:rgba(155,155,155,.04);
-      border-radius:99px;color:var(--muted);font-size:.78rem;transition:all .2s var(--ease);
+      border-radius:99px;color:var(--muted);font-size:.75rem;transition:all .2s var(--ease);
     }
     .user-chip:hover{background:rgba(155,155,155,.08);border-color:var(--border-h)}
     .user-chip.visible{display:flex}
-    .user-chip img{width:29px;height:29px;border-radius:50%;object-fit:cover;background:var(--panel-2)}
-    .user-name{max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .user-chip img{width:28px;height:28px;border-radius:50%;object-fit:cover;background:var(--panel-2)}
+    .user-name{max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+    .topnav{
+      display:flex;align-items:center;gap:4px;width:100%;
+      overflow-x:auto;-webkit-overflow-scrolling:touch;
+      scrollbar-width:none;padding-bottom:2px;
+    }
+    .topnav::-webkit-scrollbar{display:none}
+    .nav-link{
+      display:inline-flex;align-items:center;gap:7px;padding:9px 13px;border-radius:11px;
+      color:var(--muted);font-size:.78rem;font-weight:700;transition:all .2s var(--ease);
+      position:relative;white-space:nowrap;flex-shrink:0;min-height:42px;
+    }
+    .nav-link:hover{color:var(--text);background:rgba(155,155,155,.06)}
+    .nav-link.active{color:var(--text);background:rgba(91,143,255,.12)}
+    .nav-link.active::after{
+      content:"";position:absolute;bottom:3px;left:50%;transform:translateX(-50%);
+      width:16px;height:2px;background:linear-gradient(90deg,var(--blue),var(--violet));border-radius:2px;
+    }
+    .nav-link[hidden]{display:none}
+
+    .nav-icon-btn{
+      width:40px;height:40px;border-radius:11px;color:var(--muted);
+      display:inline-flex;align-items:center;justify-content:center;
+      transition:all .2s var(--ease);font-size:.9rem;flex-shrink:0;
+    }
+    .nav-icon-btn:hover{color:var(--text);background:rgba(155,155,155,.06)}
 
     .btn{
-      border:1px solid transparent;border-radius:99px;padding:10px 17px;color:#fff;
-      font-weight:700;font-size:.82rem;transition:all .25s var(--ease);
-      display:inline-flex;align-items:center;justify-content:center;gap:8px;
-      white-space:nowrap;
+      border:1px solid transparent;border-radius:99px;padding:9px 16px;color:#fff;
+      font-weight:700;font-size:.8rem;transition:all .25s var(--ease);
+      display:inline-flex;align-items:center;justify-content:center;gap:7px;white-space:nowrap;
+      min-height:42px;
     }
     .btn:hover:not(:disabled){transform:translateY(-2px)}
     .btn:active:not(:disabled){transform:translateY(0)}
     .btn:disabled{opacity:.5;cursor:not-allowed}
-    #auth-btn{min-width:0;height:38px;padding:0 14px}
+    #auth-btn{min-width:0;padding:0 13px;height:38px}
     .btn-primary{
       background:linear-gradient(135deg,var(--blue),var(--violet));
-      box-shadow:0 8px 24px rgba(75,143,255,.25), inset 0 1px 0 rgba(255,255,255,.15);
+      box-shadow:0 8px 24px rgba(75,143,255,.25),inset 0 1px 0 rgba(255,255,255,.15);
     }
-    .btn-primary:hover:not(:disabled){box-shadow:0 12px 30px rgba(75,143,255,.4), inset 0 1px 0 rgba(255,255,255,.2);filter:brightness(1.08)}
     .btn-ghost{background:rgba(155,155,155,.045);border-color:var(--border);color:var(--muted)}
-    .btn-ghost:hover:not(:disabled){color:var(--text);border-color:var(--border-h);background:rgba(155,155,155,.08)}
-    [data-theme="light"] .btn-ghost{background:rgba(15,23,42,.04);color:var(--muted)}
-    [data-theme="light"] .btn-ghost:hover:not(:disabled){background:rgba(15,23,42,.08);color:var(--text)}
+    [data-theme="light"] .btn-ghost{background:rgba(15,23,42,.04)}
 
-    /* HERO */
-    .hero{display:block;margin-bottom:46px;scroll-margin-top:100px}
+    /* ===== HERO ===== */
+    .hero{display:block;margin-bottom:36px;scroll-margin-top:100px}
     .eyebrow{
       display:inline-flex;align-items:center;gap:8px;padding:6px 12px;
       background:rgba(91,143,255,.08);border:1px solid rgba(91,143,255,.18);
-      color:var(--blue);font-size:.7rem;font-weight:800;letter-spacing:1.5px;
-      text-transform:uppercase;margin-bottom:18px;border-radius:99px;
+      color:var(--blue);font-size:.68rem;font-weight:800;letter-spacing:1.2px;
+      text-transform:uppercase;margin-bottom:14px;border-radius:99px;
     }
-    .eyebrow i{font-size:.65rem;color:var(--amber)}
-    .hero h1{
-      font:800 clamp(2.4rem,6.5vw,4.6rem)/1.02 var(--display);
-      letter-spacing:-2.5px;max-width:700px;
-    }
+    .hero h1{font:800 clamp(2rem,7vw,4.2rem)/1.05 var(--display);letter-spacing:-2px;max-width:700px}
     .hero-line{
-      display:block;line-height:1.14;
-      background:linear-gradient(180deg, var(--hero-text-from) 0%, var(--hero-text-to) 100%);
+      display:block;line-height:1.15;
+      background:linear-gradient(180deg,var(--hero-text-from) 0%,var(--hero-text-to) 100%);
       -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
     }
     .hero-line-accent{
-      margin-top:.1em;
-      background:linear-gradient(135deg, var(--blue) 0%, var(--violet) 60%, #c290ff 100%);
+      margin-top:.08em;
+      background:linear-gradient(135deg,var(--blue) 0%,var(--violet) 60%,#c290ff 100%);
       -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
-      filter:drop-shadow(0 2px 20px rgba(139,108,240,.3));
     }
-    .hero-copy{color:var(--muted);line-height:1.75;margin-top:20px;max-width:610px;font-size:.95rem}
+    .hero-copy{color:var(--muted);line-height:1.7;margin-top:16px;max-width:610px;font-size:.9rem}
 
-    /* TOOLBAR */
-    .toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:22px}
-    .search{position:relative;flex:1;min-width:220px}
-    .search i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:.82rem;transition:color .2s}
+    /* ===== TOOLBAR ===== */
+    .toolbar{display:flex;align-items:stretch;gap:10px;margin-bottom:18px}
+    .search{position:relative;flex:1;min-width:0}
+    .search i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:.82rem}
     .search input{
       width:100%;background:var(--panel);backdrop-filter:blur(10px);
       border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);
-      padding:12px 14px 12px 40px;outline:0;font-size:.84rem;transition:all .2s var(--ease);
+      padding:12px 14px 12px 40px;outline:0;font-size:16px;transition:all .2s var(--ease);
     }
     .search input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(91,143,255,.15)}
-    .search input:focus+i{color:var(--blue)}
     .search input::placeholder{color:var(--dim)}
     .filter{
-      background:var(--panel);backdrop-filter:blur(10px);
-      border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);
-      padding:12px 36px 12px 14px;outline:0;font-size:.82rem;cursor:pointer;
-      transition:all .2s var(--ease);
-      appearance:none;-webkit-appearance:none;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238794ad' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-sm);
+      color:var(--text);padding:12px 34px 12px 14px;outline:0;font-size:.82rem;cursor:pointer;
+      appearance:none;-webkit-appearance:none;max-width:150px;flex-shrink:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238794ad' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
       background-repeat:no-repeat;background-position:right 12px center;
     }
-    .filter:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(91,143,255,.15)}
     .filter option{background:var(--panel-solid);color:var(--text)}
     .refresh-btn{
-      width:42px;height:42px;padding:0;border:1px solid var(--border);
+      width:44px;height:44px;flex:0 0 44px;border:1px solid var(--border);
       border-radius:var(--radius-sm);background:var(--panel);backdrop-filter:blur(10px);
       color:var(--muted);font-size:.85rem;transition:all .25s var(--ease);
     }
-    .refresh-btn:hover:not(:disabled){color:var(--text);border-color:var(--blue);background:rgba(91,143,255,.1);transform:rotate(90deg)}
+    .refresh-btn:hover:not(:disabled){color:var(--text);border-color:var(--blue);transform:rotate(90deg)}
     .refresh-btn:disabled{opacity:.55;cursor:wait;transform:none}
     .refresh-btn.loading i{animation:portal-spin .8s linear infinite}
-    .updated-at{color:var(--dim);font-size:.72rem;white-space:nowrap}
+    .updated-at{display:none}
     @keyframes portal-spin{to{transform:rotate(360deg)}}
 
-    /* STATS */
-    .stats{display:flex;align-items:center;gap:18px;color:var(--muted);font-size:.8rem;margin-bottom:20px;flex-wrap:wrap}
-    .stats strong{color:var(--text);font-size:1.15rem;font-weight:800;margin-right:4px}
-    .status{display:inline-flex;align-items:center;gap:8px;padding:4px 11px 4px 8px;background:rgba(155,155,155,.04);border-radius:99px;border:1px solid var(--border)}
-    .status-dot{
-      width:8px;height:8px;border-radius:50%;background:var(--green);
-      box-shadow:0 0 10px color-mix(in srgb, var(--green) 80%, transparent);
-      animation:pulse 2s ease-in-out infinite;
-    }
-    .status.connecting .status-dot{background:var(--blue);box-shadow:0 0 10px color-mix(in srgb, var(--blue) 80%, transparent)}
-    .status.offline .status-dot{background:var(--red);box-shadow:0 0 10px color-mix(in srgb, var(--red) 80%, transparent);animation:none}
-    @keyframes pulse{
-      0%,100%{opacity:1;transform:scale(1)}
-      50%{opacity:.6;transform:scale(1.3)}
-    }
+    /* ===== STATS ===== */
+    .stats{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:.78rem;margin-bottom:18px;flex-wrap:wrap}
+    .stats strong{color:var(--text);font-size:1.05rem;font-weight:800;margin-right:4px}
+    .status{display:inline-flex;align-items:center;gap:8px;padding:4px 10px 4px 8px;background:rgba(155,155,155,.04);border-radius:99px;border:1px solid var(--border)}
+    .status-dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 10px var(--green);animation:pulse 2s ease-in-out infinite}
+    .status.connecting .status-dot{background:var(--blue);box-shadow:0 0 10px var(--blue)}
+    .status.offline .status-dot{background:var(--red);box-shadow:0 0 10px var(--red);animation:none}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(1.3)}}
 
-    /* LOADING / EMPTY / ERROR */
-    .loading,.empty,.error{
-      padding:58px 24px;text-align:center;border:1px solid var(--border);
-      border-radius:var(--radius);background:var(--panel);backdrop-filter:blur(10px);
-      color:var(--muted);
-    }
-    .loading i{color:var(--blue);font-size:1.6rem;margin-bottom:14px;filter:drop-shadow(0 0 10px color-mix(in srgb, var(--blue) 50%, transparent))}
-    .empty i,.error i{display:block;font-size:1.8rem;margin-bottom:14px;color:var(--dim)}
-    .error i{color:var(--red);filter:drop-shadow(0 0 10px color-mix(in srgb, var(--red) 40%, transparent))}
-    .empty strong,.error strong{display:block;color:var(--text);margin-bottom:8px;font-size:1rem}
-    .empty p,.error p{font-size:.85rem;line-height:1.6;max-width:420px;margin:0 auto}
+    /* ===== STATES ===== */
+    .loading,.empty,.error{padding:48px 20px;text-align:center;border:1px solid var(--border);border-radius:var(--radius);background:var(--panel);backdrop-filter:blur(10px);color:var(--muted)}
+    .loading i{color:var(--blue);font-size:1.5rem;margin-bottom:12px}
+    .empty i,.error i{display:block;font-size:1.6rem;margin-bottom:12px;color:var(--dim)}
+    .error i{color:var(--red)}
+    .empty strong,.error strong{display:block;color:var(--text);margin-bottom:8px;font-size:.95rem}
+    .empty p,.error p{font-size:.82rem;line-height:1.6}
 
-    /* APP GROUPS */
-    .group{margin-top:32px}
-    .group-head{display:flex;align-items:center;gap:11px;margin-bottom:14px}
-    .group-head h2{font:800 1.05rem var(--display);letter-spacing:-.3px;display:flex;align-items:center;gap:8px}
-    .group-head h2::before{
-      content:"";width:4px;height:18px;border-radius:2px;
-      background:linear-gradient(180deg,var(--blue),var(--violet));
-    }
-    .group-head span{font-size:.65rem;color:var(--dim);background:rgba(155,155,155,.05);padding:3px 9px;border-radius:99px;font-weight:700}
+    /* ===== APPS ===== */
+    .group{margin-top:28px}
+    .group-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+    .group-head h2{font:800 1rem var(--display);letter-spacing:-.3px;display:flex;align-items:center;gap:8px}
+    .group-head h2::before{content:"";width:3px;height:16px;border-radius:2px;background:linear-gradient(180deg,var(--blue),var(--violet))}
+    .group-head span{font-size:.62rem;color:var(--dim);background:rgba(155,155,155,.05);padding:3px 8px;border-radius:99px;font-weight:700}
     .group-head:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,var(--border),transparent)}
 
-    .apps-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+    .apps-grid{display:grid;grid-template-columns:1fr;gap:10px}
     .app-card{
-      position:relative;display:flex;align-items:flex-start;gap:13px;min-height:118px;padding:17px;
+      position:relative;display:flex;align-items:flex-start;gap:12px;min-height:110px;padding:15px;
       border:1px solid var(--border);border-radius:var(--radius);
       background:var(--panel);backdrop-filter:blur(10px);
-      overflow:hidden;transition:all .3s var(--ease);
-      animation:cardIn .4s var(--ease) both;
+      overflow:hidden;transition:all .3s var(--ease);animation:cardIn .4s var(--ease) both;
     }
-    @keyframes cardIn{
-      from{opacity:0;transform:translateY(8px)}
-      to{opacity:1;transform:translateY(0)}
-    }
-    .app-card::before{
-      content:"";position:absolute;inset:0 auto 0 0;width:3px;
-      background:linear-gradient(180deg,var(--card-color,var(--blue)),transparent);
-      opacity:.9;transition:width .3s var(--ease);
-    }
-    .app-card::after{
-      content:"";position:absolute;inset:0;
-      background:radial-gradient(circle at var(--mouse-x,50%) var(--mouse-y,50%),rgba(155,155,155,.08),transparent 50%);
-      opacity:0;transition:opacity .3s var(--ease);pointer-events:none;
-    }
-    [data-theme="light"] .app-card::after{background:radial-gradient(circle at var(--mouse-x,50%) var(--mouse-y,50%),rgba(15,23,42,.04),transparent 50%)}
-    .app-card:hover{
-      transform:translateY(-4px);border-color:var(--border-h);
-      box-shadow:0 20px 40px -15px rgba(0,0,0,.15), 0 0 0 1px rgba(155,155,155,.05);
-    }
-    [data-theme="dark"] .app-card:hover{box-shadow:0 20px 40px -15px rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.05)}
-    .app-card:hover::before{width:4px}
-    .app-card:hover::after{opacity:1}
+    @keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+    .app-card::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:linear-gradient(180deg,var(--card-color,var(--blue)),transparent);opacity:.9}
+    .app-card:hover{transform:translateY(-3px);border-color:var(--border-h);box-shadow:0 15px 30px -10px rgba(0,0,0,.2)}
 
     .app-icon{
-      width:44px;height:44px;flex:0 0 44px;display:grid;place-items:center;
-      border-radius:12px;
+      width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border-radius:11px;
       background:color-mix(in srgb,var(--card-color,var(--blue)) 15%,transparent);
-      color:var(--card-color,var(--blue));font-size:1.05rem;
+      color:var(--card-color,var(--blue));font-size:1rem;
       border:1px solid color-mix(in srgb,var(--card-color,var(--blue)) 25%,transparent);
-      box-shadow:inset 0 1px 0 rgba(155,155,155,.08);
-      transition:transform .3s var(--ease);
     }
-    .app-card:hover .app-icon{transform:scale(1.08) rotate(-3deg)}
-    .app-icon img{width:26px;height:26px;object-fit:contain}
-    .app-info{min-width:0;flex:1;padding-right:20px}
-    .app-name{font:800 .94rem var(--display);line-height:1.3;margin-bottom:7px;padding-right:10px;overflow-wrap:anywhere;word-break:break-word}
-    .app-description{font-size:.76rem;color:var(--muted);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-    .app-open{
-      position:absolute;right:14px;bottom:14px;color:var(--dim);font-size:.72rem;
-      padding:6px 10px;border-radius:99px;background:rgba(155,155,155,.04);
-      opacity:0;transform:translateX(-4px);transition:all .3s var(--ease);
-    }
-    .app-card:hover .app-open{opacity:1;transform:translateX(0);color:var(--card-color,var(--blue))}
-    .star{position:absolute;top:12px;right:12px;color:var(--amber);font-size:.7rem;filter:drop-shadow(0 0 4px color-mix(in srgb, var(--amber) 50%, transparent))}
-
+    .app-icon img{width:24px;height:24px;object-fit:contain}
+    .app-info{min-width:0;flex:1;padding-right:18px}
+    .app-name{font:800 .9rem var(--display);line-height:1.3;margin-bottom:6px;overflow-wrap:anywhere}
+    .app-description{font-size:.74rem;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+    .app-open{position:absolute;right:12px;bottom:12px;color:var(--dim);font-size:.7rem;padding:5px 8px;border-radius:99px;background:rgba(155,155,155,.04)}
+    .app-card:hover .app-open{color:var(--card-color,var(--blue))}
+    .star{position:absolute;top:10px;right:10px;color:var(--amber);font-size:.65rem}
     .group-public .app-card{--card-color:var(--blue)}
     .group-starred .app-card{--card-color:var(--amber)}
 
-    /* MODAL */
+    /* ===== MODAL ===== */
     .modal-backdrop{
-      position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;
-      background:rgba(1,3,8,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-      z-index:20;opacity:0;visibility:hidden;transition:opacity .3s var(--ease), visibility .3s var(--ease);
+      position:fixed;inset:0;display:flex;align-items:flex-end;justify-content:center;
+      padding:0;background:rgba(1,3,8,.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+      z-index:20;opacity:0;visibility:hidden;transition:opacity .3s var(--ease),visibility .3s var(--ease);
     }
-    [data-theme="light"] .modal-backdrop{background:rgba(15,23,42,.5)}
     .modal-backdrop.open{opacity:1;visibility:visible}
     .modal{
-      width:min(100%,420px);border:1px solid var(--border-h);border-radius:var(--radius-lg);
-      background:var(--modal-bg);
-      box-shadow:var(--shadow), inset 0 1px 0 rgba(155,155,155,.05);
-      padding:28px;max-height:calc(100vh - 40px);overflow:auto;
-      transform:translateY(20px) scale(.96);transition:transform .3s var(--ease);
+      width:100%;max-width:100%;border:1px solid var(--border-h);
+      border-radius:20px 20px 0 0;background:var(--modal-bg);
+      box-shadow:var(--shadow);padding:20px 16px calc(20px + env(safe-area-inset-bottom));
+      max-height:calc(100vh - 40px);max-height:calc(100dvh - 40px);overflow-y:auto;
+      transform:translateY(30px);transition:transform .3s var(--ease);
     }
-    .modal-backdrop.open .modal{transform:translateY(0) scale(1)}
-    .modal.account-wide{width:min(100%,520px)}
-    .modal.wide{width:min(100%,560px)}
-    .modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:24px}
-    .modal-head h2{font:800 1.5rem var(--display);letter-spacing:-.6px}
-    .modal-head p{color:var(--muted);font-size:.82rem;line-height:1.6;margin-top:6px}
-    .close{border:0;background:transparent;color:var(--muted);font-size:1.2rem;padding:4px;border-radius:8px;transition:all .2s}
+    .modal-backdrop.open .modal{transform:translateY(0)}
+    .modal-handle{width:36px;height:4px;background:var(--border-h);border-radius:2px;margin:0 auto 16px;flex-shrink:0}
+    .modal-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:20px}
+    .modal-head h2{font:800 1.3rem var(--display);letter-spacing:-.5px}
+    .modal-head p{color:var(--muted);font-size:.78rem;line-height:1.55;margin-top:5px}
+    .close{border:0;background:transparent;color:var(--muted);font-size:1.1rem;padding:6px;border-radius:8px;min-width:40px;min-height:40px;display:flex;align-items:center;justify-content:center}
     .close:hover{color:var(--text);background:rgba(155,155,155,.06)}
-    .google-wrap{min-height:44px;display:flex;justify-content:center;padding:8px 0}
-    .login-help{color:var(--dim);font-size:.73rem;line-height:1.7;text-align:center;margin-top:20px;padding:12px;background:rgba(155,155,155,.02);border-radius:10px;border:1px dashed var(--border)}
-    .field-label{display:block;color:var(--muted);font-size:.76rem;font-weight:700;margin-bottom:8px}
+
+    .field-label{display:block;color:var(--muted);font-size:.78rem;font-weight:700;margin-bottom:8px}
     .field{
-      width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:12px;
-      background:rgba(0,0,0,.2);color:var(--text);outline:0;margin-bottom:15px;
-      transition:all .2s var(--ease);
+      width:100%;padding:13px 14px;border:1px solid var(--border);border-radius:12px;
+      background:rgba(0,0,0,.15);color:var(--text);outline:0;margin-bottom:14px;
+      transition:all .2s var(--ease);font-size:16px;
     }
-    [data-theme="light"] .field{background:rgba(15,23,42,.02)}
     .field:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(91,143,255,.15)}
     textarea.field{resize:vertical;min-height:80px}
-    .modal-actions{display:flex;gap:9px;justify-content:flex-end;margin-top:5px}
-    .modal-actions .btn{min-width:100px}
-    .user-detail{display:flex;align-items:center;gap:13px;padding:14px;border-radius:14px;background:rgba(155,155,155,.04);margin-bottom:20px;border:1px solid var(--border)}
-    .user-detail img{width:46px;height:46px;border-radius:50%;object-fit:cover;border:2px solid var(--border-h)}
-    .user-detail strong{display:block;font-size:.92rem}
-    .user-detail span{display:block;color:var(--muted);font-size:.74rem;margin-top:3px;overflow-wrap:anywhere;word-break:break-word}
-    .account-section{padding-top:20px;margin-top:20px;border-top:1px solid var(--border)}
-    .account-section-title{font-size:.88rem;font-weight:800;margin-bottom:6px}
-    .account-section-copy{font-size:.76rem;color:var(--muted);line-height:1.6;margin-bottom:14px}
-    .name-row{display:flex;gap:9px}
+    .modal-actions{display:flex;gap:9px;margin-top:8px}
+    .modal-actions .btn{flex:1;min-height:46px}
+
+    .user-detail{display:flex;align-items:center;gap:12px;padding:13px;border-radius:13px;background:rgba(155,155,155,.04);margin-bottom:16px;border:1px solid var(--border)}
+    .user-detail img{width:44px;height:44px;border-radius:50%;object-fit:cover}
+    .user-detail strong{display:block;font-size:.88rem}
+    .user-detail span{display:block;color:var(--muted);font-size:.72rem;margin-top:3px;word-break:break-all}
+    .account-section{padding-top:16px;margin-top:16px;border-top:1px solid var(--border)}
+    .account-section-title{font-size:.85rem;font-weight:800;margin-bottom:5px}
+    .account-section-copy{font-size:.72rem;color:var(--muted);line-height:1.55;margin-bottom:12px}
+    .name-row{display:flex;gap:8px}
     .name-row .field{margin-bottom:0;flex:1}
-    .name-row .btn{flex:0 0 auto}
-    .role-badge{
-      display:inline-block;margin-top:10px;color:var(--blue-h);
-      background:rgba(91,143,255,.15);padding:4px 10px;border-radius:99px;
-      font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
-      border:1px solid rgba(91,143,255,.25);
-    }
+    .name-row .btn{flex:0 0 auto;min-width:90px}
+    .role-badge{display:inline-block;margin-top:8px;color:var(--blue-h);background:rgba(91,143,255,.15);padding:3px 8px;border-radius:99px;font-size:.65rem;font-weight:700;text-transform:uppercase}
 
-    /* SETTINGS */
-    .settings-grid{display:grid;gap:14px;margin-top:6px}
-    .settings-row{
-      display:flex;align-items:center;justify-content:space-between;gap:16px;
-      padding:14px;border:1px solid var(--border);border-radius:12px;
-      background:rgba(155,155,155,.03);
-    }
-    .settings-row-info{flex:1;min-width:0}
-    .settings-row-title{font-weight:700;font-size:.88rem;margin-bottom:3px}
-    .settings-row-desc{color:var(--muted);font-size:.74rem;line-height:1.45}
-    .seg-ctrl{display:inline-flex;border:1px solid var(--border);border-radius:99px;padding:3px;background:rgba(0,0,0,.2);gap:2px}
-    [data-theme="light"] .seg-ctrl{background:rgba(15,23,42,.03)}
-    .seg-opt{
-      border:0;background:transparent;padding:7px 13px;border-radius:99px;
-      color:var(--muted);font-size:.74rem;font-weight:700;transition:all .2s var(--ease);
-      display:inline-flex;align-items:center;gap:6px;white-space:nowrap;
-    }
-    .seg-opt:hover{color:var(--text)}
-    .seg-opt.active{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff;box-shadow:0 2px 8px rgba(91,143,255,.3)}
+    /* ===== SETTINGS ===== */
+    .settings-grid{display:grid;gap:12px}
+    .settings-row{display:flex;flex-direction:column;gap:12px;padding:14px;border:1px solid var(--border);border-radius:12px;background:rgba(155,155,155,.03)}
+    .settings-row-title{font-weight:700;font-size:.85rem;display:flex;align-items:center;gap:8px}
+    .settings-row-desc{color:var(--muted);font-size:.72rem;line-height:1.45;margin-top:4px}
+    .seg-ctrl{display:flex;gap:4px;background:rgba(0,0,0,.15);border:1px solid var(--border);border-radius:12px;padding:4px}
+    .seg-opt{flex:1;border:0;background:transparent;padding:10px 8px;border-radius:9px;color:var(--muted);font-size:.75rem;font-weight:700;transition:all .2s var(--ease);display:flex;align-items:center;justify-content:center;gap:6px;min-height:44px}
+    .seg-opt.active{background:linear-gradient(135deg,var(--blue),var(--violet));color:#fff}
 
-    .kbd-list{display:grid;gap:8px;margin-top:6px}
-    .kbd-row{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:10px;background:rgba(155,155,155,.03);border:1px solid var(--border)}
-    .kbd-label{font-size:.82rem;color:var(--text-2)}
-    .kbd-keys{display:inline-flex;gap:4px}
-    kbd{
-      display:inline-block;padding:3px 8px;border-radius:6px;
-      background:rgba(155,155,155,.08);border:1px solid var(--border);
-      font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
-      font-size:.7rem;font-weight:600;color:var(--text);
-      box-shadow:inset 0 -1px 0 rgba(155,155,155,.1);
-    }
+    .kbd-list{display:grid;gap:6px}
+    .kbd-row{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:10px;background:rgba(155,155,155,.03)}
+    .kbd-label{font-size:.8rem;color:var(--text-2)}
+    kbd{padding:3px 8px;border-radius:6px;background:rgba(155,155,155,.08);border:1px solid var(--border);font-family:ui-monospace,monospace;font-size:.68rem}
 
-    /* TOAST */
+    /* ===== TOAST ===== */
     .toast{
-      position:fixed;left:50%;bottom:24px;transform:translate(-50%,30px);
-      opacity:0;pointer-events:none;z-index:40;padding:12px 18px;border-radius:99px;
-      background:rgba(24,36,58,.95);backdrop-filter:blur(20px);
-      border:1px solid var(--border-h);box-shadow:var(--shadow);
-      font-size:.82rem;transition:all .3s var(--ease);
-      white-space:nowrap;max-width:calc(100% - 32px);overflow:hidden;text-overflow:ellipsis;
-      display:flex;align-items:center;gap:9px;color:var(--text);
+      position:fixed;left:16px;right:16px;bottom:calc(20px + env(safe-area-inset-bottom));
+      transform:translateY(30px);opacity:0;pointer-events:none;z-index:40;padding:13px 16px;
+      border-radius:14px;background:rgba(24,36,58,.95);backdrop-filter:blur(20px);
+      border:1px solid var(--border-h);box-shadow:var(--shadow);font-size:.82rem;
+      transition:all .3s var(--ease);display:flex;align-items:center;gap:9px;color:var(--text);
     }
-    [data-theme="light"] .toast{background:rgba(255,255,255,.95);color:var(--text)}
-    .toast i{font-size:.9rem}
-    .toast.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+    .toast.show{opacity:1;transform:translateY(0);pointer-events:auto}
     .toast.success{border-color:rgba(34,209,122,.45)}
     .toast.success i{color:var(--green)}
     .toast.error{border-color:rgba(255,85,114,.5)}
     .toast.error i{color:var(--red)}
     .toast.info i{color:var(--blue)}
 
-    /* FOOTER */
-    .footer{display:flex;justify-content:space-between;gap:16px;color:var(--dim);font-size:.72rem;margin-top:60px;padding-top:20px;border-top:1px solid var(--border);flex-wrap:wrap}
-    .footer-btn{background:transparent;color:var(--dim);font-size:.72rem;padding:4px 8px;border-radius:6px;transition:color .2s}
+    /* ===== FOOTER ===== */
+    .footer{display:flex;justify-content:space-between;gap:12px;color:var(--dim);font-size:.7rem;margin-top:48px;padding-top:16px;border-top:1px solid var(--border);flex-direction:column;align-items:flex-start}
+    .footer-btn{background:transparent;color:var(--dim);font-size:.7rem;padding:8px;border-radius:6px}
     .footer-btn:hover{color:var(--text)}
 
-    /* ADMIN */
-    .admin-wide{width:min(100%,920px)}
-    .admin-layout{display:grid;grid-template-columns:minmax(240px,.8fr) minmax(340px,1.2fr);gap:20px}
-    .admin-panel{border:1px solid var(--border);border-radius:var(--radius);background:var(--panel);backdrop-filter:blur(10px);padding:18px}
-    .admin-panel-title{font-size:.88rem;font-weight:800;margin-bottom:4px}
-    .admin-panel-copy{font-size:.74rem;color:var(--muted);line-height:1.55;margin-bottom:16px}
-    .admin-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
-    .admin-form-grid .full{grid-column:1/-1}
+    /* ===== ADMIN ===== */
+    .admin-wide,.picker-wide,.account-wide,.wide{width:100%;max-width:100%}
+    .admin-layout{display:grid;grid-template-columns:1fr;gap:16px}
+    .admin-panel{border:1px solid var(--border);border-radius:var(--radius);background:var(--panel);padding:16px}
+    .admin-panel-title{font-size:.85rem;font-weight:800;margin-bottom:4px}
+    .admin-panel-copy{font-size:.72rem;color:var(--muted);line-height:1.5;margin-bottom:14px}
+    .admin-form-grid{display:grid;grid-template-columns:1fr;gap:0}
     .admin-form-grid .field{margin-bottom:12px}
-    .icon-select{display:flex;align-items:center;gap:11px;margin:2px 0 10px;padding:11px;border:1px solid var(--border);border-radius:12px;background:rgba(16,20,26,.5)}
-    .selected-icon{
-      width:42px;height:42px;display:grid;place-items:center;border-radius:11px;
-      background:linear-gradient(135deg,#1a2f5c,#2b4a8a);color:#8db9ff;font-size:1rem;
-      overflow:hidden;flex:0 0 42px;
-    }
+    .icon-select{display:flex;align-items:center;gap:10px;margin:2px 0 10px;padding:10px;border:1px solid var(--border);border-radius:11px;background:rgba(16,20,26,.3)}
+    .selected-icon{width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center;border-radius:10px;background:linear-gradient(135deg,#1a2f5c,#2b4a8a);color:#8db9ff;overflow:hidden}
     .selected-icon[hidden]{display:none}
-    .selected-icon img{width:26px;height:26px;object-fit:contain}
-    .icon-media{display:contents}
+    .selected-icon img{width:24px;height:24px;object-fit:contain}
     .icon-select-copy{min-width:0;flex:1}
-    .icon-select-copy strong{display:block;font-size:.8rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-    .icon-select-copy span{display:block;color:var(--dim);font-size:.68rem;margin-top:3px}
-    .icon-select .btn{padding:8px 12px;font-size:.72rem;flex:0 0 auto}
-    .manual-icon{display:flex;gap:8px;margin-bottom:14px}
-    .manual-icon .field{margin:0;min-width:0;flex:1;padding:9px 12px;font-size:.74rem}
-    .manual-icon .btn{padding:9px 12px;font-size:.72rem}
-    .admin-form-actions{display:flex;gap:9px;margin-top:5px}
-    .admin-form-actions .btn{flex:1}
-    .admin-items,.admin-users{display:flex;flex-direction:column;gap:8px;max-height:450px;overflow:auto;padding-right:4px}
-    .admin-item,.admin-user{display:flex;align-items:center;gap:10px;padding:11px;border:1px solid var(--border);border-radius:11px;background:rgba(16,20,26,.5);transition:all .2s var(--ease)}
-    .admin-item:hover,.admin-user:hover{border-color:var(--border-h);background:rgba(20,25,35,.7)}
-    .admin-item-icon{
-      width:34px;height:34px;border-radius:9px;display:grid;place-items:center;
-      background:linear-gradient(135deg,#1a2f5c,#2b4a8a);color:#8db9ff;
-      overflow:hidden;flex:0 0 34px;
-    }
-    .admin-item-icon img{width:22px;height:22px;object-fit:contain}
+    .icon-select-copy strong{display:block;font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .icon-select-copy span{display:block;color:var(--dim);font-size:.65rem;margin-top:3px}
+    .manual-icon{display:flex;gap:7px;margin-bottom:12px}
+    .manual-icon .field{margin:0;flex:1;padding:11px 12px;font-size:16px}
+    .manual-icon .btn{padding:10px 12px;font-size:.72rem}
+    .admin-form-actions{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+    .admin-form-actions .btn{width:100%;min-height:46px}
+    .admin-items,.admin-users{display:flex;flex-direction:column;gap:7px;max-height:none;overflow:visible}
+    .admin-item,.admin-user{display:flex;align-items:center;gap:9px;padding:10px;border:1px solid var(--border);border-radius:10px;background:rgba(16,20,26,.3)}
+    .admin-item-icon{width:32px;height:32px;flex:0 0 32px;border-radius:8px;display:grid;place-items:center;background:linear-gradient(135deg,#1a2f5c,#2b4a8a);color:#8db9ff;overflow:hidden}
+    .admin-item-icon img{width:20px;height:20px;object-fit:contain}
     .admin-item-info,.admin-user-info{min-width:0;flex:1}
-    .admin-item-name,.admin-user-name{font-weight:700;font-size:.78rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .admin-item-meta,.admin-user-email{color:var(--dim);font-size:.66rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px}
-    .admin-item-actions,.admin-user-controls{display:flex;gap:4px;flex:0 0 auto}
-    .icon-btn{
-      width:28px;height:28px;border:1px solid #29313b;border-radius:8px;
-      background:transparent;color:var(--muted);font-size:.7rem;
-      transition:all .2s var(--ease);
-    }
-    .icon-btn:hover:not(:disabled){color:var(--text);border-color:var(--blue);background:rgba(91,143,255,.1)}
-    .icon-btn:disabled{opacity:.3;cursor:not-allowed}
-    .icon-btn.danger:hover:not(:disabled){color:#ff7c91;border-color:var(--red);background:rgba(255,85,114,.1)}
+    .admin-item-name,.admin-user-name{font-weight:700;font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .admin-item-meta,.admin-user-email{color:var(--dim);font-size:.64rem;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .admin-item-actions{display:flex;gap:4px}
+    .admin-user-controls{display:flex;align-items:center;gap:6px}
+    .icon-btn{width:36px;height:36px;border:1px solid #29313b;border-radius:8px;background:transparent;color:var(--muted);font-size:.72rem;display:flex;align-items:center;justify-content:center}
+    .icon-btn:hover:not(:disabled){color:var(--text);border-color:var(--blue)}
+    .icon-btn:disabled{opacity:.3}
+    .icon-btn.danger:hover:not(:disabled){color:#ff7c91;border-color:var(--red)}
+    .admin-role{width:100px;padding:10px;border:1px solid #29313b;border-radius:9px;background:rgba(13,16,20,.5);color:var(--text);font-size:.75rem}
+    .admin-save{padding:10px 12px!important;font-size:.72rem!important;min-height:40px}
 
-    /* LOGO PICKER */
-    .picker-wide{width:min(100%,780px)}
-    .logo-search{margin-bottom:14px}
-    .logo-results{display:grid;grid-template-columns:repeat(auto-fill,minmax(126px,1fr));gap:8px;max-height:430px;overflow:auto;padding-right:4px}
-    .logo-result{
-      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
-      min-height:96px;padding:11px 8px;border:1px solid var(--border);border-radius:11px;
-      background:rgba(16,20,26,.5);color:var(--muted);transition:all .2s var(--ease);cursor:pointer;
-    }
-    .logo-result:hover{border-color:var(--blue);background:rgba(91,143,255,.08);color:var(--text);transform:translateY(-2px)}
-    .logo-result img{width:34px;height:34px;object-fit:contain}
-    .logo-result span{width:100%;font-size:.68rem;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .picker-note{color:var(--dim);font-size:.7rem;line-height:1.6;margin-top:14px;padding:10px;background:rgba(155,155,155,.02);border-radius:10px;border:1px dashed var(--border)}
-    .picker-note a{color:var(--blue-h);text-decoration:underline;text-underline-offset:2px}
+    /* ===== LOGO PICKER ===== */
+    .logo-search{margin-bottom:12px}
+    .logo-results{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;max-height:none;overflow:visible}
+    .logo-result{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:88px;padding:10px 6px;border:1px solid var(--border);border-radius:10px;background:rgba(16,20,26,.3);color:var(--muted)}
+    .logo-result img{width:30px;height:30px;object-fit:contain}
+    .logo-result span{width:100%;font-size:.65rem;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-    .admin-tabs{display:flex;gap:5px;border-bottom:1px solid var(--border);margin:-5px 0 20px;padding-bottom:8px}
-    .admin-tab-btn{border:0;background:transparent;color:var(--muted);padding:9px 14px;border-radius:9px;font-size:.78rem;font-weight:700;display:inline-flex;align-items:center;gap:7px;transition:all .2s var(--ease)}
-    .admin-tab-btn:hover{color:var(--text);background:rgba(155,155,155,.04)}
-    .admin-tab-btn.active{color:#fff;background:linear-gradient(135deg,rgba(91,143,255,.25),rgba(139,108,240,.25));border:1px solid rgba(91,143,255,.3)}
+    .admin-tabs{display:flex;gap:5px;border-bottom:1px solid var(--border);margin:-5px 0 16px;padding-bottom:7px;overflow-x:auto;scrollbar-width:none}
+    .admin-tabs::-webkit-scrollbar{display:none}
+    .admin-tab-btn{border:0;background:transparent;color:var(--muted);padding:9px 12px;border-radius:9px;font-size:.76rem;font-weight:700;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;min-height:42px}
+    .admin-tab-btn.active{color:#fff;background:linear-gradient(135deg,rgba(91,143,255,.25),rgba(139,108,240,.25))}
     .admin-tab-pane[hidden]{display:none}
-    .user-search{margin-bottom:14px}
-    .admin-user-avatar{width:36px;height:36px;border-radius:50%;object-fit:cover;background:#182b4c;flex:0 0 36px;border:2px solid var(--border-h)}
-    .admin-role{width:138px;padding:8px 10px;border:1px solid #29313b;border-radius:9px;background:rgba(13,16,20,.5);color:var(--text);font-size:.72rem;outline:0;transition:all .2s}
-    .admin-role:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(91,143,255,.12)}
-    .admin-save{padding:8px 11px!important;font-size:.72rem!important}
+    .user-search{margin-bottom:12px}
 
     .skeleton{background:linear-gradient(90deg,rgba(155,155,155,.04) 0%,rgba(155,155,155,.08) 50%,rgba(155,155,155,.04) 100%);background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px}
-    [data-theme="light"] .skeleton{background:linear-gradient(90deg,rgba(15,23,42,.04) 0%,rgba(15,23,42,.08) 50%,rgba(15,23,42,.04) 100%);background-size:200% 100%}
     @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-    .skeleton-card{height:118px;border-radius:var(--radius);border:1px solid var(--border)}
-    .skeleton-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:14px}
+    .skeleton-card{height:110px;border-radius:var(--radius);border:1px solid var(--border)}
+    .skeleton-grid{display:grid;gap:10px}
 
-    @media(max-width:900px){.shell{padding-left:22px;padding-right:22px}.apps-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    @media(max-width:760px){
-      .shell{padding:15px 15px 38px}
-      .topbar{top:8px;margin-bottom:42px;padding-left:9px;gap:8px}
-      .brand-sub{display:none}
-      .topnav{position:absolute;top:72px;left:0;right:0;justify-content:center;overflow-x:auto;padding:4px;border:1px solid var(--border);border-radius:11px;background:var(--panel);backdrop-filter:blur(20px)}
-      .nav-link{white-space:nowrap}
-      .user-name{display:none}
-      .hero{margin-bottom:30px}
-      .hero h1{letter-spacing:-1.6px}
-      .hero-line{line-height:1.17}
-      .hero-line-accent{margin-top:.2em}
-      .apps-grid{grid-template-columns:1fr}
-      .toolbar{margin-bottom:23px}
-      .footer{flex-direction:column;gap:8px}
-      .modal{padding:22px}
-      .name-row{flex-direction:column}
-      .name-row .btn{width:100%}
-      .admin-layout{grid-template-columns:1fr}
-      .admin-items,.admin-users{max-height:320px}
-      .admin-form-grid{grid-template-columns:1fr}
-      .admin-form-grid .full{grid-column:auto}
-      .picker-wide{padding:18px}
-      .logo-results{grid-template-columns:repeat(3,minmax(0,1fr))}
-      .settings-row{flex-direction:column;align-items:flex-start;gap:10px}
-      .seg-ctrl{width:100%;justify-content:space-between}
+    /* ===== TABLET ===== */
+    @media(min-width:761px){
+      .topbar{flex-direction:row;align-items:center;height:62px;padding:7px 9px 7px 11px;gap:18px}
+      .topbar-main{width:auto;flex:1}
+      .brand-sub{display:block}
+      .topnav{width:auto;margin-left:auto;overflow-x:visible;padding-bottom:0}
+      .apps-grid{grid-template-columns:repeat(2,1fr)}
+      .toolbar{align-items:center}
+      .updated-at{display:inline;color:var(--dim);font-size:.7rem;white-space:nowrap}
+      .footer{flex-direction:row;align-items:center}
     }
+
+    /* ===== DESKTOP ===== */
+    @media(min-width:1024px){
+      .shell{padding:18px 28px 44px}
+      .apps-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+      .modal-backdrop{align-items:center;padding:20px}
+      .modal{max-width:420px;border-radius:var(--radius-lg);transform:translateY(20px) scale(.96)}
+      .modal-backdrop.open .modal{transform:translateY(0) scale(1)}
+      .modal.account-wide{max-width:520px}
+      .modal.admin-wide{max-width:920px}
+      .modal.picker-wide{max-width:780px}
+      .modal.wide{max-width:560px}
+      .modal_handle{display:none}
+      .modal{padding:28px}
+      .admin-layout{grid-template-columns:minmax(240px,.8fr) minmax(340px,1.2fr)}
+      .admin-form-grid{grid-template-columns:1fr 1fr;gap:0 10px}
+      .admin-form-grid .full{grid-column:1/-1}
+      .admin-form-actions{flex-direction:row}
+      .admin-form-actions .btn{flex:1}
+      .logo-results{grid-template-columns:repeat(auto-fill,minmax(126px,1fr));max-height:430px;overflow-y:auto}
+      .admin-items,.admin-users{max-height:450px;overflow-y:auto}
+      .settings-row{flex-direction:row;align-items:center;justify-content:space-between}
+    }
+
     @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
   </style>
 </head>
 <body>
   <main class="shell">
     <header class="topbar">
-      <a class="brand" href="./" aria-label="Koo Mean Portal">
-        <span class="brand-mark"><i class="fas fa-table-cells"></i></span>
-        <span class="brand-copy"><span class="brand-title" data-i18n="brand_title">Koo Mean Portal</span><span class="brand-sub" data-i18n="brand_sub">Application space</span></span>
-      </a>
+      <div class="topbar-main">
+        <a class="brand" href="./" aria-label="Koo Mean Portal">
+          <span class="brand-mark"><i class="fas fa-table-cells"></i></span>
+          <span class="brand-copy">
+            <span class="brand-title" data-i18n="brand_title">Koo Mean Portal</span>
+            <span class="brand-sub" data-i18n="brand_sub">Application space</span>
+          </span>
+        </a>
+        <div class="user-area">
+          <button class="nav-icon-btn" id="nav-settings" type="button" title="Settings" aria-label="Settings"><i class="fas fa-gear"></i></button>
+          <div class="user-chip" id="user-chip"><img id="user-avatar" alt=""><span class="user-name" id="user-name"></span></div>
+          <button class="btn btn-primary" id="auth-btn" type="button"><i class="fas fa-arrow-right-to-bracket"></i> <span data-i18n="btn_login">เข้าสู่ระบบ</span></button>
+        </div>
+      </div>
       <nav class="topnav" aria-label="Main menu">
         <a class="nav-link active" id="nav-home" href="#home"><i class="fas fa-house"></i><span data-i18n="nav_home">หน้าแรก</span></a>
         <button class="nav-link" id="nav-account" type="button"><i class="fas fa-circle-user"></i><span data-i18n="nav_account">บัญชี</span></button>
         <button class="nav-link" id="nav-admin" type="button" hidden><i class="fas fa-sliders"></i><span data-i18n="nav_admin">จัดการระบบ</span></button>
-        <button class="nav-icon-btn" id="nav-settings" type="button" title="Settings" aria-label="Settings"><i class="fas fa-gear"></i></button>
       </nav>
-      <div class="user-area">
-        <div class="user-chip" id="user-chip"><img id="user-avatar" alt=""><span class="user-name" id="user-name"></span></div>
-        <button class="btn btn-primary" id="auth-btn" type="button"><i class="fas fa-arrow-right-to-bracket"></i> <span data-i18n="btn_login">เข้าสู่ระบบ</span></button>
-      </div>
     </header>
 
     <section class="hero" id="home">
@@ -576,7 +475,7 @@
       <div class="toolbar">
         <label class="search"><input id="search" type="search" data-i18n-placeholder="search_placeholder" placeholder="ค้นหาแอปพลิเคชัน..." autocomplete="off"><i class="fas fa-magnifying-glass"></i></label>
         <select class="filter" id="group-filter" aria-label="Filter by group"><option value="all" data-i18n="filter_all">ทุกกลุ่ม</option></select>
-        <button class="refresh-btn" id="refresh-btn" type="button" data-i18n-title="btn_refresh" title="รีเฟรชข้อมูล" aria-label="Refresh"><i class="fas fa-rotate-right"></i></button>
+        <button class="refresh-btn" id="refresh-btn" type="button" title="Refresh" aria-label="Refresh"><i class="fas fa-rotate-right"></i></button>
         <span class="updated-at" id="updated-at" aria-live="polite"></span>
       </div>
       <div class="stats">
@@ -585,7 +484,6 @@
       </div>
       <div id="applications">
         <div class="skeleton-grid">
-          <div class="skeleton skeleton-card"></div>
           <div class="skeleton skeleton-card"></div>
           <div class="skeleton skeleton-card"></div>
           <div class="skeleton skeleton-card"></div>
@@ -602,66 +500,88 @@
     </footer>
   </main>
 
+  <!-- LOGIN MODAL -->
   <div class="modal-backdrop" id="login-modal" role="dialog" aria-modal="true" aria-labelledby="login-title">
     <div class="modal">
-      <div class="modal-head"><div><h2 id="login-title" data-i18n="login_title">เข้าสู่ระบบ</h2><p data-i18n="login_desc">ใช้ Google Account เพื่อดูแอปที่คุณมีสิทธิ์ใช้งาน</p></div><button class="close" type="button" data-close="login-modal" aria-label="Close"><i class="fas fa-xmark"></i></button></div>
-      <div class="google-wrap"><div id="g_id_onload"></div><div class="g_id_signin"></div></div>
-      <p class="login-help"><i class="fas fa-shield-halved" style="color:var(--blue);margin-right:6px"></i><span data-i18n="login_help">การเข้าสู่ระบบจะใช้ token ที่ตรวจสอบโดย backend เดิม ไม่มีการเก็บรหัสผ่านไว้ในเว็บนี้</span></p>
+      <div class="modal-handle" aria-hidden="true"></div>
+      <div class="modal-head">
+        <div><h2 id="login-title" data-i18n="login_title">เข้าสู่ระบบ</h2><p data-i18n="login_desc">ใช้ Google Account เพื่อดูแอปที่คุณมีสิทธิ์ใช้งาน</p></div>
+        <button class="close" type="button" data-close="login-modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
+      </div>
+      <div class="google-wrap" style="min-height:44px;display:flex;justify-content:center;padding:8px 0"><div id="g_id_onload"></div><div class="g_id_signin"></div></div>
+      <p style="color:var(--dim);font-size:.72rem;line-height:1.6;text-align:center;margin-top:16px;padding:12px;background:rgba(155,155,155,.02);border-radius:10px;border:1px dashed var(--border)">
+        <i class="fas fa-shield-halved" style="color:var(--blue);margin-right:6px"></i><span data-i18n="login_help">การเข้าสู่ระบบจะใช้ token ที่ตรวจสอบโดย backend เดิม ไม่มีการเก็บรหัสผ่านไว้ในเว็บนี้</span>
+      </p>
     </div>
   </div>
 
+  <!-- REGISTER MODAL -->
   <div class="modal-backdrop" id="register-modal" role="dialog" aria-modal="true" aria-labelledby="register-title">
     <div class="modal">
-      <div class="modal-head"><div><h2 id="register-title" data-i18n="register_title">ขอลงทะเบียน</h2><p data-i18n="register_desc">บัญชีนี้ยังไม่อยู่ในระบบ กรุณาแจ้งข้อมูลสั้น ๆ เพื่อส่งคำขอ</p></div><button class="close" type="button" data-close="register-modal" aria-label="Close"><i class="fas fa-xmark"></i></button></div>
+      <div class="modal-handle" aria-hidden="true"></div>
+      <div class="modal-head">
+        <div><h2 id="register-title" data-i18n="register_title">ขอลงทะเบียน</h2><p data-i18n="register_desc">บัญชีนี้ยังไม่อยู่ในระบบ กรุณาแจ้งข้อมูลสั้น ๆ เพื่อส่งคำขอ</p></div>
+        <button class="close" type="button" data-close="register-modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
+      </div>
       <label class="field-label" for="register-note" data-i18n="register_note_label">ข้อมูลเพิ่มเติม (ไม่บังคับ)</label>
       <textarea class="field" id="register-note" rows="4" maxlength="500" data-i18n-placeholder="register_note_placeholder" placeholder="เช่น ทีม / หน้าที่ / แอปที่ต้องการใช้งาน"></textarea>
       <div class="modal-actions"><button class="btn btn-ghost" type="button" data-close="register-modal" data-i18n="btn_cancel">ยกเลิก</button><button class="btn btn-primary" id="register-btn" type="button" data-i18n="btn_submit_request">ส่งคำขอ</button></div>
     </div>
   </div>
 
+  <!-- ACCOUNT MODAL -->
   <div class="modal-backdrop" id="account-modal" role="dialog" aria-modal="true" aria-labelledby="account-title">
     <div class="modal account-wide">
-      <div class="modal-head"><div><h2 id="account-title" data-i18n="account_title">บัญชีของคุณ</h2><p data-i18n="account_desc">จัดการข้อมูลบัญชีที่ใช้เชื่อมต่อกับ Portal</p></div><button class="close" type="button" data-close="account-modal" aria-label="Close"><i class="fas fa-xmark"></i></button></div>
+      <div class="modal-handle" aria-hidden="true"></div>
+      <div class="modal-head">
+        <div><h2 id="account-title" data-i18n="account_title">บัญชีของคุณ</h2><p data-i18n="account_desc">จัดการข้อมูลบัญชีที่ใช้เชื่อมต่อกับ Portal</p></div>
+        <button class="close" type="button" data-close="account-modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
+      </div>
       <div class="user-detail"><img id="account-avatar" alt=""><div><strong id="account-name"></strong><span id="account-email"></span><span class="role-badge" id="account-role"></span></div></div>
       <div class="account-section">
         <div class="account-section-title" data-i18n="display_name_title">ชื่อที่แสดง</div>
         <p class="account-section-copy" data-i18n="display_name_desc">ชื่อใหม่นี้จะถูกบันทึกในบัญชีส่วนกลาง และใช้แสดงในเว็บที่เชื่อมต่อกับระบบ</p>
         <div class="name-row"><input class="field" id="new-name" type="text" maxlength="50" autocomplete="name" data-i18n-placeholder="display_name_placeholder" placeholder="กรอกชื่อที่ต้องการแสดง"><button class="btn btn-primary" id="save-name-btn" type="button"><i class="fas fa-check"></i> <span data-i18n="btn_save">บันทึก</span></button></div>
       </div>
-      <div class="account-section"><button class="btn btn-ghost" id="logout-btn" type="button" style="width:100%"><i class="fas fa-right-from-bracket"></i> <span data-i18n="btn_logout">ออกจากระบบ</span></button></div>
+      <div class="account-section"><button class="btn btn-ghost" id="logout-btn" type="button" style="width:100%;min-height:46px"><i class="fas fa-right-from-bracket"></i> <span data-i18n="btn_logout">ออกจากระบบ</span></button></div>
     </div>
   </div>
 
+  <!-- ADMIN MODAL -->
   <div class="modal-backdrop" id="admin-modal" role="dialog" aria-modal="true" aria-labelledby="admin-title">
     <div class="modal admin-wide">
-      <div class="modal-head"><div><h2 id="admin-title" data-i18n="admin_title">จัดการระบบ</h2><p id="admin-subtitle" data-i18n="admin_subtitle_apps">เพิ่ม แก้ไข และจัดลำดับรายการจาก Application Sheet</p></div><button class="close" type="button" data-close="admin-modal" aria-label="Close"><i class="fas fa-xmark"></i></button></div>
+      <div class="modal-handle" aria-hidden="true"></div>
+      <div class="modal-head">
+        <div><h2 id="admin-title" data-i18n="admin_title">จัดการระบบ</h2><p id="admin-subtitle" data-i18n="admin_subtitle_apps">เพิ่ม แก้ไข และจัดลำดับรายการจาก Application Sheet</p></div>
+        <button class="close" type="button" data-close="admin-modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
+      </div>
       <div class="admin-tabs">
         <button class="admin-tab-btn active" id="admin-apps-tab-btn" type="button"><i class="fas fa-table-cells-large"></i> <span data-i18n="admin_tab_apps">แอปพลิเคชัน</span></button>
         <button class="admin-tab-btn" id="admin-users-tab-btn" type="button"><i class="fas fa-users"></i> <span data-i18n="admin_tab_users">ผู้ใช้</span></button>
       </div>
       <div id="admin-apps-tab" class="admin-tab-pane">
-       <div class="admin-layout">
-        <section class="admin-panel">
-          <div class="admin-panel-title" id="admin-form-title" data-i18n="admin_add_app">เพิ่มแอปพลิเคชัน</div>
-          <p class="admin-panel-copy" data-i18n="admin_form_help">ไอคอนจาก theSVG จะบันทึกเป็นชื่อ slug และระบบจะตรวจสอบ URL ซ้ำก่อนบันทึก</p>
-          <div class="admin-form-grid">
-            <div class="full"><label class="field-label" for="admin-name" data-i18n="field_app_name">ชื่อแอป</label><input class="field" id="admin-name" maxlength="100" placeholder="เช่น Dashboard"></div>
-            <div class="full"><label class="field-label" for="admin-url">URL</label><input class="field" id="admin-url" type="url" maxlength="500" placeholder="https://..."></div>
-            <div class="full"><label class="field-label" for="admin-description" data-i18n="field_description">คำอธิบาย</label><textarea class="field" id="admin-description" rows="3" maxlength="300" data-i18n-placeholder="field_desc_placeholder" placeholder="อธิบายสั้น ๆ"></textarea></div>
-            <div><label class="field-label" for="admin-group" data-i18n="field_group">กลุ่ม / Role</label><input class="field" id="admin-group" maxlength="50" placeholder="public หรือ admin"></div>
-            <div><label class="field-label" for="admin-color" data-i18n="field_color">สี (ไม่บังคับ)</label><input class="field" id="admin-color" maxlength="9" placeholder="#4b8fff"></div>
-            <label class="field-label" style="display:flex;align-items:center;gap:8px;padding:11px 0 0;cursor:pointer"><input id="admin-starred" type="checkbox" style="accent-color:var(--blue)"> <span data-i18n="field_featured">แนะนำแอปนี้</span></label>
-          </div>
-          <div class="icon-select"><div class="selected-icon" id="admin-icon-preview" hidden></div><div class="icon-select-copy"><strong id="admin-icon-name" data-i18n="icon_not_selected">ยังไม่ได้เลือกไอคอน</strong><span id="admin-icon-value">—</span></div><button class="btn btn-ghost" id="choose-logo-btn" type="button"><i class="fas fa-shapes"></i> <span data-i18n="btn_choose_logo">เลือกโลโก้</span></button></div>
-          <div class="manual-icon"><input class="field" id="admin-icon-manual" maxlength="31" placeholder="หรือกรอก theSVG slug เช่น github"><button class="btn btn-ghost" id="use-icon-btn" type="button" data-i18n="btn_use_slug">ใช้ slug</button></div>
-          <div class="admin-form-actions"><button class="btn btn-primary" id="admin-submit-btn" type="button"><i class="fas fa-plus"></i> <span data-i18n="btn_add_app">เพิ่มแอป</span></button><button class="btn btn-ghost" id="admin-cancel-btn" type="button" hidden data-i18n="btn_cancel_edit">ยกเลิกแก้ไข</button></div>
-        </section>
-        <section class="admin-panel">
-          <div class="admin-panel-title" data-i18n="admin_order_title">ลำดับแอป</div>
-          <p class="admin-panel-copy" data-i18n="admin_order_help">ใช้ลูกศรขึ้นลงเพื่อกำหนดว่าแอปใดจะแสดงก่อนหลัง</p>
-          <div class="admin-items" id="admin-items"><div class="empty" style="padding:28px 10px"><p data-i18n="empty_no_data">ยังไม่มีข้อมูล</p></div></div>
-        </section>
-       </div>
+        <div class="admin-layout">
+          <section class="admin-panel">
+            <div class="admin-panel-title" id="admin-form-title" data-i18n="admin_add_app">เพิ่มแอปพลิเคชัน</div>
+            <p class="admin-panel-copy" data-i18n="admin_form_help">ไอคอนจาก theSVG จะบันทึกเป็นชื่อ slug และระบบจะตรวจสอบ URL ซ้ำก่อนบันทึก</p>
+            <div class="admin-form-grid">
+              <div><label class="field-label" for="admin-name" data-i18n="field_app_name">ชื่อแอป</label><input class="field" id="admin-name" maxlength="100" placeholder="เช่น Dashboard"></div>
+              <div><label class="field-label" for="admin-url">URL</label><input class="field" id="admin-url" type="url" maxlength="500" placeholder="https://..."></div>
+              <div class="full"><label class="field-label" for="admin-description" data-i18n="field_description">คำอธิบาย</label><textarea class="field" id="admin-description" rows="3" maxlength="300" data-i18n-placeholder="field_desc_placeholder" placeholder="อธิบายสั้น ๆ"></textarea></div>
+              <div><label class="field-label" for="admin-group" data-i18n="field_group">กลุ่ม / Role</label><input class="field" id="admin-group" maxlength="50" placeholder="public หรือ admin"></div>
+              <div><label class="field-label" for="admin-color" data-i18n="field_color">สี (ไม่บังคับ)</label><input class="field" id="admin-color" maxlength="9" placeholder="#4b8fff"></div>
+              <label class="field-label" style="display:flex;align-items:center;gap:8px;padding:11px 0 0;cursor:pointer"><input id="admin-starred" type="checkbox" style="accent-color:var(--blue);width:18px;height:18px"> <span data-i18n="field_featured">แนะนำแอปนี้</span></label>
+            </div>
+            <div class="icon-select"><div class="selected-icon" id="admin-icon-preview" hidden></div><div class="icon-select-copy"><strong id="admin-icon-name" data-i18n="icon_not_selected">ยังไม่ได้เลือกไอคอน</strong><span id="admin-icon-value">—</span></div><button class="btn btn-ghost" id="choose-logo-btn" type="button" style="padding:8px 10px;font-size:.72rem"><i class="fas fa-shapes"></i> <span data-i18n="btn_choose_logo">เลือกโลโก้</span></button></div>
+            <div class="manual-icon"><input class="field" id="admin-icon-manual" maxlength="31" placeholder="หรือกรอก theSVG slug เช่น github"><button class="btn btn-ghost" id="use-icon-btn" type="button" data-i18n="btn_use_slug">ใช้ slug</button></div>
+            <div class="admin-form-actions"><button class="btn btn-primary" id="admin-submit-btn" type="button"><i class="fas fa-plus"></i> <span data-i18n="btn_add_app">เพิ่มแอป</span></button><button class="btn btn-ghost" id="admin-cancel-btn" type="button" hidden data-i18n="btn_cancel_edit">ยกเลิกแก้ไข</button></div>
+          </section>
+          <section class="admin-panel">
+            <div class="admin-panel-title" data-i18n="admin_order_title">ลำดับแอป</div>
+            <p class="admin-panel-copy" data-i18n="admin_order_help">ใช้ลูกศรขึ้นลงเพื่อกำหนดว่าแอปใดจะแสดงก่อนหลัง</p>
+            <div class="admin-items" id="admin-items"><div class="empty" style="padding:28px 10px"><p data-i18n="empty_no_data">ยังไม่มีข้อมูล</p></div></div>
+          </section>
+        </div>
       </div>
       <div id="admin-users-tab" class="admin-tab-pane" hidden>
         <div class="admin-panel">
@@ -674,20 +594,32 @@
     </div>
   </div>
 
+  <!-- LOGO PICKER MODAL -->
   <div class="modal-backdrop" id="logo-modal" role="dialog" aria-modal="true" aria-labelledby="logo-title">
-    <div class="modal picker-wide"><div class="modal-head"><div><h2 id="logo-title" data-i18n="logo_picker_title">เลือกโลโก้</h2><p data-i18n="logo_picker_desc">ค้นหาและเลือกโลโก้จากคลัง theSVG</p></div><button class="close" type="button" data-close="logo-modal" aria-label="Close"><i class="fas fa-xmark"></i></button></div><label class="search logo-search"><input id="logo-search" type="search" data-i18n-placeholder="logo_search_placeholder" placeholder="ค้นหา เช่น Google, Notion, OpenAI..." autocomplete="off"><i class="fas fa-magnifying-glass"></i></label><div class="logo-results" id="logo-results"><div class="loading" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-circle-notch fa-spin"></i><p data-i18n="logo_loading">กำลังโหลดโลโก้...</p></div></div><p class="picker-note"><i class="fas fa-circle-info" style="color:var(--blue);margin-right:6px"></i><span data-i18n="logo_picker_note">ที่มา:</span> <a href="https://thesvg.org/" target="_blank" rel="noopener noreferrer">theSVG</a> · <span data-i18n="logo_picker_note2">ไอคอนจะถูกโหลดจาก URL สาธารณะของ theSVG</span></p></div>
+    <div class="modal picker-wide">
+      <div class="modal-handle" aria-hidden="true"></div>
+      <div class="modal-head">
+        <div><h2 id="logo-title" data-i18n="logo_picker_title">เลือกโลโก้</h2><p data-i18n="logo_picker_desc">ค้นหาและเลือกโลโก้จากคลัง theSVG</p></div>
+        <button class="close" type="button" data-close="logo-modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
+      </div>
+      <label class="search logo-search"><input id="logo-search" type="search" data-i18n-placeholder="logo_search_placeholder" placeholder="ค้นหา เช่น Google, Notion, OpenAI..." autocomplete="off"><i class="fas fa-magnifying-glass"></i></label>
+      <div class="logo-results" id="logo-results"><div class="loading" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-circle-notch fa-spin"></i><p data-i18n="logo_loading">กำลังโหลดโลโก้...</p></div></div>
+      <p style="color:var(--dim);font-size:.68rem;line-height:1.5;margin-top:12px;padding:10px;background:rgba(155,155,155,.02);border-radius:10px;border:1px dashed var(--border)"><i class="fas fa-circle-info" style="color:var(--blue);margin-right:6px"></i><span data-i18n="logo_picker_note">ที่มา:</span> <a href="https://thesvg.org/" target="_blank" rel="noopener noreferrer" style="color:var(--blue-h);text-decoration:underline">theSVG</a> · <span data-i18n="logo_picker_note2">ไอคอนจะถูกโหลดจาก URL สาธารณะของ theSVG</span></p>
+    </div>
   </div>
 
+  <!-- SETTINGS MODAL -->
   <div class="modal-backdrop" id="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settings-title">
     <div class="modal wide">
+      <div class="modal-handle" aria-hidden="true"></div>
       <div class="modal-head">
         <div><h2 id="settings-title" data-i18n="settings_title">การตั้งค่า</h2><p data-i18n="settings_desc">ปรับแต่งการแสดงผลและภาษาของ Portal</p></div>
         <button class="close" type="button" data-close="settings-modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
       </div>
       <div class="settings-grid">
         <div class="settings-row">
-          <div class="settings-row-info">
-            <div class="settings-row-title"><i class="fas fa-palette" style="margin-right:8px;color:var(--blue)"></i><span data-i18n="settings_theme">ธีม</span></div>
+          <div>
+            <div class="settings-row-title"><i class="fas fa-palette" style="color:var(--blue)"></i><span data-i18n="settings_theme">ธีม</span></div>
             <div class="settings-row-desc" data-i18n="settings_theme_desc">เลือกธีมสีสำหรับการแสดงผล (ระบบจะปรับตามค่าเครื่องเมื่อเลือกอัตโนมัติ)</div>
           </div>
           <div class="seg-ctrl" id="theme-ctrl" role="radiogroup" aria-label="Theme">
@@ -697,18 +629,18 @@
           </div>
         </div>
         <div class="settings-row">
-          <div class="settings-row-info">
-            <div class="settings-row-title"><i class="fas fa-language" style="margin-right:8px;color:var(--violet)"></i><span data-i18n="settings_language">ภาษา</span></div>
+          <div>
+            <div class="settings-row-title"><i class="fas fa-language" style="color:var(--violet)"></i><span data-i18n="settings_language">ภาษา</span></div>
             <div class="settings-row-desc" data-i18n="settings_language_desc">เปลี่ยนภาษาที่ใช้ในหน้าเว็บ</div>
           </div>
           <div class="seg-ctrl" id="lang-ctrl" role="radiogroup" aria-label="Language">
-            <button class="seg-opt" type="button" data-lang-value="th">🇹🇭 TH</button>
-            <button class="seg-opt" type="button" data-lang-value="en">🇺🇸 EN</button>
+            <button class="seg-opt" type="button" data-lang-value="th">🇹🇭 ไทย</button>
+            <button class="seg-opt" type="button" data-lang-value="en">🇺🇸 English</button>
           </div>
         </div>
-        <div class="settings-row" style="flex-direction:column;align-items:stretch;gap:10px">
-          <div class="settings-row-info">
-            <div class="settings-row-title"><i class="fas fa-keyboard" style="margin-right:8px;color:var(--amber)"></i><span data-i18n="settings_shortcuts">ปุ่มลัด</span></div>
+        <div class="settings-row">
+          <div>
+            <div class="settings-row-title"><i class="fas fa-keyboard" style="color:var(--amber)"></i><span data-i18n="settings_shortcuts">ปุ่มลัด</span></div>
             <div class="settings-row-desc" data-i18n="settings_shortcuts_desc">ปุ่มลัดสำหรับใช้บนคีย์บอร์ด</div>
           </div>
           <div class="kbd-list">
@@ -716,35 +648,32 @@
             <div class="kbd-row"><span class="kbd-label" data-i18n="shortcut_refresh">รีเฟรชข้อมูล</span><span class="kbd-keys"><kbd>R</kbd></span></div>
             <div class="kbd-row"><span class="kbd-label" data-i18n="shortcut_settings">เปิดการตั้งค่า</span><span class="kbd-keys"><kbd>,</kbd></span></div>
             <div class="kbd-row"><span class="kbd-label" data-i18n="shortcut_close">ปิด modal / ยกเลิก</span><span class="kbd-keys"><kbd>Esc</kbd></span></div>
-            <div class="kbd-row"><span class="kbd-label" data-i18n="shortcut_help">แสดงปุ่มลัด</span><span class="kbd-keys"><kbd>?</kbd></span></div>
           </div>
         </div>
       </div>
     </div>
   </div>
 
+  <!-- HELP MODAL -->
   <div class="modal-backdrop" id="help-modal" role="dialog" aria-modal="true" aria-labelledby="help-title">
     <div class="modal wide">
+      <div class="modal-handle" aria-hidden="true"></div>
       <div class="modal-head">
         <div><h2 id="help-title" data-i18n="help_title">ช่วยเหลือ &amp; เกี่ยวกับ</h2><p data-i18n="help_desc">ข้อมูลและคำตอบที่พบบ่อย</p></div>
         <button class="close" type="button" data-close="help-modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
       </div>
       <div class="settings-grid">
-        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+        <div class="settings-row">
           <div class="settings-row-title" data-i18n="help_what_is">Koo Mean Portal คืออะไร?</div>
           <div class="settings-row-desc" data-i18n="help_what_is_desc">เป็นศูนย์รวมแอปพลิเคชันและเครื่องมือสำหรับผู้ใช้ที่ได้รับการอนุญาต ระบบจะแสดงเฉพาะแอปที่คุณมีสิทธิ์เข้าถึงเท่านั้น</div>
         </div>
-        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+        <div class="settings-row">
           <div class="settings-row-title" data-i18n="help_cannot_login">เข้าสู่ระบบไม่ได้?</div>
           <div class="settings-row-desc" data-i18n="help_cannot_login_desc">ตรวจสอบว่าใช้อีเมลที่ได้รับอนุญาต และบัญชี Google ถูกเชื่อมต่อกับระบบ หากยังไม่สามารถเข้าได้ ให้ติดต่อผู้ดูแลระบบ</div>
         </div>
-        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:8px">
+        <div class="settings-row">
           <div class="settings-row-title" data-i18n="help_missing_app">ไม่เห็นแอปบางตัว?</div>
           <div class="settings-row-desc" data-i18n="help_missing_app_desc">การมองเห็นแอปขึ้นอยู่กับ Role และ Group ที่กำหนดให้บัญชีของคุณ หากคิดว่าควรเห็น ให้แจ้งผู้ดูแลระบบ</div>
-        </div>
-        <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:8px">
-          <div class="settings-row-title" data-i18n="help_privacy">ความเป็นส่วนตัว</div>
-          <div class="settings-row-desc" data-i18n="help_privacy_desc">ระบบไม่เก็บรหัสผ่าน ใช้ token จาก Google ในการยืนยันตัวตนเท่านั้น ข้อมูลผู้ใช้จะถูกเก็บเฉพาะที่จำเป็น</div>
         </div>
       </div>
     </div>
@@ -767,7 +696,6 @@
         hero_copy:'ศูนย์รวมเครื่องมือและแอปพลิเคชันสำหรับการใช้งานของคุณ เลือกแอปที่ต้องการ แล้วเริ่มใช้งานได้ทันที',
         search_placeholder:'ค้นหาแอปพลิเคชัน...',
         filter_all:'ทุกกลุ่ม',
-        btn_refresh:'รีเฟรชข้อมูล',
         apps_available:'แอปที่พร้อมใช้งาน',
         status_connecting:'กำลังเชื่อมต่อ', status_connected:'เชื่อมต่อแล้ว',
         status_offline:'ออฟไลน์', status_retrying:'กำลังลองใหม่...',
@@ -810,22 +738,19 @@
         logo_loading:'กำลังโหลดโลโก้...',
         logo_picker_note:'ที่มา:', logo_picker_note2:'ไอคอนจะถูกโหลดจาก URL สาธารณะของ theSVG',
         settings_title:'การตั้งค่า', settings_desc:'ปรับแต่งการแสดงผลและภาษาของ Portal',
-        settings_theme:'ธีม', settings_theme_desc:'เลือกธีมสีสำหรับการแสดงผล (ระบบจะปรับตามค่าเครื่องเมื่อเลือกอัตโนมัติ)',
+        settings_theme:'ธีม', settings_theme_desc:'เลือกธีมสีสำหรับการแสดงผล',
         theme_light:'สว่าง', theme_dark:'มืด', theme_auto:'อัตโนมัติ',
         settings_language:'ภาษา', settings_language_desc:'เปลี่ยนภาษาที่ใช้ในหน้าเว็บ',
         settings_shortcuts:'ปุ่มลัด', settings_shortcuts_desc:'ปุ่มลัดสำหรับใช้บนคีย์บอร์ด',
         shortcut_search:'ค้นหาแอปพลิเคชัน', shortcut_refresh:'รีเฟรชข้อมูล',
         shortcut_settings:'เปิดการตั้งค่า', shortcut_close:'ปิด modal / ยกเลิก',
-        shortcut_help:'แสดงปุ่มลัด',
         help_title:'ช่วยเหลือ & เกี่ยวกับ', help_desc:'ข้อมูลและคำตอบที่พบบ่อย',
         help_what_is:'Koo Mean Portal คืออะไร?',
-        help_what_is_desc:'เป็นศูนย์รวมแอปพลิเคชันและเครื่องมือสำหรับผู้ใช้ที่ได้รับการอนุญาต ระบบจะแสดงเฉพาะแอปที่คุณมีสิทธิ์เข้าถึงเท่านั้น',
+        help_what_is_desc:'เป็นศูนย์รวมแอปพลิเคชันและเครื่องมือสำหรับผู้ใช้ที่ได้รับการอนุญาต',
         help_cannot_login:'เข้าสู่ระบบไม่ได้?',
-        help_cannot_login_desc:'ตรวจสอบว่าใช้อีเมลที่ได้รับอนุญาต และบัญชี Google ถูกเชื่อมต่อกับระบบ หากยังไม่สามารถเข้าได้ ให้ติดต่อผู้ดูแลระบบ',
+        help_cannot_login_desc:'ตรวจสอบว่าใช้อีเมลที่ได้รับอนุญาต หากยังไม่สามารถเข้าได้ ให้ติดต่อผู้ดูแลระบบ',
         help_missing_app:'ไม่เห็นแอปบางตัว?',
-        help_missing_app_desc:'การมองเห็นแอปขึ้นอยู่กับ Role และ Group ที่กำหนดให้บัญชีของคุณ หากคิดว่าควรเห็น ให้แจ้งผู้ดูแลระบบ',
-        help_privacy:'ความเป็นส่วนตัว',
-        help_privacy_desc:'ระบบไม่เก็บรหัสผ่าน ใช้ token จาก Google ในการยืนยันตัวตนเท่านั้น ข้อมูลผู้ใช้จะถูกเก็บเฉพาะที่จำเป็น',
+        help_missing_app_desc:'การมองเห็นแอปขึ้นอยู่กับ Role และ Group ที่กำหนดให้บัญชีของคุณ',
         toast_session_expired:'เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่',
         toast_login_checking:'กำลังตรวจสอบบัญชี...',
         toast_login_success:'เข้าสู่ระบบสำเร็จ',
@@ -835,7 +760,6 @@
         toast_saved:'บันทึกเรียบร้อยแล้ว',
         toast_name_saved:'เปลี่ยนชื่อเรียบร้อยแล้ว',
         toast_register_sent:'ส่งคำขอลงทะเบียนแล้ว',
-        toast_login_failed:'เข้าสู่ระบบไม่สำเร็จ',
         toast_google_invalid:'Google session ไม่ถูกต้องหรือหมดอายุ กรุณาลองใหม่',
         toast_network_timeout:'การเชื่อมต่อใช้เวลานานเกินไป กรุณาลองใหม่',
         toast_network_error:'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้',
@@ -870,7 +794,6 @@
         hero_copy:'Your central hub for tools and applications. Pick an app and start using it right away.',
         search_placeholder:'Search applications...',
         filter_all:'All groups',
-        btn_refresh:'Refresh',
         apps_available:'apps available',
         status_connecting:'Connecting', status_connected:'Connected',
         status_offline:'Offline', status_retrying:'Retrying...',
@@ -913,22 +836,19 @@
         logo_loading:'Loading logos...',
         logo_picker_note:'Source:', logo_picker_note2:'Icons are loaded from public theSVG URLs',
         settings_title:'Settings', settings_desc:'Customize display and language of Portal',
-        settings_theme:'Theme', settings_theme_desc:'Choose the display theme (Auto follows your device)',
+        settings_theme:'Theme', settings_theme_desc:'Choose the display theme',
         theme_light:'Light', theme_dark:'Dark', theme_auto:'Auto',
         settings_language:'Language', settings_language_desc:'Change the interface language',
         settings_shortcuts:'Shortcuts', settings_shortcuts_desc:'Keyboard shortcuts',
         shortcut_search:'Search apps', shortcut_refresh:'Refresh data',
         shortcut_settings:'Open settings', shortcut_close:'Close modal / Cancel',
-        shortcut_help:'Show shortcuts',
         help_title:'Help & About', help_desc:'Information and frequently asked questions',
         help_what_is:'What is Koo Mean Portal?',
-        help_what_is_desc:'A hub of applications and tools for authorized users. Only apps you have access to will be shown.',
+        help_what_is_desc:'A hub of applications and tools for authorized users.',
         help_cannot_login:'Cannot sign in?',
-        help_cannot_login_desc:'Make sure you are using an authorized email and your Google Account is linked. Contact an admin if it still fails.',
+        help_cannot_login_desc:'Make sure you are using an authorized email. Contact an admin if it still fails.',
         help_missing_app:'Missing some apps?',
-        help_missing_app_desc:'Visibility depends on the role and group assigned to your account. Contact an admin if you believe it should be visible.',
-        help_privacy:'Privacy',
-        help_privacy_desc:'No password is stored. We only use a Google token for authentication. User data is kept minimal.',
+        help_missing_app_desc:'Visibility depends on the role and group assigned to your account.',
         toast_session_expired:'Session expired, please sign in again',
         toast_login_checking:'Checking account...',
         toast_login_success:'Signed in successfully',
@@ -938,7 +858,6 @@
         toast_saved:'Saved successfully',
         toast_name_saved:'Display name updated',
         toast_register_sent:'Registration request sent',
-        toast_login_failed:'Sign-in failed',
         toast_google_invalid:'Google session invalid or expired. Please try again',
         toast_network_timeout:'Connection took too long, please retry',
         toast_network_error:'Cannot reach the server',
@@ -976,60 +895,44 @@
     const CLIENT_UA=(navigator.userAgent||'').slice(0,300);
 
     const state={
-      idToken:null, user:null, authVerified:false,
-      allUsers:[], applications:[], profile:null, spaceProfile:null,
-      editingRow:0, selectedIcon:'', selectedIconName:'',
-      logoRegistry:[], logosLoaded:false,
-      isRefreshing:false, adminBusy:false,
-      loadError:null, lastErrorMessage:'',
-      retryTimer:0, retryAttempt:0,
-      theme:'auto', lang:'th'
+      idToken:null,user:null,authVerified:false,
+      allUsers:[],applications:[],profile:null,spaceProfile:null,
+      editingRow:0,selectedIcon:'',selectedIconName:'',
+      logoRegistry:[],logosLoaded:false,
+      isRefreshing:false,adminBusy:false,
+      loadError:null,lastErrorMessage:'',
+      retryTimer:0,retryAttempt:0,
+      theme:'auto',lang:'th'
     };
-    state.selectedIconName = t('icon_not_selected');
+    state.selectedIconName=t('icon_not_selected');
 
     const $=id=>document.getElementById(id);
-    let toastTimer=0, gsiPromise=null, sessionTimer=0;
+    let toastTimer=0,gsiPromise=null,sessionTimer=0;
     let lastFocusedElement=null;
 
     /* ===== Safe helpers ===== */
     function escapeHtml(value){
-      return String(value==null?'':value)
-        .replace(/[&<>"'`]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[c]));
+      return String(value==null?'':value).replace(/[&<>"'`]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[c]));
     }
     function safeUrl(value){
-      try{
-        const u=new URL(String(value||''));
-        if(!/^https?:$/.test(u.protocol))return '';
-        return u.href;
-      }catch{return '';}
+      try{const u=new URL(String(value||''));return /^https?:$/.test(u.protocol)?u.href:'';}catch{return '';}
     }
     function canonicalAppUrl(value){
-      try{
-        const u=new URL(String(value||''));
-        if(!/^https?:$/.test(u.protocol))return '';
+      try{const u=new URL(String(value||''));if(!/^https?:$/.test(u.protocol))return '';
         const path=(u.pathname.replace(/\/+$/,'')||'/').toLowerCase();
-        return u.origin.toLowerCase()+path+u.search.toLowerCase()+u.hash.toLowerCase();
-      }catch{return '';}
+        return u.origin.toLowerCase()+path+u.search.toLowerCase()+u.hash.toLowerCase();}catch{return '';}
     }
     function decodeJwt(token){
       try{
         if(!token||typeof token!=='string')return null;
-        const parts=token.split('.');
-        if(parts.length!==3)return null;
+        const parts=token.split('.');if(parts.length!==3)return null;
         const b64=parts[1].replace(/-/g,'+').replace(/_/g,'/');
-        const pad=b64.length%4;
-        const padded=pad?b64+'='.repeat(4-pad):b64;
-        const json=atob(padded);
-        return JSON.parse(decodeURIComponent(json.split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));
+        const pad=b64.length%4;const padded=pad?b64+'='.repeat(4-pad):b64;
+        return JSON.parse(decodeURIComponent(atob(padded).split('').map(c=>'%'+('00'+c.charCodeAt(0).toString(16)).slice(-2)).join('')));
       }catch{return null;}
     }
-    function expired(token){
-      const p=decodeJwt(token);
-      return !p||!p.exp||(p.exp*1000)<=Date.now();
-    }
-    function debounce(fn,wait=250){
-      let t;return function(...args){clearTimeout(t);t=setTimeout(()=>fn.apply(this,args),wait);};
-    }
+    function expired(token){const p=decodeJwt(token);return !p||!p.exp||(p.exp*1000)<=Date.now();}
+    function debounce(fn,wait=250){let t;return function(...args){clearTimeout(t);t=setTimeout(()=>fn.apply(this,args),wait);};}
     function isValidSlug(v){return /^[a-z0-9][a-z0-9_-]{0,30}$/.test(v);}
     function isValidColor(v){return /^#[0-9a-f]{3,8}$/i.test(v);}
 
@@ -1046,16 +949,13 @@
       const el=$('connection-status');if(!el)return;
       el.classList.remove('connecting','offline');
       if(mode)el.classList.add(mode);
-      const textEl=$('status-text');
-      if(textEl)textEl.textContent=label;
+      const textEl=$('status-text');if(textEl)textEl.textContent=label;
     }
 
-    /* ===== Prefs: theme + language ===== */
+    /* ===== Prefs ===== */
     function loadPrefs(){
-      try{
-        const raw=localStorage.getItem(PREFS_KEY);
-        if(raw){
-          const p=JSON.parse(raw);
+      try{const raw=localStorage.getItem(PREFS_KEY);
+        if(raw){const p=JSON.parse(raw);
           if(p&&typeof p==='object'){
             state.theme=(p.theme==='light'||p.theme==='dark'||p.theme==='auto')?p.theme:'auto';
             state.lang=(p.lang==='en')?'en':'th';
@@ -1063,67 +963,43 @@
         }
       }catch{}
     }
-    function savePrefs(){
-      try{localStorage.setItem(PREFS_KEY,JSON.stringify({theme:state.theme,lang:state.lang}));}catch{}
-    }
+    function savePrefs(){try{localStorage.setItem(PREFS_KEY,JSON.stringify({theme:state.theme,lang:state.lang}));}catch{}}
     function applyTheme(){
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const theme = state.theme==='auto' ? (prefersDark?'dark':'light') : state.theme;
-      document.documentElement.setAttribute('data-theme', theme);
+      const prefersDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme=state.theme==='auto'?(prefersDark?'dark':'light'):state.theme;
+      document.documentElement.setAttribute('data-theme',theme);
       const meta=$('theme-color-meta');
-      if(meta) meta.setAttribute('content', theme==='dark'?'#06080e':'#f5f7fb');
+      if(meta)meta.setAttribute('content',theme==='dark'?'#06080e':'#f5f7fb');
       document.querySelectorAll('#theme-ctrl .seg-opt').forEach(btn=>{
-        btn.classList.toggle('active', btn.dataset.themeValue===state.theme);
-        btn.setAttribute('aria-checked', btn.dataset.themeValue===state.theme);
+        btn.classList.toggle('active',btn.dataset.themeValue===state.theme);
       });
     }
     function applyLang(){
-      document.documentElement.setAttribute('lang', state.lang);
+      document.documentElement.setAttribute('lang',state.lang);
       document.querySelectorAll('[data-i18n]').forEach(el=>{
         const key=el.getAttribute('data-i18n');
-        if(key && I18N[state.lang] && I18N[state.lang][key]!=null){
-          el.textContent=I18N[state.lang][key];
-        }
+        if(key&&I18N[state.lang]&&I18N[state.lang][key]!=null)el.textContent=I18N[state.lang][key];
       });
       document.querySelectorAll('[data-i18n-placeholder]').forEach(el=>{
         const key=el.getAttribute('data-i18n-placeholder');
-        if(key && I18N[state.lang] && I18N[state.lang][key]!=null){
-          el.setAttribute('placeholder', I18N[state.lang][key]);
-        }
-      });
-      document.querySelectorAll('[data-i18n-title]').forEach(el=>{
-        const key=el.getAttribute('data-i18n-title');
-        if(key && I18N[state.lang] && I18N[state.lang][key]!=null){
-          el.setAttribute('title', I18N[state.lang][key]);
-          el.setAttribute('aria-label', I18N[state.lang][key]);
-        }
+        if(key&&I18N[state.lang]&&I18N[state.lang][key]!=null)el.setAttribute('placeholder',I18N[state.lang][key]);
       });
       document.querySelectorAll('#lang-ctrl .seg-opt').forEach(btn=>{
-        btn.classList.toggle('active', btn.dataset.langValue===state.lang);
-        btn.setAttribute('aria-checked', btn.dataset.langValue===state.lang);
+        btn.classList.toggle('active',btn.dataset.langValue===state.lang);
       });
-      // Refresh dynamic labels
       const authBtn=$('auth-btn');
-      if(authBtn){
-        const span=authBtn.querySelector('span');
-        if(span) span.textContent = state.user ? t('btn_account') : t('btn_login');
-      }
-      // Re-render apps to apply translations in dynamic content
-      if(state.applications && state.applications.length) renderApplications();
+      if(authBtn){const span=authBtn.querySelector('span');if(span)span.textContent=state.user?t('btn_account'):t('btn_login');}
+      if(state.applications&&state.applications.length)renderApplications();
     }
 
     /* ===== Session ===== */
     function saveSession(){try{localStorage.setItem(SESSION_KEY,JSON.stringify({idToken:state.idToken,user:state.user}));}catch{}}
     function clearSession(){try{localStorage.removeItem(SESSION_KEY);}catch{}}
     function clearSessionTimer(){if(sessionTimer){clearTimeout(sessionTimer);sessionTimer=0;}}
-
-    function cancelAutoRetry(){
-      if(state.retryTimer){clearTimeout(state.retryTimer);state.retryTimer=0;}
-      state.retryAttempt=0;
-    }
+    function cancelAutoRetry(){if(state.retryTimer){clearTimeout(state.retryTimer);state.retryTimer=0;}state.retryAttempt=0;}
 
     function expireSession(message){
-      message = message || t('toast_session_expired');
+      message=message||t('toast_session_expired');
       clearSessionTimer();cancelAutoRetry();
       state.idToken=null;state.user=null;state.authVerified=false;
       clearSession();applyUser();setModal('account-modal',false);setModal('admin-modal',false);
@@ -1131,8 +1007,7 @@
     }
     function scheduleSessionExpiry(){
       clearSessionTimer();
-      const claims=decodeJwt(state.idToken||'');
-      if(!claims?.exp)return;
+      const claims=decodeJwt(state.idToken||'');if(!claims?.exp)return;
       const delay=Math.max(0,claims.exp*1000-Date.now()-30000);
       sessionTimer=setTimeout(()=>expireSession(),delay);
     }
@@ -1170,49 +1045,33 @@
       try{
         await loadGSI();
         window.google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleCredentialResponse,auto_select:false});
-        const button=document.querySelector('.g_id_signin');
-        button.innerHTML='';
+        const button=document.querySelector('.g_id_signin');button.innerHTML='';
         window.google.accounts.id.renderButton(button,{type:'standard',size:'large',theme:'filled_black',text:'signin_with',shape:'pill',logo_alignment:'left'});
         setModal('login-modal',true);
       }catch(e){showToast(e.message||'Cannot open login','error');}
     }
     function handleCredentialResponse(response){
       const claims=decodeJwt(response.credential);
-      if(!claims?.email||expired(response.credential)){
-        showToast(t('toast_google_invalid'),'error');
-        return;
-      }
+      if(!claims?.email||expired(response.credential)){showToast(t('toast_google_invalid'),'error');return;}
       state.idToken=response.credential;
       state.user=null;state.authVerified=false;
-      cancelAutoRetry();
-      scheduleSessionExpiry();
+      cancelAutoRetry();scheduleSessionExpiry();
       setModal('login-modal',false);
       showToast(t('toast_login_checking'),'info');
       loadPortal(true);
     }
-    // Expose only what Google requires
     window.handleCredentialResponse=handleCredentialResponse;
 
     /* ===== API request ===== */
     async function request(action,extra={}){
-      if(state.idToken&&expired(state.idToken)){
-        expireSession();
-        throw new Error(t('toast_session_expired'));
-      }
+      if(state.idToken&&expired(state.idToken)){expireSession();throw new Error(t('toast_session_expired'));}
       const body=new URLSearchParams({action,ua:CLIENT_UA});
       if(state.idToken)body.set('idToken',state.idToken);
-      Object.entries(extra).forEach(([key,value])=>{
-        if(value!=null) body.set(key,String(value));
-      });
+      Object.entries(extra).forEach(([key,value])=>{if(value!=null)body.set(key,String(value));});
       const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),API_TIMEOUT_MS);
       let response;
       try{
-        response=await fetch(API_URL,{
-          method:'POST',
-          headers:{'Content-Type':'application/x-www-form-urlencoded'},
-          body,cache:'no-store',signal:controller.signal,
-          credentials:'omit'
-        });
+        response=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body,cache:'no-store',signal:controller.signal,credentials:'omit'});
       }catch(error){
         if(error?.name==='AbortError')throw new Error(t('toast_network_timeout'));
         throw new Error(t('toast_network_error'));
@@ -1227,9 +1086,7 @@
     async function loadPortal(isFreshLogin=false,forceRefresh=false){
       cancelAutoRetry();
       try{
-        if(forceRefresh&&isAdmin()){
-          try{await request('clearCache');}catch(e){console.warn('Cache refresh skipped:',e);}
-        }
+        if(forceRefresh&&isAdmin()){try{await request('clearCache');}catch(e){console.warn('Cache refresh skipped:',e);}}
         const data=await request('bootstrap');
         if(data.authError){expireSession();throw new Error(t('toast_session_expired'));}
         if(data.requireRegistration){
@@ -1247,12 +1104,11 @@
         if(state.idToken)scheduleSessionExpiry();
         saveSession();applyMeta();applyUser();renderApplications();
         const updatedAt=$('updated-at');
-        if(updatedAt) updatedAt.textContent=new Date().toLocaleTimeString(state.lang==='th'?'th-TH':'en-US',{hour:'2-digit',minute:'2-digit'});
+        if(updatedAt)updatedAt.textContent=new Date().toLocaleTimeString(state.lang==='th'?'th-TH':'en-US',{hour:'2-digit',minute:'2-digit'});
         if(isFreshLogin)showToast(t('toast_login_success'),'success');
         return true;
       }catch(error){
         console.error(error);
-        state.applications=state.applications||[];
         state.loadError=error;
         state.lastErrorMessage=error.message||t('error_load_failed');
         renderApplications(state.lastErrorMessage);
@@ -1268,21 +1124,20 @@
       cancelAutoRetry();
       if(state.retryAttempt>=5)return;
       state.retryAttempt++;
-      const delay = Math.min(2000*Math.pow(2, state.retryAttempt-1), 30000);
-      state.retryTimer=setTimeout(async ()=>{
+      const delay=Math.min(2000*Math.pow(2,state.retryAttempt-1),30000);
+      state.retryTimer=setTimeout(async()=>{
         if(state.loadError){
           setConnectionStatus('connecting',t('status_retrying'));
           showToast(t('toast_retrying'),'info');
           await loadPortal(false,false);
         }
-      }, delay);
+      },delay);
     }
 
     async function refreshPortal(){
       if(state.isRefreshing)return;
       const btn=$('refresh-btn');state.isRefreshing=true;
-      cancelAutoRetry();
-      btn.disabled=true;btn.classList.add('loading');
+      cancelAutoRetry();btn.disabled=true;btn.classList.add('loading');
       try{const ok=await loadPortal(false,true);if(ok)showToast(t('toast_refreshed'),'success');}
       finally{state.isRefreshing=false;btn.disabled=false;btn.classList.remove('loading');}
     }
@@ -1290,26 +1145,21 @@
     function applyMeta(){
       const p=state.spaceProfile||{};
       if(p.webTitle)document.title=p.webTitle+' · Portal';
-      const ft=$('footer-title'); if(ft) ft.textContent='Koo Mean Portal';
-      if(p.name){const eb=$('eyebrow-text'); if(eb) eb.textContent=p.name+' · Application hub';}
-      if(p.bio){const hc=$('hero-copy'); if(hc) hc.textContent=p.bio;}
+      const ft=$('footer-title');if(ft)ft.textContent='Koo Mean Portal';
+      if(p.name){const eb=$('eyebrow-text');if(eb)eb.textContent=p.name+' · Application hub';}
+      if(p.bio){const hc=$('hero-copy');if(hc)hc.textContent=p.bio;}
     }
 
     function applyUser(){
       const signed=!!state.user;
       const isAdminUser=signed&&state.authVerified&&String(state.user.role||'').toLowerCase().includes('admin');
+      const chip=$('user-chip');const navAdmin=$('nav-admin');
+      if(chip)chip.classList.toggle('visible',signed);
+      if(navAdmin)navAdmin.hidden=!isAdminUser;
       const btn=$('auth-btn');
-      const chip=$('user-chip');
-      const navAdmin=$('nav-admin');
-      if(chip) chip.classList.toggle('visible',signed);
-      if(navAdmin) navAdmin.hidden=!isAdminUser;
       if(btn){
-        const span=btn.querySelector('span');
-        if(signed){
-          btn.innerHTML='<i class="fas fa-user"></i> <span>'+escapeHtml(t('btn_account'))+'</span>';
-        }else{
-          btn.innerHTML='<i class="fas fa-arrow-right-to-bracket"></i> <span>'+escapeHtml(t('btn_login'))+'</span>';
-        }
+        if(signed)btn.innerHTML='<i class="fas fa-user"></i> <span>'+escapeHtml(t('btn_account'))+'</span>';
+        else btn.innerHTML='<i class="fas fa-arrow-right-to-bracket"></i> <span>'+escapeHtml(t('btn_login'))+'</span>';
       }
       if(signed){
         const name=state.user.name||state.user.email.split('@')[0];
@@ -1346,50 +1196,42 @@
     function iconMarkup(value,extraClass=''){
       const raw=String(value||'').trim();if(!raw)return '';
       const src=svgUrl(raw);
-      if(src){
-        return '<span class="icon-media"><img class="'+escapeHtml(extraClass)+'" src="'+escapeHtml(src)+'" alt="" loading="lazy" referrerpolicy="no-referrer"></span>';
-      }
+      if(src)return '<span class="icon-media"><img class="'+escapeHtml(extraClass)+'" src="'+escapeHtml(src)+'" alt="" loading="lazy" referrerpolicy="no-referrer"></span>';
       const cls=iconClass(raw);
       return cls?'<i class="'+escapeHtml(cls)+'"></i>':'';
     }
     function refreshSelectedIcon(){
-      const preview=$('admin-icon-preview');
-      preview.innerHTML=iconMarkup(state.selectedIcon);
+      const preview=$('admin-icon-preview');preview.innerHTML=iconMarkup(state.selectedIcon);
       preview.hidden=!state.selectedIcon;
-      const nameEl=$('admin-icon-name');
-      const valEl=$('admin-icon-value');
-      if(nameEl) nameEl.textContent=state.selectedIconName||t('icon_not_selected');
-      if(valEl) valEl.textContent=state.selectedIcon||'—';
+      const nameEl=$('admin-icon-name');const valEl=$('admin-icon-value');
+      if(nameEl)nameEl.textContent=state.selectedIconName||t('icon_not_selected');
+      if(valEl)valEl.textContent=state.selectedIcon||'—';
     }
     function isAdmin(){return !!state.user&&state.authVerified&&String(state.user.role||'').toLowerCase().includes('admin');}
 
     /* ===== Admin form ===== */
     function resetAdminForm(){
       state.editingRow=0;state.selectedIcon='';state.selectedIconName=t('icon_not_selected');
-      const title=$('admin-form-title'); if(title) title.textContent=t('admin_add_app');
-      ['admin-name','admin-url','admin-description','admin-color','admin-icon-manual'].forEach(id=>{
-        const el=$(id); if(el) el.value='';
-      });
+      const title=$('admin-form-title');if(title)title.textContent=t('admin_add_app');
+      ['admin-name','admin-url','admin-description','admin-color','admin-icon-manual'].forEach(id=>{const el=$(id);if(el)el.value='';});
       const g=$('admin-group');if(g)g.value='public';
       const s=$('admin-starred');if(s)s.checked=false;
-      const btn=$('admin-submit-btn');
-      if(btn) btn.innerHTML='<i class="fas fa-plus"></i> <span>'+escapeHtml(t('btn_add_app'))+'</span>';
-      const cancel=$('admin-cancel-btn'); if(cancel) cancel.hidden=true;
+      const btn=$('admin-submit-btn');if(btn)btn.innerHTML='<i class="fas fa-plus"></i> <span>'+escapeHtml(t('btn_add_app'))+'</span>';
+      const cancel=$('admin-cancel-btn');if(cancel)cancel.hidden=true;
       refreshSelectedIcon();
     }
     function fillAdminForm(app){
       state.editingRow=Number(app.rowIdx)||0;
       state.selectedIcon=String(app.icon||'').trim();
       state.selectedIconName=state.selectedIcon?(svgUrl(state.selectedIcon)?state.selectedIcon:'Font Awesome'):t('icon_not_selected');
-      const title=$('admin-form-title'); if(title) title.textContent=t('admin_edit_app');
+      const title=$('admin-form-title');if(title)title.textContent=t('admin_edit_app');
       const f=(id,v)=>{const el=$(id);if(el)el.value=v||'';};
       f('admin-name',app.name);f('admin-url',app.url);f('admin-description',app.description);
       f('admin-group',app.group||'public');f('admin-color',app.color);
-      const star=$('admin-starred'); if(star) star.checked=app.starred===true;
+      const star=$('admin-starred');if(star)star.checked=app.starred===true;
       f('admin-icon-manual','');
-      const btn=$('admin-submit-btn');
-      if(btn) btn.innerHTML='<i class="fas fa-check"></i> <span>'+escapeHtml(t('btn_save_changes'))+'</span>';
-      const cancel=$('admin-cancel-btn'); if(cancel) cancel.hidden=false;
+      const btn=$('admin-submit-btn');if(btn)btn.innerHTML='<i class="fas fa-check"></i> <span>'+escapeHtml(t('btn_save_changes'))+'</span>';
+      const cancel=$('admin-cancel-btn');if(cancel)cancel.hidden=false;
       refreshSelectedIcon();
     }
     function useManualIcon(){
@@ -1401,12 +1243,11 @@
       const apps=tab==='apps';
       const atp=$('admin-apps-tab'),utp=$('admin-users-tab');
       const abtn=$('admin-apps-tab-btn'),ubtn=$('admin-users-tab-btn');
-      if(atp) atp.hidden=!apps;
-      if(utp) utp.hidden=apps;
-      if(abtn) abtn.classList.toggle('active',apps);
-      if(ubtn) ubtn.classList.toggle('active',!apps);
+      if(atp)atp.hidden=!apps;if(utp)utp.hidden=apps;
+      if(abtn)abtn.classList.toggle('active',apps);
+      if(ubtn)ubtn.classList.toggle('active',!apps);
       const sub=$('admin-subtitle');
-      if(sub) sub.textContent=apps?t('admin_subtitle_apps'):t('admin_subtitle_users');
+      if(sub)sub.textContent=apps?t('admin_subtitle_apps'):t('admin_subtitle_users');
     }
     function openAdmin(){
       if(!isAdmin()){showToast(t('msg_need_admin'),'error');return;}
@@ -1417,12 +1258,11 @@
     function renderAdminItems(){
       const root=$('admin-items');if(!root)return;
       if(!state.applications.length){
-        root.innerHTML='<div class="empty" style="padding:28px 10px"><p>'+escapeHtml(t('empty_no_data'))+'</p></div>';
-        return;
+        root.innerHTML='<div class="empty" style="padding:28px 10px"><p>'+escapeHtml(t('empty_no_data'))+'</p></div>';return;
       }
       root.innerHTML=state.applications.map((app,index)=>{
         const name=escapeHtml(app.name||'—');
-        const isFirst=index===0, isLast=index===state.applications.length-1;
+        const isFirst=index===0,isLast=index===state.applications.length-1;
         const row=Number(app.rowIdx)||0;
         return '<div class="admin-item">'+adminItemIcon(app)+
           '<div class="admin-item-info"><div class="admin-item-name">'+name+'</div>'+
@@ -1446,21 +1286,15 @@
       const root=$('admin-users'),search=$('admin-user-search');
       if(!root)return;
       const query=search?(search.value||'').trim().toLowerCase():'';
-      const users=state.allUsers.filter(user=>
-        (String(user.name||'')+' '+String(user.email||'')).toLowerCase().includes(query)
-      );
+      const users=state.allUsers.filter(user=>(String(user.name||'')+' '+String(user.email||'')).toLowerCase().includes(query));
       if(!users.length){
-        root.innerHTML='<div class="empty" style="padding:28px 10px"><p>'+escapeHtml(
-          state.allUsers.length?'No users':'empty_no_data'
-        )+'</p></div>';
-        return;
+        root.innerHTML='<div class="empty" style="padding:28px 10px"><p>'+escapeHtml(state.allUsers.length?'No users':t('empty_no_data'))+'</p></div>';return;
       }
       root.innerHTML=users.map(user=>{
         const name=user.name||String(user.email||'').split('@')[0]||'—';
         const pic=user.pic||avatar(name);
-        const email=escapeHtml(user.email||'');
-        const role=escapeHtml(user.role||'public');
-        return '<div class="admin-user"><img class="admin-user-avatar" src="'+escapeHtml(pic)+'" alt="">'+
+        const email=escapeHtml(user.email||'');const role=escapeHtml(user.role||'public');
+        return '<div class="admin-user"><img class="admin-user-avatar" src="'+escapeHtml(pic)+'" alt="" style="width:36px;height:36px;border-radius:50%;object-fit:cover;flex-shrink:0">'+
           '<div class="admin-user-info"><div class="admin-user-name">'+escapeHtml(name)+'</div>'+
           '<div class="admin-user-email">'+email+'</div></div>'+
           '<div class="admin-user-controls">'+
@@ -1495,7 +1329,7 @@
       if(!app)return;
       if(action==='edit'){fillAdminForm(app);return;}
       if(action==='delete'){
-        const msg = t('msg_confirm_delete')+' "'+(app.name||'—')+'" '+(state.lang==='th'?t('msg_confirm_delete_suffix'):'?');
+        const msg=t('msg_confirm_delete')+' "'+(app.name||'—')+'" '+(state.lang==='th'?t('msg_confirm_delete_suffix'):'?');
         if(!confirm(msg))return;
         await adminRequest('deleteApplication',{rowIdx});return;
       }
@@ -1511,8 +1345,7 @@
       try{
         await request(action,params);
         showToast(t('toast_saved'),'success');
-        await loadPortal();
-        if(isAdmin())renderAdminItems();
+        await loadPortal();if(isAdmin())renderAdminItems();
       }catch(e){showToast(e.message||'Failed','error');}
       finally{setAdminActionsBusy(false);}
     }
@@ -1527,10 +1360,7 @@
       if(!name){showToast(t('msg_app_name_required'),'error');$('admin-name').focus();return;}
       if(!safeUrl(url)){showToast(t('msg_invalid_url'),'error');$('admin-url').focus();return;}
       const duplicate=state.applications.find(app=>Number(app.rowIdx)!==state.editingRow&&canonicalAppUrl(app.url)===canonicalAppUrl(url));
-      if(duplicate){
-        showToast(t('msg_url_duplicate')+' "'+(duplicate.name||'—')+'"','error');
-        $('admin-url').focus();return;
-      }
+      if(duplicate){showToast(t('msg_url_duplicate')+' "'+(duplicate.name||'—')+'"','error');$('admin-url').focus();return;}
       if(appColor&&!isValidColor(appColor)){showToast(t('msg_invalid_color'),'error');return;}
       const btn=$('admin-submit-btn'),old=btn.innerHTML;
       btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin"></i> '+escapeHtml(t('toast_saving'));
@@ -1556,7 +1386,7 @@
         state.logoRegistry=Array.isArray(data)?data:(Array.isArray(data.icons)?data.icons:[]);
         state.logosLoaded=true;renderLogoResults();
       }catch(e){
-        if(root) root.innerHTML='<div class="error" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-triangle-exclamation"></i><strong>Failed to load logos</strong><p>Try using a slug manually.</p></div>';
+        if(root)root.innerHTML='<div class="error" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-triangle-exclamation"></i><strong>Failed to load logos</strong><p>Try using a slug manually.</p></div>';
       }
     }
     function renderLogoResults(){
@@ -1568,8 +1398,7 @@
         return !query||hay.includes(query);
       }).slice(0,120);
       if(!hits.length){
-        root.innerHTML='<div class="empty" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-magnifying-glass"></i><p>No logos found</p></div>';
-        return;
+        root.innerHTML='<div class="empty" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-magnifying-glass"></i><p>No logos found</p></div>';return;
       }
       root.innerHTML=hits.map(item=>{
         const slug=String(item.slug||item.name||'').trim();
@@ -1588,8 +1417,7 @@
           state.selectedIcon=btn.dataset.logoSlug;
           state.selectedIconName=btn.dataset.logoTitle;
           refreshSelectedIcon();
-          setModal('logo-modal',false);
-          setModal('admin-modal',true);
+          setModal('logo-modal',false);setModal('admin-modal',true);
         });
       });
     }
@@ -1598,7 +1426,7 @@
       setModal('admin-modal',false);setModal('logo-modal',true);
       const results=$('logo-results');
       if(!state.logosLoaded){
-        if(results) results.innerHTML='<div class="loading" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-circle-notch fa-spin"></i><p>'+escapeHtml(t('logo_loading'))+'</p></div>';
+        if(results)results.innerHTML='<div class="loading" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-circle-notch fa-spin"></i><p>'+escapeHtml(t('logo_loading'))+'</p></div>';
         await loadLogoRegistry();
       }else renderLogoResults();
     }
@@ -1610,40 +1438,32 @@
       const query=search?(search.value||'').trim().toLowerCase():'';
       const selected=filter?filter.value:'all';
 
-      // If user is actively searching, clear any previous error state first
-      // This fixes the "must refresh to see search results after error" bug
-      if(query && errorMessage===undefined && state.lastErrorMessage){
-        state.lastErrorMessage='';
-        errorMessage='';
+      if(query&&errorMessage===undefined&&state.lastErrorMessage){
+        state.lastErrorMessage='';errorMessage='';
       }
-      // If errorMessage explicitly provided (from loadPortal error), update state
-      if(errorMessage!==undefined){
-        state.lastErrorMessage=errorMessage;
-      }
+      if(errorMessage!==undefined)state.lastErrorMessage=errorMessage;
 
       const source=state.applications.filter(app=>safeUrl(app.url)).filter(app=>{
         const hay=((app.name||'')+' '+(app.description||'')+' '+(app.group||'')).toLowerCase();
         return (!query||hay.includes(query))&&(selected==='all'||groupKey(app)===selected);
       });
-
       const countEl=$('app-count');if(countEl)countEl.textContent=source.length;
 
       if(errorMessage){
         setConnectionStatus('offline',t('status_offline'));
         root.innerHTML='<div class="error"><i class="fas fa-triangle-exclamation"></i><strong>'+
           escapeHtml(t('error_load_failed'))+'</strong><p>'+escapeHtml(errorMessage)+
-          '<br><button class="btn btn-ghost" style="margin-top:16px" type="button" id="retry-load-btn">'+
+          '<br><button class="btn btn-ghost" style="margin-top:16px;min-height:44px" type="button" id="retry-load-btn">'+
           '<i class="fas fa-rotate-right"></i> '+escapeHtml(t('error_retry'))+
           '</button></p></div>';
         const retryBtn=$('retry-load-btn');
-        if(retryBtn) retryBtn.addEventListener('click', ()=>loadPortal(false,true));
+        if(retryBtn)retryBtn.addEventListener('click',()=>loadPortal(false,true));
         return;
       }
 
       setConnectionStatus('',t('status_connected'));
 
-      const groups=[...new Set(state.applications.filter(app=>safeUrl(app.url)).map(groupKey))]
-        .sort((a,b)=>a==='public'?-1:b==='public'?1:a.localeCompare(b));
+      const groups=[...new Set(state.applications.filter(app=>safeUrl(app.url)).map(groupKey))].sort((a,b)=>a==='public'?-1:b==='public'?1:a.localeCompare(b));
       const oldVal=filter?filter.value:'all';
       if(filter){
         filter.innerHTML='<option value="all">'+escapeHtml(t('filter_all'))+'</option>'+
@@ -1653,10 +1473,9 @@
 
       if(!source.length){
         const hasQuery=!!query;
-        const hasApps=state.applications.length>0;
         const icon=hasQuery?'fa-magnifying-glass':'fa-layer-group';
-        const title=hasQuery?t('empty_no_match'):(hasApps?t('empty_no_app'):t('empty_no_app'));
-        const desc=hasQuery?t('empty_no_match_desc'):(hasApps?'':t('empty_no_app_desc'));
+        const title=hasQuery?t('empty_no_match'):t('empty_no_app');
+        const desc=hasQuery?t('empty_no_match_desc'):t('empty_no_app_desc');
         root.innerHTML='<div class="empty"><i class="fas '+icon+'"></i><strong>'+
           escapeHtml(title)+'</strong><p>'+escapeHtml(desc)+'</p></div>';
         return;
@@ -1669,12 +1488,10 @@
           '</h2><span>'+apps.length+'</span></div><div class="apps-grid">'+
           apps.map(cardHtml).join('')+'</div></section>';
       }).join('');
-      attachCardMouseEffect();
     }
 
     function cardHtml(app){
-      const url=safeUrl(app.url);
-      if(!url) return '';
+      const url=safeUrl(app.url);if(!url)return '';
       const appColor=color(app.color)||'#5b8fff';
       const icon=iconMarkup(app.icon);
       const name=escapeHtml(app.name||'Untitled');
@@ -1686,17 +1503,6 @@
         '<div class="app-description">'+desc+'</div></div>'+
         starred+
         '<i class="app-open fas fa-arrow-up-right-from-square"></i></a>';
-    }
-    function attachCardMouseEffect(){
-      document.querySelectorAll('.app-card').forEach(card=>{
-        card.addEventListener('mousemove',e=>{
-          const rect=card.getBoundingClientRect();
-          const x=((e.clientX-rect.left)/rect.width*100).toFixed(1);
-          const y=((e.clientY-rect.top)/rect.height*100).toFixed(1);
-          card.style.setProperty('--mouse-x',x+'%');
-          card.style.setProperty('--mouse-y',y+'%');
-        });
-      });
     }
 
     /* ===== Account actions ===== */
@@ -1740,14 +1546,12 @@
     const debouncedRenderUsers=debounce(renderAdminUsers,220);
     const debouncedRenderLogos=debounce(renderLogoResults,180);
 
-    // Top bar
     $('auth-btn').addEventListener('click',()=>state.user?setModal('account-modal',true):openLogin());
     $('nav-account').addEventListener('click',()=>state.user?setModal('account-modal',true):openLogin());
     $('nav-admin').addEventListener('click',openAdmin);
     $('nav-settings').addEventListener('click',()=>setModal('settings-modal',true));
     $('footer-help').addEventListener('click',()=>setModal('help-modal',true));
 
-    // Admin modal
     $('admin-apps-tab-btn').addEventListener('click',()=>showAdminTab('apps'));
     $('admin-users-tab-btn').addEventListener('click',()=>showAdminTab('users'));
     $('admin-user-search').addEventListener('input',debouncedRenderUsers);
@@ -1758,7 +1562,6 @@
     $('admin-cancel-btn').addEventListener('click',resetAdminForm);
     $('logo-search').addEventListener('input',debouncedRenderLogos);
 
-    // Tools
     $('refresh-btn').addEventListener('click',refreshPortal);
     $('save-name-btn').addEventListener('click',saveName);
     $('new-name').addEventListener('keydown',e=>{if(e.key==='Enter')saveName();});
@@ -1767,57 +1570,44 @@
     $('search').addEventListener('input',debouncedRenderApps);
     $('group-filter').addEventListener('change',()=>renderApplications());
 
-    // Theme / language controls
     document.querySelectorAll('#theme-ctrl .seg-opt').forEach(btn=>{
-      btn.addEventListener('click',()=>{
-        state.theme=btn.dataset.themeValue;
-        savePrefs();applyTheme();
-      });
+      btn.addEventListener('click',()=>{state.theme=btn.dataset.themeValue;savePrefs();applyTheme();});
     });
     document.querySelectorAll('#lang-ctrl .seg-opt').forEach(btn=>{
       btn.addEventListener('click',()=>{
-        state.lang=btn.dataset.langValue;
-        savePrefs();applyLang();
-        // re-render dynamic parts
-        if(state.applications&&state.applications.length) renderApplications();
-        renderAdminItems();renderAdminUsers();
-        applyUser();
+        state.lang=btn.dataset.langValue;savePrefs();applyLang();
+        if(state.applications&&state.applications.length)renderApplications();
+        renderAdminItems();renderAdminUsers();applyUser();
       });
     });
 
-    // Nav links
     document.querySelectorAll('.nav-link[href]').forEach(link=>link.addEventListener('click',()=>{
       document.querySelectorAll('.nav-link[href]').forEach(item=>item.classList.remove('active'));
       link.classList.add('active');
     }));
 
-    // Modal close
     document.querySelectorAll('[data-close]').forEach(btn=>btn.addEventListener('click',()=>setModal(btn.dataset.close,false)));
     document.querySelectorAll('.modal-backdrop').forEach(modal=>modal.addEventListener('click',e=>{
       if(e.target===modal)setModal(modal.id,false);
     }));
 
-    // Keyboard shortcuts
     document.addEventListener('keydown',e=>{
-      // Escape = close modals
       if(e.key==='Escape'){
         const open=document.querySelector('.modal-backdrop.open');
-        if(open) setModal(open.id,false);
+        if(open)setModal(open.id,false);
         return;
       }
-      // Ignore shortcuts when typing in inputs/textareas or when modal is open
       const tag=(document.activeElement?.tagName||'').toLowerCase();
       const isTyping=tag==='input'||tag==='textarea'||tag==='select'||document.activeElement?.isContentEditable;
       const modalOpen=!!document.querySelector('.modal-backdrop.open');
 
-      if(!isTyping && !modalOpen){
+      if(!isTyping&&!modalOpen){
         if(e.key==='/'){e.preventDefault();const s=$('search');if(s)s.focus();return;}
         if(e.key==='r'||e.key==='R'){if(!e.ctrlKey&&!e.metaKey){e.preventDefault();refreshPortal();}return;}
         if(e.key===','){e.preventDefault();setModal('settings-modal',true);return;}
         if(e.key==='?'||e.key==='؟'){e.preventDefault();setModal('help-modal',true);return;}
       }
 
-      // Focus trap in open modal
       if(e.key==='Tab'){
         const openModal=document.querySelector('.modal-backdrop.open .modal');
         if(!openModal)return;
@@ -1829,32 +1619,25 @@
       }
     });
 
-    // System theme change listener (for "auto" mode)
     if(window.matchMedia){
       try{
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{
-          if(state.theme==='auto') applyTheme();
+          if(state.theme==='auto')applyTheme();
         });
       }catch{}
     }
 
-    // Handle broken images via event delegation (no inline onerror = safer CSP)
     document.addEventListener('error',e=>{
-      const t=e.target;
-      if(t && t.tagName==='IMG' && t.closest('.app-icon,.admin-item-icon,.selected-icon,.admin-user-avatar,.user-detail img,.user-chip img')){
-        // Replace broken image with Font Awesome fallback
-        const parent=t.parentElement;
-        if(parent){
-          parent.innerHTML='<i class="fas fa-cube"></i>';
-        }
+      const tgt=e.target;
+      if(tgt&&tgt.tagName==='IMG'&&tgt.closest('.app-icon,.admin-item-icon,.selected-icon,.admin-user-avatar,.user-detail img,.user-chip img')){
+        const parent=tgt.parentElement;
+        if(parent)parent.innerHTML='<i class="fas fa-cube"></i>';
       }
-    }, true);
+    },true);
 
     /* ===== Init ===== */
     (async function init(){
-      loadPrefs();
-      applyTheme();
-      applyLang();
+      loadPrefs();applyTheme();applyLang();
       try{
         const raw=localStorage.getItem(SESSION_KEY);
         const saved=raw?JSON.parse(raw):null;
