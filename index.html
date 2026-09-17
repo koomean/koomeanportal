@@ -6,18 +6,47 @@
   <meta name="theme-color" content="#06080e" id="theme-color-meta">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
+
+  <!-- 🔒 CSP Policy -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' https://accounts.google.com https://cdn.jsdelivr.net;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net;
+    font-src 'self' https://fonts.gstatic.com;
+    img-src 'self' data: https:;
+    connect-src 'self' https://koomean-proxy.meanchannel52.workers.dev https://thesvg.org https://ui-avatars.com https://accounts.google.com;
+    frame-src https://accounts.google.com;
+  ">
+
   <title>Koo Mean Portal</title>
+
+  <!-- PWA Manifest (inline via blob later) -->
+  <link rel="manifest" id="manifest-link">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235b8fff'%3E%3Cpath d='M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z'/%3E%3C/svg%3E">
+
+  <!-- Preconnect + DNS prefetch -->
   <link rel="preconnect" href="https://koomean-proxy.meanchannel52.workers.dev" crossorigin>
+  <link rel="preconnect" href="https://accounts.google.com" crossorigin>
+  <link rel="dns-prefetch" href="https://thesvg.org">
+  <link rel="dns-prefetch" href="https://ui-avatars.com">
+
+  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Bricolage+Grotesque:opsz,wght@12..96,800&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <!-- DOMPurify for XSS protection -->
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3/dist/purify.min.js"></script>
+
   <style>
+    /* ===== RESET & VARIABLES ===== */
     :root{
       --font:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
       --display:'Bricolage Grotesque',var(--font);
+      --mono:ui-monospace,'SF Mono',monospace;
       --radius:14px;--radius-sm:10px;--radius-lg:22px;
       --ease:cubic-bezier(.4,0,.2,1);
+      --ease-spring:cubic-bezier(.34,1.56,.64,1);
     }
 
     /* ===== THEMES ===== */
@@ -34,6 +63,7 @@
       --hero-text-from:#ffffff;--hero-text-to:#c8d2e8;
       --bg-gradient-1:rgba(91,143,255,.12);--bg-gradient-2:rgba(139,108,240,.10);
       --modal-bg:linear-gradient(145deg,#111a2d,#0c111e);
+      --highlight:rgba(245,185,66,.25);
     }
     [data-theme="light"]{
       --bg:#f5f7fb;--bg-2:#eef1f8;
@@ -48,6 +78,7 @@
       --hero-text-from:#0f172a;--hero-text-to:#475569;
       --bg-gradient-1:rgba(37,99,235,.08);--bg-gradient-2:rgba(124,58,237,.06);
       --modal-bg:linear-gradient(145deg,#ffffff,#f8fafc);
+      --highlight:rgba(245,185,66,.35);
     }
 
     *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -62,19 +93,20 @@
       background-attachment: fixed;
       transition: background-color .3s var(--ease), color .3s var(--ease);
     }
+
+    /* 🎨 Noise texture overlay */
     body::before{
       content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;
-      background-image:
-        radial-gradient(1px 1px at 20% 30%, rgba(155,155,155,.3), transparent),
-        radial-gradient(1px 1px at 70% 80%, rgba(155,155,155,.2), transparent),
-        radial-gradient(1px 1px at 40% 60%, rgba(155,155,155,.15), transparent);
-      background-size:300px 300px;opacity:.5;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0 0.5 0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+      opacity:.04;mix-blend-mode:overlay;
     }
-    [data-theme="light"] body::before{opacity:.3}
+    [data-theme="light"] body::before{opacity:.06}
 
+    /* Scrollbar */
     ::-webkit-scrollbar{width:8px;height:8px}
     ::-webkit-scrollbar-track{background:transparent}
     ::-webkit-scrollbar-thumb{background:rgba(155,155,155,.12);border-radius:10px}
+    ::-webkit-scrollbar-thumb:hover{background:rgba(155,155,155,.2)}
     [data-theme="light"] ::-webkit-scrollbar-thumb{background:rgba(15,23,42,.15)}
 
     button,input,select,textarea{font:inherit;color:inherit}
@@ -82,7 +114,16 @@
     a{color:inherit;text-decoration:none}
     :focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
 
-    .shell{width:min(1080px,100%);margin:auto;padding:18px 28px 44px}
+    .shell{width:min(1100px,100%);margin:auto;padding:18px 28px 44px}
+
+    /* ===== INLINE SVG ICON ===== */
+    .icon{
+      width:1em;height:1em;fill:currentColor;display:inline-block;
+      vertical-align:-0.125em;flex-shrink:0;
+    }
+    .icon-sm{width:.85em;height:.85em}
+    .icon-lg{width:1.3em;height:1.3em}
+    .icon-xl{width:1.6em;height:1.6em}
 
     /* ===== TOPBAR ===== */
     .topbar{
@@ -101,7 +142,14 @@
       width:38px;height:38px;flex:0 0 38px;display:grid;place-items:center;border-radius:11px;
       background:linear-gradient(135deg,#1a2f5c,#2b4a8a);color:#8db9ff;font-size:.95rem;
       box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 4px 12px rgba(27,59,120,.4);
+      position:relative;overflow:hidden;
     }
+    .brand-mark::after{
+      content:"";position:absolute;inset:0;
+      background:linear-gradient(45deg,transparent 30%,rgba(255,255,255,.15) 50%,transparent 70%);
+      animation:shine 4s ease-in-out infinite;
+    }
+    @keyframes shine{0%,100%{transform:translateX(-100%)}50%{transform:translateX(100%)}}
     [data-theme="light"] .brand-mark{background:linear-gradient(135deg,#2563eb,#7c3aed);color:#fff}
     .brand-copy{min-width:0}
     .brand-title{font:800 1rem var(--display);letter-spacing:-.3px;white-space:nowrap}
@@ -158,8 +206,11 @@
       background:linear-gradient(135deg,var(--blue),var(--violet));
       box-shadow:0 8px 24px rgba(75,143,255,.25),inset 0 1px 0 rgba(255,255,255,.15);
     }
+    .btn-primary:hover:not(:disabled){box-shadow:0 12px 28px rgba(75,143,255,.4)}
     .btn-ghost{background:rgba(155,155,155,.045);border-color:var(--border);color:var(--muted)}
+    .btn-ghost:hover:not(:disabled){color:var(--text);border-color:var(--border-h)}
     [data-theme="light"] .btn-ghost{background:rgba(15,23,42,.04)}
+    .btn-danger{background:linear-gradient(135deg,#ff5572,#ff2a52);color:#fff}
 
     /* ===== HERO ===== */
     .hero{display:block;margin-bottom:36px;scroll-margin-top:100px}
@@ -178,14 +229,17 @@
     .hero-line-accent{
       margin-top:.08em;
       background:linear-gradient(135deg,var(--blue) 0%,var(--violet) 60%,#c290ff 100%);
+      background-size:200% 200%;
       -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+      animation:gradientShift 8s ease infinite;
     }
+    @keyframes gradientShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
     .hero-copy{color:var(--muted);line-height:1.7;margin-top:16px;max-width:610px;font-size:.9rem}
 
     /* ===== TOOLBAR ===== */
-    .toolbar{display:flex;align-items:stretch;gap:10px;margin-bottom:18px}
-    .search{position:relative;flex:1;min-width:0}
-    .search i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:.82rem}
+    .toolbar{display:flex;align-items:stretch;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+    .search{position:relative;flex:1;min-width:200px}
+    .search i{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--dim);font-size:.9em}
     .search input{
       width:100%;background:var(--panel);backdrop-filter:blur(10px);
       border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);
@@ -193,18 +247,39 @@
     }
     .search input:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(91,143,255,.15)}
     .search input::placeholder{color:var(--dim)}
+    .search-kbd{
+      position:absolute;right:10px;top:50%;transform:translateY(-50%);
+      padding:2px 6px;border-radius:5px;background:rgba(155,155,155,.08);
+      border:1px solid var(--border);font-size:.65rem;color:var(--dim);font-family:var(--mono);
+    }
     .filter{
       background:var(--panel);border:1px solid var(--border);border-radius:var(--radius-sm);
       color:var(--text);padding:12px 34px 12px 14px;outline:0;font-size:.82rem;cursor:pointer;
-      appearance:none;-webkit-appearance:none;max-width:150px;flex-shrink:0;
+      appearance:none;-webkit-appearance:none;max-width:180px;flex-shrink:0;
       background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238794ad' stroke-width='2.5'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
       background-repeat:no-repeat;background-position:right 12px center;
     }
     .filter option{background:var(--panel-solid);color:var(--text)}
+
+    /* View Switcher */
+    .view-switcher{
+      display:flex;border:1px solid var(--border);border-radius:var(--radius-sm);
+      background:var(--panel);overflow:hidden;
+    }
+    .view-btn{
+      width:40px;height:44px;color:var(--muted);
+      display:flex;align-items:center;justify-content:center;
+      transition:all .2s var(--ease);border-right:1px solid var(--border);
+    }
+    .view-btn:last-child{border-right:none}
+    .view-btn:hover:not(:disabled){color:var(--text);background:rgba(155,155,155,.06)}
+    .view-btn.active{color:var(--blue);background:rgba(91,143,255,.1)}
+
     .refresh-btn{
       width:44px;height:44px;flex:0 0 44px;border:1px solid var(--border);
       border-radius:var(--radius-sm);background:var(--panel);backdrop-filter:blur(10px);
-      color:var(--muted);font-size:.85rem;transition:all .25s var(--ease);
+      color:var(--muted);font-size:.9em;transition:all .25s var(--ease);
+      display:flex;align-items:center;justify-content:center;
     }
     .refresh-btn:hover:not(:disabled){color:var(--text);border-color:var(--blue);transform:rotate(90deg)}
     .refresh-btn:disabled{opacity:.55;cursor:wait;transform:none}
@@ -223,9 +298,9 @@
 
     /* ===== STATES ===== */
     .loading,.empty,.error{padding:48px 20px;text-align:center;border:1px solid var(--border);border-radius:var(--radius);background:var(--panel);backdrop-filter:blur(10px);color:var(--muted)}
-    .loading i{color:var(--blue);font-size:1.5rem;margin-bottom:12px}
-    .empty i,.error i{display:block;font-size:1.6rem;margin-bottom:12px;color:var(--dim)}
-    .error i{color:var(--red)}
+    .loading i,.loading svg{color:var(--blue);font-size:1.5em;margin-bottom:12px}
+    .empty i,.empty svg,.error i,.error svg{display:block;font-size:1.6em;margin:0 auto 12px;color:var(--dim)}
+    .error i,.error svg{color:var(--red)}
     .empty strong,.error strong{display:block;color:var(--text);margin-bottom:8px;font-size:.95rem}
     .empty p,.error p{font-size:.82rem;line-height:1.6}
 
@@ -238,6 +313,8 @@
     .group-head:after{content:"";height:1px;flex:1;background:linear-gradient(90deg,var(--border),transparent)}
 
     .apps-grid{display:grid;grid-template-columns:1fr;gap:10px}
+
+    /* 🎨 Animated gradient border on hover */
     .app-card{
       position:relative;display:flex;align-items:flex-start;gap:12px;min-height:110px;padding:15px;
       border:1px solid var(--border);border-radius:var(--radius);
@@ -245,22 +322,82 @@
       overflow:hidden;transition:all .3s var(--ease);animation:cardIn .4s var(--ease) both;
     }
     @keyframes cardIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-    .app-card::before{content:"";position:absolute;inset:0 auto 0 0;width:3px;background:linear-gradient(180deg,var(--card-color,var(--blue)),transparent);opacity:.9}
-    .app-card:hover{transform:translateY(-3px);border-color:var(--border-h);box-shadow:0 15px 30px -10px rgba(0,0,0,.2)}
+
+    .app-card::before{
+      content:"";position:absolute;inset:0 auto 0 0;width:3px;
+      background:linear-gradient(180deg,var(--card-color,var(--blue)),transparent);opacity:.9;
+    }
+    .app-card::after{
+      content:"";position:absolute;inset:-1px;border-radius:inherit;pointer-events:none;
+      background:linear-gradient(135deg,var(--card-color,var(--blue)),transparent 40%,transparent 60%,var(--card-color,var(--blue)));
+      opacity:0;transition:opacity .3s var(--ease);z-index:-1;
+    }
+    .app-card:hover{
+      transform:translateY(-3px);border-color:var(--border-h);
+      box-shadow:0 15px 30px -10px rgba(0,0,0,.2);
+    }
+    .app-card:hover::after{opacity:.15}
+
+    /* Shimmer on hover */
+    .app-card .shimmer{
+      position:absolute;top:0;right:-100%;width:60%;height:100%;
+      background:linear-gradient(110deg,transparent 30%,rgba(255,255,255,.05) 50%,transparent 70%);
+      transform:skewX(-20deg);pointer-events:none;
+    }
+    .app-card:hover .shimmer{
+      animation:shimmerSweep .8s ease-out;
+    }
+    @keyframes shimmerSweep{from{right:120%}to{right:-120%}}
 
     .app-icon{
       width:42px;height:42px;flex:0 0 42px;display:grid;place-items:center;border-radius:11px;
       background:color-mix(in srgb,var(--card-color,var(--blue)) 15%,transparent);
       color:var(--card-color,var(--blue));font-size:1rem;
       border:1px solid color-mix(in srgb,var(--card-color,var(--blue)) 25%,transparent);
+      transition:transform .3s var(--ease);
     }
-    .app-icon img{width:24px;height:24px;object-fit:contain}
-    .app-info{min-width:0;flex:1;padding-right:18px}
+    .app-card:hover .app-icon{transform:scale(1.05) rotate(-3deg)}
+    .app-icon img,.app-icon svg{width:22px;height:22px;object-fit:contain}
+    .app-info{min-width:0;flex:1;padding-right:24px}
     .app-name{font:800 .9rem var(--display);line-height:1.3;margin-bottom:6px;overflow-wrap:anywhere}
     .app-description{font-size:.74rem;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-    .app-open{position:absolute;right:12px;bottom:12px;color:var(--dim);font-size:.7rem;padding:5px 8px;border-radius:99px;background:rgba(155,155,155,.04)}
-    .app-card:hover .app-open{color:var(--card-color,var(--blue))}
-    .star{position:absolute;top:10px;right:10px;color:var(--amber);font-size:.65rem}
+    .app-open{position:absolute;right:12px;bottom:12px;color:var(--dim);font-size:.75rem;padding:5px 8px;border-radius:99px;background:rgba(155,155,155,.04);transition:all .2s var(--ease)}
+    .app-card:hover .app-open{color:var(--card-color,var(--blue));transform:translateX(2px)}
+
+    /* ⭐ Favorite pin */
+    .pin-btn{
+      position:absolute;top:10px;right:10px;width:28px;height:28px;border-radius:50%;
+      background:rgba(155,155,155,.06);color:var(--dim);
+      display:flex;align-items:center;justify-content:center;
+      transition:all .2s var(--ease);opacity:0;z-index:2;
+    }
+    .app-card:hover .pin-btn,.pin-btn.pinned{opacity:1}
+    .pin-btn:hover{background:rgba(155,155,155,.12);color:var(--amber)}
+    .pin-btn.pinned{color:var(--amber);background:rgba(245,185,66,.12)}
+
+    /* ⭐ Featured star (admin flag) */
+    .star-badge{
+      position:absolute;top:10px;right:44px;color:var(--amber);font-size:.65rem;
+      padding:2px 6px;border-radius:99px;background:rgba(245,185,66,.12);font-weight:700;
+      display:inline-flex;align-items:center;gap:3px;
+    }
+
+    /* Search highlight */
+    .highlight{background:var(--highlight);color:var(--text);padding:0 2px;border-radius:3px}
+
+    /* View mode variations */
+    [data-view="list"] .apps-grid{grid-template-columns:1fr;gap:6px}
+    [data-view="list"] .app-card{min-height:72px;padding:12px 15px}
+    [data-view="list"] .app-icon{width:36px;height:36px;flex:0 0 36px}
+    [data-view="list"] .app-description{-webkit-line-clamp:1;font-size:.72rem}
+    [data-view="list"] .app-name{margin-bottom:3px}
+
+    [data-view="compact"] .apps-grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px}
+    [data-view="compact"] .app-card{flex-direction:column;align-items:center;text-align:center;min-height:140px;padding:20px 12px}
+    [data-view="compact"] .app-icon{width:56px;height:56px;font-size:1.3rem;margin-bottom:8px}
+    [data-view="compact"] .app-info{padding:0}
+    [data-view="compact"] .app-description{display:none}
+
     .group-public .app-card{--card-color:var(--blue)}
     .group-starred .app-card{--card-color:var(--amber)}
 
@@ -321,7 +458,49 @@
     .kbd-list{display:grid;gap:6px}
     .kbd-row{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border-radius:10px;background:rgba(155,155,155,.03)}
     .kbd-label{font-size:.8rem;color:var(--text-2)}
-    kbd{padding:3px 8px;border-radius:6px;background:rgba(155,155,155,.08);border:1px solid var(--border);font-family:ui-monospace,monospace;font-size:.68rem}
+    kbd{padding:3px 8px;border-radius:6px;background:rgba(155,155,155,.08);border:1px solid var(--border);font-family:var(--mono);font-size:.68rem}
+
+    /* ===== COMMAND PALETTE (NEW) ===== */
+    .cmd-palette{
+      position:fixed;top:15%;left:50%;transform:translateX(-50%) scale(.96);
+      width:min(560px,calc(100% - 32px));z-index:50;
+      background:var(--modal-bg);border:1px solid var(--border-h);
+      border-radius:var(--radius-lg);box-shadow:var(--shadow);
+      opacity:0;visibility:hidden;transition:all .2s var(--ease);
+      overflow:hidden;
+    }
+    .cmd-palette.open{opacity:1;visibility:visible;transform:translateX(-50%) scale(1)}
+    .cmd-search{
+      display:flex;align-items:center;gap:10px;padding:14px 18px;
+      border-bottom:1px solid var(--border);
+    }
+    .cmd-search input{
+      flex:1;background:transparent;border:0;outline:0;
+      color:var(--text);font-size:16px;padding:0;
+    }
+    .cmd-search input::placeholder{color:var(--dim)}
+    .cmd-results{max-height:400px;overflow-y:auto;padding:6px}
+    .cmd-section{padding:8px 10px 4px;font-size:.65rem;color:var(--dim);
+      text-transform:uppercase;letter-spacing:1px;font-weight:800}
+    .cmd-item{
+      display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;
+      cursor:pointer;transition:all .15s var(--ease);font-size:.85rem;
+    }
+    .cmd-item:hover,.cmd-item.active{background:rgba(91,143,255,.12);color:var(--text)}
+    .cmd-item .cmd-icon{
+      width:28px;height:28px;border-radius:7px;
+      background:rgba(155,155,155,.06);
+      display:flex;align-items:center;justify-content:center;color:var(--muted);
+    }
+    .cmd-item.active .cmd-icon{color:var(--blue)}
+    .cmd-item-title{flex:1;min-width:0}
+    .cmd-item-title strong{display:block;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .cmd-item-title small{display:block;font-size:.68rem;color:var(--muted);margin-top:2px}
+    .cmd-item-kbd{font-family:var(--mono);font-size:.68rem;color:var(--dim);
+      padding:2px 6px;background:rgba(155,155,155,.06);border-radius:4px}
+    .cmd-hint{padding:8px 14px;border-top:1px solid var(--border);font-size:.68rem;
+      color:var(--dim);display:flex;justify-content:space-between;align-items:center}
+    .cmd-hint kbd{font-size:.62rem;padding:1px 5px}
 
     /* ===== TOAST ===== */
     .toast{
@@ -330,17 +509,24 @@
       border-radius:14px;background:rgba(24,36,58,.95);backdrop-filter:blur(20px);
       border:1px solid var(--border-h);box-shadow:var(--shadow);font-size:.82rem;
       transition:all .3s var(--ease);display:flex;align-items:center;gap:9px;color:var(--text);
+      overflow:hidden;
     }
     .toast.show{opacity:1;transform:translateY(0);pointer-events:auto}
     .toast.success{border-color:rgba(34,209,122,.45)}
-    .toast.success i{color:var(--green)}
+    .toast.success svg{color:var(--green)}
     .toast.error{border-color:rgba(255,85,114,.5)}
-    .toast.error i{color:var(--red)}
-    .toast.info i{color:var(--blue)}
+    .toast.error svg{color:var(--red)}
+    .toast.info svg{color:var(--blue)}
+    .toast-progress{
+      position:absolute;bottom:0;left:0;height:2px;
+      background:linear-gradient(90deg,var(--blue),var(--violet));
+      animation:toastProgress 3.2s linear forwards;
+    }
+    @keyframes toastProgress{to{width:0}}
 
     /* ===== FOOTER ===== */
     .footer{display:flex;justify-content:space-between;gap:12px;color:var(--dim);font-size:.7rem;margin-top:48px;padding-top:16px;border-top:1px solid var(--border);flex-direction:column;align-items:flex-start}
-    .footer-btn{background:transparent;color:var(--dim);font-size:.7rem;padding:8px;border-radius:6px}
+    .footer-btn{background:transparent;color:var(--dim);font-size:.7rem;padding:8px;border-radius:6px;display:inline-flex;align-items:center;gap:5px}
     .footer-btn:hover{color:var(--text)}
 
     /* ===== ADMIN ===== */
@@ -354,7 +540,7 @@
     .icon-select{display:flex;align-items:center;gap:10px;margin:2px 0 10px;padding:10px;border:1px solid var(--border);border-radius:11px;background:rgba(16,20,26,.3)}
     .selected-icon{width:40px;height:40px;flex:0 0 40px;display:grid;place-items:center;border-radius:10px;background:linear-gradient(135deg,#1a2f5c,#2b4a8a);color:#8db9ff;overflow:hidden}
     .selected-icon[hidden]{display:none}
-    .selected-icon img{width:24px;height:24px;object-fit:contain}
+    .selected-icon img,.selected-icon svg{width:24px;height:24px}
     .icon-select-copy{min-width:0;flex:1}
     .icon-select-copy strong{display:block;font-size:.78rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
     .icon-select-copy span{display:block;color:var(--dim);font-size:.65rem;margin-top:3px}
@@ -366,13 +552,13 @@
     .admin-items,.admin-users{display:flex;flex-direction:column;gap:7px;max-height:none;overflow:visible}
     .admin-item,.admin-user{display:flex;align-items:center;gap:9px;padding:10px;border:1px solid var(--border);border-radius:10px;background:rgba(16,20,26,.3)}
     .admin-item-icon{width:32px;height:32px;flex:0 0 32px;border-radius:8px;display:grid;place-items:center;background:linear-gradient(135deg,#1a2f5c,#2b4a8a);color:#8db9ff;overflow:hidden}
-    .admin-item-icon img{width:20px;height:20px;object-fit:contain}
+    .admin-item-icon img,.admin-item-icon svg{width:20px;height:20px}
     .admin-item-info,.admin-user-info{min-width:0;flex:1}
     .admin-item-name,.admin-user-name{font-weight:700;font-size:.76rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .admin-item-meta,.admin-user-email{color:var(--dim);font-size:.64rem;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .admin-item-actions{display:flex;gap:4px}
     .admin-user-controls{display:flex;align-items:center;gap:6px}
-    .icon-btn{width:36px;height:36px;border:1px solid #29313b;border-radius:8px;background:transparent;color:var(--muted);font-size:.72rem;display:flex;align-items:center;justify-content:center}
+    .icon-btn{width:36px;height:36px;border:1px solid #29313b;border-radius:8px;background:transparent;color:var(--muted);font-size:.72rem;display:flex;align-items:center;justify-content:center;transition:all .2s var(--ease)}
     .icon-btn:hover:not(:disabled){color:var(--text);border-color:var(--blue)}
     .icon-btn:disabled{opacity:.3}
     .icon-btn.danger:hover:not(:disabled){color:#ff7c91;border-color:var(--red)}
@@ -382,7 +568,8 @@
     /* ===== LOGO PICKER ===== */
     .logo-search{margin-bottom:12px}
     .logo-results{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;max-height:none;overflow:visible}
-    .logo-result{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:88px;padding:10px 6px;border:1px solid var(--border);border-radius:10px;background:rgba(16,20,26,.3);color:var(--muted)}
+    .logo-result{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;min-height:88px;padding:10px 6px;border:1px solid var(--border);border-radius:10px;background:rgba(16,20,26,.3);color:var(--muted);transition:all .2s var(--ease)}
+    .logo-result:hover{background:rgba(91,143,255,.1);border-color:var(--blue);color:var(--text)}
     .logo-result img{width:30px;height:30px;object-fit:contain}
     .logo-result span{width:100%;font-size:.65rem;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
@@ -398,29 +585,44 @@
     .skeleton-card{height:110px;border-radius:var(--radius);border:1px solid var(--border)}
     .skeleton-grid{display:grid;gap:10px}
 
-    /* ===== TABLET ===== */
+    /* ===== INSTALL PROMPT ===== */
+    .install-bar{
+      position:fixed;bottom:calc(20px + env(safe-area-inset-bottom));left:16px;right:16px;
+      padding:12px 16px;border-radius:14px;z-index:35;
+      background:linear-gradient(135deg,rgba(91,143,255,.95),rgba(139,108,240,.95));
+      color:#fff;display:flex;align-items:center;gap:12px;
+      transform:translateY(100px);opacity:0;visibility:hidden;
+      transition:all .4s var(--ease-spring);
+      box-shadow:0 15px 40px rgba(91,143,255,.3);
+    }
+    .install-bar.show{transform:translateY(0);opacity:1;visibility:visible}
+    .install-bar-copy{flex:1;min-width:0;font-size:.82rem;font-weight:600}
+    .install-bar small{display:block;font-size:.68rem;font-weight:400;opacity:.85;margin-top:2px}
+    .install-bar .btn{background:rgba(255,255,255,.2);color:#fff;min-height:36px;padding:0 14px;font-size:.75rem}
+    .install-bar .btn:hover{background:rgba(255,255,255,.3)}
+
+    /* ===== RESPONSIVE ===== */
     @media(min-width:761px){
       .topbar{flex-direction:row;align-items:center;height:62px;padding:7px 9px 7px 11px;gap:18px}
       .topbar-main{width:auto;flex:1}
       .brand-sub{display:block}
       .topnav{width:auto;margin-left:auto;overflow-x:visible;padding-bottom:0}
       .apps-grid{grid-template-columns:repeat(2,1fr)}
-      .toolbar{align-items:center}
+      .toolbar{align-items:center;flex-wrap:nowrap}
       .updated-at{display:inline;color:var(--dim);font-size:.7rem;white-space:nowrap}
       .footer{flex-direction:row;align-items:center}
     }
 
-    /* ===== DESKTOP ===== */
     @media(min-width:1024px){
       .shell{padding:18px 28px 44px}
-      .apps-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+      .apps-grid{grid-template-columns:repeat(auto-fill,minmax(260px,1fr))}
       .modal-backdrop{align-items:center;padding:20px}
-      .modal{max-width:420px;border-radius:var(--radius-lg);transform:translateY(20px) scale(.96)}
+      .modal{max-width:440px;border-radius:var(--radius-lg);transform:translateY(20px) scale(.96)}
       .modal-backdrop.open .modal{transform:translateY(0) scale(1)}
       .modal.account-wide{max-width:520px}
       .modal.admin-wide{max-width:920px}
       .modal.picker-wide{max-width:780px}
-      .modal.wide{max-width:560px}
+      .modal.wide{max-width:580px}
       .modal_handle{display:none}
       .modal{padding:28px}
       .admin-layout{grid-template-columns:minmax(240px,.8fr) minmax(340px,1.2fr)}
@@ -437,32 +639,88 @@
   </style>
 </head>
 <body>
+  <!-- ===== SVG SPRITE (inline, replaces Font Awesome) ===== -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <symbol id="i-table-cells" viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h7v7H4V4zm9 0h7v7h-7V4zM4 13h7v7H4v-7zm9 0h7v7h-7v-7z"/></symbol>
+      <symbol id="i-house" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3L2 12h3v8h5v-6h4v6h5v-8h3L12 3z"/></symbol>
+      <symbol id="i-circle-user" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></symbol>
+      <symbol id="i-sliders" viewBox="0 0 24 24"><path fill="currentColor" d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-2-4h2V7h4V5h-4V3h-2v6z"/></symbol>
+      <symbol id="i-gear" viewBox="0 0 24 24"><path fill="currentColor" d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94 0 .31.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></symbol>
+      <symbol id="i-arrow-right-to-bracket" viewBox="0 0 24 24"><path fill="currentColor" d="M15 7l5 5-5 5V14H9v-4h6V7zm5-5h-4V0h6v6h-2V2zM2 2v20h14v-2H4V4h10V2H2zm17 18h2v2h-2v-2z"/></symbol>
+      <symbol id="i-right-from-bracket" viewBox="0 0 24 24"><path fill="currentColor" d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5-5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/></symbol>
+      <symbol id="i-magnifying-glass" viewBox="0 0 24 24"><path fill="currentColor" d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></symbol>
+      <symbol id="i-rotate-right" viewBox="0 0 24 24"><path fill="currentColor" d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></symbol>
+      <symbol id="i-circle-check" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></symbol>
+      <symbol id="i-circle-exclamation" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></symbol>
+      <symbol id="i-circle-info" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></symbol>
+      <symbol id="i-triangle-exclamation" viewBox="0 0 24 24"><path fill="currentColor" d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></symbol>
+      <symbol id="i-xmark" viewBox="0 0 24 24"><path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path fill="currentColor" d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path fill="currentColor" d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></symbol>
+      <symbol id="i-pen" viewBox="0 0 24 24"><path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 0 0-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></symbol>
+      <symbol id="i-trash" viewBox="0 0 24 24"><path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></symbol>
+      <symbol id="i-chevron-up" viewBox="0 0 24 24"><path fill="currentColor" d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/></symbol>
+      <symbol id="i-chevron-down" viewBox="0 0 24 24"><path fill="currentColor" d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/></symbol>
+      <symbol id="i-chevron-right" viewBox="0 0 24 24"><path fill="currentColor" d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></symbol>
+      <symbol id="i-shapes" viewBox="0 0 24 24"><path fill="currentColor" d="M9 9.66V3h6v6.66L18 12H6l3-2.34zM17 13v9H7v-9h10zm-2 2H9v5h6v-5z"/></symbol>
+      <symbol id="i-sparkles" viewBox="0 0 24 24"><path fill="currentColor" d="M9.5 2L11 6.5 15.5 8 11 9.5 9.5 14 8 9.5 3.5 8 8 6.5zM19 6l1 2.5L22.5 9.5 20 11l-1 2.5L18 11l-2.5-1.5L18 8.5z"/></symbol>
+      <symbol id="i-sun" viewBox="0 0 24 24"><path fill="currentColor" d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.79 1.42-1.41zM4 10.5H1v2h3v-2zm9-9.95h-2V3.5h2V.55zm7.45 3.91l-1.41-1.41-1.79 1.79 1.41 1.41 1.79-1.79zm-3.21 13.7l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM20 10.5v2h3v-2h-3zm-8-5c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm-1 16.95h2V19.5h-2v2.95zm-7.45-3.91l1.41 1.41 1.79-1.8-1.41-1.41-1.79 1.8z"/></symbol>
+      <symbol id="i-moon" viewBox="0 0 24 24"><path fill="currentColor" d="M9.5 2c-1.82 0-3.53.5-5 1.35 2.99 1.73 5 4.95 5 8.65s-2.01 6.92-5 8.65c1.47.85 3.18 1.35 5 1.35 5.52 0 10-4.48 10-10S15.02 2 9.5 2z"/></symbol>
+      <symbol id="i-circle-half-stroke" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10V2z"/></symbol>
+      <symbol id="i-language" viewBox="0 0 24 24"><path fill="currentColor" d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zm6.93 6h-2.95c-.32-1.25-.78-2.45-1.38-3.56 1.84.63 3.37 1.91 4.33 3.56zM12 4.04c.83 1.2 1.48 2.53 1.91 3.96h-3.82c.43-1.43 1.08-2.76 1.91-3.96zM4.26 14C4.1 13.36 4 12.69 4 12s.1-1.36.26-2h3.38c-.08.66-.14 1.32-.14 2 0 .68.06 1.34.14 2H4.26zm.82 2h2.95c.32 1.25.78 2.45 1.38 3.56-1.84-.63-3.37-1.9-4.33-3.56zm2.95-8H5.08c.96-1.66 2.49-2.93 4.33-3.56C8.81 5.55 8.35 6.75 8.03 8zM12 19.96c-.83-1.2-1.48-2.53-1.91-3.96h3.82c-.43 1.43-1.08 2.76-1.91 3.96zM14.34 14H9.66c-.09-.66-.16-1.32-.16-2 0-.68.07-1.35.16-2h4.68c.09.65.16 1.32.16 2 0 .68-.07 1.34-.16 2zm.25 5.56c.6-1.11 1.06-2.31 1.38-3.56h2.95c-.96 1.65-2.49 2.93-4.33 3.56zM16.36 14c.08-.66.14-1.32.14-2 0-.68-.06-1.34-.14-2h3.38c.16.64.26 1.31.26 2s-.1 1.36-.26 2h-3.38z"/></symbol>
+      <symbol id="i-keyboard" viewBox="0 0 24 24"><path fill="currentColor" d="M20 5H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-9 3h2v2h-2V8zm0 3h2v2h-2v-2zM8 8h2v2H8V8zm0 3h2v2H8v-2zm-1 2H5v-2h2v2zm0-3H5V8h2v2zm9 7H8v-2h8v2zm0-4h-2v-2h2v2zm0-3h-2V8h2v2zm3 3h-2v-2h2v2zm0-3h-2V8h2v2z"/></symbol>
+      <symbol id="i-layer-group" viewBox="0 0 24 24"><path fill="currentColor" d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/></symbol>
+      <symbol id="i-arrow-up-right-from-square" viewBox="0 0 24 24"><path fill="currentColor" d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></symbol>
+      <symbol id="i-circle-notch" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm-6 4c.22-.72 3.31-2 6-2 2.7 0 5.8 1.29 6 2H6z"/></symbol>
+      <symbol id="i-star" viewBox="0 0 24 24"><path fill="currentColor" d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></symbol>
+      <symbol id="i-star-outline" viewBox="0 0 24 24"><path fill="currentColor" d="M22 9.24l-7.19-.62L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21 12 17.27 18.18 21l-1.63-7.03L22 9.24zM12 15.4l-3.76 2.27 1-4.28-3.32-2.88 4.38-.38L12 6.1l1.71 4.04 4.38.38-3.32 2.88 1 4.28L12 15.4z"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path fill="currentColor" d="M16 9V4h1c.55 0 1-.45 1-1s-.45-1-1-1H7c-.55 0-1 .45-1 1s.45 1 1 1h1v5c0 1.66-1.34 3-3 3v2h5.97v7l1 1 1-1v-7H19v-2c-1.66 0-3-1.34-3-3z"/></symbol>
+      <symbol id="i-command" viewBox="0 0 24 24"><path fill="currentColor" d="M7.5 21H6c-2.21 0-4-1.79-4-4v-1.5c0-1.93 1.57-3.5 3.5-3.5H7V15H5.5c-.83 0-1.5.67-1.5 1.5V18c0 1.1.9 2 2 2h1.5c.83 0 1.5-.67 1.5-1.5v-13c0-.83-.67-1.5-1.5-1.5H6c-1.1 0-2 .9-2 2v1.5C4 8.43 2.43 10 .5 10H3v3H.5C2.43 13 4 14.57 4 16.5V18c0 2.21 1.79 4 4 4h1.5c.83 0 1.5-.67 1.5-1.5V19H8v1.5c0 .83-.67 1.5-1.5 1.5zM18 3h-1.5c-.83 0-1.5.67-1.5 1.5V5h3V3.5c0-.83-.67-1.5-1.5-1.5z"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path fill="currentColor" d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></symbol>
+      <symbol id="i-table-cells-large" viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h16v16H4V4zm2 2v5h5V6H6zm7 0v5h5V6h-5zM6 13v5h5v-5H6zm7 0v5h5v-5h-5z"/></symbol>
+      <symbol id="i-users" viewBox="0 0 24 24"><path fill="currentColor" d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></symbol>
+      <symbol id="i-shield-halved" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z"/></symbol>
+      <symbol id="i-cube" viewBox="0 0 24 24"><path fill="currentColor" d="M21 16.5c0 .38-.21.71-.53.88l-7.9 4.44c-.36.2-.8.2-1.14 0l-7.9-4.44C3.21 17.21 3 16.88 3 16.5v-9c0-.38.21-.71.53-.88l7.9-4.44c.36-.2.8-.2 1.14 0l7.9 4.44c.32.17.53.5.53.88v9z"/></symbol>
+      <symbol id="i-grip" viewBox="0 0 24 24"><path fill="currentColor" d="M3 3v8h8V3H3zm6 6H5V5h4v4zm-6 4v8h8v-8H3zm6 6H5v-4h4v4zm4-16v8h8V3h-8zm6 6h-4V5h4v4zm-6 4v8h8v-8h-8zm6 6h-4v-4h4v4z"/></symbol>
+      <symbol id="i-list" viewBox="0 0 24 24"><path fill="currentColor" d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></symbol>
+    </defs>
+  </svg>
+
   <main class="shell">
     <header class="topbar">
       <div class="topbar-main">
         <a class="brand" href="./" aria-label="Koo Mean Portal">
-          <span class="brand-mark"><i class="fas fa-table-cells"></i></span>
+          <span class="brand-mark"><svg class="icon"><use href="#i-table-cells"/></svg></span>
           <span class="brand-copy">
             <span class="brand-title" data-i18n="brand_title">Koo Mean Portal</span>
             <span class="brand-sub" data-i18n="brand_sub">Application space</span>
           </span>
         </a>
         <div class="user-area">
-          <button class="nav-icon-btn" id="nav-settings" type="button" title="Settings" aria-label="Settings"><i class="fas fa-gear"></i></button>
+          <button class="nav-icon-btn" id="nav-command" type="button" title="Command (Ctrl/⌘+K)" aria-label="Command">
+            <svg class="icon"><use href="#i-command"/></svg>
+          </button>
+          <button class="nav-icon-btn" id="nav-settings" type="button" title="Settings" aria-label="Settings">
+            <svg class="icon"><use href="#i-gear"/></svg>
+          </button>
           <div class="user-chip" id="user-chip"><img id="user-avatar" alt=""><span class="user-name" id="user-name"></span></div>
-          <button class="btn btn-primary" id="auth-btn" type="button"><i class="fas fa-arrow-right-to-bracket"></i> <span data-i18n="btn_login">เข้าสู่ระบบ</span></button>
+          <button class="btn btn-primary" id="auth-btn" type="button">
+            <svg class="icon"><use href="#i-arrow-right-to-bracket"/></svg>
+            <span data-i18n="btn_login">เข้าสู่ระบบ</span>
+          </button>
         </div>
       </div>
       <nav class="topnav" aria-label="Main menu">
-        <a class="nav-link active" id="nav-home" href="#home"><i class="fas fa-house"></i><span data-i18n="nav_home">หน้าแรก</span></a>
-        <button class="nav-link" id="nav-account" type="button"><i class="fas fa-circle-user"></i><span data-i18n="nav_account">บัญชี</span></button>
-        <button class="nav-link" id="nav-admin" type="button" hidden><i class="fas fa-sliders"></i><span data-i18n="nav_admin">จัดการระบบ</span></button>
+        <a class="nav-link active" id="nav-home" href="#home"><svg class="icon"><use href="#i-house"/></svg><span data-i18n="nav_home">หน้าแรก</span></a>
+        <button class="nav-link" id="nav-account" type="button"><svg class="icon"><use href="#i-circle-user"/></svg><span data-i18n="nav_account">บัญชี</span></button>
+        <button class="nav-link" id="nav-admin" type="button" hidden><svg class="icon"><use href="#i-sliders"/></svg><span data-i18n="nav_admin">จัดการระบบ</span></button>
       </nav>
     </header>
 
     <section class="hero" id="home">
       <div>
-        <div class="eyebrow"><i class="fas fa-sparkles"></i><span id="eyebrow-text" data-i18n="hero_eyebrow">Your application hub</span></div>
+        <div class="eyebrow"><svg class="icon"><use href="#i-sparkles"/></svg><span id="eyebrow-text" data-i18n="hero_eyebrow">Your application hub</span></div>
         <h1 id="hero-title">
           <span class="hero-line" data-i18n="hero_line1">รวมทุกแอป</span>
           <span class="hero-line hero-line-accent" data-i18n="hero_line2">ไว้ในที่เดียว</span>
@@ -473,14 +731,30 @@
 
     <section id="applications-section" aria-label="Application list">
       <div class="toolbar">
-        <label class="search"><input id="search" type="search" data-i18n-placeholder="search_placeholder" placeholder="ค้นหาแอปพลิเคชัน..." autocomplete="off"><i class="fas fa-magnifying-glass"></i></label>
-        <select class="filter" id="group-filter" aria-label="Filter by group"><option value="all" data-i18n="filter_all">ทุกกลุ่ม</option></select>
-        <button class="refresh-btn" id="refresh-btn" type="button" title="Refresh" aria-label="Refresh"><i class="fas fa-rotate-right"></i></button>
+        <label class="search">
+          <input id="search" type="search" data-i18n-placeholder="search_placeholder" placeholder="ค้นหาแอปพลิเคชัน..." autocomplete="off">
+          <svg class="icon"><use href="#i-magnifying-glass"/></svg>
+          <span class="search-kbd">/</span>
+        </label>
+        <select class="filter" id="group-filter" aria-label="Filter by group">
+          <option value="all" data-i18n="filter_all">ทุกกลุ่ม</option>
+        </select>
+        <div class="view-switcher" role="tablist" aria-label="View mode">
+          <button class="view-btn active" type="button" data-view="grid" title="Grid"><svg class="icon"><use href="#i-grip"/></svg></button>
+          <button class="view-btn" type="button" data-view="list" title="List"><svg class="icon"><use href="#i-list"/></svg></button>
+          <button class="view-btn" type="button" data-view="compact" title="Compact"><svg class="icon"><use href="#i-table-cells"/></svg></button>
+        </div>
+        <button class="refresh-btn" id="refresh-btn" type="button" title="Refresh (R)" aria-label="Refresh">
+          <svg class="icon"><use href="#i-rotate-right"/></svg>
+        </button>
         <span class="updated-at" id="updated-at" aria-live="polite"></span>
       </div>
       <div class="stats">
         <span><strong id="app-count">—</strong> <span data-i18n="apps_available">แอปที่พร้อมใช้งาน</span></span>
-        <span class="status connecting" id="connection-status"><i class="status-dot"></i><span id="status-text" data-i18n="status_connecting">กำลังเชื่อมต่อ</span></span>
+        <span class="status connecting" id="connection-status">
+          <i class="status-dot"></i>
+          <span id="status-text" data-i18n="status_connecting">กำลังเชื่อมต่อ</span>
+        </span>
       </div>
       <div id="applications">
         <div class="skeleton-grid">
@@ -495,7 +769,9 @@
       <span id="footer-title">Koo Mean Portal</span>
       <span>
         <span data-i18n="footer_info">ข้อมูลและสิทธิ์การเข้าถึงจัดการจากระบบส่วนกลาง</span>
-        · <button class="footer-btn" id="footer-help" type="button" data-i18n="footer_help">ช่วยเหลือ</button>
+        · <button class="footer-btn" id="footer-help" type="button" data-i18n="footer_help">
+          <svg class="icon"><use href="#i-circle-info"/></svg> ช่วยเหลือ
+        </button>
       </span>
     </footer>
   </main>
@@ -505,12 +781,21 @@
     <div class="modal">
       <div class="modal-handle" aria-hidden="true"></div>
       <div class="modal-head">
-        <div><h2 id="login-title" data-i18n="login_title">เข้าสู่ระบบ</h2><p data-i18n="login_desc">ใช้ Google Account เพื่อดูแอปที่คุณมีสิทธิ์ใช้งาน</p></div>
-        <button class="close" type="button" data-close="login-modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        <div>
+          <h2 id="login-title" data-i18n="login_title">เข้าสู่ระบบ</h2>
+          <p data-i18n="login_desc">ใช้ Google Account เพื่อดูแอปที่คุณมีสิทธิ์ใช้งาน</p>
+        </div>
+        <button class="close" type="button" data-close="login-modal" aria-label="Close">
+          <svg class="icon"><use href="#i-xmark"/></svg>
+        </button>
       </div>
-      <div class="google-wrap" style="min-height:44px;display:flex;justify-content:center;padding:8px 0"><div id="g_id_onload"></div><div class="g_id_signin"></div></div>
+      <div class="google-wrap" style="min-height:44px;display:flex;justify-content:center;padding:8px 0">
+        <div id="g_id_onload"></div>
+        <div class="g_id_signin"></div>
+      </div>
       <p style="color:var(--dim);font-size:.72rem;line-height:1.6;text-align:center;margin-top:16px;padding:12px;background:rgba(155,155,155,.02);border-radius:10px;border:1px dashed var(--border)">
-        <i class="fas fa-shield-halved" style="color:var(--blue);margin-right:6px"></i><span data-i18n="login_help">การเข้าสู่ระบบจะใช้ token ที่ตรวจสอบโดย backend เดิม ไม่มีการเก็บรหัสผ่านไว้ในเว็บนี้</span>
+        <svg class="icon" style="color:var(--blue);margin-right:6px;vertical-align:middle"><use href="#i-shield-halved"/></svg>
+        <span data-i18n="login_help">การเข้าสู่ระบบจะใช้ token ที่ตรวจสอบโดย backend เดิม ไม่มีการเก็บรหัสผ่านไว้ในเว็บนี้</span>
       </p>
     </div>
   </div>
@@ -520,12 +805,20 @@
     <div class="modal">
       <div class="modal-handle" aria-hidden="true"></div>
       <div class="modal-head">
-        <div><h2 id="register-title" data-i18n="register_title">ขอลงทะเบียน</h2><p data-i18n="register_desc">บัญชีนี้ยังไม่อยู่ในระบบ กรุณาแจ้งข้อมูลสั้น ๆ เพื่อส่งคำขอ</p></div>
-        <button class="close" type="button" data-close="register-modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        <div>
+          <h2 id="register-title" data-i18n="register_title">ขอลงทะเบียน</h2>
+          <p data-i18n="register_desc">บัญชีนี้ยังไม่อยู่ในระบบ กรุณาแจ้งข้อมูลสั้น ๆ เพื่อส่งคำขอ</p>
+        </div>
+        <button class="close" type="button" data-close="register-modal" aria-label="Close">
+          <svg class="icon"><use href="#i-xmark"/></svg>
+        </button>
       </div>
       <label class="field-label" for="register-note" data-i18n="register_note_label">ข้อมูลเพิ่มเติม (ไม่บังคับ)</label>
       <textarea class="field" id="register-note" rows="4" maxlength="500" data-i18n-placeholder="register_note_placeholder" placeholder="เช่น ทีม / หน้าที่ / แอปที่ต้องการใช้งาน"></textarea>
-      <div class="modal-actions"><button class="btn btn-ghost" type="button" data-close="register-modal" data-i18n="btn_cancel">ยกเลิก</button><button class="btn btn-primary" id="register-btn" type="button" data-i18n="btn_submit_request">ส่งคำขอ</button></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" type="button" data-close="register-modal" data-i18n="btn_cancel">ยกเลิก</button>
+        <button class="btn btn-primary" id="register-btn" type="button" data-i18n="btn_submit_request">ส่งคำขอ</button>
+      </div>
     </div>
   </div>
 
@@ -534,16 +827,38 @@
     <div class="modal account-wide">
       <div class="modal-handle" aria-hidden="true"></div>
       <div class="modal-head">
-        <div><h2 id="account-title" data-i18n="account_title">บัญชีของคุณ</h2><p data-i18n="account_desc">จัดการข้อมูลบัญชีที่ใช้เชื่อมต่อกับ Portal</p></div>
-        <button class="close" type="button" data-close="account-modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        <div>
+          <h2 id="account-title" data-i18n="account_title">บัญชีของคุณ</h2>
+          <p data-i18n="account_desc">จัดการข้อมูลบัญชีที่ใช้เชื่อมต่อกับ Portal</p>
+        </div>
+        <button class="close" type="button" data-close="account-modal" aria-label="Close">
+          <svg class="icon"><use href="#i-xmark"/></svg>
+        </button>
       </div>
-      <div class="user-detail"><img id="account-avatar" alt=""><div><strong id="account-name"></strong><span id="account-email"></span><span class="role-badge" id="account-role"></span></div></div>
+      <div class="user-detail">
+        <img id="account-avatar" alt="">
+        <div>
+          <strong id="account-name"></strong>
+          <span id="account-email"></span>
+          <span class="role-badge" id="account-role"></span>
+        </div>
+      </div>
       <div class="account-section">
         <div class="account-section-title" data-i18n="display_name_title">ชื่อที่แสดง</div>
         <p class="account-section-copy" data-i18n="display_name_desc">ชื่อใหม่นี้จะถูกบันทึกในบัญชีส่วนกลาง และใช้แสดงในเว็บที่เชื่อมต่อกับระบบ</p>
-        <div class="name-row"><input class="field" id="new-name" type="text" maxlength="50" autocomplete="name" data-i18n-placeholder="display_name_placeholder" placeholder="กรอกชื่อที่ต้องการแสดง"><button class="btn btn-primary" id="save-name-btn" type="button"><i class="fas fa-check"></i> <span data-i18n="btn_save">บันทึก</span></button></div>
+        <div class="name-row">
+          <input class="field" id="new-name" type="text" maxlength="50" autocomplete="name" data-i18n-placeholder="display_name_placeholder" placeholder="กรอกชื่อที่ต้องการแสดง">
+          <button class="btn btn-primary" id="save-name-btn" type="button">
+            <svg class="icon"><use href="#i-check"/></svg> <span data-i18n="btn_save">บันทึก</span>
+          </button>
+        </div>
       </div>
-      <div class="account-section"><button class="btn btn-ghost" id="logout-btn" type="button" style="width:100%;min-height:46px"><i class="fas fa-right-from-bracket"></i> <span data-i18n="btn_logout">ออกจากระบบ</span></button></div>
+      <div class="account-section">
+        <button class="btn btn-ghost" id="logout-btn" type="button" style="width:100%;min-height:46px">
+          <svg class="icon"><use href="#i-right-from-bracket"/></svg>
+          <span data-i18n="btn_logout">ออกจากระบบ</span>
+        </button>
+      </div>
     </div>
   </div>
 
@@ -552,12 +867,21 @@
     <div class="modal admin-wide">
       <div class="modal-handle" aria-hidden="true"></div>
       <div class="modal-head">
-        <div><h2 id="admin-title" data-i18n="admin_title">จัดการระบบ</h2><p id="admin-subtitle" data-i18n="admin_subtitle_apps">เพิ่ม แก้ไข และจัดลำดับรายการจาก Application Sheet</p></div>
-        <button class="close" type="button" data-close="admin-modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        <div>
+          <h2 id="admin-title" data-i18n="admin_title">จัดการระบบ</h2>
+          <p id="admin-subtitle" data-i18n="admin_subtitle_apps">เพิ่ม แก้ไข และจัดลำดับรายการจาก Application Sheet</p>
+        </div>
+        <button class="close" type="button" data-close="admin-modal" aria-label="Close">
+          <svg class="icon"><use href="#i-xmark"/></svg>
+        </button>
       </div>
       <div class="admin-tabs">
-        <button class="admin-tab-btn active" id="admin-apps-tab-btn" type="button"><i class="fas fa-table-cells-large"></i> <span data-i18n="admin_tab_apps">แอปพลิเคชัน</span></button>
-        <button class="admin-tab-btn" id="admin-users-tab-btn" type="button"><i class="fas fa-users"></i> <span data-i18n="admin_tab_users">ผู้ใช้</span></button>
+        <button class="admin-tab-btn active" id="admin-apps-tab-btn" type="button">
+          <svg class="icon"><use href="#i-table-cells-large"/></svg> <span data-i18n="admin_tab_apps">แอปพลิเคชัน</span>
+        </button>
+        <button class="admin-tab-btn" id="admin-users-tab-btn" type="button">
+          <svg class="icon"><use href="#i-users"/></svg> <span data-i18n="admin_tab_users">ผู้ใช้</span>
+        </button>
       </div>
       <div id="admin-apps-tab" class="admin-tab-pane">
         <div class="admin-layout">
@@ -565,21 +889,58 @@
             <div class="admin-panel-title" id="admin-form-title" data-i18n="admin_add_app">เพิ่มแอปพลิเคชัน</div>
             <p class="admin-panel-copy" data-i18n="admin_form_help">ไอคอนจาก theSVG จะบันทึกเป็นชื่อ slug และระบบจะตรวจสอบ URL ซ้ำก่อนบันทึก</p>
             <div class="admin-form-grid">
-              <div><label class="field-label" for="admin-name" data-i18n="field_app_name">ชื่อแอป</label><input class="field" id="admin-name" maxlength="100" placeholder="เช่น Dashboard"></div>
-              <div><label class="field-label" for="admin-url">URL</label><input class="field" id="admin-url" type="url" maxlength="500" placeholder="https://..."></div>
-              <div class="full"><label class="field-label" for="admin-description" data-i18n="field_description">คำอธิบาย</label><textarea class="field" id="admin-description" rows="3" maxlength="300" data-i18n-placeholder="field_desc_placeholder" placeholder="อธิบายสั้น ๆ"></textarea></div>
-              <div><label class="field-label" for="admin-group" data-i18n="field_group">กลุ่ม / Role</label><input class="field" id="admin-group" maxlength="50" placeholder="public หรือ admin"></div>
-              <div><label class="field-label" for="admin-color" data-i18n="field_color">สี (ไม่บังคับ)</label><input class="field" id="admin-color" maxlength="9" placeholder="#4b8fff"></div>
-              <label class="field-label" style="display:flex;align-items:center;gap:8px;padding:11px 0 0;cursor:pointer"><input id="admin-starred" type="checkbox" style="accent-color:var(--blue);width:18px;height:18px"> <span data-i18n="field_featured">แนะนำแอปนี้</span></label>
+              <div>
+                <label class="field-label" for="admin-name" data-i18n="field_app_name">ชื่อแอป</label>
+                <input class="field" id="admin-name" maxlength="100" placeholder="เช่น Dashboard">
+              </div>
+              <div>
+                <label class="field-label" for="admin-url">URL</label>
+                <input class="field" id="admin-url" type="url" maxlength="500" placeholder="https://...">
+              </div>
+              <div class="full">
+                <label class="field-label" for="admin-description" data-i18n="field_description">คำอธิบาย</label>
+                <textarea class="field" id="admin-description" rows="3" maxlength="300" data-i18n-placeholder="field_desc_placeholder" placeholder="อธิบายสั้น ๆ"></textarea>
+              </div>
+              <div>
+                <label class="field-label" for="admin-group" data-i18n="field_group">กลุ่ม / Role</label>
+                <input class="field" id="admin-group" maxlength="50" placeholder="public หรือ admin">
+              </div>
+              <div>
+                <label class="field-label" for="admin-color" data-i18n="field_color">สี (ไม่บังคับ)</label>
+                <input class="field" id="admin-color" maxlength="9" placeholder="#4b8fff">
+              </div>
+              <label class="field-label" style="display:flex;align-items:center;gap:8px;padding:11px 0 0;cursor:pointer">
+                <input id="admin-starred" type="checkbox" style="accent-color:var(--blue);width:18px;height:18px">
+                <span data-i18n="field_featured">แนะนำแอปนี้</span>
+              </label>
             </div>
-            <div class="icon-select"><div class="selected-icon" id="admin-icon-preview" hidden></div><div class="icon-select-copy"><strong id="admin-icon-name" data-i18n="icon_not_selected">ยังไม่ได้เลือกไอคอน</strong><span id="admin-icon-value">—</span></div><button class="btn btn-ghost" id="choose-logo-btn" type="button" style="padding:8px 10px;font-size:.72rem"><i class="fas fa-shapes"></i> <span data-i18n="btn_choose_logo">เลือกโลโก้</span></button></div>
-            <div class="manual-icon"><input class="field" id="admin-icon-manual" maxlength="31" placeholder="หรือกรอก theSVG slug เช่น github"><button class="btn btn-ghost" id="use-icon-btn" type="button" data-i18n="btn_use_slug">ใช้ slug</button></div>
-            <div class="admin-form-actions"><button class="btn btn-primary" id="admin-submit-btn" type="button"><i class="fas fa-plus"></i> <span data-i18n="btn_add_app">เพิ่มแอป</span></button><button class="btn btn-ghost" id="admin-cancel-btn" type="button" hidden data-i18n="btn_cancel_edit">ยกเลิกแก้ไข</button></div>
+            <div class="icon-select">
+              <div class="selected-icon" id="admin-icon-preview" hidden></div>
+              <div class="icon-select-copy">
+                <strong id="admin-icon-name" data-i18n="icon_not_selected">ยังไม่ได้เลือกไอคอน</strong>
+                <span id="admin-icon-value">—</span>
+              </div>
+              <button class="btn btn-ghost" id="choose-logo-btn" type="button" style="padding:8px 10px;font-size:.72rem">
+                <svg class="icon"><use href="#i-shapes"/></svg> <span data-i18n="btn_choose_logo">เลือกโลโก้</span>
+              </button>
+            </div>
+            <div class="manual-icon">
+              <input class="field" id="admin-icon-manual" maxlength="31" placeholder="หรือกรอก theSVG slug เช่น github">
+              <button class="btn btn-ghost" id="use-icon-btn" type="button" data-i18n="btn_use_slug">ใช้ slug</button>
+            </div>
+            <div class="admin-form-actions">
+              <button class="btn btn-primary" id="admin-submit-btn" type="button">
+                <svg class="icon"><use href="#i-plus"/></svg> <span data-i18n="btn_add_app">เพิ่มแอป</span>
+              </button>
+              <button class="btn btn-ghost" id="admin-cancel-btn" type="button" hidden data-i18n="btn_cancel_edit">ยกเลิกแก้ไข</button>
+            </div>
           </section>
           <section class="admin-panel">
             <div class="admin-panel-title" data-i18n="admin_order_title">ลำดับแอป</div>
             <p class="admin-panel-copy" data-i18n="admin_order_help">ใช้ลูกศรขึ้นลงเพื่อกำหนดว่าแอปใดจะแสดงก่อนหลัง</p>
-            <div class="admin-items" id="admin-items"><div class="empty" style="padding:28px 10px"><p data-i18n="empty_no_data">ยังไม่มีข้อมูล</p></div></div>
+            <div class="admin-items" id="admin-items">
+              <div class="empty" style="padding:28px 10px"><p data-i18n="empty_no_data">ยังไม่มีข้อมูล</p></div>
+            </div>
           </section>
         </div>
       </div>
@@ -587,8 +948,13 @@
         <div class="admin-panel">
           <div class="admin-panel-title" data-i18n="admin_users_title">ผู้ใช้งานทั้งหมด</div>
           <p class="admin-panel-copy" data-i18n="admin_users_help">กำหนด Role เพื่อควบคุมสิทธิ์การเข้าถึงข้อมูลและฟังก์ชันในระบบ</p>
-          <label class="search user-search"><input id="admin-user-search" type="search" data-i18n-placeholder="search_users_placeholder" placeholder="ค้นหาชื่อหรืออีเมล..." autocomplete="off"><i class="fas fa-magnifying-glass"></i></label>
-          <div class="admin-users" id="admin-users"><div class="empty" style="padding:28px 10px"><p data-i18n="empty_no_data">ยังไม่มีข้อมูล</p></div></div>
+          <label class="search user-search">
+            <input id="admin-user-search" type="search" data-i18n-placeholder="search_users_placeholder" placeholder="ค้นหาชื่อหรืออีเมล..." autocomplete="off">
+            <svg class="icon"><use href="#i-magnifying-glass"/></svg>
+          </label>
+          <div class="admin-users" id="admin-users">
+            <div class="empty" style="padding:28px 10px"><p data-i18n="empty_no_data">ยังไม่มีข้อมูล</p></div>
+          </div>
         </div>
       </div>
     </div>
@@ -599,12 +965,29 @@
     <div class="modal picker-wide">
       <div class="modal-handle" aria-hidden="true"></div>
       <div class="modal-head">
-        <div><h2 id="logo-title" data-i18n="logo_picker_title">เลือกโลโก้</h2><p data-i18n="logo_picker_desc">ค้นหาและเลือกโลโก้จากคลัง theSVG</p></div>
-        <button class="close" type="button" data-close="logo-modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        <div>
+          <h2 id="logo-title" data-i18n="logo_picker_title">เลือกโลโก้</h2>
+          <p data-i18n="logo_picker_desc">ค้นหาและเลือกโลโก้จากคลัง theSVG</p>
+        </div>
+        <button class="close" type="button" data-close="logo-modal" aria-label="Close">
+          <svg class="icon"><use href="#i-xmark"/></svg>
+        </button>
       </div>
-      <label class="search logo-search"><input id="logo-search" type="search" data-i18n-placeholder="logo_search_placeholder" placeholder="ค้นหา เช่น Google, Notion, OpenAI..." autocomplete="off"><i class="fas fa-magnifying-glass"></i></label>
-      <div class="logo-results" id="logo-results"><div class="loading" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-circle-notch fa-spin"></i><p data-i18n="logo_loading">กำลังโหลดโลโก้...</p></div></div>
-      <p style="color:var(--dim);font-size:.68rem;line-height:1.5;margin-top:12px;padding:10px;background:rgba(155,155,155,.02);border-radius:10px;border:1px dashed var(--border)"><i class="fas fa-circle-info" style="color:var(--blue);margin-right:6px"></i><span data-i18n="logo_picker_note">ที่มา:</span> <a href="https://thesvg.org/" target="_blank" rel="noopener noreferrer" style="color:var(--blue-h);text-decoration:underline">theSVG</a> · <span data-i18n="logo_picker_note2">ไอคอนจะถูกโหลดจาก URL สาธารณะของ theSVG</span></p>
+      <label class="search logo-search">
+        <input id="logo-search" type="search" data-i18n-placeholder="logo_search_placeholder" placeholder="ค้นหา เช่น Google, Notion, OpenAI..." autocomplete="off">
+        <svg class="icon"><use href="#i-magnifying-glass"/></svg>
+      </label>
+      <div class="logo-results" id="logo-results">
+        <div class="loading" style="grid-column:1/-1;padding:30px 10px">
+          <svg class="icon"><use href="#i-circle-notch"/></svg>
+          <p data-i18n="logo_loading">กำลังโหลดโลโก้...</p>
+        </div>
+      </div>
+      <p style="color:var(--dim);font-size:.68rem;line-height:1.5;margin-top:12px;padding:10px;background:rgba(155,155,155,.02);border-radius:10px;border:1px dashed var(--border)">
+        <svg class="icon" style="color:var(--blue);margin-right:6px"><use href="#i-circle-info"/></svg>
+        <span data-i18n="logo_picker_note">ที่มา:</span>
+        <a href="https://thesvg.org/" target="_blank" rel="noopener noreferrer" style="color:var(--blue-h);text-decoration:underline">theSVG</a>
+      </p>
     </div>
   </div>
 
@@ -613,24 +996,41 @@
     <div class="modal wide">
       <div class="modal-handle" aria-hidden="true"></div>
       <div class="modal-head">
-        <div><h2 id="settings-title" data-i18n="settings_title">การตั้งค่า</h2><p data-i18n="settings_desc">ปรับแต่งการแสดงผลและภาษาของ Portal</p></div>
-        <button class="close" type="button" data-close="settings-modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        <div>
+          <h2 id="settings-title" data-i18n="settings_title">การตั้งค่า</h2>
+          <p data-i18n="settings_desc">ปรับแต่งการแสดงผลและภาษาของ Portal</p>
+        </div>
+        <button class="close" type="button" data-close="settings-modal" aria-label="Close">
+          <svg class="icon"><use href="#i-xmark"/></svg>
+        </button>
       </div>
       <div class="settings-grid">
         <div class="settings-row">
           <div>
-            <div class="settings-row-title"><i class="fas fa-palette" style="color:var(--blue)"></i><span data-i18n="settings_theme">ธีม</span></div>
+            <div class="settings-row-title">
+              <svg class="icon" style="color:var(--blue)"><use href="#i-sun"/></svg>
+              <span data-i18n="settings_theme">ธีม</span>
+            </div>
             <div class="settings-row-desc" data-i18n="settings_theme_desc">เลือกธีมสีสำหรับการแสดงผล (ระบบจะปรับตามค่าเครื่องเมื่อเลือกอัตโนมัติ)</div>
           </div>
           <div class="seg-ctrl" id="theme-ctrl" role="radiogroup" aria-label="Theme">
-            <button class="seg-opt" type="button" data-theme-value="light"><i class="fas fa-sun"></i> <span data-i18n="theme_light">สว่าง</span></button>
-            <button class="seg-opt" type="button" data-theme-value="dark"><i class="fas fa-moon"></i> <span data-i18n="theme_dark">มืด</span></button>
-            <button class="seg-opt" type="button" data-theme-value="auto"><i class="fas fa-circle-half-stroke"></i> <span data-i18n="theme_auto">อัตโนมัติ</span></button>
+            <button class="seg-opt" type="button" data-theme-value="light">
+              <svg class="icon"><use href="#i-sun"/></svg> <span data-i18n="theme_light">สว่าง</span>
+            </button>
+            <button class="seg-opt" type="button" data-theme-value="dark">
+              <svg class="icon"><use href="#i-moon"/></svg> <span data-i18n="theme_dark">มืด</span>
+            </button>
+            <button class="seg-opt" type="button" data-theme-value="auto">
+              <svg class="icon"><use href="#i-circle-half-stroke"/></svg> <span data-i18n="theme_auto">อัตโนมัติ</span>
+            </button>
           </div>
         </div>
         <div class="settings-row">
           <div>
-            <div class="settings-row-title"><i class="fas fa-language" style="color:var(--violet)"></i><span data-i18n="settings_language">ภาษา</span></div>
+            <div class="settings-row-title">
+              <svg class="icon" style="color:var(--violet)"><use href="#i-language"/></svg>
+              <span data-i18n="settings_language">ภาษา</span>
+            </div>
             <div class="settings-row-desc" data-i18n="settings_language_desc">เปลี่ยนภาษาที่ใช้ในหน้าเว็บ</div>
           </div>
           <div class="seg-ctrl" id="lang-ctrl" role="radiogroup" aria-label="Language">
@@ -640,14 +1040,33 @@
         </div>
         <div class="settings-row">
           <div>
-            <div class="settings-row-title"><i class="fas fa-keyboard" style="color:var(--amber)"></i><span data-i18n="settings_shortcuts">ปุ่มลัด</span></div>
+            <div class="settings-row-title">
+              <svg class="icon" style="color:var(--amber)"><use href="#i-keyboard"/></svg>
+              <span data-i18n="settings_shortcuts">ปุ่มลัด</span>
+            </div>
             <div class="settings-row-desc" data-i18n="settings_shortcuts_desc">ปุ่มลัดสำหรับใช้บนคีย์บอร์ด</div>
           </div>
           <div class="kbd-list">
-            <div class="kbd-row"><span class="kbd-label" data-i18n="shortcut_search">ค้นหาแอปพลิเคชัน</span><span class="kbd-keys"><kbd>/</kbd></span></div>
-            <div class="kbd-row"><span class="kbd-label" data-i18n="shortcut_refresh">รีเฟรชข้อมูล</span><span class="kbd-keys"><kbd>R</kbd></span></div>
-            <div class="kbd-row"><span class="kbd-label" data-i18n="shortcut_settings">เปิดการตั้งค่า</span><span class="kbd-keys"><kbd>,</kbd></span></div>
-            <div class="kbd-row"><span class="kbd-label" data-i18n="shortcut_close">ปิด modal / ยกเลิก</span><span class="kbd-keys"><kbd>Esc</kbd></span></div>
+            <div class="kbd-row">
+              <span class="kbd-label">เปิด Command Palette</span>
+              <span class="kbd-keys"><kbd>⌘</kbd><kbd>K</kbd></span>
+            </div>
+            <div class="kbd-row">
+              <span class="kbd-label" data-i18n="shortcut_search">ค้นหาแอปพลิเคชัน</span>
+              <span class="kbd-keys"><kbd>/</kbd></span>
+            </div>
+            <div class="kbd-row">
+              <span class="kbd-label" data-i18n="shortcut_refresh">รีเฟรชข้อมูล</span>
+              <span class="kbd-keys"><kbd>R</kbd></span>
+            </div>
+            <div class="kbd-row">
+              <span class="kbd-label" data-i18n="shortcut_settings">เปิดการตั้งค่า</span>
+              <span class="kbd-keys"><kbd>,</kbd></span>
+            </div>
+            <div class="kbd-row">
+              <span class="kbd-label" data-i18n="shortcut_close">ปิด modal / ยกเลิก</span>
+              <span class="kbd-keys"><kbd>Esc</kbd></span>
+            </div>
           </div>
         </div>
       </div>
@@ -659,8 +1078,13 @@
     <div class="modal wide">
       <div class="modal-handle" aria-hidden="true"></div>
       <div class="modal-head">
-        <div><h2 id="help-title" data-i18n="help_title">ช่วยเหลือ &amp; เกี่ยวกับ</h2><p data-i18n="help_desc">ข้อมูลและคำตอบที่พบบ่อย</p></div>
-        <button class="close" type="button" data-close="help-modal" aria-label="Close"><i class="fas fa-xmark"></i></button>
+        <div>
+          <h2 id="help-title" data-i18n="help_title">ช่วยเหลือ &amp; เกี่ยวกับ</h2>
+          <p data-i18n="help_desc">ข้อมูลและคำตอบที่พบบ่อย</p>
+        </div>
+        <button class="close" type="button" data-close="help-modal" aria-label="Close">
+          <svg class="icon"><use href="#i-xmark"/></svg>
+        </button>
       </div>
       <div class="settings-grid">
         <div class="settings-row">
@@ -675,11 +1099,42 @@
           <div class="settings-row-title" data-i18n="help_missing_app">ไม่เห็นแอปบางตัว?</div>
           <div class="settings-row-desc" data-i18n="help_missing_app_desc">การมองเห็นแอปขึ้นอยู่กับ Role และ Group ที่กำหนดให้บัญชีของคุณ หากคิดว่าควรเห็น ให้แจ้งผู้ดูแลระบบ</div>
         </div>
+        <div class="settings-row">
+          <div class="settings-row-title">🚀 ติดตั้งเป็นแอป</div>
+          <div class="settings-row-desc">คลิกปุ่ม "ติดตั้งแอป" ที่ด้านล่างเพื่อติดตั้งบนอุปกรณ์ของคุณ ใช้ได้แม้ไม่มีอินเทอร์เน็ต</div>
+        </div>
       </div>
     </div>
   </div>
 
+  <!-- COMMAND PALETTE (NEW) -->
+  <div class="modal-backdrop" id="cmd-backdrop" role="dialog" aria-modal="true"></div>
+  <div class="cmd-palette" id="cmd-palette" role="dialog" aria-label="Command palette">
+    <div class="cmd-search">
+      <svg class="icon" style="color:var(--muted)"><use href="#i-magnifying-glass"/></svg>
+      <input id="cmd-input" type="text" placeholder="พิมพ์เพื่อค้นหาแอป การตั้งค่า หรือการกระทำ..." autocomplete="off" autofocus>
+      <kbd style="font-size:.6rem;padding:1px 5px">ESC</kbd>
+    </div>
+    <div class="cmd-results" id="cmd-results"></div>
+    <div class="cmd-hint">
+      <span><kbd>↑</kbd><kbd>↓</kbd> เพื่อเลื่อน</span>
+      <span><kbd>↵</kbd> เพื่อเลือก</span>
+    </div>
+  </div>
+
+  <!-- TOAST -->
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- INSTALL BAR -->
+  <div class="install-bar" id="install-bar">
+    <svg class="icon icon-lg"><use href="#i-download"/></svg>
+    <div class="install-bar-copy">
+      ติดตั้ง Koo Mean Portal
+      <small>ใช้งานเร็วขึ้นและใช้ได้แม้ไม่มีเน็ต</small>
+    </div>
+    <button class="btn" id="install-btn">ติดตั้ง</button>
+    <button class="btn" id="install-dismiss" style="background:rgba(255,255,255,.1)">✕</button>
+  </div>
 
   <script>
   (function(){
@@ -736,7 +1191,6 @@
         logo_picker_title:'เลือกโลโก้', logo_picker_desc:'ค้นหาและเลือกโลโก้จากคลัง theSVG',
         logo_search_placeholder:'ค้นหา เช่น Google, Notion, OpenAI...',
         logo_loading:'กำลังโหลดโลโก้...',
-        logo_picker_note:'ที่มา:', logo_picker_note2:'ไอคอนจะถูกโหลดจาก URL สาธารณะของ theSVG',
         settings_title:'การตั้งค่า', settings_desc:'ปรับแต่งการแสดงผลและภาษาของ Portal',
         settings_theme:'ธีม', settings_theme_desc:'เลือกธีมสีสำหรับการแสดงผล',
         theme_light:'สว่าง', theme_dark:'มืด', theme_auto:'อัตโนมัติ',
@@ -745,12 +1199,6 @@
         shortcut_search:'ค้นหาแอปพลิเคชัน', shortcut_refresh:'รีเฟรชข้อมูล',
         shortcut_settings:'เปิดการตั้งค่า', shortcut_close:'ปิด modal / ยกเลิก',
         help_title:'ช่วยเหลือ & เกี่ยวกับ', help_desc:'ข้อมูลและคำตอบที่พบบ่อย',
-        help_what_is:'Koo Mean Portal คืออะไร?',
-        help_what_is_desc:'เป็นศูนย์รวมแอปพลิเคชันและเครื่องมือสำหรับผู้ใช้ที่ได้รับการอนุญาต',
-        help_cannot_login:'เข้าสู่ระบบไม่ได้?',
-        help_cannot_login_desc:'ตรวจสอบว่าใช้อีเมลที่ได้รับอนุญาต หากยังไม่สามารถเข้าได้ ให้ติดต่อผู้ดูแลระบบ',
-        help_missing_app:'ไม่เห็นแอปบางตัว?',
-        help_missing_app_desc:'การมองเห็นแอปขึ้นอยู่กับ Role และ Group ที่กำหนดให้บัญชีของคุณ',
         toast_session_expired:'เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่',
         toast_login_checking:'กำลังตรวจสอบบัญชี...',
         toast_login_success:'เข้าสู่ระบบสำเร็จ',
@@ -760,8 +1208,8 @@
         toast_saved:'บันทึกเรียบร้อยแล้ว',
         toast_name_saved:'เปลี่ยนชื่อเรียบร้อยแล้ว',
         toast_register_sent:'ส่งคำขอลงทะเบียนแล้ว',
-        toast_google_invalid:'Google session ไม่ถูกต้องหรือหมดอายุ กรุณาลองใหม่',
-        toast_network_timeout:'การเชื่อมต่อใช้เวลานานเกินไป กรุณาลองใหม่',
+        toast_google_invalid:'Google session ไม่ถูกต้องหรือหมดอายุ',
+        toast_network_timeout:'การเชื่อมต่อใช้เวลานานเกินไป',
         toast_network_error:'ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้',
         toast_server_error:'เซิร์ฟเวอร์ตอบกลับไม่ถูกต้อง',
         toast_role_updated:'อัปเดต Role เรียบร้อยแล้ว',
@@ -769,21 +1217,11 @@
         toast_app_updated:'แก้ไขแอปเรียบร้อยแล้ว',
         toast_app_deleted:'ลบแอปเรียบร้อยแล้ว',
         toast_retrying:'กำลังลองเชื่อมต่อใหม่อัตโนมัติ...',
-        msg_need_admin:'ต้องใช้บัญชี Admin',
-        msg_app_name_required:'กรุณากรอกชื่อแอป',
-        msg_invalid_url:'URL ต้องขึ้นต้นด้วย http:// หรือ https://',
-        msg_url_duplicate:'URL นี้ถูกใช้แล้วในแอป',
-        msg_invalid_color:'สีต้องอยู่ในรูปแบบ #4b8fff',
-        msg_invalid_slug:'Slug ต้องเป็น a-z, 0-9, - หรือ _',
-        msg_name_required:'กรุณากรอกชื่อที่ต้องการแสดง',
-        msg_name_too_long:'ชื่อยาวเกิน 50 ตัวอักษร',
-        msg_role_required:'กรุณากรอก Role',
-        msg_confirm_delete:'ลบแอป',
-        msg_confirm_delete_suffix:'ใช่หรือไม่?',
-        msg_retry_auto:'ระบบจะลองโหลดใหม่อัตโนมัติในไม่กี่วินาที',
         group_public:'ทั่วไป',
-        app_open:'เปิด',
-        app_featured:'แนะนำ'
+        app_featured:'แนะนำ',
+        section_favorites:'⭐ รายการโปรด',
+        cmd_empty:'ไม่พบรายการ',
+        section_apps:'แอปพลิเคชัน', section_actions:'การกระทำ'
       },
       en: {
         brand_title:'Koo Mean Portal', brand_sub:'Application space',
@@ -801,7 +1239,7 @@
         footer_info:'Access managed centrally', footer_help:'Help',
         login_title:'Sign in', login_desc:'Use your Google Account to see apps you have access to',
         login_help:'Sign-in uses a token verified by the backend. No password is stored on this site.',
-        register_title:'Request access', register_desc:'This account is not in the system. Please provide some details to submit a request.',
+        register_title:'Request access', register_desc:'This account is not in the system. Please provide some details.',
         register_note_label:'Additional info (optional)',
         register_note_placeholder:'e.g. Team / Role / Apps you need',
         btn_cancel:'Cancel', btn_submit_request:'Submit request', btn_save:'Save',
@@ -815,7 +1253,7 @@
         admin_subtitle_users:'Manage users and access from Users Sheet',
         admin_tab_apps:'Applications', admin_tab_users:'Users',
         admin_add_app:'Add application', admin_edit_app:'Edit application',
-        admin_form_help:'Icon slug from theSVG is saved. The system checks for duplicate URLs before saving.',
+        admin_form_help:'Icon slug from theSVG is saved. The system checks for duplicate URLs.',
         field_app_name:'App name', field_description:'Description', field_desc_placeholder:'Short description',
         field_group:'Group / Role', field_color:'Color (optional)', field_featured:'Featured app',
         icon_not_selected:'No icon selected',
@@ -834,7 +1272,6 @@
         logo_picker_title:'Choose logo', logo_picker_desc:'Search and pick a logo from theSVG',
         logo_search_placeholder:'Search e.g. Google, Notion, OpenAI...',
         logo_loading:'Loading logos...',
-        logo_picker_note:'Source:', logo_picker_note2:'Icons are loaded from public theSVG URLs',
         settings_title:'Settings', settings_desc:'Customize display and language of Portal',
         settings_theme:'Theme', settings_theme_desc:'Choose the display theme',
         theme_light:'Light', theme_dark:'Dark', theme_auto:'Auto',
@@ -843,12 +1280,6 @@
         shortcut_search:'Search apps', shortcut_refresh:'Refresh data',
         shortcut_settings:'Open settings', shortcut_close:'Close modal / Cancel',
         help_title:'Help & About', help_desc:'Information and frequently asked questions',
-        help_what_is:'What is Koo Mean Portal?',
-        help_what_is_desc:'A hub of applications and tools for authorized users.',
-        help_cannot_login:'Cannot sign in?',
-        help_cannot_login_desc:'Make sure you are using an authorized email. Contact an admin if it still fails.',
-        help_missing_app:'Missing some apps?',
-        help_missing_app_desc:'Visibility depends on the role and group assigned to your account.',
         toast_session_expired:'Session expired, please sign in again',
         toast_login_checking:'Checking account...',
         toast_login_success:'Signed in successfully',
@@ -858,8 +1289,8 @@
         toast_saved:'Saved successfully',
         toast_name_saved:'Display name updated',
         toast_register_sent:'Registration request sent',
-        toast_google_invalid:'Google session invalid or expired. Please try again',
-        toast_network_timeout:'Connection took too long, please retry',
+        toast_google_invalid:'Google session invalid or expired',
+        toast_network_timeout:'Connection took too long',
         toast_network_error:'Cannot reach the server',
         toast_server_error:'Server returned an invalid response',
         toast_role_updated:'Role updated',
@@ -867,21 +1298,11 @@
         toast_app_updated:'App updated',
         toast_app_deleted:'App deleted',
         toast_retrying:'Auto-retrying...',
-        msg_need_admin:'Admin account required',
-        msg_app_name_required:'App name is required',
-        msg_invalid_url:'URL must start with http:// or https://',
-        msg_url_duplicate:'URL is already used by app',
-        msg_invalid_color:'Color must be in #4b8fff format',
-        msg_invalid_slug:'Slug must be a-z, 0-9, - or _',
-        msg_name_required:'Display name is required',
-        msg_name_too_long:'Name exceeds 50 characters',
-        msg_role_required:'Role is required',
-        msg_confirm_delete:'Delete app',
-        msg_confirm_delete_suffix:'',
-        msg_retry_auto:'The system will retry loading in a few seconds',
         group_public:'Public',
-        app_open:'Open',
-        app_featured:'Featured'
+        app_featured:'Featured',
+        section_favorites:'⭐ Favorites',
+        cmd_empty:'No results',
+        section_apps:'Applications', section_actions:'Actions'
       }
     };
     const t = (key)=> (I18N[state.lang] && I18N[state.lang][key]) || I18N.th[key] || key;
@@ -891,7 +1312,9 @@
     const API_TIMEOUT_MS=15000;
     const GOOGLE_CLIENT_ID='906677442222-kmjgsmta70n24aoaq7osm9c1l7g1fb89.apps.googleusercontent.com';
     const SESSION_KEY='koomean_portal_session_v1';
-    const PREFS_KEY='koomean_portal_prefs_v1';
+    const PREFS_KEY='koomean_portal_prefs_v2';
+    const CACHE_KEY='koomean_portal_cache_v1';
+    const PINNED_KEY='koomean_pinned_apps_v1';
     const CLIENT_UA=(navigator.userAgent||'').slice(0,300);
 
     const state={
@@ -902,20 +1325,37 @@
       isRefreshing:false,adminBusy:false,
       loadError:null,lastErrorMessage:'',
       retryTimer:0,retryAttempt:0,
-      theme:'auto',lang:'th'
+      theme:'auto',lang:'th',view:'grid',
+      pinnedApps:new Set(),
+      cmdOpen:false,cmdIndex:0,cmdItems:[],
+      installPrompt:null,
+      cache:new Map()
     };
-    state.selectedIconName=t('icon_not_selected');
 
     const $=id=>document.getElementById(id);
     let toastTimer=0,gsiPromise=null,sessionTimer=0;
     let lastFocusedElement=null;
 
-    /* ===== Safe helpers ===== */
+    /* ===== Security: safe helpers ===== */
     function escapeHtml(value){
       return String(value==null?'':value).replace(/[&<>"'`]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;','`':'&#96;'}[c]));
     }
+    // 🔒 Sanitize HTML from user content (via DOMPurify)
+    function safeHtml(value){
+      if (typeof DOMPurify !== 'undefined') {
+        return DOMPurify.sanitize(String(value==null?'':value), {
+          ALLOWED_TAGS: ['b','i','strong','em','br','mark'],
+          ALLOWED_ATTR: []
+        });
+      }
+      return escapeHtml(value);
+    }
     function safeUrl(value){
       try{const u=new URL(String(value||''));return /^https?:$/.test(u.protocol)?u.href:'';}catch{return '';}
+    }
+    // 🔒 Strict color whitelist (prevents CSS injection)
+    function safeCssColor(v){
+      return /^#[0-9a-f]{3,8}$/i.test(String(v||'')) ? v : '#5b8fff';
     }
     function canonicalAppUrl(value){
       try{const u=new URL(String(value||''));if(!/^https?:$/.test(u.protocol))return '';
@@ -936,11 +1376,22 @@
     function isValidSlug(v){return /^[a-z0-9][a-z0-9_-]{0,30}$/.test(v);}
     function isValidColor(v){return /^#[0-9a-f]{3,8}$/i.test(v);}
 
+    // 🔒 Safe logger (strip tokens from errors)
+    function safeLog(level, err){
+      if(typeof err==='string'){
+        console[level](err.replace(/Bearer\s+[A-Za-z0-9._-]+/gi,'Bearer [REDACTED]'));
+      } else {
+        console[level](err?.name||'Error', err?.message||err);
+      }
+    }
+
     /* ===== Toast ===== */
     function showToast(message,type='info'){
       const el=$('toast');clearTimeout(toastTimer);
-      const iconMap={success:'fa-circle-check',error:'fa-circle-exclamation',info:'fa-circle-info'};
-      el.innerHTML='<i class="fas '+escapeHtml(iconMap[type]||iconMap.info)+'"></i><span>'+escapeHtml(message)+'</span>';
+      const iconMap={success:'i-circle-check',error:'i-circle-exclamation',info:'i-circle-info'};
+      el.innerHTML='<svg class="icon"><use href="#'+escapeHtml(iconMap[type]||iconMap.info)+'"/></svg>'+
+        '<span>'+safeHtml(message)+'</span>'+
+        '<div class="toast-progress" style="width:100%"></div>';
       el.className='toast'+(type?' '+type:'')+' show';
       toastTimer=setTimeout(()=>el.classList.remove('show'),3200);
     }
@@ -957,13 +1408,18 @@
       try{const raw=localStorage.getItem(PREFS_KEY);
         if(raw){const p=JSON.parse(raw);
           if(p&&typeof p==='object'){
-            state.theme=(p.theme==='light'||p.theme==='dark'||p.theme==='auto')?p.theme:'auto';
+            state.theme=(['light','dark','auto'].includes(p.theme))?p.theme:'auto';
             state.lang=(p.lang==='en')?'en':'th';
+            state.view=(['grid','list','compact'].includes(p.view))?p.view:'grid';
           }
         }
       }catch{}
     }
-    function savePrefs(){try{localStorage.setItem(PREFS_KEY,JSON.stringify({theme:state.theme,lang:state.lang}));}catch{}}
+    function savePrefs(){
+      try{localStorage.setItem(PREFS_KEY,JSON.stringify({
+        theme:state.theme, lang:state.lang, view:state.view
+      }));}catch{}
+    }
     function applyTheme(){
       const prefersDark=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches;
       const theme=state.theme==='auto'?(prefersDark?'dark':'light'):state.theme;
@@ -972,6 +1428,12 @@
       if(meta)meta.setAttribute('content',theme==='dark'?'#06080e':'#f5f7fb');
       document.querySelectorAll('#theme-ctrl .seg-opt').forEach(btn=>{
         btn.classList.toggle('active',btn.dataset.themeValue===state.theme);
+      });
+    }
+    function applyView(){
+      document.documentElement.setAttribute('data-view',state.view);
+      document.querySelectorAll('.view-btn').forEach(btn=>{
+        btn.classList.toggle('active',btn.dataset.view===state.view);
       });
     }
     function applyLang(){
@@ -990,6 +1452,21 @@
       const authBtn=$('auth-btn');
       if(authBtn){const span=authBtn.querySelector('span');if(span)span.textContent=state.user?t('btn_account'):t('btn_login');}
       if(state.applications&&state.applications.length)renderApplications();
+    }
+
+    /* ===== Favorites (NEW) ===== */
+    function loadPinned(){
+      try{const raw=localStorage.getItem(PINNED_KEY);
+        state.pinnedApps=new Set(raw?JSON.parse(raw):[]);}
+      catch{state.pinnedApps=new Set();}
+    }
+    function savePinned(){
+      try{localStorage.setItem(PINNED_KEY,JSON.stringify([...state.pinnedApps]));}catch{}
+    }
+    function togglePin(appUrl){
+      if(state.pinnedApps.has(appUrl))state.pinnedApps.delete(appUrl);
+      else state.pinnedApps.add(appUrl);
+      savePinned();renderApplications();
     }
 
     /* ===== Session ===== */
@@ -1062,12 +1539,22 @@
     }
     window.handleCredentialResponse=handleCredentialResponse;
 
-    /* ===== API request ===== */
-    async function request(action,extra={}){
+    /* ===== API request with cache ===== */
+    async function request(action,extra={},options={}){
       if(state.idToken&&expired(state.idToken)){expireSession();throw new Error(t('toast_session_expired'));}
-      const body=new URLSearchParams({action,ua:CLIENT_UA});
+      const nonce=crypto.randomUUID?crypto.randomUUID():String(Date.now()+Math.random());
+      const ts=Date.now();
+      const body=new URLSearchParams({action,ua:CLIENT_UA,nonce,ts:String(ts)});
       if(state.idToken)body.set('idToken',state.idToken);
       Object.entries(extra).forEach(([key,value])=>{if(value!=null)body.set(key,String(value));});
+
+      // ⚡ Read cache (only for read-only actions)
+      const cacheKey=action+':'+JSON.stringify(extra);
+      if(options.useCache && state.cache.has(cacheKey)){
+        const cached=state.cache.get(cacheKey);
+        if(Date.now()-cached.ts<5*60*1000)return cached.data;
+      }
+
       const controller=new AbortController(),timeout=setTimeout(()=>controller.abort(),API_TIMEOUT_MS);
       let response;
       try{
@@ -1079,6 +1566,14 @@
       let data;
       try{data=await response.json();}catch{throw new Error(t('toast_server_error'));}
       if(!response.ok||data?.code>=400)throw new Error(data?.message||'HTTP '+response.status);
+
+      if(options.useCache){
+        state.cache.set(cacheKey,{data,ts:Date.now()});
+        if(state.cache.size>100){
+          const oldest=[...state.cache.entries()].sort((a,b)=>a[1].ts-b[1].ts)[0];
+          state.cache.delete(oldest[0]);
+        }
+      }
       return data;
     }
 
@@ -1086,8 +1581,11 @@
     async function loadPortal(isFreshLogin=false,forceRefresh=false){
       cancelAutoRetry();
       try{
-        if(forceRefresh&&isAdmin()){try{await request('clearCache');}catch(e){console.warn('Cache refresh skipped:',e);}}
-        const data=await request('bootstrap');
+        if(forceRefresh){
+          state.cache.clear();
+          if(isAdmin()){try{await request('clearCache');}catch(e){safeLog('warn',e);}}
+        }
+        const data=await request('bootstrap',{},{useCache:!forceRefresh});
         if(data.authError){expireSession();throw new Error(t('toast_session_expired'));}
         if(data.requireRegistration){
           state.user=null;state.authVerified=false;state.applications=[];
@@ -1108,7 +1606,7 @@
         if(isFreshLogin)showToast(t('toast_login_success'),'success');
         return true;
       }catch(error){
-        console.error(error);
+        safeLog('error',error);
         state.loadError=error;
         state.lastErrorMessage=error.message||t('error_load_failed');
         renderApplications(state.lastErrorMessage);
@@ -1158,8 +1656,8 @@
       if(navAdmin)navAdmin.hidden=!isAdminUser;
       const btn=$('auth-btn');
       if(btn){
-        if(signed)btn.innerHTML='<i class="fas fa-user"></i> <span>'+escapeHtml(t('btn_account'))+'</span>';
-        else btn.innerHTML='<i class="fas fa-arrow-right-to-bracket"></i> <span>'+escapeHtml(t('btn_login'))+'</span>';
+        if(signed)btn.innerHTML='<svg class="icon"><use href="#i-circle-user"/></svg> <span>'+escapeHtml(t('btn_account'))+'</span>';
+        else btn.innerHTML='<svg class="icon"><use href="#i-arrow-right-to-bracket"/></svg> <span>'+escapeHtml(t('btn_login'))+'</span>';
       }
       if(signed){
         const name=state.user.name||state.user.email.split('@')[0];
@@ -1184,21 +1682,24 @@
       const clean=raw.replace(/^fa[srb]\s+/,'').replace(/^fa-/,'');
       return clean?'fas fa-'+clean:'';
     }
-    function color(value){const v=String(value||'').trim();return isValidColor(v)?v:'';}
     function displayGroup(group){return group==='public'?t('group_public'):group.charAt(0).toUpperCase()+group.slice(1);}
     function groupKey(app){return normalizeGroup(app.group).toLowerCase();}
+
+    // 🔒 Restrict SVG URLs to theSVG only (no external SVG injection)
     function svgUrl(value,variant='default'){
       const raw=String(value||'').trim();
-      if(/^https?:\/\/[^\s]+\.svg(?:[?#].*)?$/i.test(raw))return raw;
-      if(!isValidSlug(raw)||/^fa[srb]$/i.test(raw))return '';
+      if(!isValidSlug(raw))return '';
       return 'https://thesvg.org/icons/'+encodeURIComponent(raw)+'/'+encodeURIComponent(variant)+'.svg';
     }
     function iconMarkup(value,extraClass=''){
       const raw=String(value||'').trim();if(!raw)return '';
+      // Inline icon from our sprite
+      if(/^i-[a-z0-9-]+$/.test(raw)){
+        return '<svg class="icon '+(extraClass||'')+'"><use href="#'+escapeHtml(raw)+'"/></svg>';
+      }
       const src=svgUrl(raw);
-      if(src)return '<span class="icon-media"><img class="'+escapeHtml(extraClass)+'" src="'+escapeHtml(src)+'" alt="" loading="lazy" referrerpolicy="no-referrer"></span>';
-      const cls=iconClass(raw);
-      return cls?'<i class="'+escapeHtml(cls)+'"></i>':'';
+      if(src)return '<img class="'+escapeHtml(extraClass||'')+'" src="'+escapeHtml(src)+'" alt="" loading="lazy" referrerpolicy="no-referrer">';
+      return '';
     }
     function refreshSelectedIcon(){
       const preview=$('admin-icon-preview');preview.innerHTML=iconMarkup(state.selectedIcon);
@@ -1216,27 +1717,27 @@
       ['admin-name','admin-url','admin-description','admin-color','admin-icon-manual'].forEach(id=>{const el=$(id);if(el)el.value='';});
       const g=$('admin-group');if(g)g.value='public';
       const s=$('admin-starred');if(s)s.checked=false;
-      const btn=$('admin-submit-btn');if(btn)btn.innerHTML='<i class="fas fa-plus"></i> <span>'+escapeHtml(t('btn_add_app'))+'</span>';
+      const btn=$('admin-submit-btn');if(btn)btn.innerHTML='<svg class="icon"><use href="#i-plus"/></svg> <span>'+escapeHtml(t('btn_add_app'))+'</span>';
       const cancel=$('admin-cancel-btn');if(cancel)cancel.hidden=true;
       refreshSelectedIcon();
     }
     function fillAdminForm(app){
       state.editingRow=Number(app.rowIdx)||0;
       state.selectedIcon=String(app.icon||'').trim();
-      state.selectedIconName=state.selectedIcon?(svgUrl(state.selectedIcon)?state.selectedIcon:'Font Awesome'):t('icon_not_selected');
+      state.selectedIconName=state.selectedIcon?(svgUrl(state.selectedIcon)?state.selectedIcon:'Icon'):t('icon_not_selected');
       const title=$('admin-form-title');if(title)title.textContent=t('admin_edit_app');
       const f=(id,v)=>{const el=$(id);if(el)el.value=v||'';};
       f('admin-name',app.name);f('admin-url',app.url);f('admin-description',app.description);
       f('admin-group',app.group||'public');f('admin-color',app.color);
       const star=$('admin-starred');if(star)star.checked=app.starred===true;
       f('admin-icon-manual','');
-      const btn=$('admin-submit-btn');if(btn)btn.innerHTML='<i class="fas fa-check"></i> <span>'+escapeHtml(t('btn_save_changes'))+'</span>';
+      const btn=$('admin-submit-btn');if(btn)btn.innerHTML='<svg class="icon"><use href="#i-check"/></svg> <span>'+escapeHtml(t('btn_save_changes'))+'</span>';
       const cancel=$('admin-cancel-btn');if(cancel)cancel.hidden=false;
       refreshSelectedIcon();
     }
     function useManualIcon(){
       const slug=$('admin-icon-manual').value.trim().toLowerCase();
-      if(!isValidSlug(slug)){showToast(t('msg_invalid_slug'),'error');return;}
+      if(!isValidSlug(slug)){showToast(t('msg_invalid_slug')||'Invalid slug','error');return;}
       state.selectedIcon=slug;state.selectedIconName='theSVG · '+slug;refreshSelectedIcon();
     }
     function showAdminTab(tab){
@@ -1250,7 +1751,7 @@
       if(sub)sub.textContent=apps?t('admin_subtitle_apps'):t('admin_subtitle_users');
     }
     function openAdmin(){
-      if(!isAdmin()){showToast(t('msg_need_admin'),'error');return;}
+      if(!isAdmin()){showToast('Admin account required','error');return;}
       resetAdminForm();showAdminTab('apps');renderAdminItems();renderAdminUsers();
       setModal('admin-modal',true);
     }
@@ -1268,10 +1769,10 @@
           '<div class="admin-item-info"><div class="admin-item-name">'+name+'</div>'+
           '<div class="admin-item-meta">'+(index+1)+'. '+escapeHtml(displayGroup(groupKey(app)))+'</div></div>'+
           '<div class="admin-item-actions">'+
-          '<button class="icon-btn" type="button" title="Up" data-admin-action="up" data-row="'+row+'"'+(isFirst?' disabled':'')+'><i class="fas fa-chevron-up"></i></button>'+
-          '<button class="icon-btn" type="button" title="Down" data-admin-action="down" data-row="'+row+'"'+(isLast?' disabled':'')+'><i class="fas fa-chevron-down"></i></button>'+
-          '<button class="icon-btn" type="button" title="Edit" data-admin-action="edit" data-row="'+row+'"><i class="fas fa-pen"></i></button>'+
-          '<button class="icon-btn danger" type="button" title="Delete" data-admin-action="delete" data-row="'+row+'"><i class="fas fa-trash"></i></button>'+
+          '<button class="icon-btn" type="button" title="Up" data-admin-action="up" data-row="'+row+'"'+(isFirst?' disabled':'')+'><svg class="icon"><use href="#i-chevron-up"/></svg></button>'+
+          '<button class="icon-btn" type="button" title="Down" data-admin-action="down" data-row="'+row+'"'+(isLast?' disabled':'')+'><svg class="icon"><use href="#i-chevron-down"/></svg></button>'+
+          '<button class="icon-btn" type="button" title="Edit" data-admin-action="edit" data-row="'+row+'"><svg class="icon"><use href="#i-pen"/></svg></button>'+
+          '<button class="icon-btn danger" type="button" title="Delete" data-admin-action="delete" data-row="'+row+'"><svg class="icon"><use href="#i-trash"/></svg></button>'+
           '</div></div>';
       }).join('');
       bindAdminItemActions();
@@ -1288,7 +1789,7 @@
       const query=search?(search.value||'').trim().toLowerCase():'';
       const users=state.allUsers.filter(user=>(String(user.name||'')+' '+String(user.email||'')).toLowerCase().includes(query));
       if(!users.length){
-        root.innerHTML='<div class="empty" style="padding:28px 10px"><p>'+escapeHtml(state.allUsers.length?'No users':t('empty_no_data'))+'</p></div>';return;
+        root.innerHTML='<div class="empty" style="padding:28px 10px"><p>'+escapeHtml(t('empty_no_data'))+'</p></div>';return;
       }
       root.innerHTML=users.map(user=>{
         const name=user.name||String(user.email||'').split('@')[0]||'—';
@@ -1299,7 +1800,7 @@
           '<div class="admin-user-email">'+email+'</div></div>'+
           '<div class="admin-user-controls">'+
           '<input class="admin-role" type="text" maxlength="50" value="'+role+'">'+
-          '<button class="btn btn-primary admin-save" type="button" data-user-email="'+email+'"><i class="fas fa-check"></i></button>'+
+          '<button class="btn btn-primary admin-save" type="button" data-user-email="'+email+'"><svg class="icon"><use href="#i-check"/></svg></button>'+
           '</div></div>';
       }).join('');
       bindUserSaveButtons();
@@ -1313,8 +1814,8 @@
     async function saveUserRole(btn,email){
       const input=btn.parentElement.querySelector('.admin-role');
       const role=input?input.value.trim():'';
-      if(!role){showToast(t('msg_role_required'),'error');input&&input.focus();return;}
-      const old=btn.innerHTML;btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin"></i>';
+      if(!role){showToast('Role is required','error');input&&input.focus();return;}
+      const old=btn.innerHTML;btn.disabled=true;btn.innerHTML='<svg class="icon"><use href="#i-circle-notch"/></svg>';
       try{
         const data=await request('updateRole',{targetEmail:email,newRole:role});
         if(!data.success)throw Error(data.message||'Failed');
@@ -1329,7 +1830,7 @@
       if(!app)return;
       if(action==='edit'){fillAdminForm(app);return;}
       if(action==='delete'){
-        const msg=t('msg_confirm_delete')+' "'+(app.name||'—')+'" '+(state.lang==='th'?t('msg_confirm_delete_suffix'):'?');
+        const msg=(state.lang==='th'?'ลบแอป ':'Delete app ')+'"'+(app.name||'—')+'" ?';
         if(!confirm(msg))return;
         await adminRequest('deleteApplication',{rowIdx});return;
       }
@@ -1357,13 +1858,13 @@
       const group=$('admin-group').value.trim()||'public';
       const appColor=$('admin-color').value.trim();
       const starred=$('admin-starred').checked;
-      if(!name){showToast(t('msg_app_name_required'),'error');$('admin-name').focus();return;}
-      if(!safeUrl(url)){showToast(t('msg_invalid_url'),'error');$('admin-url').focus();return;}
+      if(!name){showToast('App name is required','error');$('admin-name').focus();return;}
+      if(!safeUrl(url)){showToast('URL must be http(s)','error');$('admin-url').focus();return;}
       const duplicate=state.applications.find(app=>Number(app.rowIdx)!==state.editingRow&&canonicalAppUrl(app.url)===canonicalAppUrl(url));
-      if(duplicate){showToast(t('msg_url_duplicate')+' "'+(duplicate.name||'—')+'"','error');$('admin-url').focus();return;}
-      if(appColor&&!isValidColor(appColor)){showToast(t('msg_invalid_color'),'error');return;}
+      if(duplicate){showToast('URL already used by "'+(duplicate.name||'—')+'"','error');$('admin-url').focus();return;}
+      if(appColor&&!isValidColor(appColor)){showToast('Invalid color format','error');return;}
       const btn=$('admin-submit-btn'),old=btn.innerHTML;
-      btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin"></i> '+escapeHtml(t('toast_saving'));
+      btn.disabled=true;btn.innerHTML='<svg class="icon"><use href="#i-circle-notch"/></svg> '+escapeHtml(t('toast_saving'));
       try{
         const action=state.editingRow?'updateApplication':'addApplication';
         const params={name,url,description,group,icon:state.selectedIcon,starred,color:appColor};
@@ -1381,12 +1882,12 @@
       const root=$('logo-results');
       try{
         const response=await fetch('https://thesvg.org/api/registry.json',{cache:'force-cache'});
-        if(!response.ok)throw Error('Failed to load logos');
+        if(!response.ok)throw Error('Failed');
         const data=await response.json();
         state.logoRegistry=Array.isArray(data)?data:(Array.isArray(data.icons)?data.icons:[]);
         state.logosLoaded=true;renderLogoResults();
       }catch(e){
-        if(root)root.innerHTML='<div class="error" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-triangle-exclamation"></i><strong>Failed to load logos</strong><p>Try using a slug manually.</p></div>';
+        if(root)root.innerHTML='<div class="error" style="grid-column:1/-1;padding:30px 10px"><svg class="icon"><use href="#i-triangle-exclamation"/></svg><strong>Failed to load logos</strong><p>Try manual slug.</p></div>';
       }
     }
     function renderLogoResults(){
@@ -1398,7 +1899,7 @@
         return !query||hay.includes(query);
       }).slice(0,120);
       if(!hits.length){
-        root.innerHTML='<div class="empty" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-magnifying-glass"></i><p>No logos found</p></div>';return;
+        root.innerHTML='<div class="empty" style="grid-column:1/-1;padding:30px 10px"><svg class="icon"><use href="#i-magnifying-glass"/></svg><p>No logos found</p></div>';return;
       }
       root.innerHTML=hits.map(item=>{
         const slug=String(item.slug||item.name||'').trim();
@@ -1426,12 +1927,23 @@
       setModal('admin-modal',false);setModal('logo-modal',true);
       const results=$('logo-results');
       if(!state.logosLoaded){
-        if(results)results.innerHTML='<div class="loading" style="grid-column:1/-1;padding:30px 10px"><i class="fas fa-circle-notch fa-spin"></i><p>'+escapeHtml(t('logo_loading'))+'</p></div>';
+        if(results)results.innerHTML='<div class="loading" style="grid-column:1/-1;padding:30px 10px"><svg class="icon"><use href="#i-circle-notch"/></svg><p>'+escapeHtml(t('logo_loading'))+'</p></div>';
         await loadLogoRegistry();
       }else renderLogoResults();
     }
 
-    /* ===== Render apps ===== */
+    /* ===== Search highlight helper ===== */
+    function highlightText(text, query){
+      if(!query||!text)return escapeHtml(text||'');
+      const escaped = escapeHtml(text);
+      const qEsc = query.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+      try{
+        const re = new RegExp('('+qEsc+')','gi');
+        return escaped.replace(re,'<mark class="highlight">$1</mark>');
+      }catch{return escaped;}
+    }
+
+    /* ===== Render apps (with Favorites + Highlights + Views) ===== */
     function renderApplications(errorMessage){
       const root=$('applications');if(!root)return;
       const search=$('search'),filter=$('group-filter');
@@ -1451,10 +1963,10 @@
 
       if(errorMessage){
         setConnectionStatus('offline',t('status_offline'));
-        root.innerHTML='<div class="error"><i class="fas fa-triangle-exclamation"></i><strong>'+
+        root.innerHTML='<div class="error"><svg class="icon"><use href="#i-triangle-exclamation"/></svg><strong>'+
           escapeHtml(t('error_load_failed'))+'</strong><p>'+escapeHtml(errorMessage)+
           '<br><button class="btn btn-ghost" style="margin-top:16px;min-height:44px" type="button" id="retry-load-btn">'+
-          '<i class="fas fa-rotate-right"></i> '+escapeHtml(t('error_retry'))+
+          '<svg class="icon"><use href="#i-rotate-right"/></svg> '+escapeHtml(t('error_retry'))+
           '</button></p></div>';
         const retryBtn=$('retry-load-btn');
         if(retryBtn)retryBtn.addEventListener('click',()=>loadPortal(false,true));
@@ -1473,36 +1985,69 @@
 
       if(!source.length){
         const hasQuery=!!query;
-        const icon=hasQuery?'fa-magnifying-glass':'fa-layer-group';
+        const icon=hasQuery?'i-magnifying-glass':'i-layer-group';
         const title=hasQuery?t('empty_no_match'):t('empty_no_app');
         const desc=hasQuery?t('empty_no_match_desc'):t('empty_no_app_desc');
-        root.innerHTML='<div class="empty"><i class="fas '+icon+'"></i><strong>'+
+        root.innerHTML='<div class="empty"><svg class="icon"><use href="#'+icon+'"/></svg><strong>'+
           escapeHtml(title)+'</strong><p>'+escapeHtml(desc)+'</p></div>';
         return;
       }
 
+      // ⭐ Split favorites
+      const favorites=source.filter(app=>state.pinnedApps.has(canonicalAppUrl(app.url)));
+      const others=source.filter(app=>!state.pinnedApps.has(canonicalAppUrl(app.url)));
+
+      let html='';
+
+      // Favorites section
+      if(favorites.length){
+        html+='<section class="group group-starred"><div class="group-head"><h2>'+escapeHtml(t('section_favorites'))+'</h2><span>'+favorites.length+'</span></div><div class="apps-grid">'+
+          favorites.map(app=>cardHtml(app,query)).join('')+'</div></section>';
+      }
+
+      // By group
       const byGroup=new Map();
-      source.forEach(app=>{const key=groupKey(app);if(!byGroup.has(key))byGroup.set(key,[]);byGroup.get(key).push(app);});
-      root.innerHTML=[...byGroup.entries()].map(([group,apps])=>{
-        return '<section class="group"><div class="group-head"><h2>'+escapeHtml(displayGroup(group))+
+      others.forEach(app=>{const key=groupKey(app);if(!byGroup.has(key))byGroup.set(key,[]);byGroup.get(key).push(app);});
+      html+=[...byGroup.entries()].map(([group,apps])=>{
+        return '<section class="group group-'+escapeHtml(group)+'"><div class="group-head"><h2>'+escapeHtml(displayGroup(group))+
           '</h2><span>'+apps.length+'</span></div><div class="apps-grid">'+
-          apps.map(cardHtml).join('')+'</div></section>';
+          apps.map(app=>cardHtml(app,query)).join('')+'</div></section>';
       }).join('');
+
+      root.innerHTML=html;
+      bindPinButtons();
     }
 
-    function cardHtml(app){
+    function cardHtml(app,query=''){
       const url=safeUrl(app.url);if(!url)return '';
-      const appColor=color(app.color)||'#5b8fff';
+      const appColor=safeCssColor(app.color);
       const icon=iconMarkup(app.icon);
-      const name=escapeHtml(app.name||'Untitled');
-      const desc=escapeHtml(app.description||'');
-      const starred=app.starred?'<i class="star fas fa-star" title="'+escapeHtml(t('app_featured'))+'"></i>':'';
+      const name=app.name||'Untitled';
+      const desc=app.description||'';
+      const isPinned=state.pinnedApps.has(canonicalAppUrl(url));
+      const pinIcon=isPinned?'i-star':'i-star-outline';
+      const starredBadge=app.starred?'<span class="star-badge"><svg class="icon icon-sm"><use href="#i-star"/></svg> '+escapeHtml(t('app_featured'))+'</span>':'';
+
       return '<a class="app-card" href="'+escapeHtml(url)+'" target="_blank" rel="noopener noreferrer" style="--card-color:'+escapeHtml(appColor)+'">'+
+        '<span class="shimmer"></span>'+
+        '<button class="pin-btn '+(isPinned?'pinned':'')+'" type="button" data-pin-url="'+escapeHtml(url)+'" aria-label="Pin">'+
+          '<svg class="icon icon-sm"><use href="#'+pinIcon+'"/></svg>'+
+        '</button>'+
+        starredBadge+
         (icon?'<div class="app-icon">'+icon+'</div>':'')+
-        '<div class="app-info"><div class="app-name">'+name+'</div>'+
-        '<div class="app-description">'+desc+'</div></div>'+
-        starred+
-        '<i class="app-open fas fa-arrow-up-right-from-square"></i></a>';
+        '<div class="app-info"><div class="app-name">'+highlightText(name,query)+'</div>'+
+        '<div class="app-description">'+highlightText(desc,query)+'</div></div>'+
+        '<svg class="icon icon-sm app-open"><use href="#i-arrow-up-right-from-square"/></svg></a>';
+    }
+
+    function bindPinButtons(){
+      document.querySelectorAll('[data-pin-url]').forEach(btn=>{
+        btn.addEventListener('click',e=>{
+          e.preventDefault();
+          e.stopPropagation();
+          togglePin(btn.dataset.pinUrl);
+        });
+      });
     }
 
     /* ===== Account actions ===== */
@@ -1516,7 +2061,7 @@
     async function register(){
       const btn=$('register-btn');const note=$('register-note');
       const noteVal=note?note.value.trim():'';
-      btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin"></i>';
+      btn.disabled=true;btn.innerHTML='<svg class="icon"><use href="#i-circle-notch"/></svg>';
       try{
         await request('register',{note:noteVal});
         setModal('register-modal',false);
@@ -1529,9 +2074,9 @@
       if(!state.user||!state.idToken){showToast(t('toast_session_expired'),'error');return;}
       const input=$('new-name'),btn=$('save-name-btn');
       const name=input?input.value.trim():'';
-      if(!name){showToast(t('msg_name_required'),'error');input&&input.focus();return;}
-      if(name.length>50){showToast(t('msg_name_too_long'),'error');return;}
-      const old=btn.innerHTML;btn.disabled=true;btn.innerHTML='<i class="fas fa-circle-notch fa-spin"></i>';
+      if(!name){showToast('Display name is required','error');input&&input.focus();return;}
+      if(name.length>50){showToast('Name exceeds 50 chars','error');return;}
+      const old=btn.innerHTML;btn.disabled=true;btn.innerHTML='<svg class="icon"><use href="#i-circle-notch"/></svg>';
       try{
         const data=await request('updateUserName',{newName:name});
         if(!data.success)throw new Error(data.message||'Failed');
@@ -1541,8 +2086,202 @@
       finally{btn.disabled=false;btn.innerHTML=old;}
     }
 
+    /* ===== Command Palette (NEW) ===== */
+    function openCommandPalette(){
+      state.cmdOpen=true;
+      $('cmd-palette').classList.add('open');
+      $('cmd-backdrop').classList.add('open');
+      document.body.style.overflow='hidden';
+      const input=$('cmd-input');
+      input.value='';
+      setTimeout(()=>input.focus(),50);
+      updateCmdPalette('');
+    }
+    function closeCommandPalette(){
+      state.cmdOpen=false;
+      $('cmd-palette').classList.remove('open');
+      $('cmd-backdrop').classList.remove('open');
+      if(!document.querySelector('.modal-backdrop.open'))document.body.style.overflow='';
+    }
+    function updateCmdPalette(query){
+      const items=[];
+
+      // Apps
+      state.applications.filter(app=>safeUrl(app.url)).forEach(app=>{
+        const hay=(app.name+' '+(app.description||'')).toLowerCase();
+        if(!query||hay.includes(query.toLowerCase())){
+          items.push({
+            section:t('section_apps'),
+            title:app.name,
+            sub:app.description||app.group||'',
+            icon:app.icon||'i-table-cells',
+            action:()=>window.open(safeUrl(app.url),'_blank','noopener')
+          });
+        }
+      });
+
+      // Actions
+      const actions=[
+        {title:t('nav_home'),icon:'i-house',action:()=>{closeCommandPalette();document.querySelector('#home')?.scrollIntoView();}},
+        {title:t('nav_account'),icon:'i-circle-user',action:()=>{closeCommandPalette();state.user?setModal('account-modal',true):openLogin();}},
+        {title:t('settings_theme'),icon:'i-sun',action:()=>{closeCommandPalette();setModal('settings-modal',true);}},
+        {title:t('shortcut_refresh'),icon:'i-rotate-right',action:()=>{closeCommandPalette();refreshPortal();}},
+        {title:'📥 '+('Install app'),icon:'i-download',action:()=>{closeCommandPalette();installApp();}},
+      ];
+      actions.forEach(a=>{
+        const hay=a.title.toLowerCase();
+        if(!query||hay.includes(query.toLowerCase())){
+          items.push({section:t('section_actions'),...a});
+        }
+      });
+
+      state.cmdItems=items.slice(0,20);
+      state.cmdIndex=0;
+      renderCmdItems(query);
+    }
+    function renderCmdItems(query){
+      const root=$('cmd-results');
+      if(!state.cmdItems.length){
+        root.innerHTML='<div style="padding:30px 16px;text-align:center;color:var(--dim);font-size:.85rem">'+escapeHtml(t('cmd_empty'))+'</div>';
+        return;
+      }
+      let html='';let lastSection='';
+      state.cmdItems.forEach((item,i)=>{
+        if(item.section!==lastSection){
+          html+='<div class="cmd-section">'+escapeHtml(item.section)+'</div>';
+          lastSection=item.section;
+        }
+        const iconHtml=item.icon.startsWith('i-')?
+          '<svg class="icon"><use href="#'+escapeHtml(item.icon)+'"/></svg>':
+          iconMarkup(item.icon);
+        const title=query?highlightText(item.title,query):escapeHtml(item.title);
+        html+='<div class="cmd-item '+(i===state.cmdIndex?'active':'')+'" data-index="'+i+'">'+
+          '<div class="cmd-icon">'+iconHtml+'</div>'+
+          '<div class="cmd-item-title"><strong>'+title+'</strong>'+
+          (item.sub?'<small>'+escapeHtml(item.sub)+'</small>':'')+
+          '</div></div>';
+      });
+      root.innerHTML=html;
+      root.querySelectorAll('.cmd-item').forEach(el=>{
+        el.addEventListener('click',()=>{
+          const idx=Number(el.dataset.index);
+          state.cmdItems[idx]?.action?.();
+          closeCommandPalette();
+        });
+        el.addEventListener('mouseenter',()=>{
+          state.cmdIndex=Number(el.dataset.index);
+          root.querySelectorAll('.cmd-item').forEach((x,i)=>x.classList.toggle('active',i===state.cmdIndex));
+        });
+      });
+    }
+    function navigateCmd(dir){
+      if(!state.cmdItems.length)return;
+      state.cmdIndex=(state.cmdIndex+dir+state.cmdItems.length)%state.cmdItems.length;
+      const items=$('cmd-results').querySelectorAll('.cmd-item');
+      items.forEach((el,i)=>el.classList.toggle('active',i===state.cmdIndex));
+      items[state.cmdIndex]?.scrollIntoView({block:'nearest'});
+    }
+    function executeCmd(){
+      const item=state.cmdItems[state.cmdIndex];
+      if(item?.action){
+        item.action();
+        closeCommandPalette();
+      }
+    }
+
+    /* ===== PWA: Service Worker + Install ===== */
+    function registerServiceWorker(){
+      if(!('serviceWorker' in navigator))return;
+      const swCode=`
+        const CACHE='koo-mean-v1';
+        self.addEventListener('install',e=>{
+          self.skipWaiting();
+        });
+        self.addEventListener('activate',e=>{
+          e.waitUntil(self.clients.claim());
+        });
+        self.addEventListener('fetch',e=>{
+          if(e.request.method!=='GET')return;
+          const url=new URL(e.request.url);
+          // Network-first for API, cache-first for assets
+          if(url.pathname.includes('/api')||url.host.includes('workers.dev')){
+            e.respondWith(fetch(e.request).catch(()=>caches.match(e.request)));
+            return;
+          }
+          e.respondWith(
+            caches.match(e.request).then(cached=>{
+              const fetchPromise=fetch(e.request).then(resp=>{
+                if(resp&&resp.status===200){
+                  const clone=resp.clone();
+                  caches.open(CACHE).then(c=>c.put(e.request,clone));
+                }
+                return resp;
+              }).catch(()=>cached);
+              return cached||fetchPromise;
+            })
+          );
+        });
+      `;
+      try{
+        const blob=new Blob([swCode],{type:'application/javascript'});
+        const swUrl=URL.createObjectURL(blob);
+        navigator.serviceWorker.register(swUrl).catch(e=>safeLog('warn',e));
+      }catch(e){safeLog('warn',e);}
+    }
+
+    function generateManifest(){
+      const manifest={
+        name:'Koo Mean Portal',
+        short_name:'Portal',
+        description:'Your application hub',
+        start_url:'.',
+        scope:'.',
+        display:'standalone',
+        background_color:'#06080e',
+        theme_color:'#06080e',
+        icons:[
+          {src:'data:image/svg+xml;base64,'+btoa('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%235b8fff"><path d="M3 3h8v8H3V3zm10 0h8v8h-8V3zM3 13h8v8H3v-8zm10 0h8v8h-8v-8z"/></svg>'),sizes:'any',type:'image/svg+xml',purpose:'any maskable'}
+        ]
+      };
+      const blob=new Blob([JSON.stringify(manifest)],{type:'application/manifest+json'});
+      const link=$('manifest-link');
+      if(link)link.href=URL.createObjectURL(blob);
+    }
+
+    let deferredInstallPrompt=null;
+    function setupInstallPrompt(){
+      window.addEventListener('beforeinstallprompt',e=>{
+        e.preventDefault();
+        deferredInstallPrompt=e;
+        // Show install bar
+        setTimeout(()=>{
+          const bar=$('install-bar');
+          if(bar&&!localStorage.getItem('koomean_install_dismissed')){
+            bar.classList.add('show');
+          }
+        },3000);
+      });
+      window.addEventListener('appinstalled',()=>{
+        deferredInstallPrompt=null;
+        const bar=$('install-bar');
+        if(bar)bar.classList.remove('show');
+        showToast('🎉 ติดตั้งแล้ว!','success');
+      });
+    }
+    async function installApp(){
+      if(!deferredInstallPrompt){
+        showToast('สามารถติดตั้งได้จากเมนูเบราว์เซอร์','info');
+        return;
+      }
+      deferredInstallPrompt.prompt();
+      const choice=await deferredInstallPrompt.userChoice;
+      if(choice.outcome==='accepted'){
+        deferredInstallPrompt=null;
+      }
+    }
+
     /* ===== Event wiring ===== */
-    const debouncedRenderApps=debounce(()=>renderApplications(),220);
+    const debouncedRenderApps=debounce(()=>renderApplications(),150);
     const debouncedRenderUsers=debounce(renderAdminUsers,220);
     const debouncedRenderLogos=debounce(renderLogoResults,180);
 
@@ -1550,7 +2289,16 @@
     $('nav-account').addEventListener('click',()=>state.user?setModal('account-modal',true):openLogin());
     $('nav-admin').addEventListener('click',openAdmin);
     $('nav-settings').addEventListener('click',()=>setModal('settings-modal',true));
+    $('nav-command').addEventListener('click',openCommandPalette);
     $('footer-help').addEventListener('click',()=>setModal('help-modal',true));
+    $('cmd-backdrop').addEventListener('click',closeCommandPalette);
+    $('cmd-input').addEventListener('input',e=>updateCmdPalette(e.target.value));
+
+    $('install-btn').addEventListener('click',installApp);
+    $('install-dismiss').addEventListener('click',()=>{
+      localStorage.setItem('koomean_install_dismissed','1');
+      $('install-bar').classList.remove('show');
+    });
 
     $('admin-apps-tab-btn').addEventListener('click',()=>showAdminTab('apps'));
     $('admin-users-tab-btn').addEventListener('click',()=>showAdminTab('users'));
@@ -1570,6 +2318,15 @@
     $('search').addEventListener('input',debouncedRenderApps);
     $('group-filter').addEventListener('change',()=>renderApplications());
 
+    document.querySelectorAll('.view-btn').forEach(btn=>{
+      btn.addEventListener('click',()=>{
+        state.view=btn.dataset.view;
+        savePrefs();
+        applyView();
+        renderApplications();
+      });
+    });
+
     document.querySelectorAll('#theme-ctrl .seg-opt').forEach(btn=>{
       btn.addEventListener('click',()=>{state.theme=btn.dataset.themeValue;savePrefs();applyTheme();});
     });
@@ -1581,17 +2338,27 @@
       });
     });
 
-    document.querySelectorAll('.nav-link[href]').forEach(link=>link.addEventListener('click',()=>{
-      document.querySelectorAll('.nav-link[href]').forEach(item=>item.classList.remove('active'));
-      link.classList.add('active');
-    }));
-
     document.querySelectorAll('[data-close]').forEach(btn=>btn.addEventListener('click',()=>setModal(btn.dataset.close,false)));
     document.querySelectorAll('.modal-backdrop').forEach(modal=>modal.addEventListener('click',e=>{
       if(e.target===modal)setModal(modal.id,false);
     }));
 
     document.addEventListener('keydown',e=>{
+      // Command palette shortcuts
+      if((e.metaKey||e.ctrlKey)&&e.key==='k'){
+        e.preventDefault();
+        if(state.cmdOpen)closeCommandPalette();
+        else openCommandPalette();
+        return;
+      }
+      if(state.cmdOpen){
+        if(e.key==='Escape'){closeCommandPalette();e.preventDefault();return;}
+        if(e.key==='ArrowDown'){navigateCmd(1);e.preventDefault();return;}
+        if(e.key==='ArrowUp'){navigateCmd(-1);e.preventDefault();return;}
+        if(e.key==='Enter'){executeCmd();e.preventDefault();return;}
+        return;
+      }
+
       if(e.key==='Escape'){
         const open=document.querySelector('.modal-backdrop.open');
         if(open)setModal(open.id,false);
@@ -1631,13 +2398,13 @@
       const tgt=e.target;
       if(tgt&&tgt.tagName==='IMG'&&tgt.closest('.app-icon,.admin-item-icon,.selected-icon,.admin-user-avatar,.user-detail img,.user-chip img')){
         const parent=tgt.parentElement;
-        if(parent)parent.innerHTML='<i class="fas fa-cube"></i>';
+        if(parent)parent.innerHTML='<svg class="icon"><use href="#i-cube"/></svg>';
       }
     },true);
 
     /* ===== Init ===== */
     (async function init(){
-      loadPrefs();applyTheme();applyLang();
+      loadPrefs();applyTheme();applyView();applyLang();loadPinned();
       try{
         const raw=localStorage.getItem(SESSION_KEY);
         const saved=raw?JSON.parse(raw):null;
@@ -1646,6 +2413,12 @@
           scheduleSessionExpiry();applyUser();
         }else if(saved?.idToken){clearSession();}
       }catch{}
+
+      // Setup PWA
+      generateManifest();
+      registerServiceWorker();
+      setupInstallPrompt();
+
       await loadPortal();
     }());
   })();
