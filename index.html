@@ -2168,7 +2168,7 @@
         applications: [],
         users: [],
         profile: null,
-        editingRow: 0,
+        editingRow: null, // [FIX] เปลี่ยนจาก 0 เป็น null ป้องกันบั๊ก rowIdx 0 Falsy
         selectedIcon: "",
         selectedIconName: "",
         logoRegistry: [],
@@ -2214,7 +2214,8 @@
         try {
           const url = new URL(value);
           const path = (url.pathname.replace(/\/+$/, "") || "/").toLowerCase();
-          return url.origin.toLowerCase() + path + url.search.toLowerCase();
+          // [FIX] เพิ่ม url.hash เข้ามาเพื่อรองรับ URL ของ SPA
+          return url.origin.toLowerCase() + path + url.search.toLowerCase() + url.hash.toLowerCase();
         } catch {
           return "";
         }
@@ -2572,7 +2573,11 @@
           setStatus("offline", t("offline"));
           renderError(error.message);
           showToast(error.message, "error");
-          scheduleRetry();
+          
+          // [FIX] ไม่ต้องสุ่มทำ retry ใหม่ถ้า error เกิดจาก Session หมดอายุ เพื่อแก้ Infinite Loop
+          if (error.message !== t("sessionExpired")) {
+            scheduleRetry();
+          }
           return false;
         }
       }
@@ -2812,6 +2817,8 @@
           const existing = document.querySelector('script[data-google-signin]');
 
           if (existing) {
+            // [FIX] เช็คให้แน่ใจว่าถ้า existing มีอยู่ และ id พร้อมใช้แล้ว ก็ resolve ทันที ป้องกันปัญหา script error หรือค้าง
+            if (window.google?.accounts?.id) return resolve();
             existing.addEventListener("load", resolve, {once: true});
             existing.addEventListener("error", reject, {once: true});
             return;
@@ -2949,7 +2956,7 @@
       }
 
       function resetAdminForm() {
-        state.editingRow = 0;
+        state.editingRow = null; // [FIX] เซ็ตเป็น null เพื่อให้แยกออกว่าเป็นเพิ่มข้อมูลใหม่
         state.selectedIcon = "";
         state.selectedIconName = "";
 
@@ -2966,7 +2973,7 @@
       }
 
       function fillAdminForm(app) {
-        state.editingRow = Number(app.rowIdx) || 0;
+        state.editingRow = app.rowIdx !== undefined ? app.rowIdx : null; // [FIX] เช็ตค่า null ถ้าไม่มี index
         state.selectedIcon = String(app.icon || "");
         state.selectedIconName = state.selectedIcon;
 
@@ -3104,8 +3111,9 @@
           return;
         }
 
+        // [FIX] ใช้ state.editingRow !== null ในการเช็ค
         const duplicate = state.applications.find(app =>
-          Number(app.rowIdx) !== state.editingRow &&
+          app.rowIdx !== state.editingRow &&
           canonicalUrl(app.url) === canonicalUrl(url)
         );
 
@@ -3127,7 +3135,8 @@
         button.textContent = t("loading");
 
         try {
-          const action = state.editingRow ? "updateApplication" : "addApplication";
+          // [FIX] ใช้ state.editingRow !== null ในการเลือก Action
+          const action = state.editingRow !== null ? "updateApplication" : "addApplication";
 
           const parameters = {
             name,
@@ -3139,7 +3148,7 @@
             icon: state.selectedIcon
           };
 
-          if (state.editingRow) parameters.rowIdx = state.editingRow;
+          if (state.editingRow !== null) parameters.rowIdx = state.editingRow;
 
           await request(action, parameters);
           showToast(t("saved"), "success");
@@ -3150,7 +3159,7 @@
         } finally {
           state.busy = false;
           button.disabled = false;
-          button.textContent = state.editingRow ? "บันทึกการแก้ไข" : "เพิ่มแอป";
+          button.textContent = state.editingRow !== null ? "บันทึกการแก้ไข" : "เพิ่มแอป";
         }
       }
 
