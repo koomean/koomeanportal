@@ -11,7 +11,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   
-  <!-- เพิ่ม FontAwesome เพื่อรองรับไอคอน fab fa- หรือ fas fa- -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <style>
@@ -218,6 +217,7 @@
       height:7px;
       border-radius:1px;
       background:currentColor;
+      display:block;
     }
 
     .brand-copy{
@@ -238,6 +238,7 @@
       margin-top:1px;
       color:var(--dim);
       font:500 .66rem var(--mono);
+      line-height:1;
     }
 
     .header-actions{
@@ -253,12 +254,14 @@
       width:40px;
       height:40px;
       flex:0 0 40px;
-      display:grid;
-      place-items:center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       border:1px solid transparent;
       border-radius:9px;
       color:var(--muted);
       font-size:1rem;
+      line-height:1;
     }
 
     .icon-button:hover{
@@ -480,17 +483,22 @@
       border-radius: 99px;
       font-weight: 600;
       font-size: 15px;
+      line-height: 1;
       border: none;
       cursor: pointer;
-      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.3);
-      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 20px -8px rgba(0,0,0,0.4);
+      transition: all 0.2s var(--ease);
       opacity: 0;
       animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
     }
 
     .hero-btn-contact:hover {
-      transform: scale(1.05);
-      box-shadow: 0 15px 35px -10px rgba(0,0,0,0.4);
+      transform: scale(1.04) translateY(-2px);
+      box-shadow: 0 14px 28px -10px rgba(0,0,0,0.5);
+    }
+    
+    .hero-btn-contact:active {
+      transform: scale(0.98) translateY(0);
     }
 
     /* --- Marquee Scroller --- */
@@ -500,6 +508,7 @@
       -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
       mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
       margin-bottom: 32px;
+      transform: translateZ(0); /* Hardware acceleration */
     }
 
     .marquee-track {
@@ -533,6 +542,7 @@
       cursor: pointer;
       text-decoration: none;
       transition: border-color 0.3s;
+      transform: translateZ(0);
     }
 
     .marquee-card:hover {
@@ -569,9 +579,15 @@
       align-items: center;
       justify-content: center;
       font-size: 24px;
+      line-height: 1;
       color: var(--text);
       flex-shrink: 0;
       transition: filter 0.3s, color 0.3s;
+    }
+
+    .marquee-icon i {
+      display: block;
+      line-height: 1;
     }
 
     .marquee-icon img {
@@ -583,6 +599,7 @@
     .marquee-text {
       font-size: 15px;
       font-weight: 600;
+      line-height: 1;
       color: var(--text);
       white-space: nowrap;
       overflow: hidden;
@@ -625,6 +642,9 @@
       color:var(--dim);
       transform:translateY(-50%);
       pointer-events:none;
+      line-height:1;
+      display:flex;
+      align-items:center;
     }
 
     .search input,
@@ -702,12 +722,14 @@
     .refresh-btn{
       width:43px;
       min-height:43px;
-      display:grid;
-      place-items:center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       border:1px solid var(--line);
       border-radius:8px;
       color:var(--muted);
       background:var(--panel);
+      line-height:1;
     }
 
     .refresh-btn:hover:not(:disabled){
@@ -751,6 +773,7 @@
       padding:4px 10px;
       border:1px solid var(--line);
       border-radius:99px;
+      line-height:1;
     }
 
     .status-dot{
@@ -803,6 +826,7 @@
       font-weight:600;
       text-overflow:ellipsis;
       white-space:nowrap;
+      line-height:1.2;
     }
 
     .group-count{
@@ -868,31 +892,41 @@
 
     .app-icon i {
       font-size: 20px;
+      line-height: 1;
+      display: block;
     }
 
     .app-icon img{
       width:24px;
       height:24px;
       object-fit:contain;
+      display:block;
     }
 
     .fallback-icon{
       font-weight:700;
-      font-size:16px;
+      font-size:18px;
       text-transform:uppercase;
+      line-height:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
     }
 
     .app-info{
       min-width:0;
       flex:1;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
     }
 
     .app-name-row{
       display:flex;
-      align-items:flex-start;
+      align-items:center;
       min-width:0;
-      gap:6px;
-      margin-bottom:5px;
+      gap:8px;
+      margin-bottom:6px;
     }
 
     .app-name{
@@ -900,18 +934,19 @@
       overflow:hidden;
       font-size:.92rem;
       font-weight:600;
-      line-height:1.35;
+      line-height:1.2;
       text-overflow:ellipsis;
       white-space:nowrap;
     }
 
     .featured{
       flex:0 0 auto;
-      padding:1px 6px;
+      padding:2px 6px;
       border:1px solid color-mix(in srgb,var(--accent) 42%,transparent);
       border-radius:99px;
       color:var(--accent);
       font:500 .59rem var(--mono);
+      line-height:1;
     }
 
     .app-description{
@@ -938,11 +973,13 @@
     .card-action{
       width:32px;
       height:32px;
-      display:grid;
-      place-items:center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       border-radius:7px;
       color:var(--dim);
       background:color-mix(in srgb,var(--panel) 94%,transparent);
+      line-height:1;
     }
 
     .card-action:hover,
@@ -1024,6 +1061,7 @@
       margin-bottom:10px;
       color:var(--dim);
       font-size:1.5rem;
+      line-height:1;
     }
 
     .state-box strong{
@@ -1163,6 +1201,7 @@
       border-radius:8px;
       color:var(--muted);
       font-size:1.15rem;
+      line-height:1;
     }
 
     .modal-close:hover{
@@ -1268,6 +1307,7 @@
       color:var(--accent)!important;
       background:color-mix(in srgb,var(--accent) 14%,transparent);
       font:500 .63rem var(--mono)!important;
+      line-height:1;
     }
 
     .account-section{
@@ -1388,6 +1428,10 @@
       background:var(--panel);
     }
 
+    .selected-icon i {
+      font-size:18px;
+    }
+
     .selected-icon img{
       width:22px;
       height:22px;
@@ -1459,14 +1503,20 @@
     }
 
     .admin-item-icon{
-      display:grid;
-      place-items:center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       overflow:hidden;
+    }
+    
+    .admin-item-icon i {
+      font-size: 16px;
     }
 
     .admin-item-icon img{
       width:19px;
       height:19px;
+      object-fit:contain;
     }
 
     .admin-item-info,
@@ -1509,11 +1559,13 @@
       width:34px;
       height:34px;
       flex:0 0 34px;
-      display:grid;
-      place-items:center;
+      display:flex;
+      align-items:center;
+      justify-content:center;
       border:1px solid var(--line);
       border-radius:7px;
       color:var(--muted);
+      line-height:1;
     }
 
     .small-action:hover:not(:disabled){
@@ -1734,6 +1786,7 @@
     .toast-symbol{
       flex:0 0 auto;
       color:var(--accent);
+      line-height:1.5;
     }
 
     .toast.success .toast-symbol{
@@ -1978,7 +2031,7 @@
         <!-- 2. Hero Text Content -->
         <div class="hero-content-layer">
           <div id="hero-kicker" hidden>YOUR APPLICATION HUB</div>
-          <!-- แก้ไขข้อความ Welcome -->
+          <!-- ข้อความ Welcome -->
           <h1 class="hero-title-modern" id="hero-title">Welcome To<br />Koo Mean Portal</h1>
           <p class="hero-subtitle-modern" id="hero-copy">
             ศูนย์รวมแอปพลิเคชันและเครื่องมือการทำงานของคุณ เข้าถึงทุกบริการและจัดการระบบได้อย่างรวดเร็ว ปลอดภัย จบในที่เดียว
@@ -1987,7 +2040,7 @@
         </div>
       </div>
     
-      <!-- 4. Seamless Marquee Logo Scroller (รอโหลดข้อมูลจากชีต Links) -->
+      <!-- 3. Seamless Marquee Logo Scroller -->
       <div class="marquee-wrapper" id="marquee-section" style="display: none;">
         <div class="marquee-track" id="marquee-track"></div>
       </div>
@@ -2183,7 +2236,7 @@
               </div>
 
               <div class="inline-form" style="margin-bottom:12px">
-                <input class="field" id="manual-icon" maxlength="31" placeholder="กรอก theSVG slug เช่น github หรือ fa-facebook">
+                <input class="field" id="manual-icon" maxlength="50" placeholder="กรอก theSVG slug หรือ fa-facebook">
                 <button class="btn btn-ghost" id="use-icon-btn" type="button">ใช้ slug</button>
               </div>
 
@@ -3203,7 +3256,7 @@
           showToast(error.message, "error");
         } finally {
           button.disabled = false;
-          button.textContent = "บันทึก";
+          button.textContent = "บันึก";
         }
       }
 
