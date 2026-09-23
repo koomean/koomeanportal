@@ -470,6 +470,10 @@
     }
 
     .hero-btn-contact {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
       background: var(--text);
       color: var(--bg);
       padding: 14px 32px;
@@ -487,76 +491,6 @@
     .hero-btn-contact:hover {
       transform: scale(1.05);
       box-shadow: 0 15px 35px -10px rgba(0,0,0,0.4);
-    }
-
-    .hero-floating-nav {
-      position: absolute;
-      bottom: 40px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 30;
-      display: flex;
-      align-items: center;
-      background: color-mix(in srgb, var(--panel) 90%, transparent);
-      backdrop-filter: blur(20px);
-      padding: 6px;
-      border-radius: 99px;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--line);
-      gap: 20px;
-      max-width: 90%;
-      white-space: nowrap;
-      opacity: 0;
-      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
-    }
-
-    .nav-logo-star {
-      width: 36px;
-      height: 36px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: var(--bg);
-      border: 1px solid var(--line);
-      color: var(--accent);
-      margin-left: 2px;
-    }
-
-    .nav-links-wrap {
-      display: flex;
-      gap: 24px;
-      padding: 0 12px;
-    }
-
-    .nav-links-wrap button {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--muted);
-      transition: color 0.2s;
-    }
-
-    .nav-links-wrap button:hover {
-      color: var(--text);
-    }
-
-    .nav-cta {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--bg);
-      color: var(--text);
-      padding: 8px 20px;
-      border-radius: 99px;
-      font-size: 12px;
-      font-weight: 600;
-      border: 1px solid var(--line);
-      transition: border-color 0.2s;
-      text-decoration: none;
-    }
-
-    .nav-cta:hover {
-      border-color: var(--line-strong);
     }
 
     /* --- Marquee Scroller --- */
@@ -583,10 +517,9 @@
       100% { transform: translateX(-50%); }
     }
 
-    /* ปรับแต่ง Marquee Card ให้มีความกว้างเห็นข้อความเต็ม */
     .marquee-card {
       position: relative;
-      width: 260px; /* ขยายความกว้าง */
+      width: 260px; 
       height: 72px; 
       flex-shrink: 0;
       display: flex;
@@ -657,7 +590,6 @@
       transition: color 0.3s;
     }
 
-    /* เมื่อ Hover บนพื้นหลังสีสว่าง ให้ Font เปลี่ยนเป็นสีเข้ม */
     .marquee-card:hover .marquee-text,
     .marquee-card:hover .marquee-icon {
       color: #111827 !important;
@@ -881,7 +813,6 @@
 
     .apps-grid{
       display:grid;
-      /* ขยายการ์ดให้กว้างขึ้น เพื่อให้ชื่อแอพไม่โดนตัด */
       grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));
       align-items:stretch;
       gap:12px;
@@ -935,7 +866,6 @@
       background:color-mix(in srgb,var(--group-color,var(--accent)) 15%,transparent);
     }
 
-    /* รองรับ FontAwesome ใน .app-icon */
     .app-icon i {
       font-size: 20px;
     }
@@ -2053,21 +1983,8 @@
           <p class="hero-subtitle-modern" id="hero-copy">
             ศูนย์รวมแอปพลิเคชันและเครื่องมือการทำงานของคุณ เข้าถึงทุกบริการและจัดการระบบได้อย่างรวดเร็ว ปลอดภัย จบในที่เดียว
           </p>
-          <button class="hero-btn-contact" type="button">Contact Us</button>
+          <a class="hero-btn-contact" href="mailto:meanchannel52@koomean.com?subject=Koo%20Mean%20Portal%20Report">Contact Us</a>
         </div>
-    
-        <!-- 3. Floating Bottom Navbar -->
-        <nav class="hero-floating-nav">
-          <div class="nav-logo-star">✦</div>
-          <div class="nav-links-wrap">
-            <button type="button">Products</button>
-            <button type="button">Docs</button>
-          </div>
-          <button class="nav-cta" type="button">
-            Get in touch 
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-          </button>
-        </nav>
       </div>
     
       <!-- 4. Seamless Marquee Logo Scroller (รอโหลดข้อมูลจากชีต Links) -->
@@ -2556,7 +2473,6 @@
       }
 
       function validSlug(value) {
-        // อัปเดต Regex ให้สามารถใช้เว้นวรรคได้ เช่น fa-brands fa-facebook
         return /^[a-z0-9][a-z0-9_\-\s]{0,50}$/i.test(String(value || ""));
       }
 
@@ -2758,17 +2674,15 @@
         );
       }
 
-      // ปรับปรุงการแสดงชื่อ Welcome ตามที่ผู้ใช้ล็อกอิน
       function applyUser() {
         const signedIn = Boolean(state.user);
         
         let firstName = "";
         if (signedIn) {
           const fullName = state.user?.name || state.user?.email?.split("@")[0] || "";
-          firstName = fullName.split(" ")[0]; // ดึงเฉพาะชื่อจริง (ตัดนามสกุลออก)
+          firstName = fullName.split(" ")[0]; 
         }
 
-        // อัปเดตข้อความ Hero Title ให้มีชื่อเมื่อล็อกอิน
         const heroTitle = $("hero-title");
         if (heroTitle) {
           heroTitle.innerHTML = firstName 
@@ -2940,12 +2854,6 @@
           const kicker = $("hero-kicker");
           if (kicker) kicker.textContent = `${profile.name} · APPLICATION HUB`;
         }
-
-        if (profile.bio) {
-          const copy = $("hero-copy");
-          // ถ้ามี bio จาก API เราจะใช้ข้อความใหม่ที่ผมใส่เป็นค่าเริ่มต้นแล้ว หากต้องการให้ระบบทับให้เอา Comment ออก
-          // if (copy) copy.textContent = profile.bio;
-        }
       }
 
       function groupKey(app) {
@@ -2975,31 +2883,25 @@
           : "";
       }
 
-      // ระบบสร้าง HTML โลโก้ใหม่ (รองรับ FontAwesome, SVG, Link รูป, และตัวอักษร)
       function getIconHtml(iconStr, title) {
         iconStr = String(iconStr || "").trim();
         title = String(title || "?").trim();
 
-        // ตรวจสอบว่าเป็น FontAwesome หรือไม่ (มี fa- อยู่ในข้อความ)
         if (iconStr.match(/^(fa[srlb]|fa-)\b/i) || iconStr.includes(" fa-")) {
-          // ถ้าเป็นชื่อสั้นๆ เช่น fa-facebook ให้เติม fas ให้เพื่อให้ใช้ได้ (เผื่อลืมใส่)
           let classes = iconStr;
           if (iconStr.startsWith("fa-")) classes = "fas " + iconStr;
           return `<i class="${escapeHtml(classes)}"></i>`;
         }
 
-        // ตรวจสอบว่าเป็น Link ตรงๆ
         if (iconStr.startsWith("http")) {
           return `<img src="${escapeHtml(iconStr)}" alt="">`;
         }
 
-        // ลองโหลดจาก theSVG
         const svgSource = svgUrl(iconStr);
         if (svgSource) {
           return `<img src="${escapeHtml(svgSource)}" alt="">`;
         }
 
-        // Fallback ตัวอักษร
         return `<span class="fallback-icon">${escapeHtml(title.charAt(0).toUpperCase())}</span>`;
       }
 
@@ -3364,7 +3266,6 @@
 
       function refreshIconPreview() {
         const preview = $("icon-preview");
-        // เราใช้ getIconHtml สำหรับการพรีวิวแทน img/svgUrl เพื่อให้รองรับ FontAwesome
         const iconHtmlCode = getIconHtml(state.selectedIcon, "Preview");
 
         preview.innerHTML = iconHtmlCode;
@@ -4008,7 +3909,6 @@
         }
       }, true);
 
-      // ฟังก์ชันสำหรับเรนเดอร์โลโก้และข้อความในแถบ Marquee
       function renderMarquee() {
         const track = $("marquee-track");
         if (!track) return;
@@ -4043,13 +3943,11 @@
           }
         }
 
-        // สร้าง HTML ให้กลายเป็นแท็ก <a> วนลูปซ้ำ 2 รอบแบบไร้รอยต่อ
         const html = [...displayLinks, ...displayLinks].map((link, index) => {
           const bg = gradients[index % gradients.length];
           const title = escapeHtml(link.title || "Link");
           const url = escapeHtml(link.url);
           
-          // ดึง Icon หรือ FontAwesome ผ่านฟังก์ชันที่เราสร้างไว้
           const iconContent = getIconHtml(link.icon, title);
 
           return `
@@ -4076,12 +3974,11 @@
         
         await loadPortal(false, true);
 
-        // เมื่อโหลดข้อมูลเสร็จแล้ว ให้ซ่อนหน้า Loading Screen แบบนุ่มนวล
         const loader = $("page-loader");
         if (loader) {
           loader.style.opacity = "0";
           loader.style.visibility = "hidden";
-          setTimeout(() => loader.remove(), 600); // เอา Element ออกจาก DOM หลัง Transition จบ
+          setTimeout(() => loader.remove(), 600);
         }
       }
 
