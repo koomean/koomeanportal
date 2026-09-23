@@ -9,11 +9,14 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <!-- โหลด Font เดิม (IBM Plex) และ Font ใหม่สำหรับ Hero (Inter, Outfit) -->
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
     :root{
       --font:"IBM Plex Sans Thai",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      --font-sans: 'Inter', sans-serif;
+      --font-display: 'Outfit', sans-serif;
       --mono:"IBM Plex Mono",ui-monospace,monospace;
       --radius:12px;
       --radius-sm:8px;
@@ -144,7 +147,7 @@
     .topbar{
       position:sticky;
       top:0;
-      z-index:20;
+      z-index:40;
       background:color-mix(in srgb,var(--topbar) 94%,transparent);
       border-bottom:1px solid var(--line);
       backdrop-filter:blur(14px);
@@ -358,32 +361,6 @@
     .main{
       padding-top:clamp(24px,5vw,42px);
       padding-bottom:60px;
-    }
-
-    .hero{
-      margin-bottom:24px;
-      scroll-margin-top:130px;
-    }
-
-    .hero-kicker{
-      margin-bottom:7px;
-      color:var(--dim);
-      font:500 .7rem var(--mono);
-    }
-
-    .hero h1{
-      max-width:700px;
-      font-size:clamp(1.55rem,4.5vw,2.25rem);
-      line-height:1.22;
-      letter-spacing:-.025em;
-    }
-
-    .hero-copy{
-      max-width:630px;
-      margin-top:9px;
-      color:var(--muted);
-      font-size:.87rem;
-      line-height:1.7;
     }
 
     .toolbar{
@@ -856,7 +833,6 @@
     }
 
     /* Modal */
-
     .modal-backdrop{
       position:fixed;
       inset:0;
@@ -1694,6 +1670,249 @@
         transition-duration:.01ms!important;
       }
     }
+
+    /* --- Modern Hero Section --- */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modern-hero {
+      position: relative;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto 40px;
+      height: min(600px, 80vh);
+      border-radius: 48px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-video-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      opacity: 0.4;
+      mix-blend-mode: luminosity;
+    }
+
+    [data-theme="light"] .hero-video-layer {
+      opacity: 0.8;
+      mix-blend-mode: normal;
+    }
+
+    .hero-video-layer video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.05);
+      transition: transform 1s;
+    }
+
+    .hero-content-layer {
+      position: relative;
+      z-index: 20;
+      flex: 1;
+      padding: clamp(32px, 5vw, 64px);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .hero-title-modern {
+      font-family: var(--font-display);
+      font-size: clamp(42px, 6vw, 56px);
+      font-weight: 500;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .hero-subtitle-modern {
+      font-family: var(--font-sans);
+      font-size: clamp(14px, 2vw, 15px);
+      color: var(--text-2);
+      max-width: 500px;
+      line-height: 1.7;
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+    }
+
+    .hero-btn-contact {
+      font-family: var(--font-sans);
+      background: var(--text);
+      color: var(--bg);
+      padding: 14px 32px;
+      border-radius: 99px;
+      font-weight: 600;
+      font-size: 15px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.3);
+      transition: transform 0.2s, box-shadow 0.2s;
+      opacity: 0;
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+    }
+
+    .hero-btn-contact:hover {
+      transform: scale(1.05);
+      box-shadow: 0 15px 35px -10px rgba(0,0,0,0.4);
+    }
+
+    .hero-floating-nav {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      background: color-mix(in srgb, var(--panel) 90%, transparent);
+      backdrop-filter: blur(20px);
+      padding: 6px;
+      border-radius: 99px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+      gap: 20px;
+      opacity: 0;
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.45s forwards;
+    }
+
+    .nav-logo-star {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 1px solid var(--line);
+      color: var(--accent);
+      margin-left: 2px;
+    }
+
+    .nav-links-wrap {
+      display: flex;
+      gap: 24px;
+      padding: 0 12px;
+    }
+
+    .nav-links-wrap button {
+      font-family: var(--font-sans);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+
+    .nav-links-wrap button:hover {
+      color: var(--text);
+    }
+
+    .nav-cta {
+      font-family: var(--font-sans);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--bg);
+      color: var(--text);
+      padding: 8px 20px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid var(--line);
+      transition: border-color 0.2s;
+    }
+
+    .nav-cta:hover {
+      border-color: var(--line-strong);
+    }
+
+    /* --- Marquee Scroller --- */
+    .marquee-wrapper {
+      width: 100%;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      margin-bottom: 24px;
+    }
+
+    .marquee-track {
+      display: flex;
+      width: 200%;
+      animation: marquee 30s linear infinite;
+    }
+
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .marquee-card {
+      position: relative;
+      width: 160px;
+      height: 96px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 99px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      margin: 0 8px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+
+    .marquee-card:hover {
+      border-color: var(--line-strong);
+    }
+
+    .marquee-gradient {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: scale(1.5);
+      transition: all 0.5s ease-out;
+      z-index: 0;
+    }
+
+    .marquee-card:hover .marquee-gradient {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .marquee-logo {
+      width: 48px;
+      height: 48px;
+      object-fit: contain;
+      position: relative;
+      z-index: 10;
+      transition: filter 0.3s;
+    }
+
+    [data-theme="dark"] .marquee-logo {
+      filter: invert(1) opacity(0.8);
+    }
+
+    .marquee-card:hover .marquee-logo {
+      filter: brightness(0) !important;
+    }
   </style>
 </head>
 
@@ -1738,12 +1957,42 @@
   </header>
 
   <main class="container main" id="main-content">
-    <section class="hero" id="home">
-      <div class="hero-kicker" id="hero-kicker">YOUR APPLICATION HUB</div>
-      <h1 id="hero-title">รวมทุกแอปไว้ในที่เดียว</h1>
-      <p class="hero-copy" id="hero-copy">
-        ศูนย์รวมเครื่องมือและแอปพลิเคชันสำหรับการใช้งานของคุณ เลือกแอปที่ต้องการแล้วเริ่มใช้งานได้ทันที
-      </p>
+    
+    <!-- Hero Section โฉมใหม่ -->
+    <section id="home">
+      <!-- 1. Main Hero Container -->
+      <div class="modern-hero">
+        <div class="hero-video-layer">
+          <video src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260505_101331_74f9b798-3f00-4e86-8a01-377aa16ffeaa.mp4" autoplay loop muted playsinline></video>
+        </div>
+
+        <!-- 2. Hero Text Content -->
+        <div class="hero-content-layer">
+          <h1 class="hero-title-modern" id="hero-title">Foundation of the<br />new digital epoch</h1>
+          <p class="hero-subtitle-modern" id="hero-copy">
+            Designing products, powering ecosystems and laying the foundation of a decentralized web for enterprises, builders and communities alike.
+          </p>
+          <button class="hero-btn-contact" type="button">Contact Us</button>
+        </div>
+
+        <!-- 3. Floating Bottom Navbar -->
+        <nav class="hero-floating-nav">
+          <div class="nav-logo-star">✦</div>
+          <div class="nav-links-wrap">
+            <button type="button">Products</button>
+            <button type="button">Docs</button>
+          </div>
+          <button class="nav-cta" type="button">
+            Get in touch 
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </nav>
+      </div>
+
+      <!-- 4. Seamless Marquee Logo Scroller (รอรับข้อมูลจาก JS) -->
+      <div class="marquee-wrapper">
+        <div class="marquee-track" id="marquee-track"></div>
+      </div>
     </section>
 
     <section aria-label="รายการแอปพลิเคชัน">
@@ -2168,7 +2417,7 @@
         applications: [],
         users: [],
         profile: null,
-        editingRow: null, // [FIX] เปลี่ยนจาก 0 เป็น null ป้องกันบั๊ก rowIdx 0 Falsy
+        editingRow: null, // แก้บั๊ก Falsy ID=0
         selectedIcon: "",
         selectedIconName: "",
         logoRegistry: [],
@@ -2214,7 +2463,7 @@
         try {
           const url = new URL(value);
           const path = (url.pathname.replace(/\/+$/, "") || "/").toLowerCase();
-          // [FIX] เพิ่ม url.hash เข้ามาเพื่อรองรับ URL ของ SPA
+          // แก้บั๊กให้รวม Hash กลับเข้าไป เพื่อรองรับ URL แบบ SPA
           return url.origin.toLowerCase() + path + url.search.toLowerCase() + url.hash.toLowerCase();
         } catch {
           return "";
@@ -2574,7 +2823,7 @@
           renderError(error.message);
           showToast(error.message, "error");
           
-          // [FIX] ไม่ต้องสุ่มทำ retry ใหม่ถ้า error เกิดจาก Session หมดอายุ เพื่อแก้ Infinite Loop
+          // แก้บั๊ก ป้องกันการสุ่มโหลดใหม่ถ้า Error มาจากการที่ Token หมดอายุ
           if (error.message !== t("sessionExpired")) {
             scheduleRetry();
           }
@@ -2589,12 +2838,9 @@
           document.title = `${profile.webTitle} · Portal`;
         }
 
-        if (profile.name) {
-          $("hero-kicker").textContent = `${profile.name} · APPLICATION HUB`;
-        }
-
-        if (profile.bio) {
-          $("hero-copy").textContent = profile.bio;
+        if (profile.name && $("hero-title")) {
+          // หากต้องการให้ข้อมูล Profile ทับ Hero Title ใหม่ ค่อยปลดคอมเมนต์บรรทัดข้างล่าง (ตอนนี้สงวนดีไซน์ใหม่เอาไว้)
+          // $("hero-title").innerHTML = `${profile.name}<br />APPLICATION HUB`;
         }
       }
 
@@ -2817,7 +3063,7 @@
           const existing = document.querySelector('script[data-google-signin]');
 
           if (existing) {
-            // [FIX] เช็คให้แน่ใจว่าถ้า existing มีอยู่ และ id พร้อมใช้แล้ว ก็ resolve ทันที ป้องกันปัญหา script error หรือค้าง
+            // แก้บั๊ก Race Condition ของ Google Sign In
             if (window.google?.accounts?.id) return resolve();
             existing.addEventListener("load", resolve, {once: true});
             existing.addEventListener("error", reject, {once: true});
@@ -2956,7 +3202,7 @@
       }
 
       function resetAdminForm() {
-        state.editingRow = null; // [FIX] เซ็ตเป็น null เพื่อให้แยกออกว่าเป็นเพิ่มข้อมูลใหม่
+        state.editingRow = null; // เช็คเป็น null เพื่อกันบั๊คแถวที่ 0
         state.selectedIcon = "";
         state.selectedIconName = "";
 
@@ -2973,7 +3219,7 @@
       }
 
       function fillAdminForm(app) {
-        state.editingRow = app.rowIdx !== undefined ? app.rowIdx : null; // [FIX] เช็ตค่า null ถ้าไม่มี index
+        state.editingRow = app.rowIdx !== undefined ? app.rowIdx : null;
         state.selectedIcon = String(app.icon || "");
         state.selectedIconName = state.selectedIcon;
 
@@ -3111,7 +3357,6 @@
           return;
         }
 
-        // [FIX] ใช้ state.editingRow !== null ในการเช็ค
         const duplicate = state.applications.find(app =>
           app.rowIdx !== state.editingRow &&
           canonicalUrl(app.url) === canonicalUrl(url)
@@ -3135,7 +3380,6 @@
         button.textContent = t("loading");
 
         try {
-          // [FIX] ใช้ state.editingRow !== null ในการเลือก Action
           const action = state.editingRow !== null ? "updateApplication" : "addApplication";
 
           const parameters = {
@@ -3403,6 +3647,32 @@
         }
       }
 
+      // Marquee Render Function (New Component)
+      function renderMarquee() {
+        const track = $("marquee-track");
+        if (!track) return;
+
+        const logos = [
+          { name: 'Procure', src: 'https://svgl.app/library/procure.svg', bg: 'linear-gradient(135deg, #bfdbfe, #3b82f6)' },
+          { name: 'Shopify', src: 'https://svgl.app/library/shopify.svg', bg: 'linear-gradient(135deg, #fef08a, #4ade80)' },
+          { name: 'Blender', src: 'https://svgl.app/library/blender.svg', bg: 'linear-gradient(135deg, #fed7aa, #93c5fd)' },
+          { name: 'Figma', src: 'https://svgl.app/library/figma.svg', bg: 'linear-gradient(135deg, #e9d5ff, #f472b6)' },
+          { name: 'Spotify', src: 'https://svgl.app/library/spotify.svg', bg: 'linear-gradient(135deg, #fbcfe8, #f87171)' },
+          { name: 'Lottielab', src: 'https://svgl.app/library/lottielab.svg', bg: 'linear-gradient(135deg, #fef08a, #86efac)' },
+          { name: 'Google Cloud', src: 'https://svgl.app/library/google_cloud.svg', bg: 'linear-gradient(135deg, #dbeafe, #60a5fa)' },
+          { name: 'Bing', src: 'https://svgl.app/library/bing.svg', bg: 'linear-gradient(135deg, #a5f3fc, #2dd4bf)' }
+        ];
+
+        const html = [...logos, ...logos].map(logo => `
+          <div class="marquee-card">
+            <div class="marquee-gradient" style="background: ${logo.bg}"></div>
+            <img src="${escapeHtml(logo.src)}" alt="${escapeHtml(logo.name)}" class="marquee-logo" loading="lazy">
+          </div>
+        `).join("");
+
+        track.innerHTML = html;
+      }
+
       document.addEventListener("click", event => {
         const closeButton = event.target.closest("[data-close-modal]");
         if (closeButton) {
@@ -3651,6 +3921,7 @@
         applyLanguage();
         restoreSession();
         applyUser();
+        renderMarquee(); // รัน Marquee
         await loadPortal(false, true);
       }
 
