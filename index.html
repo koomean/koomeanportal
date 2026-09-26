@@ -2900,14 +2900,13 @@
 
       function applyProfile() {
         const profile = state.profile || {};
-
-        if (profile.webTitle) {
-          document.title = `${profile.webTitle} · Portal`;
-        }
+        // Keep the browser tab and product name consistent with this page.
+        // Older D1 profile rows may still contain the previous Link Center title.
+        document.title = "Koo Mean Portal";
 
         if (profile.name) {
           const kicker = $("hero-kicker");
-          if (kicker) kicker.textContent = `${profile.name} · APPLICATION HUB`;
+          if (kicker) kicker.textContent = `${profile.name} · KOO MEAN PORTAL`;
         }
       }
 
