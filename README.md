@@ -18,7 +18,7 @@
 <a id="overview"></a>
 ## 🌟 ภาพรวม
 
-หน้าเว็บ [`koomeanportal.html`](koomeanportal.html) เป็น HTML/CSS/JavaScript แบบ standalone ไม่ต้อง build สามารถ host บน HTTPS static hosting ใดก็ได้ที่รองรับหน้า HTML คำว่า Portal เป็นชื่อผลิตภัณฑ์ ไม่ได้บังคับให้ต้องมี subdomain `portal.koomean.com`
+หน้าเว็บ [`https://koomean.com/`](koomeanportal.html) เป็น HTML/CSS/JavaScript แบบ standalone ไม่ต้อง build สามารถ host บน HTTPS static hosting ใดก็ได้ที่รองรับหน้า HTML คำว่า Portal เป็นชื่อผลิตภัณฑ์ ไม่ได้บังคับให้ต้องมี subdomain `portal.koomean.com`
 
 ```mermaid
 flowchart TD
