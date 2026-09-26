@@ -2722,11 +2722,12 @@
       }
 
       function isAdmin() {
-        return Boolean(
-          state.user &&
-          state.verified &&
-          String(state.user.role || "").toLowerCase().includes("admin")
-        );
+        const roles = String(state.user?.role || "")
+          .toLowerCase()
+          .split(/[,;|]+/)
+          .map(role => role.trim())
+          .filter(Boolean);
+        return Boolean(state.user && state.verified && roles.includes("admin"));
       }
 
       function applyUser() {
@@ -2853,10 +2854,8 @@
           if (data.requireRegistration) {
             state.user = null;
             state.verified = false;
-            state.applications = [];
-            state.links = [];
+            clearPortalData();
             applyUser();
-            renderApplications();
             setStatus("offline", "ต้องลงทะเบียน");
             openModal("register-modal");
             return false;
@@ -2910,6 +2909,17 @@
           const kicker = $("hero-kicker");
           if (kicker) kicker.textContent = `${profile.name} · APPLICATION HUB`;
         }
+      }
+
+      function clearPortalData() {
+        state.applications = [];
+        state.links = [];
+        state.users = [];
+        state.profile = null;
+        renderApplications();
+        renderMarquee();
+        renderAdminItems();
+        renderAdminUsers();
       }
 
       function groupKey(app) {
@@ -3202,6 +3212,8 @@
         state.token = response.credential;
         state.user = null;
         state.verified = false;
+        clearPortalData();
+        applyUser();
 
         closeModal("login-modal");
         scheduleSessionExpiry();
@@ -3217,12 +3229,10 @@
         state.token = null;
         state.user = null;
         state.verified = false;
-        state.users = [];
-        state.applications = [];
+        clearPortalData();
 
         clearSession();
         applyUser();
-        renderApplications();
 
         [...state.modalStack].reverse().forEach(id => closeModal(id, false));
 
