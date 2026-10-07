@@ -1706,6 +1706,34 @@
       line-height:1.6;
     }
 
+    .policy-links{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:14px;
+    }
+
+    .policy-links .btn{
+      text-decoration:none;
+    }
+
+    .register-consent{
+      align-items:flex-start;
+      margin:6px 0 0;
+      line-height:1.65;
+    }
+
+    .register-consent input{
+      flex:0 0 18px;
+      margin-top:3px;
+    }
+
+    .register-consent a{
+      color:var(--accent);
+      text-decoration:underline;
+      text-underline-offset:2px;
+    }
+
     .command-results{
       display:flex;
       flex-direction:column;
@@ -2109,6 +2137,10 @@
         <div class="help-item" style="margin-top:16px">
           <p>ระบบใช้ Token ที่ตรวจสอบโดยเซิร์ฟเวอร์ และไม่มีการจัดเก็บรหัสผ่านของ Google ภายในหน้าเว็บนี้</p>
         </div>
+        <div class="policy-links" aria-label="เอกสารนโยบาย">
+          <a class="btn btn-ghost" href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="login-privacy-label">นโยบายความเป็นส่วนตัว</span> ↗</a>
+          <a class="btn btn-ghost" href="https://koomean.com/terms-of-service.html" target="_blank" rel="noopener noreferrer"><span id="login-terms-label">ข้อกำหนดการใช้บริการ</span> ↗</a>
+        </div>
       </div>
     </section>
   </div>
@@ -2127,11 +2159,15 @@
       <div class="modal-body">
         <label class="field-label" for="register-note">ข้อมูลเพิ่มเติม (ไม่บังคับ)</label>
         <textarea class="field" id="register-note" maxlength="500" placeholder="เช่น ทีม หน้าที่ หรือแอปที่ต้องการใช้งาน"></textarea>
+        <label class="check-row register-consent" for="register-terms-accepted">
+          <input id="register-terms-accepted" type="checkbox" required>
+          <span><span id="register-consent-prefix">ฉันยอมรับ</span> <a href="https://koomean.com/terms-of-service.html" target="_blank" rel="noopener noreferrer"><span id="register-terms-label">ข้อกำหนดการใช้บริการ</span></a> <span id="register-consent-and">และรับทราบ</span> <a href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="register-privacy-label">นโยบายความเป็นส่วนตัว</span></a></span>
+        </label>
       </div>
 
       <footer class="modal-footer">
         <button class="btn btn-ghost" type="button" data-close-modal>ยกเลิก</button>
-        <button class="btn btn-primary" id="register-btn" type="button">ส่งคำขอ</button>
+        <button class="btn btn-primary" id="register-btn" type="button" disabled>ส่งคำขอ</button>
       </footer>
     </section>
   </div>
@@ -2363,6 +2399,10 @@
             <strong>ปุ่มลัด</strong>
             <p>กด / เพื่อค้นหา, R เพื่อรีเฟรช, Ctrl/⌘ + K เพื่อเปิด Command Palette และ Esc เพื่อปิดหน้าต่างล่าสุด</p>
           </div>
+        </div>
+        <div class="policy-links" aria-label="เอกสารนโยบาย">
+          <a class="btn btn-ghost" href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="help-privacy-label">นโยบายความเป็นส่วนตัว</span> ↗</a>
+          <a class="btn btn-ghost" href="https://koomean.com/terms-of-service.html" target="_blank" rel="noopener noreferrer"><span id="help-terms-label">ข้อกำหนดการใช้บริการ</span> ↗</a>
         </div>
       </div>
     </section>
@@ -2682,6 +2722,15 @@
         document.documentElement.lang = state.lang;
         $("auth-label").textContent = state.user ? t("account") : t("login");
         $("available-label").textContent = t("available");
+        const english = state.lang === "en";
+        $("login-privacy-label").textContent = english ? "Privacy Policy" : "นโยบายความเป็นส่วนตัว";
+        $("login-terms-label").textContent = english ? "Terms of Service" : "ข้อกำหนดการใช้บริการ";
+        $("help-privacy-label").textContent = english ? "Privacy Policy" : "นโยบายความเป็นส่วนตัว";
+        $("help-terms-label").textContent = english ? "Terms of Service" : "ข้อกำหนดการใช้บริการ";
+        $("register-privacy-label").textContent = english ? "Privacy Policy" : "นโยบายความเป็นส่วนตัว";
+        $("register-terms-label").textContent = english ? "Terms of Service" : "ข้อกำหนดการใช้บริการ";
+        $("register-consent-prefix").textContent = english ? "I agree to the" : "ฉันยอมรับ";
+        $("register-consent-and").textContent = english ? "and acknowledge the" : "และรับทราบ";
 
         document.querySelectorAll("[data-language-value]").forEach(button => {
           button.classList.toggle("active", button.dataset.languageValue === state.lang);
@@ -3274,12 +3323,19 @@
 
       async function registerAccount() {
         const button = $("register-btn");
+        if (!$("register-terms-accepted").checked) {
+          showToast(state.lang === "en" ? "Please accept the Terms of Service and acknowledge the Privacy Policy to continue." : "กรุณายอมรับข้อกำหนดและรับทราบนโยบายความเป็นส่วนตัวก่อนสมัคร", "error");
+          $("register-terms-accepted").focus();
+          return;
+        }
         button.disabled = true;
         button.textContent = t("loading");
 
         try {
           await request("register", {
-            note: $("register-note").value.trim()
+            note: $("register-note").value.trim(),
+            termsAccepted: true,
+            termsVersion: "2026-10-07"
           });
 
           closeModal("register-modal");
@@ -3903,6 +3959,9 @@
       $("logout-btn").addEventListener("click", () => signOut(true));
       $("save-name-btn").addEventListener("click", saveDisplayName);
       $("register-btn").addEventListener("click", registerAccount);
+      $("register-terms-accepted").addEventListener("change", event => {
+        $("register-btn").disabled = !event.currentTarget.checked;
+      });
       $("admin-submit-btn").addEventListener("click", submitApplication);
       $("admin-cancel-btn").addEventListener("click", resetAdminForm);
       $("use-icon-btn").addEventListener("click", useManualIcon);
