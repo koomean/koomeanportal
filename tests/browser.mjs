@@ -12,7 +12,7 @@ function ok(name,value=true){assert.ok(value,name);checks.push(name);console.log
 async function setup(options={}){
  const context=await browser.newContext({viewport:{width:1440,height:960},colorScheme:'dark',reducedMotion:options.reduced?'reduce':'no-preference'});const page=await context.newPage();
  if(options.clock)await page.clock.install();
- const calls=[],errors=[],consoleErrors=[];let signedRole='admin',rateLimited=false,requiresRegistration=false,registered=false,maintenance=false,gate=null;
+ const calls=[],errors=[],consoleErrors=[];let signedRole='admin',rateLimited=false,requiresRegistration=false,registered=false,maintenance=false,gate=null,initialToolbarY=null;
  page.on('pageerror',e=>errors.push(e.message));page.on('console',e=>{if(e.type()==='error')consoleErrors.push(e.text())});
  if(options.storage)await page.addInitScript(()=>{localStorage.setItem('koomean_portal_session_v2',JSON.stringify({token:'legacy-private-token',user:{role:'admin',email:'old@example.invalid'}}))});
  if(options.blockStorage)await page.addInitScript(()=>{Storage.prototype.setItem=()=>{throw new DOMException('Unavailable')};Storage.prototype.getItem=()=>{throw new DOMException('Unavailable')};Storage.prototype.removeItem=()=>{throw new DOMException('Unavailable')}});
@@ -24,6 +24,7 @@ async function setup(options={}){
   if(action==='maintenanceStatus')return r.fulfill({json:{maintenance:{active:maintenance,note:'ทดสอบปิดปรับปรุง',reopenAt:Date.now()+60000}}});
   if(action==='bootstrap'){
    const authenticated=params.has('idToken');
+   if(!authenticated && initialToolbarY===null)initialToolbarY=(await page.locator('.toolbar').boundingBox()).y;
    const data={applications:apps.filter(app=>authenticated||app.group==='public').concat(authenticated?[{rowIdx:99,name:'PrivateAdmin',url:'https://example.invalid/private',group:signedRole}]:[]),links,user:authenticated?{...user,role:signedRole}:{role:'public'},allUsers:authenticated&&signedRole==='admin'?[{...user,email:'x'.repeat(120)+'@example.invalid'}]:[]};
    if(authenticated&&requiresRegistration&&!registered)data.requireRegistration=true;
    if(gate&&authenticated){const current=gate;gate=null;current.started();await current.promise;}
@@ -34,13 +35,14 @@ async function setup(options={}){
   return r.fulfill({json:{success:true}});
  });
  await page.goto('https://koomean.com/',{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#applications').getAttribute('aria-busy')==='false');
- return {page,context,calls,errors,consoleErrors,setRole:role=>signedRole=role,setRate:v=>rateLimited=v,setRegistration:v=>requiresRegistration=v,setMaintenance:v=>maintenance=v,delayNext:()=>{let resolve,started;const promise=new Promise(r=>resolve=r);const ready=new Promise(r=>started=r);gate={promise,started};return{release:resolve,ready}},login:async(role='admin')=>{signedRole=role;await page.evaluate(token=>window.handleGoogleCredential({credential:token}),token(role));await page.waitForFunction(()=>document.querySelector('#applications').getAttribute('aria-busy')==='false');}};
+ return {page,context,calls,errors,consoleErrors,get initialToolbarY(){return initialToolbarY},setRole:role=>signedRole=role,setRate:v=>rateLimited=v,setRegistration:v=>requiresRegistration=v,setMaintenance:v=>maintenance=v,delayNext:()=>{let resolve,started;const promise=new Promise(r=>resolve=r);const ready=new Promise(r=>started=r);gate={promise,started};return{release:resolve,ready}},login:async(role='admin')=>{signedRole=role;await page.evaluate(token=>window.handleGoogleCredential({credential:token}),token(role));await page.waitForFunction(()=>document.querySelector('#applications').getAttribute('aria-busy')==='false');}};
 }
 async function within(page,selector){return page.locator(selector).evaluateAll(nodes=>nodes.filter(e=>e.offsetParent!==null).map(e=>{const r=e.getBoundingClientRect(),p=e.parentElement.getBoundingClientRect();return{selector:e.className||e.id,right:r.right,left:r.left,width:r.width,parentRight:p.right,parentLeft:p.left,scroll:e.scrollWidth,client:e.clientWidth}}).filter(r=>r.right>r.parentRight+2||r.left<r.parentLeft-2))}
 async function close(page){await page.keyboard.press('Escape');await page.waitForFunction(()=>!document.querySelector('.modal-backdrop.open'))}
 try{
  const env=await setup({storage:true});const {page,calls}=env;
  ok('Legacy token is removed without restoring unverified identity',await page.evaluate(()=>localStorage.getItem('koomean_portal_session_v2')===null)&&await page.locator('#admin-nav').isHidden());
+ ok('Public link rail reserves layout space before the API responds',Math.abs((await page.locator('.toolbar').boundingBox()).y-env.initialToolbarY)<1);
  ok('Anonymous startup requests only bootstrap and maintenance',calls.filter(c=>!['bootstrap','maintenanceStatus'].includes(c.action)).length===0);
  ok('First render contains no blocking loader or fetched video',await page.locator('#page-loader').count()===0&&await page.locator('#hero-video').getAttribute('src')===null);
  ok('Unsafe app and marquee URLs are filtered',await page.locator('a[href^="javascript:"],a[href*="password@"],a[href*="name:"]').count()===0);
@@ -71,6 +73,7 @@ try{
  await env.context.close();
  const registered=await setup();registered.setRegistration(true);await registered.page.evaluate(t=>handleGoogleCredential({credential:t}),token('public'));await registered.page.waitForSelector('#register-modal.open');ok('New users see registration with consent required',await registered.page.locator('#register-btn').isDisabled());await registered.page.locator('#register-terms-accepted').check();await registered.page.locator('#register-btn').click();await registered.page.waitForSelector('#register-modal',{state:'hidden'});await registered.page.waitForFunction(()=>document.querySelector('#applications').getAttribute('aria-busy')==='false');ok('Registration refreshes account and catalog automatically',await registered.page.locator('#auth-label').textContent()==='บัญชี');await registered.context.close();
  const ordinary=await setup();await ordinary.login('notadmin');ok('Substring admin role does not grant admin controls',await ordinary.page.locator('#admin-nav').isHidden());await ordinary.context.close();
+ const gis=await setup();await gis.page.locator('#auth-btn').click();await gis.page.waitForSelector('#google-button button');await gis.page.keyboard.press('Escape');ok('Closing login tears down the provider frame before hiding the modal',await gis.page.locator('#google-button').evaluate(e=>e.childElementCount===0));await gis.context.close();
  const slow=await setup({googleDelay:500});await slow.page.locator('#auth-btn').click();await slow.page.waitForSelector('#login-modal.open');await slow.page.keyboard.press('Escape');await slow.page.waitForTimeout(650);ok('Closing login while Google loads does not reopen it',await slow.page.locator('#login-modal').isHidden());await slow.context.close();
  const reduced=await setup({reduced:true});ok('Reduced motion stops marquee and hero entrance',await reduced.page.locator('.marquee-track').evaluate(e=>getComputedStyle(e).animationName==='none')&&await reduced.page.locator('#hero-title').evaluate(e=>getComputedStyle(e).opacity==='1'));await reduced.context.close();
  const unavailable=await setup({blockStorage:true});await unavailable.page.locator('#settings-btn').click();await unavailable.page.locator('[data-theme-value="light"]').click();await close(unavailable.page);await unavailable.page.locator('[data-pin-url]').first().click();ok('Blocked storage does not break theme or favorites',unavailable.errors.length===0);await unavailable.context.close();

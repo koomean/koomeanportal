@@ -2039,7 +2039,7 @@
       </div>
 
       <!-- 3. Seamless Marquee Logo Scroller -->
-      <div class="marquee-section" id="marquee-section" hidden>
+      <div class="marquee-section" id="marquee-section" data-loading aria-busy="true">
         <div class="marquee-wrapper"><div class="marquee-track" id="marquee-track"></div></div>
         <button class="marquee-toggle" id="marquee-toggle" type="button" aria-pressed="false" aria-label="หยุดแถบลิงก์">Ⅱ</button>
       </div>
@@ -2653,6 +2653,8 @@
         const backdrop = $(id);
         if (!backdrop?.classList.contains("open")) return;
 
+        // Tear down the GIS frame before hiding it so pending provider callbacks cannot run in a hidden frame.
+        if (id === "login-modal") $("google-button").replaceChildren();
         backdrop.classList.remove("open");
         backdrop.hidden = true;
         backdrop.style.zIndex = "";
@@ -4051,6 +4053,8 @@
       function renderMarquee() {
         const track = $("marquee-track"), section = $("marquee-section");
         const publicLinks = state.links.filter(link => (link.group === 'public' || !link.group) && safeUrl(link.url));
+        section.removeAttribute("data-loading");
+        section.setAttribute("aria-busy", "false");
         section.hidden = !publicLinks.length;
         if (!publicLinks.length) { track.replaceChildren(); return; }
         const loop = (duplicate) => publicLinks.map(link => {

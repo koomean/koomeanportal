@@ -128,3 +128,8 @@ textarea.field{height:auto;min-height:112px;max-height:45dvh}
 }
 
 .marquee-card:hover{background:var(--panel-hover)}
+
+/* Reserve the asynchronous link rail so the application tools keep their position. */
+.marquee-section[data-loading]{min-height:68px}
+.marquee-section[data-loading]::before{box-sizing:border-box;content:"";display:block;height:64px;width:min(244px,70%);border:1px solid var(--line);border-radius:20px;background:var(--panel)}
+@media(max-width:760px){.marquee-section[data-loading]{min-height:64px}.marquee-section[data-loading]::before{height:60px;width:min(220px,70%);border-radius:18px}}
