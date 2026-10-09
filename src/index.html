@@ -1,0 +1,4129 @@
+<!doctype html>
+<html lang="th" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#14181d" id="theme-color-meta">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Koo Mean Portal</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <meta name="description" content="ศูนย์รวมแอปพลิเคชันและเครื่องมือ Koo Mean เข้าถึงบริการและจัดการบัญชีของคุณได้ในที่เดียว">
+  <link rel="canonical" href="https://koomean.com/">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <style>
+    :root{
+      --font:"IBM Plex Sans Thai",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      --mono:"IBM Plex Mono",ui-monospace,monospace;
+      --radius:12px;
+      --radius-sm:8px;
+      --ease:cubic-bezier(.4,0,.2,1);
+    }
+
+    [data-theme="dark"]{
+      --bg:#14181d;
+      --topbar:#181d23;
+      --panel:#1b2027;
+      --panel-2:#20262d;
+      --panel-hover:#252c34;
+      --text:#eceef1;
+      --text-2:#c3c9d1;
+      --muted:#8a93a0;
+      --dim:#646d78;
+      --line:rgba(255,255,255,.09);
+      --line-strong:rgba(255,255,255,.18);
+      --accent:#d98a3d;
+      --accent-hover:#e6a15c;
+      --on-accent:#1b1206;
+      --ok:#5fa98c;
+      --danger:#d9566b;
+      --scrim:rgba(5,7,9,.72);
+      --shadow:0 24px 60px rgba(0,0,0,.45);
+    }
+
+    [data-theme="light"]{
+      --bg:#f1f2f4;
+      --topbar:#fff;
+      --panel:#fff;
+      --panel-2:#f3f4f6;
+      --panel-hover:#e9ebee;
+      --text:#171a1e;
+      --text-2:#3c434c;
+      --muted:#68707a;
+      --dim:#8a949f;
+      --line:rgba(15,20,25,.11);
+      --line-strong:rgba(15,20,25,.21);
+      --accent:#b96a1e;
+      --accent-hover:#9c5a18;
+      --on-accent:#fff;
+      --ok:#3e7f68;
+      --danger:#b93e52;
+      --scrim:rgba(15,20,25,.48);
+      --shadow:0 24px 60px rgba(15,20,25,.16);
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      -webkit-tap-highlight-color:transparent;
+    }
+
+    html{
+      scroll-behavior:smooth;
+      scrollbar-gutter:stable;
+    }
+
+    body{
+      min-width:280px;
+      min-height:100vh;
+      background:var(--bg);
+      color:var(--text);
+      font-family:var(--font);
+      overflow-x:hidden;
+    }
+
+    body.modal-open{
+      overflow:hidden;
+      overscroll-behavior:none;
+    }
+
+    button,input,select,textarea{
+      font:inherit;
+      color:inherit;
+    }
+
+    button{
+      border:0;
+      background:none;
+      cursor:pointer;
+    }
+
+    button:disabled{
+      cursor:not-allowed;
+      opacity:.5;
+    }
+
+    a{
+      color:inherit;
+      text-decoration:none;
+    }
+
+    img{
+      display:block;
+      max-width:100%;
+    }
+
+    [hidden]{
+      display:none!important;
+    }
+
+    :focus-visible{
+      outline:2px solid var(--accent);
+      outline-offset:2px;
+    }
+
+    ::-webkit-scrollbar{
+      width:9px;
+      height:9px;
+    }
+
+    ::-webkit-scrollbar-thumb{
+      background:var(--line-strong);
+      border:2px solid transparent;
+      border-radius:20px;
+      background-clip:padding-box;
+    }
+
+    .container{
+      width:min(1120px,100%);
+      margin-inline:auto;
+      padding-inline:clamp(14px,3vw,24px);
+    }
+
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:40;
+      background:color-mix(in srgb,var(--topbar) 94%,transparent);
+      border-bottom:1px solid var(--line);
+      backdrop-filter:blur(14px);
+    }
+
+    .topbar-main{
+      display:flex;
+      align-items:center;
+      min-height:62px;
+      gap:12px;
+      padding-block:10px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      min-width:0;
+      flex:0 1 auto;
+    }
+
+    .brand-mark{
+      width:36px;
+      height:36px;
+      flex:0 0 36px;
+      display:grid;
+      grid-template-columns:repeat(2,7px);
+      grid-template-rows:repeat(2,7px);
+      place-content:center;
+      gap:3px;
+      border-radius:9px;
+      color:var(--on-accent);
+      background:var(--accent);
+    }
+
+    .brand-mark i{
+      width:7px;
+      height:7px;
+      border-radius:1px;
+      background:currentColor;
+      display:block;
+    }
+
+    .brand-copy{
+      min-width:0;
+    }
+
+    .brand-title{
+      display:block;
+      overflow:hidden;
+      font-size:.95rem;
+      font-weight:700;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .brand-sub{
+      display:block;
+      margin-top:1px;
+      color:var(--dim);
+      font:500 .66rem var(--mono);
+      line-height:1;
+    }
+
+    /* --- จัดการความสูงและระดับของปุ่มบน Header ให้เท่ากันเป๊ะ --- */
+    .header-actions{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:8px;
+      min-width:0;
+      margin-left:auto;
+    }
+
+    .icon-button{
+      width:40px;
+      height:40px;
+      flex:0 0 40px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid var(--line);
+      border-radius:9px;
+      background: var(--panel);
+      color:var(--muted);
+      font-size:1.15rem;
+      line-height:1;
+    }
+
+    .icon-button:hover{
+      color:var(--text);
+      background:var(--panel-2);
+      border-color:var(--line-strong);
+    }
+
+    .user-chip{
+      display:none;
+      align-items:center;
+      height:40px;
+      max-width:180px;
+      gap:8px;
+      padding:0 12px 0 4px;
+      border:1px solid var(--line);
+      border-radius:99px;
+      background: var(--panel);
+      color:var(--text);
+      font-size:.78rem;
+      font-weight:500;
+    }
+
+    .user-chip.visible{
+      display:flex;
+    }
+
+    .user-chip img{
+      width:30px;
+      height:30px;
+      flex:0 0 30px;
+      border-radius:50%;
+      background:var(--panel-2);
+      object-fit:cover;
+    }
+
+    .user-chip span{
+      min-width:0;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .topnav-wrap{
+      position:relative;
+    }
+
+    .topnav-wrap::after{
+      content:"";
+      position:absolute;
+      top:0;
+      right:0;
+      bottom:8px;
+      width:28px;
+      pointer-events:none;
+      background:linear-gradient(90deg,transparent,var(--topbar));
+    }
+
+    .topnav{
+      display:flex;
+      gap:4px;
+      overflow-x:auto;
+      padding-bottom:9px;
+      scrollbar-width:thin;
+      overscroll-behavior-inline:contain;
+    }
+
+    .nav-link{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      height:40px;
+      flex:0 0 auto;
+      gap:7px;
+      padding:0 14px;
+      border-radius:8px;
+      color:var(--muted);
+      font-size:.78rem;
+      font-weight:600;
+      white-space:nowrap;
+    }
+
+    .nav-link:hover,
+    .nav-link.active{
+      color:var(--text);
+      background:var(--panel-2);
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      height:40px;
+      gap:7px;
+      padding:0 18px;
+      border:1px solid transparent;
+      border-radius:99px;
+      font-size:.85rem;
+      font-weight:600;
+      line-height:1;
+      white-space:nowrap;
+    }
+
+    .btn-primary{
+      color:var(--on-accent);
+      background:var(--accent);
+      border-color:var(--accent);
+    }
+
+    .btn-primary:hover:not(:disabled){
+      background:var(--accent-hover);
+      border-color:var(--accent-hover);
+    }
+
+    .btn-ghost{
+      color:var(--text-2);
+      border-color:var(--line);
+      background:transparent;
+    }
+
+    .btn-ghost:hover:not(:disabled){
+      color:var(--text);
+      background:var(--panel-2);
+      border-color:var(--line-strong);
+    }
+
+    .btn-danger{
+      color:#fff;
+      background:var(--danger);
+      border-color:var(--danger);
+    }
+
+    .main{
+      padding-top:clamp(24px,5vw,42px);
+      padding-bottom:60px;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .modern-hero {
+      position: relative;
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto 40px;
+      height: min(600px, 80vh);
+      border-radius: 48px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-video-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+      opacity: 0.4;
+      mix-blend-mode: luminosity;
+    }
+
+    [data-theme="light"] .hero-video-layer {
+      opacity: 0.8;
+      mix-blend-mode: normal;
+    }
+
+    .hero-video-layer video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.05);
+      transition: transform 1s;
+    }
+
+    .hero-content-layer {
+      position: relative;
+      z-index: 20;
+      flex: 1;
+      padding: clamp(32px, 5vw, 64px);
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .hero-title-modern {
+      font-family: var(--font);
+      font-size: clamp(40px, 6vw, 54px);
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    .hero-subtitle-modern {
+      font-size: clamp(14px, 2vw, 15px);
+      color: var(--text-2);
+      max-width: 500px;
+      line-height: 1.7;
+      margin-bottom: 32px;
+      opacity: 0;
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s forwards;
+    }
+
+    .hero-btn-contact {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      background: var(--text);
+      color: var(--bg);
+      padding: 14px 32px;
+      border-radius: 99px;
+      font-weight: 600;
+      font-size: 15px;
+      line-height: 1;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 20px -8px rgba(0,0,0,0.4);
+      transition: all 0.2s var(--ease);
+      opacity: 0;
+      animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+    }
+
+    .hero-btn-contact:hover {
+      transform: scale(1.04) translateY(-2px);
+      box-shadow: 0 14px 28px -10px rgba(0,0,0,0.5);
+    }
+
+    .hero-btn-contact:active {
+      transform: scale(0.98) translateY(0);
+    }
+
+    .marquee-wrapper {
+      width: 100%;
+      overflow: hidden;
+      -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+      margin-bottom: 32px;
+      transform: translateZ(0);
+    }
+
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marquee 35s linear infinite;
+    }
+
+    .marquee-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes marquee {
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .marquee-card {
+      position: relative;
+      width: 260px;
+      height: 72px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      border-radius: 99px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      margin: 0 10px;
+      padding: 0 20px;
+      overflow: hidden;
+      cursor: pointer;
+      text-decoration: none;
+      transition: border-color 0.3s;
+      transform: translateZ(0);
+    }
+
+    .marquee-card:hover {
+      border-color: var(--line-strong);
+    }
+
+    .marquee-gradient {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transform: scale(1.5);
+      transition: all 0.5s ease-out;
+      z-index: 0;
+    }
+
+    .marquee-card:hover .marquee-gradient {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .marquee-content {
+      position: relative;
+      z-index: 10;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .marquee-icon {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      line-height: 1;
+      color: var(--text);
+      flex-shrink: 0;
+      transition: filter 0.3s, color 0.3s;
+    }
+
+    .marquee-icon i {
+      display: block;
+      line-height: 1;
+    }
+
+    .marquee-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .marquee-text {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: color 0.3s;
+    }
+
+    .toolbar{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) minmax(130px,170px) auto auto;
+      align-items:stretch;
+      gap:8px;
+      margin-bottom:14px;
+    }
+
+    .search{
+      position:relative;
+      display:block;
+      min-width:0;
+    }
+
+    .search-symbol{
+      position:absolute;
+      top:50%;
+      left:13px;
+      z-index:1;
+      color:var(--dim);
+      transform:translateY(-50%);
+      pointer-events:none;
+      line-height:1;
+      display:flex;
+      align-items:center;
+    }
+
+    .search input,
+    .field,
+    .filter{
+      width:100%;
+      height:40px;
+      border:1px solid var(--line);
+      border-radius:var(--radius-sm);
+      outline:0;
+      background:var(--panel);
+    }
+
+    .search input{
+      padding:8px 42px 8px 38px;
+      font-size:16px;
+    }
+
+    .search input:focus,
+    .field:focus,
+    .filter:focus{
+      border-color:var(--accent);
+      box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 16%,transparent);
+    }
+
+    .search-kbd{
+      position:absolute;
+      top:50%;
+      right:10px;
+      padding:2px 6px;
+      border:1px solid var(--line);
+      border-radius:5px;
+      color:var(--dim);
+      background:var(--panel-2);
+      font:500 .63rem var(--mono);
+      transform:translateY(-50%);
+      pointer-events:none;
+    }
+
+    .filter{
+      min-width:0;
+      padding:0 34px 0 12px;
+      color:var(--text-2);
+      font-size:.8rem;
+      cursor:pointer;
+    }
+
+    .view-switcher{
+      display:flex;
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:8px;
+      background:var(--panel);
+      height:40px;
+    }
+
+    .view-btn{
+      width:40px;
+      height:40px;
+      display:grid;
+      place-items:center;
+      border-right:1px solid var(--line);
+      color:var(--muted);
+    }
+
+    .view-btn:last-child{
+      border-right:0;
+    }
+
+    .view-btn:hover,
+    .view-btn.active{
+      color:var(--accent);
+      background:var(--panel-2);
+    }
+
+    .refresh-btn{
+      width:40px;
+      height:40px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid var(--line);
+      border-radius:8px;
+      color:var(--muted);
+      background:var(--panel);
+      line-height:1;
+    }
+
+    .refresh-btn:hover:not(:disabled){
+      color:var(--accent);
+      border-color:var(--accent);
+    }
+
+    .refresh-btn.loading{
+      animation:spin .8s linear infinite;
+    }
+
+    @keyframes spin{
+      to{transform:rotate(360deg)}
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .stats{
+      display:flex;
+      align-items:center;
+      flex-wrap:wrap;
+      gap:10px 14px;
+      margin-bottom:16px;
+      color:var(--muted);
+      font-size:.77rem;
+    }
+
+    .stats strong{
+      margin-right:3px;
+      color:var(--text);
+      font-size:1rem;
+    }
+
+    .status{
+      display:inline-flex;
+      align-items:center;
+      gap:7px;
+      padding:4px 10px;
+      border:1px solid var(--line);
+      border-radius:99px;
+      line-height:1;
+    }
+
+    .status-dot{
+      width:7px;
+      height:7px;
+      flex:0 0 7px;
+      border-radius:50%;
+      background:var(--ok);
+    }
+
+    .status.connecting .status-dot{
+      background:var(--accent);
+      animation:pulse 1.2s ease-in-out infinite;
+    }
+
+    .status.offline .status-dot{
+      background:var(--danger);
+    }
+
+    .group{
+      margin-top:25px;
+    }
+
+    .group-head{
+      display:flex;
+      align-items:center;
+      min-width:0;
+      gap:8px;
+      margin-bottom:10px;
+    }
+
+    .group-head::after{
+      content:"";
+      height:1px;
+      flex:1;
+      background:var(--line);
+    }
+
+    .group-dot{
+      width:8px;
+      height:8px;
+      flex:0 0 8px;
+      border-radius:2px;
+      background:var(--group-color,var(--accent));
+    }
+
+    .group-head h2{
+      overflow:hidden;
+      font-size:.9rem;
+      font-weight:600;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+      line-height:1.2;
+    }
+
+    .group-count{
+      flex:0 0 auto;
+      color:var(--dim);
+      font:500 .66rem var(--mono);
+    }
+
+    .apps-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));
+      align-items:stretch;
+      gap:12px;
+    }
+
+    .app-card{
+      position:relative;
+      min-width:0;
+      min-height:104px;
+      overflow:hidden;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:var(--panel);
+      transition:border-color .15s var(--ease),transform .15s var(--ease);
+    }
+
+    .app-card::before{
+      content:"";
+      position:absolute;
+      top:0;
+      bottom:0;
+      left:0;
+      width:3px;
+      background:var(--group-color,var(--accent));
+    }
+
+    .app-card:hover,
+    .app-card:focus-within{
+      border-color:var(--line-strong);
+      transform:translateY(-1px);
+    }
+
+    .app-card-body{
+      display:flex;
+      min-height:100%;
+      gap:14px;
+      padding:16px 52px 16px 18px;
+    }
+
+    .app-icon{
+      width:42px;
+      height:42px;
+      flex:0 0 42px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+      border:1px solid color-mix(in srgb,var(--group-color,var(--accent)) 32%,transparent);
+      border-radius:10px;
+      color:var(--group-color,var(--accent));
+      background:color-mix(in srgb,var(--group-color,var(--accent)) 15%,transparent);
+    }
+
+    .app-icon i {
+      font-size: 20px;
+      line-height: 1;
+      display: block;
+    }
+
+    .app-icon img{
+      width:24px;
+      height:24px;
+      object-fit:contain;
+      display:block;
+    }
+
+    .fallback-icon{
+      font-weight:700;
+      font-size:18px;
+      text-transform:uppercase;
+      line-height:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .app-info{
+      min-width:0;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+    }
+
+    .app-name-row{
+      display:flex;
+      align-items:center;
+      min-width:0;
+      gap:8px;
+      margin-bottom:6px;
+    }
+
+    .app-name{
+      min-width:0;
+      overflow:hidden;
+      font-size:.92rem;
+      font-weight:600;
+      line-height:1.2;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .featured{
+      flex:0 0 auto;
+      padding:2px 6px;
+      border:1px solid color-mix(in srgb,var(--accent) 42%,transparent);
+      border-radius:99px;
+      color:var(--accent);
+      font:500 .59rem var(--mono);
+      line-height:1;
+    }
+
+    .app-description{
+      display:-webkit-box;
+      overflow:hidden;
+      color:var(--muted);
+      font-size:.76rem;
+      line-height:1.55;
+      overflow-wrap:anywhere;
+      -webkit-box-orient:vertical;
+      -webkit-line-clamp:2;
+    }
+
+    .card-actions{
+      position:absolute;
+      top:8px;
+      right:8px;
+      z-index:2;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .card-action{
+      width:32px;
+      height:32px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:7px;
+      color:var(--dim);
+      background:color-mix(in srgb,var(--panel) 94%,transparent);
+      line-height:1;
+    }
+
+    .card-action:hover,
+    .card-action.pinned{
+      color:var(--accent);
+      background:var(--panel-2);
+    }
+
+    [data-view="list"] .apps-grid{
+      grid-template-columns:1fr;
+      gap:6px;
+    }
+
+    [data-view="list"] .app-card{
+      min-height:72px;
+    }
+
+    [data-view="list"] .app-card-body{
+      padding-block:11px;
+    }
+
+    [data-view="list"] .app-description{
+      -webkit-line-clamp:1;
+    }
+
+    [data-view="compact"] .apps-grid{
+      grid-template-columns:repeat(auto-fill,minmax(min(100%,170px),1fr));
+    }
+
+    [data-view="compact"] .app-card{
+      min-height:145px;
+    }
+
+    [data-view="compact"] .app-card-body{
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:22px 40px 18px;
+      text-align:center;
+    }
+
+    [data-view="compact"] .app-icon{
+      width:48px;
+      height:48px;
+      flex-basis:48px;
+    }
+
+    [data-view="compact"] .app-name-row{
+      justify-content:center;
+      flex-wrap:wrap;
+    }
+
+    [data-view="compact"] .app-name{
+      white-space:normal;
+    }
+
+    [data-view="compact"] .app-description{
+      display:none;
+    }
+
+    mark{
+      padding-inline:2px;
+      border-radius:3px;
+      color:var(--text);
+      background:color-mix(in srgb,var(--accent) 28%,transparent);
+    }
+
+    .state-box{
+      padding:42px 20px;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      color:var(--muted);
+      background:var(--panel);
+      text-align:center;
+    }
+
+    .state-icon{
+      display:block;
+      margin-bottom:10px;
+      color:var(--dim);
+      font-size:1.5rem;
+      line-height:1;
+    }
+
+    .state-box strong{
+      display:block;
+      margin-bottom:5px;
+      color:var(--text);
+      font-size:.9rem;
+    }
+
+    .state-box p{
+      font-size:.8rem;
+      line-height:1.6;
+    }
+
+    .skeleton-grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));
+      gap:9px;
+    }
+
+    .skeleton{
+      min-height:104px;
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:linear-gradient(90deg,var(--panel),var(--panel-2),var(--panel));
+      background-size:220% 100%;
+      animation:shimmer 1.3s linear infinite;
+    }
+
+    @keyframes shimmer{
+      to{background-position:-220% 0}
+    }
+
+    .footer{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:48px;
+      padding-top:16px;
+      border-top:1px solid var(--line);
+      color:var(--dim);
+      font-size:.69rem;
+    }
+
+    .footer button{
+      color:var(--dim);
+      text-decoration:underline;
+    }
+
+    .footer button:hover{
+      color:var(--text);
+    }
+
+    /* Modal */
+    .modal-backdrop{
+      position:fixed;
+      inset:0;
+      z-index:100;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:
+        max(12px,env(safe-area-inset-top))
+        max(12px,env(safe-area-inset-right))
+        max(12px,env(safe-area-inset-bottom))
+        max(12px,env(safe-area-inset-left));
+      background:var(--scrim);
+      opacity:0;
+      transition:opacity .18s var(--ease);
+    }
+
+    .modal-backdrop.open{
+      display:flex;
+      opacity:1;
+    }
+
+    .modal{
+      width:min(460px,100%);
+      max-height:calc(100dvh - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+      border:1px solid var(--line-strong);
+      border-radius:16px;
+      background:var(--panel);
+      box-shadow:var(--shadow);
+      transform:translateY(10px) scale(.985);
+      transition:transform .2s var(--ease);
+    }
+
+    .modal-backdrop.open .modal{
+      transform:none;
+    }
+
+    .modal.medium{
+      width:min(600px,100%);
+    }
+
+    .modal.wide{
+      width:min(960px,100%);
+    }
+
+    .modal-head{
+      display:flex;
+      align-items:flex-start;
+      flex:0 0 auto;
+      gap:12px;
+      padding:20px 20px 16px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .modal-title{
+      min-width:0;
+      flex:1;
+    }
+
+    .modal-title h2{
+      font-size:1.12rem;
+      line-height:1.35;
+    }
+
+    .modal-title p{
+      margin-top:4px;
+      color:var(--muted);
+      font-size:.76rem;
+      line-height:1.5;
+    }
+
+    .modal-close{
+      width:38px;
+      height:38px;
+      flex:0 0 38px;
+      display:grid;
+      place-items:center;
+      border-radius:8px;
+      color:var(--muted);
+      font-size:1.15rem;
+      line-height:1;
+    }
+
+    .modal-close:hover{
+      color:var(--text);
+      background:var(--panel-2);
+    }
+
+    .modal-body{
+      min-height:0;
+      flex:1 1 auto;
+      overflow-x:hidden;
+      overflow-y:auto;
+      overscroll-behavior:contain;
+      padding:20px;
+    }
+
+    .modal-footer{
+      display:flex;
+      flex:0 0 auto;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+      gap:8px;
+      padding:14px 20px;
+      border-top:1px solid var(--line);
+      background:var(--panel);
+    }
+
+    .field-label{
+      display:block;
+      margin-bottom:6px;
+      color:var(--muted);
+      font-size:.75rem;
+      font-weight:600;
+    }
+
+    .field{
+      padding:10px 12px;
+      margin-bottom:13px;
+      color:var(--text);
+      font-size:16px;
+      background:var(--panel-2);
+    }
+
+    textarea.field{
+      min-height:88px;
+      resize:vertical;
+    }
+
+    .form-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:0 10px;
+    }
+
+    .full{
+      grid-column:1/-1;
+    }
+
+    .user-detail{
+      display:flex;
+      align-items:center;
+      min-width:0;
+      gap:12px;
+      padding:12px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:var(--panel-2);
+    }
+
+    .user-detail img{
+      width:46px;
+      height:46px;
+      flex:0 0 46px;
+      border-radius:50%;
+      object-fit:cover;
+    }
+
+    .user-detail-copy{
+      min-width:0;
+    }
+
+    .user-detail strong,
+    .user-detail span{
+      display:block;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .user-detail span{
+      margin-top:2px;
+      color:var(--muted);
+      font-size:.72rem;
+    }
+
+    .role-badge{
+      display:inline-block!important;
+      width:max-content;
+      max-width:100%;
+      margin-top:6px!important;
+      padding:2px 8px;
+      border-radius:99px;
+      color:var(--accent)!important;
+      background:color-mix(in srgb,var(--accent) 14%,transparent);
+      font:500 .63rem var(--mono)!important;
+      line-height:1;
+    }
+
+    .account-section{
+      margin-top:16px;
+      padding-top:16px;
+      border-top:1px solid var(--line);
+    }
+
+    .section-title{
+      margin-bottom:3px;
+      font-size:.84rem;
+      font-weight:700;
+    }
+
+    .section-copy{
+      margin-bottom:10px;
+      color:var(--muted);
+      font-size:.72rem;
+      line-height:1.55;
+    }
+
+    .inline-form{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:8px;
+    }
+
+    .inline-form .field{
+      margin:0;
+    }
+
+    .admin-tabs{
+      display:flex;
+      gap:5px;
+      margin-bottom:16px;
+      padding-bottom:8px;
+      overflow-x:auto;
+      border-bottom:1px solid var(--line);
+    }
+
+    .admin-tab{
+      min-height:38px;
+      flex:0 0 auto;
+      padding:7px 12px;
+      border-radius:8px;
+      color:var(--muted);
+      font-size:.76rem;
+      font-weight:600;
+      white-space:nowrap;
+    }
+
+    .admin-tab.active{
+      color:var(--text);
+      background:var(--panel-2);
+    }
+
+    .admin-layout{
+      display:grid;
+      grid-template-columns:minmax(260px,.9fr) minmax(360px,1.1fr);
+      gap:14px;
+    }
+
+    .panel{
+      min-width:0;
+      padding:15px;
+      border:1px solid var(--line);
+      border-radius:11px;
+      background:var(--panel);
+    }
+
+    .panel-title{
+      font-size:.84rem;
+      font-weight:700;
+    }
+
+    .panel-copy{
+      margin:4px 0 13px;
+      color:var(--muted);
+      font-size:.7rem;
+      line-height:1.55;
+    }
+
+    .check-row{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-bottom:13px;
+      color:var(--text-2);
+      font-size:.78rem;
+      cursor:pointer;
+    }
+
+    .check-row input{
+      width:18px;
+      height:18px;
+      accent-color:var(--accent);
+    }
+
+    .icon-picker-row{
+      display:grid;
+      grid-template-columns:auto minmax(0,1fr) auto;
+      align-items:center;
+      gap:9px;
+      margin-bottom:10px;
+      padding:9px;
+      border:1px solid var(--line);
+      border-radius:9px;
+      background:var(--panel-2);
+    }
+
+    .selected-icon{
+      width:38px;
+      height:38px;
+      display:grid;
+      place-items:center;
+      overflow:hidden;
+      border-radius:8px;
+      background:var(--panel);
+    }
+
+    .selected-icon i {
+      font-size:18px;
+    }
+
+    .selected-icon img{
+      width:22px;
+      height:22px;
+    }
+
+    .selected-icon-copy{
+      min-width:0;
+    }
+
+    .selected-icon-copy strong,
+    .selected-icon-copy span{
+      display:block;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .selected-icon-copy strong{
+      font-size:.75rem;
+    }
+
+    .selected-icon-copy span{
+      margin-top:2px;
+      color:var(--dim);
+      font:500 .62rem var(--mono);
+    }
+
+    .admin-form-actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+    }
+
+    .admin-form-actions .btn{
+      flex:1 1 140px;
+    }
+
+    .admin-items,
+    .admin-users{
+      display:flex;
+      flex-direction:column;
+      gap:7px;
+      max-height:min(460px,55dvh);
+      overflow-y:auto;
+      overscroll-behavior:contain;
+    }
+
+    .admin-item,
+    .admin-user{
+      display:grid;
+      grid-template-columns:auto minmax(0,1fr) auto;
+      align-items:center;
+      min-width:0;
+      gap:9px;
+      padding:9px;
+      border:1px solid var(--line);
+      border-radius:9px;
+      background:var(--panel-2);
+    }
+
+    .admin-item-icon,
+    .admin-user-avatar{
+      width:34px;
+      height:34px;
+      flex:0 0 34px;
+      border-radius:8px;
+      object-fit:cover;
+      background:var(--panel);
+    }
+
+    .admin-item-icon{
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      overflow:hidden;
+    }
+
+    .admin-item-icon i {
+      font-size: 16px;
+    }
+
+    .admin-item-icon img{
+      width:19px;
+      height:19px;
+      object-fit:contain;
+    }
+
+    .admin-item-info,
+    .admin-user-info{
+      min-width:0;
+    }
+
+    .admin-item-name,
+    .admin-user-name,
+    .admin-item-meta,
+    .admin-user-email{
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .admin-item-name,
+    .admin-user-name{
+      font-size:.75rem;
+      font-weight:600;
+    }
+
+    .admin-item-meta,
+    .admin-user-email{
+      margin-top:2px;
+      color:var(--dim);
+      font-size:.63rem;
+    }
+
+    .admin-item-actions,
+    .admin-user-controls{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      flex-wrap:wrap;
+      gap:4px;
+    }
+
+    .small-action{
+      width:34px;
+      height:34px;
+      flex:0 0 34px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid var(--line);
+      border-radius:7px;
+      color:var(--muted);
+      line-height:1;
+    }
+
+    .small-action:hover:not(:disabled){
+      color:var(--accent);
+      border-color:var(--accent);
+      background:var(--panel);
+    }
+
+    .small-action.danger:hover:not(:disabled){
+      color:var(--danger);
+      border-color:var(--danger);
+    }
+
+    .admin-role{
+      width:110px;
+      min-height:36px;
+      padding:7px 9px;
+      border:1px solid var(--line);
+      border-radius:7px;
+      outline:0;
+      background:var(--panel);
+      font-size:.72rem;
+    }
+
+    .logo-results{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(105px,1fr));
+      gap:7px;
+      max-height:52dvh;
+      overflow-y:auto;
+    }
+
+    .logo-result{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      min-width:0;
+      min-height:88px;
+      gap:7px;
+      padding:9px;
+      border:1px solid var(--line);
+      border-radius:8px;
+      color:var(--muted);
+      background:var(--panel-2);
+    }
+
+    .logo-result:hover{
+      color:var(--text);
+      border-color:var(--accent);
+    }
+
+    .logo-result img{
+      width:28px;
+      height:28px;
+      object-fit:contain;
+    }
+
+    .logo-result span{
+      width:100%;
+      overflow:hidden;
+      font-size:.64rem;
+      text-align:center;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .settings-grid{
+      display:grid;
+      gap:9px;
+    }
+
+    .settings-row{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      align-items:center;
+      gap:14px;
+      padding:13px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:var(--panel-2);
+    }
+
+    .settings-row-title{
+      font-size:.82rem;
+      font-weight:600;
+    }
+
+    .settings-row-desc{
+      margin-top:3px;
+      color:var(--muted);
+      font-size:.7rem;
+      line-height:1.5;
+    }
+
+    .segment{
+      display:flex;
+      gap:3px;
+      padding:3px;
+      border:1px solid var(--line);
+      border-radius:8px;
+      background:var(--panel);
+    }
+
+    .segment button{
+      min-height:37px;
+      padding:7px 10px;
+      border-radius:6px;
+      color:var(--muted);
+      font-size:.72rem;
+      font-weight:600;
+      white-space:nowrap;
+    }
+
+    .segment button.active{
+      color:var(--on-accent);
+      background:var(--accent);
+    }
+
+    .help-item{
+      padding:13px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:var(--panel-2);
+    }
+
+    .help-item strong{
+      display:block;
+      margin-bottom:4px;
+      font-size:.82rem;
+    }
+
+    .help-item p{
+      color:var(--muted);
+      font-size:.73rem;
+      line-height:1.6;
+    }
+
+    .policy-links{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      margin-top:14px;
+    }
+
+    .policy-links .btn{
+      text-decoration:none;
+    }
+
+    .register-consent{
+      align-items:flex-start;
+      margin:6px 0 0;
+      line-height:1.65;
+    }
+
+    .register-consent input{
+      flex:0 0 18px;
+      margin-top:3px;
+    }
+
+    .register-consent a{
+      color:var(--accent);
+      text-decoration:underline;
+      text-underline-offset:2px;
+    }
+
+    .command-results{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .command-item{
+      display:grid;
+      grid-template-columns:minmax(0,1fr) auto;
+      gap:10px;
+      padding:10px 11px;
+      border-radius:8px;
+      text-align:left;
+    }
+
+    .command-item:hover,
+    .command-item.active{
+      background:var(--panel-2);
+    }
+
+    .command-item strong,
+    .command-item small{
+      display:block;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .command-item strong{
+      font-size:.82rem;
+    }
+
+    .command-item small{
+      margin-top:2px;
+      color:var(--muted);
+      font-size:.67rem;
+    }
+
+    .command-item span{
+      color:var(--dim);
+    }
+
+    .toast{
+      position:fixed;
+      z-index:1000;
+      right:max(14px,env(safe-area-inset-right));
+      bottom:max(14px,env(safe-area-inset-bottom));
+      width:min(380px,calc(100% - 28px));
+      display:flex;
+      align-items:flex-start;
+      gap:9px;
+      padding:12px 14px;
+      border:1px solid var(--line-strong);
+      border-radius:10px;
+      color:var(--text);
+      background:var(--panel);
+      box-shadow:var(--shadow);
+      opacity:0;
+      visibility:hidden;
+      transform:translateY(14px);
+      transition:.2s var(--ease);
+      pointer-events:none;
+    }
+
+    .toast.show{
+      opacity:1;
+      visibility:visible;
+      transform:none;
+      pointer-events:auto;
+    }
+
+    .toast.success{
+      border-color:color-mix(in srgb,var(--ok) 60%,transparent);
+    }
+
+    .toast.error{
+      border-color:color-mix(in srgb,var(--danger) 60%,transparent);
+    }
+
+    .toast-symbol{
+      flex:0 0 auto;
+      color:var(--accent);
+      line-height:1.5;
+    }
+
+    .toast.success .toast-symbol{
+      color:var(--ok);
+    }
+
+    .toast.error .toast-symbol{
+      color:var(--danger);
+    }
+
+    .toast-message{
+      min-width:0;
+      font-size:.79rem;
+      line-height:1.5;
+      overflow-wrap:anywhere;
+    }
+
+    @media(max-width:760px){
+      .brand-sub,
+      .user-chip{
+        display:none!important;
+      }
+
+      .toolbar{
+        grid-template-columns:minmax(0,1fr) auto;
+      }
+
+      .toolbar .search{
+        grid-column:1/-1;
+      }
+
+      .filter{
+        max-width:none;
+      }
+
+      .view-switcher{
+        display:none;
+      }
+
+      .modal-backdrop{
+        align-items:flex-end;
+        padding:0;
+      }
+
+      .modal{
+        width:100%!important;
+        max-height:calc(100dvh - env(safe-area-inset-top));
+        border-right:0;
+        border-bottom:0;
+        border-left:0;
+        border-radius:18px 18px 0 0;
+      }
+
+      .modal-head{
+        padding:17px 16px 13px;
+      }
+
+      .modal-body{
+        padding:16px;
+        padding-bottom:max(16px,env(safe-area-inset-bottom));
+      }
+
+      .modal-footer{
+        padding:12px 16px max(12px,env(safe-area-inset-bottom));
+      }
+
+      .admin-layout{
+        grid-template-columns:1fr;
+      }
+
+      .form-grid{
+        grid-template-columns:1fr;
+      }
+
+      .full{
+        grid-column:auto;
+      }
+
+      .admin-items,
+      .admin-users{
+        max-height:none;
+        overflow:visible;
+      }
+
+      .settings-row{
+        grid-template-columns:1fr;
+      }
+
+      .segment{
+        width:100%;
+      }
+
+      .segment button{
+        flex:1;
+      }
+    }
+
+    @media(max-width:520px){
+      .topbar-main{
+        min-height:56px;
+      }
+
+      .brand-title{
+        max-width:130px;
+      }
+
+      #auth-btn{
+        width:40px;
+        padding:0;
+      }
+
+      #auth-btn .auth-label{
+        display:none;
+      }
+
+      .toolbar{
+        grid-template-columns:minmax(0,1fr) 43px;
+      }
+
+      .filter{
+        min-width:0;
+      }
+
+      .app-card-body{
+        padding-right:49px;
+      }
+
+      .inline-form{
+        grid-template-columns:1fr;
+      }
+
+      .inline-form .btn{
+        width:100%;
+      }
+
+      .icon-picker-row{
+        grid-template-columns:auto minmax(0,1fr);
+      }
+
+      .icon-picker-row .btn{
+        grid-column:1/-1;
+        width:100%;
+      }
+
+      .admin-item,
+      .admin-user{
+        grid-template-columns:auto minmax(0,1fr);
+        align-items:start;
+      }
+
+      .admin-item-actions,
+      .admin-user-controls{
+        grid-column:1/-1;
+        justify-content:flex-end;
+        width:100%;
+        padding-top:3px;
+      }
+
+      .admin-role{
+        min-width:0;
+        flex:1;
+        width:auto;
+      }
+
+      .modal-footer .btn{
+        flex:1 1 120px;
+      }
+
+      .footer{
+        align-items:flex-start;
+        flex-direction:column;
+      }
+    }
+
+    @media(prefers-reduced-motion:reduce){
+      *,
+      *::before,
+      *::after{
+        scroll-behavior:auto!important;
+        animation-duration:.01ms!important;
+        transition-duration:.01ms!important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#main-content">ข้ามไปยังรายการแอป</a>
+
+<style>
+#global-maintenance-overlay[hidden]{display:none!important}#global-maintenance-overlay{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:max(20px,env(safe-area-inset-top)) 20px max(20px,env(safe-area-inset-bottom));background:rgba(5,8,14,.97);backdrop-filter:blur(18px);color:#eef3fb;font:16px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}#global-maintenance-overlay .maintenance-card{width:min(560px,100%);padding:clamp(24px,6vw,42px);border:1px solid rgba(255,255,255,.12);border-radius:24px;background:linear-gradient(150deg,#151d2b,#10151e);box-shadow:0 28px 100px #0009;text-align:center}#global-maintenance-overlay .maintenance-mark{display:grid;place-items:center;width:52px;height:52px;margin:0 auto 18px;border-radius:17px;background:#ff74751c;color:#ff9292;font-size:25px}#global-maintenance-overlay .maintenance-eyebrow{margin:0 0 8px;color:#ffaaaa;font-size:11px;font-weight:750;letter-spacing:.16em;text-transform:uppercase}#global-maintenance-overlay h1{margin:0 0 12px;color:#f4f6fb;font-size:clamp(25px,5vw,34px);line-height:1.3;letter-spacing:-.03em}#global-maintenance-overlay .maintenance-note{margin:0;color:#bdc7d6;white-space:pre-wrap;overflow-wrap:anywhere}#global-maintenance-overlay .maintenance-count{margin:25px 0 8px;padding:17px 14px;border:1px solid rgba(255,255,255,.1);border-radius:14px;background:#ffffff06}#global-maintenance-overlay .maintenance-count span{display:block;color:#8f9db1;font-size:12px}#global-maintenance-overlay .maintenance-count strong{display:block;margin-top:3px;color:#b7d0ff;font:600 clamp(23px,6vw,32px)/1.25 ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}#global-maintenance-overlay .maintenance-foot{margin:14px 0 0;color:#7f8ba0;font-size:12px}
+</style>
+<div id="global-maintenance-overlay" hidden role="alertdialog" aria-modal="true" aria-labelledby="global-maintenance-title" aria-describedby="global-maintenance-note"><div class="maintenance-card"><div class="maintenance-mark" aria-hidden="true">⏳</div><p class="maintenance-eyebrow" id="global-maintenance-eyebrow"></p><h1 id="global-maintenance-title"></h1><p class="maintenance-note" id="global-maintenance-note"></p><div class="maintenance-count"><span id="global-maintenance-label"></span><strong id="global-maintenance-countdown">--:--:--</strong></div><p class="maintenance-foot" id="global-maintenance-foot"></p></div></div>
+<script>/* BUILD_MAINTENANCE */</script>
+
+
+  <!-- Loading Overlay -->
+
+  <header class="topbar">
+    <div class="container">
+      <div class="topbar-main">
+        <a class="brand" href="#home" aria-label="Koo Mean Portal">
+          <span class="brand-mark" aria-hidden="true">
+            <i></i><i></i><i></i><i></i>
+          </span>
+          <span class="brand-copy">
+            <span class="brand-title">Koo Mean Portal</span>
+            <span class="brand-sub">APPLICATION SPACE</span>
+          </span>
+        </a>
+
+        <div class="header-actions">
+          <button class="icon-button" id="command-btn" aria-label="เปิด Command Palette" type="button" title="Command Palette">⌘</button>
+          <button class="icon-button" id="settings-btn" aria-label="การตั้งค่า" type="button" title="การตั้งค่า">⚙</button>
+
+          <button class="user-chip" id="user-chip" type="button">
+            <img id="user-avatar" alt="">
+            <span id="user-name"></span>
+          </button>
+
+          <button class="btn btn-primary" id="auth-btn" aria-label="เข้าสู่ระบบ" type="button">
+            <span aria-hidden="true">⇥</span>
+            <span class="auth-label" id="auth-label">เข้าสู่ระบบ</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="topnav-wrap">
+        <nav class="topnav" aria-label="เมนูหลัก">
+          <a class="nav-link active" href="#home">⌂ หน้าแรก</a>
+          <button class="nav-link" id="account-nav" type="button">● บัญชี</button>
+          <button class="nav-link" id="admin-nav" type="button" hidden>▦ จัดการระบบ</button>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="container main" id="main-content" tabindex="-1">
+    <section id="home">
+      <!-- 1. Main Hero Container -->
+      <div class="modern-hero">
+        <div class="hero-video-layer" aria-hidden="true">
+          <img class="hero-poster" src="assets/hero-poster.webp" alt="" width="1120" height="630" fetchpriority="high">
+          <video id="hero-video" loop muted playsinline preload="none" hidden data-src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260505_101331_74f9b798-3f00-4e86-8a01-377aa16ffeaa.mp4"></video>
+        </div>
+
+        <!-- 2. Hero Text Content -->
+        <div class="hero-content-layer">
+          <div id="hero-kicker" hidden>YOUR APPLICATION HUB</div>
+          <!-- ข้อความ Welcome -->
+          <h1 class="hero-title-modern" id="hero-title">Welcome To<br />Koo Mean Portal</h1>
+          <p class="hero-subtitle-modern" id="hero-copy">
+            ศูนย์รวมแอปพลิเคชันและเครื่องมือการทำงานของคุณ เข้าถึงทุกบริการและจัดการระบบได้อย่างรวดเร็ว ปลอดภัย จบในที่เดียว
+          </p>
+          <a class="hero-btn-contact" href="mailto:meanchannel52@koomean.com?subject=Koo%20Mean%20Portal%20Report">Contact Us</a>
+        </div>
+        <button class="motion-toggle" id="video-toggle" type="button" aria-pressed="false">▶ เล่นพื้นหลัง</button>
+      </div>
+
+      <!-- 3. Seamless Marquee Logo Scroller -->
+      <div class="marquee-section" id="marquee-section" hidden>
+        <div class="marquee-wrapper"><div class="marquee-track" id="marquee-track"></div></div>
+        <button class="marquee-toggle" id="marquee-toggle" type="button" aria-pressed="false" aria-label="หยุดแถบลิงก์">Ⅱ</button>
+      </div>
+    </section>
+
+    <section aria-label="รายการแอปพลิเคชัน">
+      <div class="toolbar">
+        <label class="search">
+          <span class="search-symbol" aria-hidden="true">⌕</span>
+          <input id="app-search" aria-label="ค้นหาแอปพลิเคชัน" type="search" placeholder="ค้นหาแอปพลิเคชัน..." autocomplete="off">
+          <span class="search-kbd">/</span>
+        </label>
+
+        <select class="filter" id="group-filter" aria-label="กรองตามกลุ่ม">
+          <option value="all">ทุกกลุ่ม</option>
+        </select>
+
+        <div class="view-switcher" aria-label="รูปแบบการแสดงผล">
+          <button class="view-btn active" type="button" data-view="grid" title="Grid">▦</button>
+          <button class="view-btn" type="button" data-view="list" title="List">☷</button>
+          <button class="view-btn" type="button" data-view="compact" title="Compact">▥</button>
+        </div>
+
+        <button class="refresh-btn" id="refresh-btn" type="button" title="รีเฟรช">↻</button>
+      </div>
+
+      <div class="stats" aria-live="polite" aria-atomic="true">
+        <span><strong id="app-count">—</strong><span id="available-label">แอปที่พร้อมใช้งาน</span></span>
+        <span class="status connecting" id="connection-status">
+          <i class="status-dot"></i>
+          <span id="status-text">กำลังเชื่อมต่อ</span>
+        </span>
+        <span id="updated-at"></span>
+      </div>
+
+      <noscript><p class="state-box">เปิด JavaScript เพื่อค้นหาแอปและเข้าสู่ระบบ หรือไปที่ <a href="https://blog.koomean.com/">Koo Mean Blog</a> และ <a href="https://link.koomean.com/">Koo Mean Site</a></p></noscript>
+      <div id="applications" aria-busy="true">
+        <div class="skeleton-grid">
+          <div class="skeleton"></div>
+          <div class="skeleton"></div>
+          <div class="skeleton"></div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>Koo Mean Portal</span>
+      <span>ข้อมูลและสิทธิ์การเข้าถึงจัดการจากระบบส่วนกลาง · <button id="help-btn" type="button">ช่วยเหลือ</button></span>
+    </footer>
+  </main>
+
+  <!-- Login -->
+  <div class="modal-backdrop" id="login-modal" hidden inert aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="login-title">
+    <section class="modal">
+      <header class="modal-head">
+        <div class="modal-title">
+          <h2 id="login-title">เข้าสู่ระบบ</h2>
+          <p>ใช้ Google Account เพื่อดูแอปที่คุณมีสิทธิ์ใช้งาน</p>
+        </div>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+      </header>
+
+      <div class="modal-body">
+        <div id="google-button" style="min-height:48px;display:flex;justify-content:center;align-items:center"></div>
+        <div class="help-item" style="margin-top:16px">
+          <p>ระบบใช้ Token ที่ตรวจสอบโดยเซิร์ฟเวอร์ และไม่มีการจัดเก็บรหัสผ่านของ Google ภายในหน้าเว็บนี้</p>
+        </div>
+        <div class="policy-links" aria-label="เอกสารนโยบาย">
+          <a class="btn btn-ghost" href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="login-privacy-label">นโยบายความเป็นส่วนตัว</span> ↗</a>
+          <a class="btn btn-ghost" href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="login-terms-label">ข้อกำหนดการใช้บริการ</span> ↗</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Register -->
+  <div class="modal-backdrop" id="register-modal" hidden inert aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="register-title">
+    <section class="modal">
+      <header class="modal-head">
+        <div class="modal-title">
+          <h2 id="register-title">ขอลงทะเบียน</h2>
+          <p>บัญชีนี้ยังไม่อยู่ในระบบ กรุณาส่งข้อมูลเพิ่มเติมให้ผู้ดูแล</p>
+        </div>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+      </header>
+
+      <div class="modal-body">
+        <label class="field-label" for="register-note">ข้อมูลเพิ่มเติม (ไม่บังคับ)</label>
+        <textarea class="field" id="register-note" maxlength="500" placeholder="เช่น ทีม หน้าที่ หรือแอปที่ต้องการใช้งาน"></textarea>
+        <label class="check-row register-consent" for="register-terms-accepted">
+          <input id="register-terms-accepted" type="checkbox" required>
+          <span><span id="register-consent-prefix">ฉันยอมรับ</span> <a href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="register-terms-label">ข้อกำหนดการใช้บริการ</span></a> <span id="register-consent-and">และรับทราบ</span> <a href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="register-privacy-label">นโยบายความเป็นส่วนตัว</span></a></span>
+        </label>
+      </div>
+
+      <footer class="modal-footer">
+        <button class="btn btn-ghost" type="button" data-close-modal>ยกเลิก</button>
+        <button class="btn btn-primary" id="register-btn" type="button" disabled>ส่งคำขอ</button>
+      </footer>
+    </section>
+  </div>
+
+  <!-- Account -->
+  <div class="modal-backdrop" id="account-modal" hidden inert aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="account-title">
+    <section class="modal medium">
+      <header class="modal-head">
+        <div class="modal-title">
+          <h2 id="account-title">บัญชีของคุณ</h2>
+          <p>จัดการข้อมูลบัญชีที่ใช้เชื่อมต่อกับ Portal</p>
+        </div>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+      </header>
+
+      <div class="modal-body">
+        <div class="user-detail">
+          <img id="account-avatar" alt="">
+          <div class="user-detail-copy">
+            <strong id="account-name">—</strong>
+            <span id="account-email">—</span>
+            <span class="role-badge" id="account-role">public</span>
+          </div>
+        </div>
+
+        <section class="account-section">
+          <div class="section-title">ชื่อที่แสดง</div>
+          <p class="section-copy">ชื่อจะถูกบันทึกในบัญชีส่วนกลางและใช้ในระบบที่เชื่อมต่อกัน</p>
+          <div class="inline-form">
+            <input class="field" id="new-name" aria-label="ชื่อที่แสดง" type="text" maxlength="50" autocomplete="name" placeholder="กรอกชื่อที่ต้องการแสดง">
+            <button class="btn btn-primary" id="save-name-btn" type="button">บันทึก</button>
+          </div>
+        </section>
+      </div>
+
+      <footer class="modal-footer">
+        <button class="btn btn-ghost" id="logout-btn" type="button">ออกจากระบบ</button>
+      </footer>
+    </section>
+  </div>
+
+  <!-- Admin -->
+  <div class="modal-backdrop" id="admin-modal" hidden inert aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="admin-title">
+    <section class="modal wide">
+      <header class="modal-head">
+        <div class="modal-title">
+          <h2 id="admin-title">จัดการระบบ</h2>
+          <p id="admin-subtitle">เพิ่ม แก้ไข และจัดลำดับแอปพลิเคชัน</p>
+        </div>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+      </header>
+
+      <div class="modal-body">
+        <div class="admin-tabs" role="tablist">
+          <button class="admin-tab active" id="apps-tab-btn" type="button">▦ แอปพลิเคชัน</button>
+          <button class="admin-tab" id="users-tab-btn" type="button">● ผู้ใช้งาน</button>
+        </div>
+
+        <div id="apps-tab">
+          <div class="admin-layout">
+            <section class="panel">
+              <div class="panel-title" id="admin-form-title">เพิ่มแอปพลิเคชัน</div>
+              <p class="panel-copy">ระบบจะตรวจสอบ URL ซ้ำและตรวจสอบรูปแบบข้อมูลก่อนบันทึก</p>
+
+              <div class="form-grid">
+                <div>
+                  <label class="field-label" for="admin-name">ชื่อแอป</label>
+                  <input class="field" id="admin-name" maxlength="100" placeholder="เช่น Dashboard">
+                </div>
+
+                <div>
+                  <label class="field-label" for="admin-url">URL</label>
+                  <input class="field" id="admin-url" type="url" maxlength="500" placeholder="https://...">
+                </div>
+
+                <div class="full">
+                  <label class="field-label" for="admin-description">คำอธิบาย</label>
+                  <textarea class="field" id="admin-description" maxlength="300" placeholder="อธิบายสั้น ๆ"></textarea>
+                </div>
+
+                <div>
+                  <label class="field-label" for="admin-group">กลุ่ม / Role</label>
+                  <input class="field" id="admin-group" maxlength="50" value="public">
+                </div>
+
+                <div>
+                  <label class="field-label" for="admin-color">สี</label>
+                  <input class="field" id="admin-color" maxlength="9" placeholder="#d98a3d">
+                </div>
+              </div>
+
+              <label class="check-row">
+                <input id="admin-starred" type="checkbox">
+                <span>แนะนำแอปนี้</span>
+              </label>
+
+              <div class="icon-picker-row">
+                <div class="selected-icon" id="icon-preview"><span>◇</span></div>
+                <div class="selected-icon-copy">
+                  <strong id="icon-name">ยังไม่ได้เลือกไอคอน</strong>
+                  <span id="icon-value">—</span>
+                </div>
+                <button class="btn btn-ghost" id="choose-logo-btn" type="button">เลือกโลโก้</button>
+              </div>
+
+              <div class="inline-form" style="margin-bottom:12px">
+                <input class="field" id="manual-icon" maxlength="50" placeholder="theSVG slug หรือ fab fa-facebook">
+                <button class="btn btn-ghost" id="use-icon-btn" type="button">ใช้ slug</button>
+              </div>
+
+              <div class="admin-form-actions">
+                <button class="btn btn-primary" id="admin-submit-btn" type="button">เพิ่มแอป</button>
+                <button class="btn btn-ghost" id="admin-cancel-btn" type="button" hidden>ยกเลิกแก้ไข</button>
+              </div>
+            </section>
+
+            <section class="panel">
+              <div class="panel-title">ลำดับแอป</div>
+              <p class="panel-copy">ใช้ปุ่มขึ้นลงเพื่อกำหนดลำดับ โดยปุ่มจะตัดบรรทัดอัตโนมัติเมื่อพื้นที่ไม่พอ</p>
+              <div class="admin-items" id="admin-items"></div>
+            </section>
+          </div>
+        </div>
+
+        <div id="users-tab" hidden>
+          <section class="panel">
+            <div class="panel-title">ผู้ใช้งานทั้งหมด</div>
+            <p class="panel-copy">ค้นหาและกำหนด Role เพื่อควบคุมสิทธิ์การเข้าถึง</p>
+
+            <label class="search" style="margin-bottom:12px">
+              <span class="search-symbol">⌕</span>
+              <input id="user-search" aria-label="ค้นหาผู้ใช้งาน" type="search" placeholder="ค้นหาชื่อหรืออีเมล..." autocomplete="off">
+            </label>
+
+            <div class="admin-users" id="admin-users"></div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Logo picker -->
+  <div class="modal-backdrop" id="logo-modal" hidden inert aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="logo-title">
+    <section class="modal medium">
+      <header class="modal-head">
+        <div class="modal-title">
+          <h2 id="logo-title">เลือกโลโก้</h2>
+          <p>ค้นหาและเลือกโลโก้จากคลัง theSVG</p>
+        </div>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+      </header>
+
+      <div class="modal-body">
+        <label class="search" style="margin-bottom:12px">
+          <span class="search-symbol">⌕</span>
+          <input id="logo-search" aria-label="ค้นหาโลโก้" type="search" placeholder="ค้นหา เช่น Google, Notion, OpenAI..." autocomplete="off">
+        </label>
+        <div class="logo-results" id="logo-results"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Settings -->
+  <div class="modal-backdrop" id="settings-modal" hidden inert aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+    <section class="modal medium">
+      <header class="modal-head">
+        <div class="modal-title">
+          <h2 id="settings-title">การตั้งค่า</h2>
+          <p>ปรับแต่งธีม ภาษา และรูปแบบการแสดงผล</p>
+        </div>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+      </header>
+
+      <div class="modal-body">
+        <div class="settings-grid">
+          <div class="settings-row">
+            <div><div class="settings-row-title">มุมมองแอป</div><div class="settings-row-desc">เปลี่ยนการจัดวางรายการแอป</div></div>
+            <div class="segment" aria-label="มุมมองแอป"><button type="button" data-view="grid">กริด</button><button type="button" data-view="list">รายการ</button><button type="button" data-view="compact">กระชับ</button></div>
+          </div>
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-title">ธีม</div>
+              <div class="settings-row-desc">เลือกธีมสว่าง มืด หรือปรับตามระบบ</div>
+            </div>
+            <div class="segment" id="theme-segment">
+              <button type="button" data-theme-value="light">สว่าง</button>
+              <button type="button" data-theme-value="dark">มืด</button>
+              <button type="button" data-theme-value="auto">อัตโนมัติ</button>
+            </div>
+          </div>
+
+          <div class="settings-row">
+            <div>
+              <div class="settings-row-title">ภาษา</div>
+              <div class="settings-row-desc">เปลี่ยนภาษาหลักของส่วนติดต่อ</div>
+            </div>
+            <div class="segment" id="language-segment">
+              <button type="button" data-language-value="th">ไทย</button>
+              <button type="button" data-language-value="en">English</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Help -->
+  <div class="modal-backdrop" id="help-modal" hidden inert aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="help-title">
+    <section class="modal medium">
+      <header class="modal-head">
+        <div class="modal-title">
+          <h2 id="help-title">ช่วยเหลือและเกี่ยวกับ</h2>
+          <p>ข้อมูลและคำตอบที่พบบ่อย</p>
+        </div>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+      </header>
+
+      <div class="modal-body">
+        <div class="settings-grid">
+          <div class="help-item">
+            <strong>Koo Mean Portal คืออะไร?</strong>
+            <p>ศูนย์รวมแอปพลิเคชันสำหรับผู้ใช้ที่ได้รับอนุญาต โดยจะแสดงเฉพาะรายการที่ตรงกับสิทธิ์ของบัญชี</p>
+          </div>
+          <div class="help-item">
+            <strong>เข้าสู่ระบบไม่ได้?</strong>
+            <p>ตรวจสอบบัญชี Google และสิทธิ์ของอีเมล หากยังไม่อยู่ในระบบ คุณสามารถส่งคำขอลงทะเบียนได้</p>
+          </div>
+          <div class="help-item">
+            <strong>ไม่เห็นแอปบางรายการ?</strong>
+            <p>การมองเห็นแอปขึ้นอยู่กับ Role และ Group ที่กำหนดให้บัญชีของคุณ</p>
+          </div>
+          <div class="help-item">
+            <strong>ปุ่มลัด</strong>
+            <p>กด / เพื่อค้นหา, R เพื่อรีเฟรช, Ctrl/⌘ + K เพื่อเปิด Command Palette และ Esc เพื่อปิดหน้าต่างล่าสุด</p>
+          </div>
+        </div>
+        <div class="policy-links" aria-label="เอกสารนโยบาย">
+          <a class="btn btn-ghost" href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="help-privacy-label">นโยบายความเป็นส่วนตัว</span> ↗</a>
+          <a class="btn btn-ghost" href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="help-terms-label">ข้อกำหนดการใช้บริการ</span> ↗</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Command palette -->
+  <div class="modal-backdrop" id="command-modal" hidden inert aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="command-title">
+    <section class="modal medium">
+      <header class="modal-head">
+        <div class="modal-title">
+          <h2 id="command-title">Command Palette</h2>
+          <p>ค้นหาแอปหรือเรียกใช้คำสั่งอย่างรวดเร็ว</p>
+        </div>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+      </header>
+
+      <div class="modal-body">
+        <label class="search" style="margin-bottom:12px">
+          <span class="search-symbol">⌕</span>
+          <input id="command-search" aria-label="ค้นหาแอปหรือคำสั่ง" type="search" placeholder="พิมพ์ชื่อแอปหรือคำสั่ง..." autocomplete="off">
+        </label>
+        <div class="command-results" id="command-results"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">
+    <span class="toast-symbol" id="toast-symbol">●</span>
+    <span class="toast-message" id="toast-message"></span>
+  </div>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const API_URL = "https://koomean-proxy.meanchannel52.workers.dev";
+      const API_TIMEOUT = 15000;
+      const activeRequests = new Set();
+      let authEpoch = 0, portalSequence = 0, portalTask = null, portalTaskToken = null;
+      let retryAfterUntil = 0, googleTask = null;
+      function staleError() { return Object.assign(new Error("Session changed"), {stale:true}); }
+      function invalidateIdentity() {
+        authEpoch++; portalSequence++; portalTask = null;
+        for (const controller of activeRequests) controller.abort();
+      }
+      function store(key, value) { try { localStorage.setItem(key, value); } catch {} }
+
+      const GOOGLE_CLIENT_ID = "906677442222-kmjgsmta70n24aoaq7osm9c1l7g1fb89.apps.googleusercontent.com";
+
+      const SESSION_KEY = "koomean_portal_session_v2";
+      const PREFS_KEY = "koomean_portal_prefs_v3";
+      const PINNED_KEY = "koomean_pinned_apps_v1";
+
+      const $ = id => document.getElementById(id);
+
+      const text = {
+        th: {
+          login: "เข้าสู่ระบบ",
+          account: "บัญชี",
+          allGroups: "ทุกกลุ่ม",
+          available: "แอปที่พร้อมใช้งาน",
+          connecting: "กำลังเชื่อมต่อ",
+          connected: "เชื่อมต่อแล้ว",
+          offline: "ออฟไลน์",
+          noApps: "ยังไม่มีแอปพลิเคชัน",
+          noResults: "ไม่พบแอปที่ตรงกับการค้นหา",
+          favorites: "รายการโปรด",
+          public: "ทั่วไป",
+          featured: "แนะนำ",
+          refreshed: "รีเฟรชข้อมูลแล้ว",
+          saved: "บันทึกเรียบร้อยแล้ว",
+          deleted: "ลบแอปเรียบร้อยแล้ว",
+          sessionExpired: "เซสชันหมดอายุ กรุณาเข้าสู่ระบบใหม่",
+          loading: "กำลังโหลด...",
+          appNameRequired: "กรุณากรอกชื่อแอป",
+          invalidUrl: "URL ต้องขึ้นต้นด้วย http:// หรือ https://",
+          duplicateUrl: "URL นี้ถูกใช้งานแล้ว",
+          invalidColor: "รูปแบบสีไม่ถูกต้อง",
+          invalidSlug: "Slug ใช้ได้เฉพาะ a-z, 0-9, _ และ -",
+          networkError: "ไม่สามารถเชื่อมต่อเซิร์ฟเวอร์ได้",
+          timeout: "การเชื่อมต่อใช้เวลานานเกินไป"
+        },
+        en: {
+          login: "Sign in",
+          account: "Account",
+          allGroups: "All groups",
+          available: "apps available",
+          connecting: "Connecting",
+          connected: "Connected",
+          offline: "Offline",
+          noApps: "No applications",
+          noResults: "No matching applications",
+          favorites: "Favorites",
+          public: "Public",
+          featured: "Featured",
+          refreshed: "Refreshed",
+          saved: "Saved",
+          deleted: "Application deleted",
+          sessionExpired: "Session expired. Please sign in again.",
+          loading: "Loading...",
+          appNameRequired: "Application name is required",
+          invalidUrl: "URL must begin with http:// or https://",
+          duplicateUrl: "This URL is already in use",
+          invalidColor: "Invalid color format",
+          invalidSlug: "Slug may contain a-z, 0-9, _ and - only",
+          networkError: "Cannot connect to the server",
+          timeout: "The connection timed out"
+        }
+      };
+
+      const state = {
+        token: null,
+        user: null,
+        verified: false,
+        applications: [],
+        links: [],
+        users: [],
+        profile: null,
+        editingRow: null,
+        selectedIcon: "",
+        selectedIconName: "",
+        logoRegistry: [],
+        logosLoaded: false,
+        busy: false,
+        lang: "th",
+        theme: "auto",
+        view: "grid",
+        pinned: new Set(),
+        modalStack: [],
+        focusStack: [],
+        retryAttempt: 0,
+        retryTimer: 0,
+        sessionTimer: 0,
+        toastTimer: 0,
+        commandIndex: 0,
+        commandItems: []
+      };
+
+      const t = key => text[state.lang]?.[key] || text.th[key] || key;
+
+      function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>"'`]/g, character => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+          "`": "&#96;"
+        })[character]);
+      }
+
+      function safeUrl(value) {
+        try {
+          const url = new URL(String(value || ""));
+          return /^https?:$/.test(url.protocol) && !url.username && !url.password ? url.href : "";
+        } catch {
+          return "";
+        }
+      }
+
+      function canonicalUrl(value) {
+        try {
+          const url = new URL(value);
+          const path = url.pathname.replace(/\/+$/, "") || "/";
+          return url.origin.toLowerCase() + path + url.search + url.hash;
+        } catch {
+          return "";
+        }
+      }
+
+      function validColor(value) {
+        return /^#(?:[0-9a-f]{3}|[0-9a-f]{6}|[0-9a-f]{8})$/i.test(String(value || ""));
+      }
+
+      function validSlug(value) {
+        return /^[a-z0-9][a-z0-9_\-\s]{0,50}$/i.test(String(value || ""));
+      }
+
+      function decodeJwt(token) {
+        try {
+          const parts = String(token || "").split(".");
+          if (parts.length !== 3) return null;
+
+          let encoded = parts[1].replace(/-/g, "+").replace(/_/g, "/");
+          encoded += "=".repeat((4 - encoded.length % 4) % 4);
+
+          const decoded = atob(encoded);
+          const bytes = Uint8Array.from(decoded, character => character.charCodeAt(0));
+          return JSON.parse(new TextDecoder().decode(bytes));
+        } catch {
+          return null;
+        }
+      }
+
+      function tokenExpired(token) {
+        const claims = decodeJwt(token);
+        return !claims?.exp || claims.exp * 1000 <= Date.now();
+      }
+
+      function debounce(callback, delay = 200) {
+        let timer;
+        return (...args) => {
+          clearTimeout(timer);
+          timer = setTimeout(() => callback(...args), delay);
+        };
+      }
+
+      function showToast(message, type = "info") {
+        clearTimeout(state.toastTimer);
+
+        $("toast-message").textContent = message;
+        $("toast-symbol").textContent =
+          type === "success" ? "✓" :
+          type === "error" ? "!" : "●";
+
+        $("toast").className = `toast ${type} show`;
+
+        state.toastTimer = setTimeout(() => {
+          $("toast").classList.remove("show");
+        }, 3300);
+      }
+
+      function setStatus(mode, label) {
+        const status = $("connection-status");
+        status.classList.remove("connecting", "offline");
+
+        if (mode) status.classList.add(mode);
+        $("status-text").textContent = label;
+      }
+
+      function getFocusable(container) {
+        return [...container.querySelectorAll(
+          'button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])'
+        )].filter(element => element.offsetParent !== null);
+      }
+
+      function syncModalState() {
+        const top = state.modalStack.at(-1);
+        const maintenanceActive = document.documentElement.dataset.maintenance === "active";
+        for (const node of document.querySelectorAll(".modal-backdrop")) {
+          const isTop = node.id === top && !maintenanceActive;
+          node.inert = !isTop;
+          node.setAttribute("aria-hidden", String(!isTop));
+        }
+        const blocked = Boolean(top) || maintenanceActive;
+        document.querySelector(".topbar").inert = blocked;
+        $("main-content").inert = blocked;
+        document.querySelector(".skip-link").inert = blocked;
+      }
+      function openModal(id) {
+        if (document.documentElement.dataset.maintenance === "active") return;
+        const backdrop = $(id);
+        if (!backdrop || backdrop.classList.contains("open")) return;
+
+        const currentFocus = document.activeElement;
+        state.focusStack.push(currentFocus);
+        state.modalStack.push(id);
+
+        backdrop.hidden = false;
+        backdrop.style.zIndex = String(100 + state.modalStack.length * 10);
+        backdrop.classList.add("open");
+        document.body.classList.add("modal-open");
+        syncModalState();
+
+        requestAnimationFrame(() => {
+          if (state.modalStack.at(-1) !== id || document.documentElement.dataset.maintenance === "active") return;
+          const focusable = getFocusable(backdrop);
+          const preferred = backdrop.querySelector("[autofocus]") || focusable[0];
+          preferred?.focus();
+        });
+      }
+
+      function closeModal(id, restoreFocus = true) {
+        const backdrop = $(id);
+        if (!backdrop?.classList.contains("open")) return;
+
+        backdrop.classList.remove("open");
+        backdrop.hidden = true;
+        backdrop.style.zIndex = "";
+
+        let restoreTarget = null;
+        const index = state.modalStack.lastIndexOf(id);
+        if (index !== -1) {
+          state.modalStack.splice(index, 1);
+          const previousFocus = state.focusStack.splice(index, 1)[0];
+
+          if (restoreFocus && previousFocus?.isConnected) restoreTarget = previousFocus;
+        }
+
+        if (!state.modalStack.length) document.body.classList.remove("modal-open");
+        syncModalState();
+        if (restoreTarget && !restoreTarget.closest("[inert]")) restoreTarget.focus({preventScroll:true});
+      }
+
+      function closeTopModal() {
+        const id = state.modalStack.at(-1);
+        if (id) closeModal(id);
+      }
+
+      function loadPreferences() {
+        try {
+          const saved = JSON.parse(localStorage.getItem(PREFS_KEY) || "{}");
+          state.theme = ["light", "dark", "auto"].includes(saved.theme) ? saved.theme : "auto";
+          state.lang = saved.lang === "en" ? "en" : "th";
+          state.view = ["grid", "list", "compact"].includes(saved.view) ? saved.view : "grid";
+        } catch {}
+
+        try {
+          const pins = JSON.parse(localStorage.getItem(PINNED_KEY) || "[]");
+          state.pinned = new Set(Array.isArray(pins) ? pins.filter(value => typeof value === "string") : []);
+        } catch {
+          state.pinned = new Set();
+        }
+      }
+
+      function savePreferences() {
+        store(PREFS_KEY, JSON.stringify({
+          theme: state.theme,
+          lang: state.lang,
+          view: state.view
+        }));
+      }
+
+      function applyTheme() {
+        const systemDark = matchMedia("(prefers-color-scheme:dark)").matches;
+        const applied = state.theme === "auto" ? (systemDark ? "dark" : "light") : state.theme;
+
+        document.documentElement.dataset.theme = applied;
+        $("theme-color-meta").content = applied === "dark" ? "#14181d" : "#f1f2f4";
+
+        document.querySelectorAll("[data-theme-value]").forEach(button => {
+          button.classList.toggle("active", button.dataset.themeValue === state.theme);
+          button.setAttribute("aria-pressed", String(button.dataset.themeValue === state.theme));
+        });
+      }
+
+      function applyView() {
+        document.documentElement.dataset.view = state.view;
+
+        document.querySelectorAll("button[data-view]").forEach(button => {
+          button.classList.toggle("active", button.dataset.view === state.view);
+          button.setAttribute("aria-pressed", String(button.dataset.view === state.view));
+        });
+      }
+
+      function applyLanguage() {
+        document.documentElement.lang = state.lang;
+        $("auth-label").textContent = state.user ? t("account") : t("login");
+        $("available-label").textContent = t("available");
+        const english = state.lang === "en";
+        $("login-privacy-label").textContent = english ? "Privacy Policy" : "นโยบายความเป็นส่วนตัว";
+        $("login-terms-label").textContent = english ? "Terms of Service" : "ข้อกำหนดการใช้บริการ";
+        $("help-privacy-label").textContent = english ? "Privacy Policy" : "นโยบายความเป็นส่วนตัว";
+        $("help-terms-label").textContent = english ? "Terms of Service" : "ข้อกำหนดการใช้บริการ";
+        $("register-privacy-label").textContent = english ? "Privacy Policy" : "นโยบายความเป็นส่วนตัว";
+        $("register-terms-label").textContent = english ? "Terms of Service" : "ข้อกำหนดการใช้บริการ";
+        $("register-consent-prefix").textContent = english ? "I agree to the" : "ฉันยอมรับ";
+        $("register-consent-and").textContent = english ? "and acknowledge the" : "และรับทราบ";
+
+        document.querySelectorAll("[data-language-value]").forEach(button => {
+          button.classList.toggle("active", button.dataset.languageValue === state.lang);
+          button.setAttribute("aria-pressed", String(button.dataset.languageValue === state.lang));
+        });
+
+        renderApplications();
+        updateVideoLabel();
+      }
+
+      function saveSession() { clearSession(); }
+      function clearSession() { try { localStorage.removeItem(SESSION_KEY); } catch {} }
+
+      function scheduleSessionExpiry() {
+        clearTimeout(state.sessionTimer);
+
+        const claims = decodeJwt(state.token);
+        if (!claims?.exp) return;
+
+        const delay = Math.max(0, claims.exp * 1000 - Date.now() - 30000);
+
+        state.sessionTimer = setTimeout(() => {
+          signOut(false);
+          showToast(t("sessionExpired"), "error");
+        }, delay);
+      }
+
+      function avatar(name) {
+        const letter = escapeHtml(Array.from(String(name || "U"))[0].toUpperCase());
+        return "data:image/svg+xml," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" rx="32" fill="#20262d"/><text x="32" y="43" text-anchor="middle" font-family="sans-serif" font-size="32" fill="#eceef1">${letter}</text></svg>`);
+      }
+
+      function isAdmin() {
+        const roles = String(state.user?.role || "")
+          .toLowerCase()
+          .split(/[,;|]+/)
+          .map(role => role.trim())
+          .filter(Boolean);
+        return Boolean(state.user && state.verified && roles.includes("admin"));
+      }
+
+      function applyUser() {
+        const signedIn = Boolean(state.user);
+
+        let firstName = "";
+        if (signedIn) {
+          const fullName = state.user?.name || state.user?.email?.split("@")[0] || "";
+          firstName = Array.from(fullName.split(" ")[0]).slice(0, 32).join("");
+        }
+
+        const heroTitle = $("hero-title");
+        if (heroTitle) {
+          heroTitle.innerHTML = firstName
+            ? `Welcome ${escapeHtml(firstName)}<br />To Koo Mean Portal`
+            : `Welcome To<br />Koo Mean Portal`;
+        }
+
+        $("user-chip").classList.toggle("visible", signedIn);
+        $("admin-nav").hidden = !isAdmin();
+        $("auth-label").textContent = signedIn ? t("account") : t("login");
+        $("auth-btn").setAttribute("aria-label", signedIn ? t("account") : t("login"));
+
+        if (!signedIn) {
+          $("user-name").textContent = "";
+          $("user-avatar").removeAttribute("src");
+          $("account-avatar").removeAttribute("src");
+          for (const id of ["account-name", "account-email", "account-role"]) $(id).textContent = "—";
+          $("new-name").value = "";
+          return;
+        }
+
+        const picture = safeUrl(state.user.pic) || avatar(firstName);
+
+        $("user-name").textContent = firstName;
+        $("user-avatar").src = picture;
+        $("account-avatar").src = picture;
+        $("account-name").textContent = state.user?.name || firstName;
+        $("account-email").textContent = state.user.email || "";
+        $("account-role").textContent = state.user.role || "public";
+        $("new-name").value = state.user?.name || firstName;
+      }
+
+      async function request(action, parameters = {}) {
+        const epoch = authEpoch;
+        if (state.token && tokenExpired(state.token)) {
+          signOut(false);
+          throw new Error(t("sessionExpired"));
+        }
+
+        const body = new URLSearchParams({
+          action,
+          client: "portal"
+        });
+
+        if (state.token) body.set("idToken", state.token);
+
+        Object.entries(parameters).forEach(([key, value]) => {
+          if (value !== undefined && value !== null) {
+            body.set(key, String(value));
+          }
+        });
+
+        const controller = new AbortController();
+        activeRequests.add(controller);
+        const timer = setTimeout(() => controller.abort(), API_TIMEOUT);
+
+        try {
+          const response = await fetch(API_URL, {
+            method: "POST",
+            headers: {"Content-Type": "application/x-www-form-urlencoded"},
+            body,
+            cache: "no-store",
+            credentials: "omit",
+            signal: controller.signal
+          });
+
+          let data;
+
+          try {
+            data = await response.json();
+          } catch {
+            throw new Error("เซิร์ฟเวอร์ตอบกลับด้วยข้อมูลที่ไม่ถูกต้อง");
+          }
+
+          if (epoch !== authEpoch) throw staleError();
+          if (!response.ok || Number(data?.code) >= 400) {
+            const retry = response.headers.get("Retry-After");
+            const wait = retry ? (/^\d+$/.test(retry) ? Number(retry)*1000 : Date.parse(retry)-Date.now()) : 0;
+            if (response.status === 429) retryAfterUntil = Date.now() + Math.max(wait || 30000, 1000);
+            throw Object.assign(new Error(data?.message || `HTTP ${response.status}`), {status:response.status});
+          }
+          return data;
+        } catch (error) {
+          if (epoch !== authEpoch) throw staleError();
+          if (error.name === "AbortError") throw new Error(t("timeout"));
+          if (error instanceof TypeError) throw new Error(t("networkError"));
+          throw error;
+        } finally {
+          clearTimeout(timer);
+          activeRequests.delete(controller);
+        }
+      }
+
+      function cancelRetry(reset = true) {
+        clearTimeout(state.retryTimer);
+        state.retryTimer = 0;
+        if (reset) state.retryAttempt = 0;
+      }
+
+      function scheduleRetry() {
+        clearTimeout(state.retryTimer);
+
+        if (state.retryAttempt >= 5 || document.hidden || !navigator.onLine) return;
+
+        state.retryAttempt += 1;
+        const delay = Math.max(Math.min(2000 * 2 ** (state.retryAttempt - 1), 30000), retryAfterUntil - Date.now());
+
+        state.retryTimer = setTimeout(() => {
+          if (!document.hidden && navigator.onLine) loadPortal(false, false);
+        }, delay);
+      }
+
+      function loadPortal(freshLogin = false, userInitiated = false) {
+        if (portalTask && portalTaskToken === state.token) return portalTask;
+        if (retryAfterUntil > Date.now()) { scheduleRetry(); return Promise.resolve(false); }
+        portalTaskToken = state.token;
+        const task = performPortalLoad(freshLogin, userInitiated);
+        portalTask = task;
+        task.finally(() => { if (portalTask === task) portalTask = null; });
+        return task;
+      }
+      async function performPortalLoad(freshLogin, userInitiated) {
+        const sequence = ++portalSequence;
+        if (userInitiated) cancelRetry(true);
+
+        setStatus("connecting", t("connecting"));
+        $("applications").setAttribute("aria-busy", "true");
+
+        try {
+          const data = await request("bootstrap");
+          if (sequence !== portalSequence) return false;
+
+          if (data.authError) {
+            signOut(false);
+            showToast(t("sessionExpired"), "error");
+            return false;
+          }
+
+          if (data.requireRegistration) {
+            state.user = null;
+            state.verified = false;
+            clearPortalData();
+            state.applications = Array.isArray(data.applications) ? data.applications : [];
+            state.links = Array.isArray(data.links) ? data.links : [];
+            renderApplications(); renderMarquee();
+            applyUser();
+            setStatus("offline", "ต้องลงทะเบียน");
+            openModal("register-modal");
+            return false;
+          }
+
+          state.user = data.user?.email ? data.user : null;
+          state.verified = Boolean(state.user && state.token);
+          state.applications = Array.isArray(data.applications) ? data.applications : [];
+          state.links = Array.isArray(data.links) ? data.links : [];
+          state.users = Array.isArray(data.allUsers) ? data.allUsers : [];
+          state.profile = data.spaceProfile || data.profile || null;
+
+          cancelRetry(true);
+          saveSession();
+          scheduleSessionExpiry();
+          applyUser();
+          applyProfile();
+          renderApplications();
+          renderMarquee();
+          renderAdminItems(); renderAdminUsers();
+          if (!isAdmin()) { closeModal("logo-modal", false); closeModal("admin-modal", false); }
+
+          setStatus("", t("connected"));
+          $("updated-at").textContent = new Date().toLocaleTimeString(
+            state.lang === "th" ? "th-TH" : "en-US",
+            {hour: "2-digit", minute: "2-digit"}
+          );
+
+          if (freshLogin) showToast("เข้าสู่ระบบสำเร็จ", "success");
+          return true;
+        } catch (error) {
+          if (error.stale || sequence !== portalSequence) return false;
+          setStatus("offline", t("offline"));
+          if (!state.applications.length) renderError(error.message);
+          showToast(error.message, "error");
+
+          if (error.message !== t("sessionExpired")) {
+            scheduleRetry();
+          }
+          return false;
+        } finally {
+          if (sequence === portalSequence) $("applications").setAttribute("aria-busy", "false");
+        }
+      }
+
+      function applyProfile() {
+        const profile = state.profile || {};
+        // Keep the browser tab and product name consistent with this page.
+        // Older D1 profile rows may still contain the previous Link Center title.
+        document.title = "Koo Mean Portal";
+
+        if (profile.name) {
+          const kicker = $("hero-kicker");
+          if (kicker) kicker.textContent = `${profile.name} · KOO MEAN PORTAL`;
+        }
+      }
+
+      function clearPortalData() {
+        state.applications = [];
+        state.links = [];
+        state.users = [];
+        state.profile = null;
+        renderApplications();
+        renderMarquee();
+        renderAdminItems();
+        renderAdminUsers();
+      }
+
+      function groupKey(app) {
+        return String(app.group || "public").trim().toLowerCase() || "public";
+      }
+
+      function groupName(group) {
+        if (group === "public") return t("public");
+        return group.charAt(0).toUpperCase() + group.slice(1);
+      }
+
+      function groupColor(group) {
+        if (group === "public") return "var(--accent)";
+
+        let hash = 0;
+        for (const character of group) {
+          hash = (hash * 31 + character.charCodeAt(0)) >>> 0;
+        }
+
+        const hues = [199, 262, 142, 340, 24];
+        return `hsl(${hues[hash % hues.length]} 55% 55%)`;
+      }
+
+      function svgUrl(slug) {
+        return validSlug(slug) && !slug.includes(" ")
+          ? `https://thesvg.org/icons/${encodeURIComponent(slug)}/default.svg`
+          : "";
+      }
+
+      function getIconHtml(iconStr, title) {
+        iconStr = String(iconStr || "").trim();
+        title = String(title || "?").trim();
+
+        if (iconStr.match(/^(fa[srlb]|fa-)\b/i) || iconStr.includes(" fa-")) {
+          const tokens = iconStr.split(/\s+/).filter(token => /^(?:fa[srlb]|fa-[a-z0-9-]+)$/i.test(token));
+          if (iconStr.startsWith("fa-")) tokens.unshift("fas");
+          return `<i class="${escapeHtml(tokens.join(" "))}" aria-hidden="true"></i>`;
+        }
+
+        if (safeUrl(iconStr)) {
+          return `<img src="${escapeHtml(safeUrl(iconStr))}" alt="" width="24" height="24" loading="lazy" decoding="async" referrerpolicy="no-referrer">`;
+        }
+
+        const svgSource = svgUrl(iconStr);
+        if (svgSource) {
+          return `<img src="${escapeHtml(svgSource)}" alt="" width="24" height="24" loading="lazy" decoding="async" referrerpolicy="no-referrer">`;
+        }
+
+        return `<span class="fallback-icon">${escapeHtml(title.charAt(0).toUpperCase())}</span>`;
+      }
+
+      function iconHtml(app) {
+        const inner = getIconHtml(app.icon, app.name);
+        return `<div class="app-icon">${inner}</div>`;
+      }
+
+      function highlight(value, query) {
+        const raw = String(value ?? "");
+        if (!query) return escapeHtml(raw);
+        const lower = raw.toLowerCase(), needle = query.toLowerCase();
+        let cursor = 0, result = "", index;
+        while ((index = lower.indexOf(needle, cursor)) !== -1) {
+          result += escapeHtml(raw.slice(cursor, index)) + "<mark>" + escapeHtml(raw.slice(index, index + needle.length)) + "</mark>";
+          cursor = index + needle.length;
+        }
+        return result + escapeHtml(raw.slice(cursor));
+      }
+
+      function cardHtml(app, query) {
+        const url = safeUrl(app.url);
+        if (!url) return "";
+
+        const canonical = canonicalUrl(url);
+        const pinned = state.pinned.has(canonical);
+        const group = groupKey(app);
+        const color = validColor(app.color) ? app.color : groupColor(group);
+
+        return `
+          <article class="app-card" style="--group-color:${escapeHtml(color)}">
+            <div class="card-actions">
+              <button
+                class="card-action ${pinned ? "pinned" : ""}"
+                type="button"
+                data-pin-url="${escapeHtml(url)}"
+                aria-label="รายการโปรด"
+                aria-pressed="${pinned}"
+                title="รายการโปรด"
+              >${pinned ? "★" : "☆"}</button>
+              <a
+                class="card-action"
+                href="${escapeHtml(url)}"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="เปิดแอปในแท็บใหม่"
+                title="เปิดในแท็บใหม่"
+              >↗</a>
+            </div>
+
+            <a class="app-card-body" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">
+              ${iconHtml(app)}
+              <div class="app-info">
+                <div class="app-name-row">
+                  <span class="app-name" title="${escapeHtml(app.name || "Untitled")}">${highlight(app.name || "Untitled", query)}</span>
+                  ${app.starred === true || String(app.starred).toLowerCase() === "true"
+                    ? `<span class="featured">${escapeHtml(t("featured"))}</span>`
+                    : ""}
+                </div>
+                <div class="app-description">${highlight(app.description || "", query)}</div>
+              </div>
+            </a>
+          </article>
+        `;
+      }
+
+      function renderApplications() {
+        const root = $("applications");
+        if (!root) return;
+
+        const query = $("app-search").value.trim().toLowerCase();
+        const filter = $("group-filter");
+        const previousGroup = filter.value;
+
+        const validApps = state.applications.filter(app => safeUrl(app.url));
+        const groups = [...new Set(validApps.map(groupKey))].sort((a, b) => {
+          if (a === "public") return -1;
+          if (b === "public") return 1;
+          return a.localeCompare(b);
+        });
+
+        filter.innerHTML = `
+          <option value="all">${escapeHtml(t("allGroups"))}</option>
+          ${groups.map(group => `<option value="${escapeHtml(group)}">${escapeHtml(groupName(group))}</option>`).join("")}
+        `;
+
+        filter.value = groups.includes(previousGroup) ? previousGroup : "all";
+        const selectedGroup = filter.value;
+
+        const filtered = validApps.filter(app => {
+          const searchable = `${app.name || ""} ${app.description || ""} ${app.group || ""}`.toLowerCase();
+          return (!query || searchable.includes(query)) &&
+            (selectedGroup === "all" || groupKey(app) === selectedGroup);
+        });
+
+        $("app-count").textContent = String(filtered.length);
+
+        if (!filtered.length) {
+          root.innerHTML = `
+            <div class="state-box">
+              <span class="state-icon">${query ? "⌕" : "◇"}</span>
+              <strong>${escapeHtml(query ? t("noResults") : t("noApps"))}</strong>
+              <p>${query ? "ลองเปลี่ยนคำค้นหาหรือเลือกกลุ่มอื่น" : "เมื่อมีข้อมูล รายการแอปจะแสดงบริเวณนี้"}</p>
+            </div>
+          `;
+          return;
+        }
+
+        const pinned = filtered.filter(app => state.pinned.has(canonicalUrl(app.url)));
+        const normal = filtered.filter(app => !state.pinned.has(canonicalUrl(app.url)));
+
+        const sections = [];
+
+        if (pinned.length) {
+          sections.push({
+            name: t("favorites"),
+            color: "var(--accent)",
+            apps: pinned
+          });
+        }
+
+        const grouped = new Map();
+
+        normal.forEach(app => {
+          const group = groupKey(app);
+          if (!grouped.has(group)) grouped.set(group, []);
+          grouped.get(group).push(app);
+        });
+
+        grouped.forEach((apps, group) => {
+          sections.push({
+            name: groupName(group),
+            color: groupColor(group),
+            apps
+          });
+        });
+
+        root.innerHTML = sections.map(section => `
+          <section class="group">
+            <header class="group-head">
+              <i class="group-dot" style="--group-color:${escapeHtml(section.color)}"></i>
+              <h2>${escapeHtml(section.name)}</h2>
+              <span class="group-count">${section.apps.length}</span>
+            </header>
+            <div class="apps-grid">
+              ${section.apps.map(app => cardHtml(app, query)).join("")}
+            </div>
+          </section>
+        `).join("");
+      }
+
+      function renderError(message) {
+        $("app-count").textContent = "0";
+        $("applications").innerHTML = `
+          <div class="state-box">
+            <span class="state-icon">!</span>
+            <strong>โหลดข้อมูลไม่สำเร็จ</strong>
+            <p>${escapeHtml(message)}</p>
+            <button class="btn btn-ghost" id="retry-btn" type="button" style="margin-top:14px">ลองใหม่</button>
+          </div>
+        `;
+
+        $("retry-btn")?.addEventListener("click", () => loadPortal(false, true));
+      }
+
+      function togglePinned(url) {
+        const canonical = safeUrl(url) && canonicalUrl(url);
+        if (!canonical) return;
+        const focusedUrl = url;
+
+        if (state.pinned.has(canonical)) {
+          state.pinned.delete(canonical);
+        } else {
+          state.pinned.add(canonical);
+        }
+
+        store(PINNED_KEY, JSON.stringify([...state.pinned]));
+        renderApplications();
+        [...document.querySelectorAll("[data-pin-url]")].find(node => node.dataset.pinUrl === focusedUrl)?.focus({preventScroll:true});
+      }
+
+      function loadGoogle() {
+        if (window.google?.accounts?.id) return Promise.resolve();
+        if (googleTask) return googleTask;
+        googleTask = new Promise((resolve, reject) => {
+          const script = document.createElement("script");
+          const timer = setTimeout(() => fail(), 10000);
+          function fail() { clearTimeout(timer); script.remove(); googleTask = null; reject(new Error("Google Sign-In unavailable")); }
+          script.src = "https://accounts.google.com/gsi/client";
+          script.async = true;
+          script.onload = () => { clearTimeout(timer); window.google?.accounts?.id ? resolve() : fail(); };
+          script.onerror = fail;
+          document.head.appendChild(script);
+        });
+        return googleTask;
+      }
+      async function openLogin() {
+        openModal("login-modal");
+        const container = $("google-button");
+        container.textContent = t("loading");
+        try {
+          await loadGoogle();
+          if (!$("login-modal").classList.contains("open")) return;
+          google.accounts.id.initialize({client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredential, auto_select:false});
+          container.replaceChildren();
+          google.accounts.id.renderButton(container, {
+            type:"standard",size:"large",theme:document.documentElement.dataset.theme === "dark" ? "filled_black" : "outline",shape:"pill",text:"signin_with",logo_alignment:"left",
+            width:Math.min(320, container.clientWidth)
+          });
+        } catch {
+          container.textContent = state.lang === "en" ? "Google Sign-In could not load." : "โหลด Google Sign-In ไม่สำเร็จ";
+          const retry = document.createElement("button");
+          retry.type = "button"; retry.className = "btn btn-ghost";
+          retry.textContent = state.lang === "en" ? "Try again" : "ลองใหม่";
+          retry.addEventListener("click", openLogin); container.appendChild(retry);
+        }
+      }
+
+      function handleGoogleCredential(response) {
+        const claims = decodeJwt(response.credential);
+
+        if (!claims?.email || tokenExpired(response.credential)) {
+          showToast("Google Session ไม่ถูกต้องหรือหมดอายุ", "error");
+          return;
+        }
+
+        invalidateIdentity();
+        state.token = response.credential;
+        state.user = null;
+        state.verified = false;
+        clearPortalData();
+        applyUser();
+
+        closeModal("login-modal");
+        scheduleSessionExpiry();
+        loadPortal(true, true);
+      }
+
+      window.handleGoogleCredential = handleGoogleCredential;
+
+      function signOut(showMessage = true) {
+        invalidateIdentity();
+        clearTimeout(state.sessionTimer);
+        cancelRetry(true);
+
+        state.token = null;
+        state.user = null;
+        state.verified = false;
+        clearPortalData();
+
+        clearSession();
+        applyUser();
+
+        [...state.modalStack].reverse().forEach(id => closeModal(id, false));
+
+        if (showMessage) showToast("ออกจากระบบแล้ว", "success");
+
+        loadPortal(false, true);
+      }
+
+      async function saveDisplayName() {
+        if (!state.user || !state.verified || $("save-name-btn").disabled) return;
+        const name = $("new-name").value.trim();
+
+        if (!name) {
+          showToast("กรุณากรอกชื่อที่ต้องการแสดง", "error");
+          $("new-name").focus();
+          return;
+        }
+
+        const button = $("save-name-btn");
+        button.disabled = true;
+        button.textContent = t("loading");
+
+        try {
+          const data = await request("updateUserName", {newName: name});
+
+          if (data.success === false) {
+            throw new Error(data.message || "บันทึกไม่สำเร็จ");
+          }
+
+          state.user.name = data.name || name;
+          saveSession();
+          applyUser();
+          showToast(t("saved"), "success");
+        } catch (error) {
+          if (error.stale) return;
+          showToast(error.message, "error");
+        } finally {
+          button.disabled = false;
+          button.textContent = "บันทึก";
+        }
+      }
+
+      async function registerAccount() {
+        if (!state.token || $("register-btn").disabled) return;
+        const button = $("register-btn");
+        if (!$("register-terms-accepted").checked) {
+          showToast(state.lang === "en" ? "Please accept the Terms of Service and acknowledge the Privacy Policy to continue." : "กรุณายอมรับข้อกำหนดและรับทราบนโยบายความเป็นส่วนตัวก่อนสมัคร", "error");
+          $("register-terms-accepted").focus();
+          return;
+        }
+        button.disabled = true;
+        button.textContent = t("loading");
+
+        try {
+          await request("register", {
+            note: $("register-note").value.trim(),
+            termsAccepted: true,
+            termsVersion: "2026-10-07"
+          });
+
+          closeModal("register-modal");
+          await loadPortal(false, true);
+          showToast("ลงทะเบียนเรียบร้อยแล้ว", "success");
+        } catch (error) {
+          if (error.stale) return;
+          showToast(error.message, "error");
+        } finally {
+          button.disabled = false;
+          button.textContent = "ส่งคำขอ";
+        }
+      }
+
+      function resetAdminForm() {
+        state.editingRow = null;
+        state.selectedIcon = "";
+        state.selectedIconName = "";
+
+        ["admin-name", "admin-url", "admin-description", "admin-color", "manual-icon"]
+          .forEach(id => $(id).value = "");
+
+        $("admin-group").value = "public";
+        $("admin-starred").checked = false;
+        $("admin-form-title").textContent = "เพิ่มแอปพลิเคชัน";
+        $("admin-submit-btn").textContent = "เพิ่มแอป";
+        $("admin-cancel-btn").hidden = true;
+
+        refreshIconPreview();
+      }
+
+      function fillAdminForm(app) {
+        state.editingRow = app.rowIdx !== undefined ? app.rowIdx : null;
+        state.selectedIcon = String(app.icon || "");
+        state.selectedIconName = state.selectedIcon;
+
+        $("admin-name").value = app.name || "";
+        $("admin-url").value = app.url || "";
+        $("admin-description").value = app.description || "";
+        $("admin-group").value = app.group || "public";
+        $("admin-color").value = app.color || "";
+        $("admin-starred").checked =
+          app.starred === true || String(app.starred).toLowerCase() === "true";
+
+        $("admin-form-title").textContent = "แก้ไขแอปพลิเคชัน";
+        $("admin-submit-btn").textContent = "บันทึกการแก้ไข";
+        $("admin-cancel-btn").hidden = false;
+
+        refreshIconPreview();
+      }
+
+      function refreshIconPreview() {
+        const preview = $("icon-preview");
+        const iconHtmlCode = getIconHtml(state.selectedIcon, "Preview");
+
+        preview.innerHTML = iconHtmlCode;
+        $("icon-name").textContent = state.selectedIconName || "ยังไม่ได้เลือกไอคอน";
+        $("icon-value").textContent = state.selectedIcon || "—";
+      }
+
+      function useManualIcon() {
+        const slug = $("manual-icon").value.trim();
+
+        if (!slug) {
+          showToast("กรุณากรอกชื่อไอคอน", "error");
+          return;
+        }
+
+        state.selectedIcon = slug;
+        state.selectedIconName = `Custom / theSVG · ${slug}`;
+        refreshIconPreview();
+      }
+
+      function renderAdminItems() {
+        const root = $("admin-items");
+        if (!root) return;
+
+        if (!isAdmin()) { root.replaceChildren(); return; }
+        if (!state.applications.length) {
+          root.innerHTML = '<div class="state-box" style="padding:24px 10px"><p>ยังไม่มีข้อมูล</p></div>';
+          return;
+        }
+
+        root.innerHTML = state.applications.map((app, index) => {
+          const iconContent = getIconHtml(app.icon, app.name);
+
+          return `
+            <div class="admin-item">
+              <div class="admin-item-icon">
+                ${iconContent}
+              </div>
+
+              <div class="admin-item-info">
+                <div class="admin-item-name">${escapeHtml(app.name || "—")}</div>
+                <div class="admin-item-meta">${index + 1}. ${escapeHtml(groupName(groupKey(app)))}</div>
+              </div>
+
+              <div class="admin-item-actions">
+                <button class="small-action" type="button" data-admin-action="up" data-row="${Number(app.rowIdx) || 0}" ${index === 0 ? "disabled" : ""} title="ขึ้น">↑</button>
+                <button class="small-action" type="button" data-admin-action="down" data-row="${Number(app.rowIdx) || 0}" ${index === state.applications.length - 1 ? "disabled" : ""} title="ลง">↓</button>
+                <button class="small-action" type="button" data-admin-action="edit" data-row="${Number(app.rowIdx) || 0}" title="แก้ไข">✎</button>
+                <button class="small-action danger" type="button" data-admin-action="delete" data-row="${Number(app.rowIdx) || 0}" title="ลบ">×</button>
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      function renderAdminUsers() {
+        const root = $("admin-users");
+        if (!root) return;
+
+        if (!isAdmin()) { root.replaceChildren(); return; }
+        const query = $("user-search").value.trim().toLowerCase();
+
+        const users = state.users.filter(user => {
+          return `${user.name || ""} ${user.email || ""}`.toLowerCase().includes(query);
+        });
+
+        if (!users.length) {
+          root.innerHTML = '<div class="state-box" style="padding:24px 10px"><p>ไม่พบผู้ใช้งาน</p></div>';
+          return;
+        }
+
+        root.innerHTML = users.map(user => {
+          const name = user.name || String(user.email || "").split("@")[0] || "—";
+          const email = String(user.email || "");
+          const picture = safeUrl(user.pic) || avatar(name);
+
+          return `
+            <div class="admin-user">
+              <img class="admin-user-avatar" src="${escapeHtml(picture)}" alt="">
+              <div class="admin-user-info">
+                <div class="admin-user-name">${escapeHtml(name)}</div>
+                <div class="admin-user-email">${escapeHtml(email)}</div>
+              </div>
+              <div class="admin-user-controls">
+                <input class="admin-role" type="text" maxlength="50" value="${escapeHtml(user.role || "public")}" aria-label="Role">
+                <button class="small-action" type="button" data-save-user="${escapeHtml(email)}" title="บันทึก">✓</button>
+              </div>
+            </div>
+          `;
+        }).join("");
+      }
+
+      async function submitApplication() {
+        if (!isAdmin() || state.busy) return;
+
+        const name = $("admin-name").value.trim();
+        const url = $("admin-url").value.trim();
+        const description = $("admin-description").value.trim();
+        const group = $("admin-group").value.trim() || "public";
+        const color = $("admin-color").value.trim();
+        const starred = $("admin-starred").checked;
+
+        if (!name) {
+          showToast(t("appNameRequired"), "error");
+          $("admin-name").focus();
+          return;
+        }
+
+        if (!safeUrl(url)) {
+          showToast(t("invalidUrl"), "error");
+          $("admin-url").focus();
+          return;
+        }
+
+        const duplicate = state.applications.find(app =>
+          app.rowIdx !== state.editingRow &&
+          canonicalUrl(app.url) === canonicalUrl(url)
+        );
+
+        if (duplicate) {
+          showToast(`${t("duplicateUrl")}: ${duplicate.name}`, "error");
+          $("admin-url").focus();
+          return;
+        }
+
+        if (color && !validColor(color)) {
+          showToast(t("invalidColor"), "error");
+          $("admin-color").focus();
+          return;
+        }
+
+        const button = $("admin-submit-btn");
+        state.busy = true;
+        button.disabled = true;
+        button.textContent = t("loading");
+
+        try {
+          const action = state.editingRow !== null ? "updateApplication" : "addApplication";
+
+          const parameters = {
+            name,
+            url,
+            description,
+            group,
+            color,
+            starred,
+            icon: state.selectedIcon
+          };
+
+          if (state.editingRow !== null) parameters.rowIdx = state.editingRow;
+
+          await request(action, parameters);
+          showToast(t("saved"), "success");
+          resetAdminForm();
+          await loadPortal(false, true);
+        } catch (error) {
+          if (error.stale) return;
+          showToast(error.message, "error");
+        } finally {
+          state.busy = false;
+          button.disabled = false;
+          button.textContent = state.editingRow !== null ? "บันทึกการแก้ไข" : "เพิ่มแอป";
+        }
+      }
+
+      async function handleAdminAction(action, row) {
+        if (!isAdmin() || state.busy || !["edit","delete","up","down"].includes(action)) return;
+
+        const app = state.applications.find(item => Number(item.rowIdx) === row);
+        if (!app) return;
+
+        if (action === "edit") {
+          fillAdminForm(app);
+          $("admin-modal").querySelector(".modal-body")?.scrollTo({top: 0, behavior: "smooth"});
+          return;
+        }
+
+        if (action === "delete") {
+          if (!confirm(`ลบแอป "${app.name || "—"}" ใช่หรือไม่?`)) return;
+        }
+
+        state.busy = true;
+
+        try {
+          if (action === "delete") {
+            await request("deleteApplication", {rowIdx: row});
+            showToast(t("deleted"), "success");
+          } else {
+            await request("moveApplication", {rowIdx: row, dir: action});
+            showToast(t("saved"), "success");
+          }
+
+          await loadPortal(false, true);
+        } catch (error) {
+          if (error.stale) return;
+          showToast(error.message, "error");
+        } finally {
+          state.busy = false;
+        }
+      }
+
+      async function saveUserRole(button, email) {
+        if (!isAdmin()) return;
+        const input = button.parentElement.querySelector(".admin-role");
+        const role = input.value.trim();
+
+        if (!role) {
+          showToast("กรุณากรอก Role", "error");
+          input.focus();
+          return;
+        }
+
+        button.disabled = true;
+        button.textContent = "…";
+
+        try {
+          await request("updateRole", {
+            targetEmail: email,
+            newRole: role
+          });
+
+          showToast(t("saved"), "success");
+          await loadPortal(false, true);
+        } catch (error) {
+          if (error.stale) return;
+          showToast(error.message, "error");
+        } finally {
+          button.disabled = false;
+          button.textContent = "✓";
+        }
+      }
+
+      async function loadLogoRegistry() {
+        if (state.logosLoaded) {
+          renderLogos();
+          return;
+        }
+
+        $("logo-results").innerHTML =
+          '<div class="state-box" style="grid-column:1/-1;padding:25px 10px"><p>กำลังโหลดโลโก้...</p></div>';
+
+        try {
+          if (!isAdmin()) return;
+          const response = await fetch("https://thesvg.org/api/registry.json", {cache:"force-cache",credentials:"omit",signal:AbortSignal.timeout(10000)});
+
+          if (!response.ok) throw new Error("โหลดโลโก้ไม่สำเร็จ");
+
+          const data = await response.json();
+
+          if (!isAdmin()) return;
+          state.logoRegistry = Array.isArray(data)
+            ? data
+            : Array.isArray(data.icons) ? data.icons : [];
+
+          state.logosLoaded = true;
+          renderLogos();
+        } catch (error) {
+          $("logo-results").innerHTML = `
+            <div class="state-box" style="grid-column:1/-1;padding:25px 10px">
+              <strong>โหลดโลโก้ไม่สำเร็จ</strong>
+              <p>คุณยังสามารถกรอกชื่อไอคอน (เช่น fa-facebook) ด้วยตนเองได้ที่ปุ่มด้านนอก</p>
+            </div>
+          `;
+        }
+      }
+
+      function renderLogos() {
+        const query = $("logo-search").value.trim().toLowerCase();
+
+        const matches = state.logoRegistry.filter(item => {
+          const searchable = [
+            item.title,
+            item.name,
+            item.slug,
+            ...(Array.isArray(item.aliases) ? item.aliases : [])
+          ].filter(Boolean).join(" ").toLowerCase();
+
+          return !query || searchable.includes(query);
+        }).slice(0, 120);
+
+        $("logo-results").innerHTML = matches.length
+          ? matches.map(item => {
+              const slug = String(item.slug || item.name || "").trim();
+              const title = String(item.title || item.name || slug);
+
+              return `
+                <button class="logo-result" type="button" data-logo="${escapeHtml(slug)}" data-logo-title="${escapeHtml(title)}">
+                  <img src="${escapeHtml(svgUrl(slug))}" alt="" loading="lazy" referrerpolicy="no-referrer">
+                  <span>${escapeHtml(title)}</span>
+                </button>
+              `;
+            }).join("")
+          : '<div class="state-box" style="grid-column:1/-1;padding:25px 10px"><p>ไม่พบโลโก้</p></div>';
+      }
+
+      function showAdminTab(tab) {
+        const apps = tab === "apps";
+
+        $("apps-tab").hidden = !apps;
+        $("users-tab").hidden = apps;
+        $("apps-tab-btn").classList.toggle("active", apps);
+        $("users-tab-btn").classList.toggle("active", !apps);
+        $("admin-subtitle").textContent = apps
+          ? "เพิ่ม แก้ไข และจัดลำดับแอปพลิเคชัน"
+          : "จัดการผู้ใช้งานและสิทธิ์การเข้าถึง";
+      }
+
+      function buildCommandItems(query = "") {
+        const normalized = query.trim().toLowerCase();
+
+        const apps = state.applications
+          .filter(app => safeUrl(app.url))
+          .filter(app => `${app.name || ""} ${app.description || ""}`.toLowerCase().includes(normalized))
+          .map(app => ({
+            title: app.name || "Untitled",
+            subtitle: app.description || app.group || "",
+            hint: "↗",
+            run: () => window.open(safeUrl(app.url), "_blank", "noopener,noreferrer")
+          }));
+
+        const actions = [
+          {
+            title: state.user ? "เปิดบัญชี" : "เข้าสู่ระบบ",
+            subtitle: "จัดการบัญชีผู้ใช้",
+            hint: "●",
+            run: () => state.user ? openModal("account-modal") : openLogin()
+          },
+          {
+            title: "การตั้งค่า",
+            subtitle: "ธีม ภาษา และการแสดงผล",
+            hint: "⚙",
+            run: () => openModal("settings-modal")
+          },
+          {
+            title: "รีเฟรชข้อมูล",
+            subtitle: "โหลดข้อมูลล่าสุดจากเซิร์ฟเวอร์",
+            hint: "↻",
+            run: () => refreshPortal()
+          }
+        ].filter(item =>
+          !normalized ||
+          `${item.title} ${item.subtitle}`.toLowerCase().includes(normalized)
+        );
+
+        state.commandItems = [...apps, ...actions].slice(0, 30);
+        state.commandIndex = 0;
+        renderCommandItems();
+      }
+
+      function renderCommandItems() {
+        const root = $("command-results");
+
+        if (!state.commandItems.length) {
+          root.innerHTML = '<div class="state-box" style="padding:24px 10px"><p>ไม่พบรายการ</p></div>';
+          return;
+        }
+
+        root.innerHTML = state.commandItems.map((item, index) => `
+          <button class="command-item ${index === state.commandIndex ? "active" : ""}" type="button" data-command-index="${index}">
+            <span>
+              <strong>${escapeHtml(item.title)}</strong>
+              <small>${escapeHtml(item.subtitle)}</small>
+            </span>
+            <span>${escapeHtml(item.hint)}</span>
+          </button>
+        `).join("");
+      }
+
+      function openCommandPalette() {
+        $("command-search").value = "";
+        buildCommandItems("");
+        openModal("command-modal");
+        setTimeout(() => $("command-search").focus(), 80);
+      }
+
+      async function refreshPortal() {
+        const button = $("refresh-btn");
+        if (button.disabled) return;
+
+        button.disabled = true;
+        button.classList.add("loading");
+
+        try {
+          const success = await loadPortal(false, true);
+          if (success) showToast(t("refreshed"), "success");
+        } finally {
+          button.disabled = false;
+          button.classList.remove("loading");
+        }
+      }
+
+      function restoreSession() { clearSession(); }
+
+      document.addEventListener("click", event => {
+        const closeButton = event.target.closest("[data-close-modal]");
+        if (closeButton) {
+          const backdrop = closeButton.closest(".modal-backdrop");
+          if (backdrop) closeModal(backdrop.id);
+          return;
+        }
+
+        const backdrop = event.target.closest(".modal-backdrop");
+        if (
+          backdrop &&
+          event.target === backdrop &&
+          state.modalStack.at(-1) === backdrop.id
+        ) {
+          closeModal(backdrop.id);
+          return;
+        }
+
+        const pinButton = event.target.closest("[data-pin-url]");
+        if (pinButton) {
+          event.preventDefault();
+          event.stopPropagation();
+          togglePinned(pinButton.dataset.pinUrl);
+          return;
+        }
+
+        const adminButton = event.target.closest("[data-admin-action]");
+        if (adminButton) {
+          handleAdminAction(
+            adminButton.dataset.adminAction,
+            Number(adminButton.dataset.row)
+          );
+          return;
+        }
+
+        const userButton = event.target.closest("[data-save-user]");
+        if (userButton) {
+          saveUserRole(userButton, userButton.dataset.saveUser);
+          return;
+        }
+
+        const logoButton = event.target.closest("[data-logo]");
+        if (logoButton) {
+          state.selectedIcon = logoButton.dataset.logo;
+          state.selectedIconName = logoButton.dataset.logoTitle;
+          refreshIconPreview();
+          closeModal("logo-modal");
+          return;
+        }
+
+        const commandButton = event.target.closest("[data-command-index]");
+        if (commandButton) {
+          const item = state.commandItems[Number(commandButton.dataset.commandIndex)];
+          closeModal("command-modal");
+          item?.run();
+        }
+      });
+
+      document.addEventListener("keydown", event => {
+        if (document.documentElement.dataset.maintenance === "active") { if (event.key === "Tab") event.preventDefault(); return; }
+        const topId = state.modalStack.at(-1);
+        const topModal = topId ? $(topId) : null;
+
+        if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") {
+          event.preventDefault();
+          topId === "command-modal" ? closeModal("command-modal") : openCommandPalette();
+          return;
+        }
+
+        if (event.key === "Escape" && topId) {
+          event.preventDefault();
+          closeTopModal();
+          return;
+        }
+
+        if (topId === "command-modal") {
+          if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+            event.preventDefault();
+
+            const direction = event.key === "ArrowDown" ? 1 : -1;
+            const length = state.commandItems.length;
+
+            if (length) {
+              state.commandIndex = (state.commandIndex + direction + length) % length;
+              renderCommandItems();
+              $(`command-results`).querySelector(".command-item.active")
+                ?.scrollIntoView({block: "nearest"});
+            }
+            return;
+          }
+
+          if (event.key === "Enter" && document.activeElement === $("command-search")) {
+            const item = state.commandItems[state.commandIndex];
+            if (item) {
+              event.preventDefault();
+              closeModal("command-modal");
+              item.run();
+            }
+          }
+        }
+
+        if (event.key === "Tab" && topModal) {
+          const focusable = getFocusable(topModal);
+          if (!focusable.length) { event.preventDefault(); return; }
+
+          const first = focusable[0];
+          const last = focusable.at(-1);
+
+          if (!topModal.contains(document.activeElement)) { event.preventDefault(); first.focus(); }
+          else if (event.shiftKey && document.activeElement === first) {
+            event.preventDefault();
+            last.focus();
+          } else if (!event.shiftKey && document.activeElement === last) {
+            event.preventDefault();
+            first.focus();
+          }
+
+          return;
+        }
+
+        const activeTag = document.activeElement?.tagName?.toLowerCase();
+        const typing =
+          ["input", "textarea", "select"].includes(activeTag) ||
+          document.activeElement?.isContentEditable;
+
+        if (!typing && !topId) {
+          if (event.key === "/") {
+            event.preventDefault();
+            $("app-search").focus();
+          }
+
+          if (
+            event.key.toLowerCase() === "r" &&
+            !event.ctrlKey &&
+            !event.metaKey
+          ) {
+            event.preventDefault();
+            refreshPortal();
+          }
+        }
+      });
+
+      $("auth-btn").addEventListener("click", () => {
+        state.user ? openModal("account-modal") : openLogin();
+      });
+
+      $("user-chip").addEventListener("click", () => openModal("account-modal"));
+
+      $("account-nav").addEventListener("click", () => {
+        state.user ? openModal("account-modal") : openLogin();
+      });
+
+      $("admin-nav").addEventListener("click", () => {
+        if (!isAdmin()) {
+          showToast("ต้องใช้บัญชีผู้ดูแลระบบ", "error");
+          return;
+        }
+
+        resetAdminForm();
+        renderAdminItems();
+        renderAdminUsers();
+        showAdminTab("apps");
+        openModal("admin-modal");
+      });
+
+      $("settings-btn").addEventListener("click", () => openModal("settings-modal"));
+      $("help-btn").addEventListener("click", () => openModal("help-modal"));
+      $("command-btn").addEventListener("click", openCommandPalette);
+      $("refresh-btn").addEventListener("click", refreshPortal);
+      $("logout-btn").addEventListener("click", () => signOut(true));
+      $("save-name-btn").addEventListener("click", saveDisplayName);
+      $("register-btn").addEventListener("click", registerAccount);
+      $("register-terms-accepted").addEventListener("change", event => {
+        $("register-btn").disabled = !event.currentTarget.checked;
+      });
+      $("admin-submit-btn").addEventListener("click", submitApplication);
+      $("admin-cancel-btn").addEventListener("click", resetAdminForm);
+      $("use-icon-btn").addEventListener("click", useManualIcon);
+
+      $("choose-logo-btn").addEventListener("click", () => {
+        openModal("logo-modal");
+        loadLogoRegistry();
+      });
+
+      $("apps-tab-btn").addEventListener("click", () => showAdminTab("apps"));
+      $("users-tab-btn").addEventListener("click", () => showAdminTab("users"));
+
+      $("new-name").addEventListener("keydown", event => {
+        if (event.key === "Enter") saveDisplayName();
+      });
+
+      $("manual-icon").addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          useManualIcon();
+        }
+      });
+
+      $("app-search").addEventListener("input", debounce(renderApplications, 130));
+      $("group-filter").addEventListener("change", renderApplications);
+      $("user-search").addEventListener("input", debounce(renderAdminUsers, 180));
+      $("logo-search").addEventListener("input", debounce(renderLogos, 160));
+      $("command-search").addEventListener("input", event => buildCommandItems(event.target.value));
+
+      document.querySelectorAll("button[data-view]").forEach(button => {
+        button.addEventListener("click", () => {
+          state.view = button.dataset.view;
+          savePreferences();
+          applyView();
+        });
+      });
+
+      document.querySelectorAll("[data-theme-value]").forEach(button => {
+        button.addEventListener("click", () => {
+          state.theme = button.dataset.themeValue;
+          savePreferences();
+          applyTheme();
+        });
+      });
+
+      document.querySelectorAll("[data-language-value]").forEach(button => {
+        button.addEventListener("click", () => {
+          state.lang = button.dataset.languageValue;
+          savePreferences();
+          applyLanguage();
+        });
+      });
+
+      matchMedia("(prefers-color-scheme:dark)").addEventListener?.("change", () => {
+        if (state.theme === "auto") applyTheme();
+      });
+
+      document.addEventListener("error", event => {
+        if (event.target.tagName !== "IMG") return;
+
+        const image = event.target;
+
+        if (image.closest(".app-icon,.admin-item-icon,.selected-icon")) {
+          image.parentElement.innerHTML = '<span class="fallback-icon">◇</span>';
+        } else if (image.classList.contains("admin-user-avatar") || ["user-avatar","account-avatar"].includes(image.id)) {
+          if (!image.dataset.fallback) { image.dataset.fallback = "true"; image.src = avatar("U"); }
+        } else if (image.closest(".logo-result")) {
+          image.style.visibility = "hidden";
+        }
+      }, true);
+
+      let marqueePaused = false;
+      function renderMarquee() {
+        const track = $("marquee-track"), section = $("marquee-section");
+        const publicLinks = state.links.filter(link => (link.group === 'public' || !link.group) && safeUrl(link.url));
+        section.hidden = !publicLinks.length;
+        if (!publicLinks.length) { track.replaceChildren(); return; }
+        const loop = (duplicate) => publicLinks.map(link => {
+          const title = String(link.title || "Link");
+          return `<a href="${escapeHtml(safeUrl(link.url))}" target="_blank" rel="noopener noreferrer" class="marquee-card" title="${escapeHtml(title)}" ${duplicate ? 'aria-hidden="true" tabindex="-1"' : ''}><div class="marquee-content"><div class="marquee-icon">${getIconHtml(link.icon, title)}</div><span class="marquee-text">${escapeHtml(title)}</span></div></a>`;
+        }).join("");
+        track.innerHTML = `<div class="marquee-loop">${loop(false)}</div><div class="marquee-loop" aria-hidden="true">${loop(true)}</div>`;
+      }
+      $("marquee-toggle").addEventListener("click", () => {
+        marqueePaused = !marqueePaused;
+        $("marquee-section").classList.toggle("user-paused", marqueePaused);
+        $("marquee-toggle").setAttribute("aria-pressed", String(marqueePaused));
+        $("marquee-toggle").setAttribute("aria-label", marqueePaused ? "เล่นแถบลิงก์" : "หยุดแถบลิงก์");
+        $("marquee-toggle").textContent = marqueePaused ? "▶" : "Ⅱ";
+      });
+      const video = $("hero-video"), videoButton = $("video-toggle");
+      let videoWanted = false, heroInView = true;
+      function updateVideoLabel() {
+        videoButton.setAttribute("aria-pressed", String(videoWanted));
+        videoButton.textContent = videoWanted ? (state.lang === "en" ? "Ⅱ Pause background" : "Ⅱ หยุดพื้นหลัง") : (state.lang === "en" ? "▶ Play background" : "▶ เล่นพื้นหลัง");
+      }
+      videoButton.addEventListener("click", async () => {
+        videoWanted = !videoWanted;
+        updateVideoLabel();
+        if (!videoWanted) { video.pause(); return; }
+        if (!video.src) video.src = video.dataset.src;
+        video.hidden = false;
+        videoButton.disabled = true;
+        try { await video.play(); if (!videoWanted || document.hidden) video.pause(); }
+        catch { videoWanted = false; video.hidden = true; showToast("ไม่สามารถเล่นวิดีโอพื้นหลังได้", "error"); }
+        finally { videoButton.disabled = false; updateVideoLabel(); }
+      });
+      const motionPreference = matchMedia("(prefers-reduced-motion:reduce)");
+      motionPreference.addEventListener?.("change", () => { if (motionPreference.matches) { videoWanted = false; video.pause(); updateVideoLabel(); } });
+      if ("IntersectionObserver" in window) {
+        new IntersectionObserver(entries => {
+          for (const entry of entries) {
+            entry.target.classList.toggle("offscreen", !entry.isIntersecting);
+          }
+        }).observe($("marquee-section"));
+        const observer = new IntersectionObserver(entries => {
+          heroInView = entries[0].isIntersecting;
+          if (!heroInView) video.pause();
+          else if (videoWanted && !document.hidden) video.play().catch(() => {});
+        }); observer.observe(video.closest(".modern-hero"));
+      }
+      let lastResume = 0;
+      function resumeConnection() {
+        if (document.hidden || !navigator.onLine || Date.now() - lastResume < 10000) return;
+        lastResume = Date.now();
+        if ($("connection-status").classList.contains("offline")) loadPortal(false, false);
+      }
+      document.addEventListener("visibilitychange", () => {
+        document.documentElement.classList.toggle("page-hidden", document.hidden);
+        if (document.hidden) { video.pause(); cancelRetry(false); }
+        else { resumeConnection(); if (videoWanted && heroInView) video.play().catch(() => {}); }
+      });
+      window.addEventListener("online", resumeConnection);
+      window.addEventListener("offline", () => { cancelRetry(false); setStatus("offline", t("offline")); });
+
+      async function init() {
+        loadPreferences();
+        applyTheme();
+        applyView();
+        applyLanguage();
+        restoreSession();
+        applyUser();
+
+        await loadPortal(false, true);
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>

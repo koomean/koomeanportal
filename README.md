@@ -1,3 +1,25 @@
+# Koo Mean Portal
+
+Active source is `src/index.html`; root `index.html` is the generated Pages artifact. Deploy only `koomean/koomeanportal` with CNAME `koomean.com`. Do not copy Blog/Site builds here.
+
+```sh
+npm ci --ignore-scripts
+npm run build
+npm test
+npm run test:browser
+node scripts/verify-portal.mjs
+```
+
+Browser checks use `PORTAL_CHROME_PATH` when set; otherwise macOS Google Chrome or Playwright Chromium. Optional `PORTAL_REPORT_DIR` stores results/screenshots. They run in fresh profiles with a synthetic API and no production writes.
+
+Push to main triggers the verified GitHub Pages workflow. It packages only index.html, CNAME and assets. Keep the Pages build source set to GitHub Actions. Asset changes require rebuilding before commit. `src/enhancements.css` defines the final responsive/motion polish; `src/maintenance.js` owns the60s visible-tab monitor; `src/vendor.css` contains the original self-hosted fonts. Keep font licenses. The small hero poster is extracted from the original site video, which is still fetched only when the viewer requests playback.
+
+Google ID tokens are memory-only. Reload needs sign-in again; theme/favorites remain. Shared API and databases are managed separately and are not deployed by this repository. See [audit and limitations](AUDIT-2026-10-09.md).
+
+Previous documentation follows for backend context; its older standalone/no-build instructions are superseded by the steps above.
+
+---
+
 <div align="center">
 
 # ⊞ Koo Mean Portal
