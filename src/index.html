@@ -2889,7 +2889,7 @@
       function scheduleRetry() {
         clearTimeout(state.retryTimer);
 
-        if (state.retryAttempt >= 5 || document.hidden || !navigator.onLine) return;
+        if (state.retryAttempt >= 5 || document.hidden || !navigator.onLine || document.documentElement.dataset.maintenance === "active") return;
 
         state.retryAttempt += 1;
         const delay = Math.max(Math.min(2000 * 2 ** (state.retryAttempt - 1), 30000), retryAfterUntil - Date.now());
@@ -2900,6 +2900,7 @@
       }
 
       function loadPortal(freshLogin = false, userInitiated = false) {
+        if (document.documentElement.dataset.maintenance === "active") { cancelRetry(); return Promise.resolve(false); }
         if (portalTask && portalTaskToken === state.token) return portalTask;
         if (retryAfterUntil > Date.now()) { scheduleRetry(); return Promise.resolve(false); }
         portalTaskToken = state.token;
@@ -2965,6 +2966,7 @@
           return true;
         } catch (error) {
           if (error.stale || sequence !== portalSequence) return false;
+          if (document.documentElement.dataset.maintenance === "active") { cancelRetry(); return false; }
           setStatus("offline", t("offline"));
           if (!state.applications.length) renderError(error.message);
           showToast(error.message, "error");
