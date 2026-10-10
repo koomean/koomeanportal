@@ -497,10 +497,6 @@
       animation: marquee 35s linear infinite;
     }
 
-    .marquee-track:hover {
-      animation-play-state: paused;
-    }
-
     @keyframes marquee {
       0% { transform: translateX(0%); }
       100% { transform: translateX(-50%); }
@@ -2071,6 +2067,7 @@
         <button class="refresh-btn" id="refresh-btn" type="button" title="รีเฟรช"><span data-ui-icon="rotate-cw"></span></button>
       </div>
 
+      <div class="catalog-summary">
       <div class="stats" aria-live="polite" aria-atomic="true">
         <span><strong id="app-count">—</strong><span id="available-label">แอปที่พร้อมใช้งาน</span></span>
         <span class="status connecting" id="connection-status">
@@ -2078,6 +2075,10 @@
           <span id="status-text">กำลังเชื่อมต่อ</span>
         </span>
         <span id="updated-at"></span>
+      </div>
+      <button id="favorites-filter" class="favorites-filter" type="button" aria-pressed="false" aria-controls="applications">
+        <span data-ui-icon="star"></span><span id="favorites-label">รายการโปรด</span><span id="favorites-count" class="favorites-count">0</span>
+      </button>
       </div>
 
       <noscript><p class="state-box">เปิด JavaScript เพื่อค้นหาแอปและเข้าสู่ระบบ หรือไปที่ <a href="https://blog.koomean.com/">Koo Mean Blog</a> และ <a href="https://link.koomean.com/">Koo Mean Site</a></p></noscript>
@@ -2344,6 +2345,34 @@
               <button type="button" data-language-value="en">English</button>
             </div>
           </div>
+          <section class="settings-section" aria-labelledby="motion-settings-title">
+            <h3 id="motion-settings-title" data-pref-copy="motionTitle">การเคลื่อนไหว</h3>
+            <label class="settings-option" for="marquee-enabled">
+              <span><strong id="marquee-setting-label" data-pref-copy="marqueeLabel">เลื่อนแถบลิงก์อัตโนมัติ</strong><span class="settings-row-desc" id="marquee-setting-desc" data-pref-copy="marqueeDesc">แถบ YouTube, GitHub และโซเชียลต่าง ๆ</span></span>
+              <input class="settings-switch" id="marquee-enabled" type="checkbox" role="switch" data-preference="marqueeEnabled" aria-labelledby="marquee-setting-label" aria-describedby="marquee-setting-desc" checked>
+            </label>
+            <div class="settings-option settings-speed">
+              <label id="speed-setting-label" for="marquee-speed" data-pref-copy="speedLabel">ความเร็วแถบลิงก์</label>
+              <select id="marquee-speed" class="filter" aria-labelledby="speed-setting-label"><option value="slow" data-pref-copy="speedSlow">ช้า</option><option value="normal" data-pref-copy="speedNormal" selected>ปกติ</option><option value="fast" data-pref-copy="speedFast">เร็ว</option></select>
+            </div>
+            <label class="settings-option" for="video-enabled">
+              <span><strong id="video-setting-label" data-pref-copy="videoLabel">เล่นวิดีโอพื้นหลัง</strong><span class="settings-row-desc" id="video-setting-desc" data-pref-copy="videoDesc">เล่นอัตโนมัติเมื่อเปิดหน้าเว็บ</span></span>
+              <input class="settings-switch" id="video-enabled" type="checkbox" role="switch" data-preference="videoEnabled" aria-labelledby="video-setting-label" aria-describedby="video-setting-desc" checked>
+            </label>
+            <p class="settings-notice" id="motion-notice" data-pref-copy="motionNotice" hidden>อุปกรณ์ของคุณเปิดการลดการเคลื่อนไหว แถบลิงก์จะแสดงนิ่งและวิดีโอจะไม่เล่นอัตโนมัติ</p>
+          </section>
+          <section class="settings-section" aria-labelledby="data-settings-title">
+            <h3 id="data-settings-title" data-pref-copy="dataTitle">การใช้ข้อมูล</h3>
+            <label class="settings-option" for="data-saver">
+              <span><strong id="data-setting-label" data-pref-copy="dataLabel">โหมดประหยัดข้อมูล</strong><span class="settings-row-desc" id="data-setting-desc" data-pref-copy="dataDesc">ใช้ภาพนิ่งแทนวิดีโอพื้นหลัง ช่วยลดการใช้เน็ต</span></span>
+              <input class="settings-switch" id="data-saver" type="checkbox" role="switch" data-preference="dataSaver" aria-labelledby="data-setting-label" aria-describedby="data-setting-desc">
+            </label>
+          </section>
+          <div class="settings-reset">
+            <p id="preferences-status" role="status" data-pref-copy="settingsStorage">บันทึกการตั้งค่าอัตโนมัติใน browser นี้</p>
+            <button class="btn btn-ghost" id="reset-preferences" type="button" data-pref-copy="resetLabel">คืนค่าการตั้งค่าเริ่มต้น</button>
+            <p class="settings-row-desc" data-pref-copy="resetDesc">คืนค่าธีม ภาษา มุมมอง การเคลื่อนไหว และตัวกรอง รายการโปรดที่ติดดาวไว้ยังอยู่</p>
+          </div>
         </div>
       </div>
     </section>
@@ -2427,13 +2456,46 @@
         authEpoch++; portalSequence++; portalTask = null;
         for (const controller of activeRequests) controller.abort();
       }
-      function store(key, value) { try { localStorage.setItem(key, value); } catch {} }
+      function store(key, value) { try { localStorage.setItem(key, value); return true; } catch { return false; } }
 
       const GOOGLE_CLIENT_ID = "906677442222-kmjgsmta70n24aoaq7osm9c1l7g1fb89.apps.googleusercontent.com";
 
       const SESSION_KEY = "koomean_portal_session_v2";
       const PREFS_KEY = "koomean_portal_prefs_v3";
       const PINNED_KEY = "koomean_pinned_apps_v1";
+      const DEFAULT_PREFERENCES = Object.freeze({theme:"dark", lang:"th", view:"grid", marqueeEnabled:true, marqueeSpeed:"normal", videoEnabled:true, dataSaver:false, favoritesOnly:false});
+      const MARQUEE_SPEEDS = Object.freeze({slow:52, normal:38, fast:28});
+
+      const preferenceText = {
+        th: {
+          motionTitle:"การเคลื่อนไหว", marqueeLabel:"เลื่อนแถบลิงก์อัตโนมัติ", marqueeDesc:"แถบ YouTube, GitHub และโซเชียลต่าง ๆ",
+          speedLabel:"ความเร็วแถบลิงก์", speedSlow:"ช้า", speedNormal:"ปกติ", speedFast:"เร็ว",
+          videoLabel:"เล่นวิดีโอพื้นหลัง", videoDesc:"เล่นอัตโนมัติเมื่อเปิดหน้าเว็บ",
+          motionNotice:"อุปกรณ์ของคุณเปิดการลดการเคลื่อนไหว แถบลิงก์จะแสดงนิ่งและวิดีโอจะไม่เล่นอัตโนมัติ",
+          dataTitle:"การใช้ข้อมูล", dataLabel:"โหมดประหยัดข้อมูล", dataDesc:"ใช้ภาพนิ่งแทนวิดีโอพื้นหลัง ช่วยลดการใช้เน็ต",
+          settingsStorage:"บันทึกการตั้งค่าอัตโนมัติใน browser นี้", settingsSaved:"บันทึกการตั้งค่าใน browser นี้แล้ว",
+          settingsNotSaved:"browser ไม่อนุญาตให้บันทึก การตั้งค่าครั้งนี้จะใช้ได้จนกว่าจะปิดหรือโหลดหน้าใหม่",
+          resetLabel:"คืนค่าการตั้งค่าเริ่มต้น", resetDesc:"คืนค่าธีม ภาษา มุมมอง การเคลื่อนไหว และตัวกรอง รายการโปรดที่ติดดาวไว้ยังอยู่",
+          resetDone:"คืนค่าการตั้งค่าเริ่มต้นแล้ว", saverButton:"โหมดประหยัดข้อมูล", showAll:"ดูแอปทั้งหมด",
+          noFavorites:"ยังไม่มีรายการโปรด", noFavoritesDesc:"กดดาวบนแอปที่คุณใช้บ่อยเพื่อเก็บไว้ที่นี่",
+          noFavoriteResults:"ไม่พบรายการโปรดที่ตรงกับตัวกรอง", noFavoriteResultsDesc:"ลองเปลี่ยนคำค้นหา กลุ่ม หรือดูแอปทั้งหมด"
+        },
+        en: {
+          motionTitle:"Motion", marqueeLabel:"Scroll social links automatically", marqueeDesc:"YouTube, GitHub and other social links",
+          speedLabel:"Link scrolling speed", speedSlow:"Slow", speedNormal:"Normal", speedFast:"Fast",
+          videoLabel:"Play background video", videoDesc:"Start automatically when you open the page",
+          motionNotice:"Your device requests reduced motion. Links stay still and video does not start automatically.",
+          dataTitle:"Data usage", dataLabel:"Save data", dataDesc:"Use a still background without downloading the video",
+          settingsStorage:"Settings are saved automatically in this browser", settingsSaved:"Settings saved in this browser",
+          settingsNotSaved:"This browser blocked saving. These settings last until you close or reload the page.",
+          resetLabel:"Restore default settings", resetDesc:"Reset theme, language, layout, motion and filters. Your starred favorites are kept.",
+          resetDone:"Default settings restored", saverButton:"Data saver is on", showAll:"Show all apps",
+          noFavorites:"No favorites yet", noFavoritesDesc:"Star the apps you use often to keep them here.",
+          noFavoriteResults:"No favorites match these filters", noFavoriteResultsDesc:"Try another search or group, or show all apps."
+        }
+      };
+      const prefCopy = key => preferenceText[state.lang][key];
+      let preferencesStatus = "settingsStorage";
 
       const $ = id => document.getElementById(id);
 
@@ -2506,9 +2568,7 @@
         logoRegistry: [],
         logosLoaded: false,
         busy: false,
-        lang: "th",
-        theme: "dark",
-        view: "grid",
+        ...DEFAULT_PREFERENCES,
         pinned: new Set(),
         modalStack: [],
         focusStack: [],
@@ -2689,10 +2749,14 @@
 
       function loadPreferences() {
         try {
-          const saved = JSON.parse(localStorage.getItem(PREFS_KEY) || "{}");
+          const saved = JSON.parse(localStorage.getItem(PREFS_KEY) || "{}") || {};
           state.theme = ["light", "dark", "auto"].includes(saved.theme) ? saved.theme : "dark";
           state.lang = saved.lang === "en" ? "en" : "th";
           state.view = ["grid", "list", "compact"].includes(saved.view) ? saved.view : "grid";
+          state.marqueeSpeed = typeof saved.marqueeSpeed === "string" && Object.hasOwn(MARQUEE_SPEEDS, saved.marqueeSpeed) ? saved.marqueeSpeed : "normal";
+          for (const key of ["marqueeEnabled", "videoEnabled", "dataSaver", "favoritesOnly"]) {
+            state[key] = typeof saved[key] === "boolean" ? saved[key] : DEFAULT_PREFERENCES[key];
+          }
         } catch {}
 
         try {
@@ -2704,11 +2768,9 @@
       }
 
       function savePreferences() {
-        store(PREFS_KEY, JSON.stringify({
-          theme: state.theme,
-          lang: state.lang,
-          view: state.view
-        }));
+        const saved = store(PREFS_KEY, JSON.stringify(Object.fromEntries(Object.keys(DEFAULT_PREFERENCES).map(key => [key, state[key]]))));
+        preferencesStatus = saved ? "settingsSaved" : "settingsNotSaved";
+        $("preferences-status").textContent = prefCopy(preferencesStatus);
       }
 
       function applyTheme() {
@@ -2735,6 +2797,8 @@
 
       function applyLanguage() {
         document.documentElement.lang = state.lang;
+        document.querySelectorAll("[data-pref-copy]").forEach(node => { node.textContent = prefCopy(node.dataset.prefCopy); });
+        $("preferences-status").textContent = prefCopy(preferencesStatus);
         $("auth-label").textContent = state.user ? t("account") : t("login");
         $("available-label").textContent = t("available");
         const english = state.lang === "en";
@@ -2753,7 +2817,7 @@
         });
 
         renderApplications();
-        updateVideoLabel();
+        applyMotionPreferences();
       }
 
       function saveSession() { clearSession(); }
@@ -3134,6 +3198,10 @@
         const previousGroup = filter.value;
 
         const validApps = state.applications.filter(app => safeUrl(app.url));
+        const favoriteCount = validApps.filter(app => state.pinned.has(canonicalUrl(app.url))).length;
+        $("favorites-label").textContent = t("favorites");
+        $("favorites-count").textContent = String(favoriteCount);
+        $("favorites-filter").setAttribute("aria-pressed", String(state.favoritesOnly));
         const groups = [...new Set(validApps.map(groupKey))].sort((a, b) => {
           if (a === "public") return -1;
           if (b === "public") return 1;
@@ -3151,7 +3219,8 @@
         const filtered = validApps.filter(app => {
           const searchable = `${app.name || ""} ${app.description || ""} ${app.group || ""}`.toLowerCase();
           return (!query || searchable.includes(query)) &&
-            (selectedGroup === "all" || groupKey(app) === selectedGroup);
+            (selectedGroup === "all" || groupKey(app) === selectedGroup) &&
+            (!state.favoritesOnly || state.pinned.has(canonicalUrl(app.url)));
         });
 
         $("app-count").textContent = String(filtered.length);
@@ -3159,11 +3228,21 @@
         if (!filtered.length) {
           root.innerHTML = `
             <div class="state-box">
-              <span class="state-icon">${uiIcon(query ? "search" : "shapes")}</span>
-              <strong>${escapeHtml(query ? t("noResults") : t("noApps"))}</strong>
-              <p>${query ? "ลองเปลี่ยนคำค้นหาหรือเลือกกลุ่มอื่น" : "เมื่อมีข้อมูล รายการแอปจะแสดงบริเวณนี้"}</p>
+              <span class="state-icon">${uiIcon(state.favoritesOnly ? "star" : query ? "search" : "shapes")}</span>
+              <strong>${escapeHtml(state.favoritesOnly ? prefCopy(favoriteCount ? "noFavoriteResults" : "noFavorites") : query ? t("noResults") : t("noApps"))}</strong>
+              <p>${escapeHtml(state.favoritesOnly ? prefCopy(favoriteCount ? "noFavoriteResultsDesc" : "noFavoritesDesc") : query ? "ลองเปลี่ยนคำค้นหาหรือเลือกกลุ่มอื่น" : "เมื่อมีข้อมูล รายการแอปจะแสดงบริเวณนี้")}</p>
+              ${state.favoritesOnly ? `<button class="btn btn-ghost" id="show-all-apps" type="button">${escapeHtml(prefCopy("showAll"))}</button>` : ""}
             </div>
           `;
+          $("show-all-apps")?.addEventListener("click", () => {
+            state.favoritesOnly = false;
+            $("app-search").value = "";
+            $("app-search").dispatchEvent(new Event("input", {bubbles:true}));
+            $("group-filter").value = "all";
+            savePreferences();
+            renderApplications();
+            $("favorites-filter").focus({preventScroll:true});
+          });
           return;
         }
 
@@ -3237,7 +3316,8 @@
 
         store(PINNED_KEY, JSON.stringify([...state.pinned]));
         renderApplications();
-        [...document.querySelectorAll("[data-pin-url]")].find(node => node.dataset.pinUrl === focusedUrl)?.focus({preventScroll:true});
+        const target = [...document.querySelectorAll("[data-pin-url]")].find(node => node.dataset.pinUrl === focusedUrl);
+        (target || $("favorites-filter")).focus({preventScroll:true});
       }
 
       function loadGoogle() {
@@ -4020,6 +4100,11 @@
 
       $("app-search").addEventListener("input", debounce(renderApplications, 130));
       $("group-filter").addEventListener("change", renderApplications);
+      $("favorites-filter").addEventListener("click", () => {
+        state.favoritesOnly = !state.favoritesOnly;
+        savePreferences();
+        renderApplications();
+      });
       $("user-search").addEventListener("input", debounce(renderAdminUsers, 180));
       $("logo-search").addEventListener("input", debounce(renderLogos, 160));
       document.querySelectorAll("[data-clear-search]").forEach(button => {
@@ -4057,6 +4142,34 @@
         });
       });
 
+      document.querySelectorAll("[data-preference]").forEach(input => {
+        input.addEventListener("change", () => {
+          const key = input.dataset.preference;
+          state[key] = input.checked;
+          if (key === "videoEnabled") { videoWanted = state.videoEnabled; videoReady = true; }
+          savePreferences();
+          applyMotionPreferences(key === "videoEnabled");
+        });
+      });
+      $("marquee-speed").addEventListener("change", event => {
+        state.marqueeSpeed = Object.hasOwn(MARQUEE_SPEEDS, event.target.value) ? event.target.value : "normal";
+        savePreferences();
+        applyMotionPreferences();
+      });
+      $("reset-preferences").addEventListener("click", () => {
+        Object.assign(state, DEFAULT_PREFERENCES);
+        $("app-search").value = "";
+        $("app-search").dispatchEvent(new Event("input", {bubbles:true}));
+        $("group-filter").value = "all";
+        videoWanted = state.videoEnabled && !motionPreference.matches;
+        applyTheme();
+        applyView();
+        applyLanguage();
+        savePreferences();
+        applyMotionPreferences();
+        showToast(prefCopy("resetDone"));
+      });
+
       matchMedia("(prefers-color-scheme:dark)").addEventListener?.("change", () => {
         if (state.theme === "auto") applyTheme();
       });
@@ -4075,7 +4188,6 @@
         }
       }, true);
 
-      let marqueePaused = false;
       function renderMarquee() {
         const track = $("marquee-track"), section = $("marquee-section");
         const publicLinks = state.links.filter(link => (link.group === 'public' || !link.group) && safeUrl(link.url));
@@ -4090,22 +4202,47 @@
         track.innerHTML = `<div class="marquee-loop">${loop(false)}</div><div class="marquee-loop" aria-hidden="true">${loop(true)}</div>`;
       }
       $("marquee-toggle").addEventListener("click", () => {
-        marqueePaused = !marqueePaused;
-        $("marquee-section").classList.toggle("user-paused", marqueePaused);
-        $("marquee-toggle").setAttribute("aria-pressed", String(marqueePaused));
-        $("marquee-toggle").setAttribute("aria-label", marqueePaused ? "เล่นแถบลิงก์" : "หยุดแถบลิงก์");
-        $("marquee-toggle").innerHTML = uiIcon(marqueePaused ? "play" : "pause");
+        state.marqueeEnabled = !state.marqueeEnabled;
+        savePreferences();
+        applyMotionPreferences();
       });
       const video = $("hero-video"), videoButton = $("video-toggle");
       const motionPreference = matchMedia("(prefers-reduced-motion:reduce)");
-      let videoWanted = !motionPreference.matches, heroInView = true, videoReady = false, videoTask = null, videoUpdatePending = false;
+      let videoWanted = false, heroInView = true, videoReady = false, videoTask = null, videoUpdatePending = false;
+      function applyMotionPreferences(userInitiated = false) {
+        document.querySelectorAll("[data-preference]").forEach(input => { input.checked = state[input.dataset.preference]; });
+        $("marquee-speed").value = state.marqueeSpeed;
+        $("motion-notice").hidden = !motionPreference.matches;
+        const section = $("marquee-section"), track = $("marquee-track"), button = $("marquee-toggle");
+        section.classList.toggle("user-paused", !state.marqueeEnabled);
+        button.setAttribute("aria-pressed", String(!state.marqueeEnabled));
+        button.setAttribute("aria-label", state.lang === "en" ? (state.marqueeEnabled ? "Pause social links" : "Play social links") : (state.marqueeEnabled ? "หยุดแถบลิงก์" : "เล่นแถบลิงก์"));
+        button.innerHTML = uiIcon(state.marqueeEnabled ? "pause" : "play");
+        const duration = MARQUEE_SPEEDS[state.marqueeSpeed] * 1000;
+        const animation = track.getAnimations()[0];
+        const oldDuration = animation?.effect.getTiming().duration;
+        const phase = typeof oldDuration === "number" && oldDuration > 0 ? animation.currentTime / oldDuration : null;
+        track.style.animationDuration = `${duration}ms`;
+        if (phase !== null) animation.currentTime = phase * duration;
+        if (state.dataSaver) {
+          video.pause();
+          video.hidden = true;
+          video.parentElement.classList.remove("has-video");
+          if (video.hasAttribute("src")) { video.removeAttribute("src"); video.load(); }
+        }
+        updateVideoLabel();
+        syncVideo(userInitiated);
+      }
       function updateVideoLabel() {
-        videoButton.setAttribute("aria-pressed", String(videoWanted));
-        const label = videoWanted ? (state.lang === "en" ? "Pause background" : "หยุดพื้นหลัง") : (state.lang === "en" ? "Play background" : "เล่นพื้นหลัง");
-        videoButton.innerHTML = uiIcon(videoWanted ? "pause" : "play") + `<span>${label}</span>`;
+        const playing = videoWanted && !state.dataSaver;
+        videoButton.disabled = state.dataSaver;
+        videoButton.title = state.dataSaver ? prefCopy("dataDesc") : "";
+        videoButton.setAttribute("aria-pressed", String(playing));
+        const label = state.dataSaver ? prefCopy("saverButton") : playing ? (state.lang === "en" ? "Pause background" : "หยุดพื้นหลัง") : (state.lang === "en" ? "Play background" : "เล่นพื้นหลัง");
+        videoButton.innerHTML = uiIcon(playing ? "pause" : "play") + `<span>${label}</span>`;
       }
       function shouldPlayVideo() {
-        return videoWanted && videoReady && heroInView && !document.hidden && document.documentElement.dataset.maintenance !== "active";
+        return videoWanted && !state.dataSaver && videoReady && heroInView && !document.hidden && document.documentElement.dataset.maintenance !== "active";
       }
       function syncVideo(userInitiated = false) {
         if (!shouldPlayVideo()) { video.pause(); return; }
@@ -4128,14 +4265,15 @@
           if (videoUpdatePending) { videoUpdatePending = false; syncVideo(); }
         });
       }
-      video.addEventListener("playing", () => video.parentElement.classList.add("has-video"));
+      video.addEventListener("playing", () => { if (shouldPlayVideo()) video.parentElement.classList.add("has-video"); else video.pause(); });
       videoButton.addEventListener("click", () => {
         videoWanted = !videoWanted;
+        state.videoEnabled = videoWanted;
         videoReady = true;
-        updateVideoLabel();
-        syncVideo(true);
+        savePreferences();
+        applyMotionPreferences(true);
       });
-      motionPreference.addEventListener?.("change", () => { if (motionPreference.matches) { videoWanted = false; syncVideo(); updateVideoLabel(); } });
+      motionPreference.addEventListener?.("change", () => { videoWanted = state.videoEnabled && !motionPreference.matches; applyMotionPreferences(); });
       // Render the poster and controls first; the small local loop follows the first paint.
       requestAnimationFrame(() => setTimeout(() => { videoReady = true; syncVideo(); }, 1200));
       new MutationObserver(() => syncVideo()).observe(document.documentElement, {attributes:true, attributeFilter:["data-maintenance"]});
@@ -4170,6 +4308,8 @@
         applyTheme();
         applyView();
         applyLanguage();
+        videoWanted = state.videoEnabled && !motionPreference.matches;
+        applyMotionPreferences();
         restoreSession();
         applyUser();
 

@@ -12,10 +12,10 @@
   <link rel="canonical" href="https://koomean.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="assets/portal-68736756bd3881f6.css">
+<link rel="stylesheet" href="assets/portal-66b9888d881bee35.css">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/ibm-2e57acf1ca9e.woff2">
 <link rel="preload" as="image" href="assets/hero-poster.webp" fetchpriority="high">
-<script src="assets/app-2aeb67f85e1c2070.js" defer></script>
+<script src="assets/app-3bec71908f4231b4.js" defer></script>
 </head>
 <body>
   <svg class="icon-definitions" width="0" height="0" aria-hidden="true" focusable="false"><symbol id="ui-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14" />
@@ -137,6 +137,7 @@
         </div>
         <button class="refresh-btn" id="refresh-btn" type="button" title="รีเฟรช"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-rotate-cw"></use></svg></button>
       </div>
+      <div class="catalog-summary">
       <div class="stats" aria-live="polite" aria-atomic="true">
         <span><strong id="app-count">—</strong><span id="available-label">แอปที่พร้อมใช้งาน</span></span>
         <span class="status connecting" id="connection-status">
@@ -144,6 +145,10 @@
           <span id="status-text">กำลังเชื่อมต่อ</span>
         </span>
         <span id="updated-at"></span>
+      </div>
+      <button id="favorites-filter" class="favorites-filter" type="button" aria-pressed="false" aria-controls="applications">
+        <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-star"></use></svg><span id="favorites-label">รายการโปรด</span><span id="favorites-count" class="favorites-count">0</span>
+      </button>
       </div>
       <noscript><p class="state-box">เปิด JavaScript เพื่อค้นหาแอปและเข้าสู่ระบบ หรือไปที่ <a href="https://blog.koomean.com/">Koo Mean Blog</a> และ <a href="https://link.koomean.com/">Koo Mean Site</a></p></noscript>
       <div id="applications" aria-busy="true">
@@ -371,6 +376,34 @@
               <button type="button" data-language-value="th">ไทย</button>
               <button type="button" data-language-value="en">English</button>
             </div>
+          </div>
+          <section class="settings-section" aria-labelledby="motion-settings-title">
+            <h3 id="motion-settings-title" data-pref-copy="motionTitle">การเคลื่อนไหว</h3>
+            <label class="settings-option" for="marquee-enabled">
+              <span><strong id="marquee-setting-label" data-pref-copy="marqueeLabel">เลื่อนแถบลิงก์อัตโนมัติ</strong><span class="settings-row-desc" id="marquee-setting-desc" data-pref-copy="marqueeDesc">แถบ YouTube, GitHub และโซเชียลต่าง ๆ</span></span>
+              <input class="settings-switch" id="marquee-enabled" type="checkbox" role="switch" data-preference="marqueeEnabled" aria-labelledby="marquee-setting-label" aria-describedby="marquee-setting-desc" checked>
+            </label>
+            <div class="settings-option settings-speed">
+              <label id="speed-setting-label" for="marquee-speed" data-pref-copy="speedLabel">ความเร็วแถบลิงก์</label>
+              <select id="marquee-speed" class="filter" aria-labelledby="speed-setting-label"><option value="slow" data-pref-copy="speedSlow">ช้า</option><option value="normal" data-pref-copy="speedNormal" selected>ปกติ</option><option value="fast" data-pref-copy="speedFast">เร็ว</option></select>
+            </div>
+            <label class="settings-option" for="video-enabled">
+              <span><strong id="video-setting-label" data-pref-copy="videoLabel">เล่นวิดีโอพื้นหลัง</strong><span class="settings-row-desc" id="video-setting-desc" data-pref-copy="videoDesc">เล่นอัตโนมัติเมื่อเปิดหน้าเว็บ</span></span>
+              <input class="settings-switch" id="video-enabled" type="checkbox" role="switch" data-preference="videoEnabled" aria-labelledby="video-setting-label" aria-describedby="video-setting-desc" checked>
+            </label>
+            <p class="settings-notice" id="motion-notice" data-pref-copy="motionNotice" hidden>อุปกรณ์ของคุณเปิดการลดการเคลื่อนไหว แถบลิงก์จะแสดงนิ่งและวิดีโอจะไม่เล่นอัตโนมัติ</p>
+          </section>
+          <section class="settings-section" aria-labelledby="data-settings-title">
+            <h3 id="data-settings-title" data-pref-copy="dataTitle">การใช้ข้อมูล</h3>
+            <label class="settings-option" for="data-saver">
+              <span><strong id="data-setting-label" data-pref-copy="dataLabel">โหมดประหยัดข้อมูล</strong><span class="settings-row-desc" id="data-setting-desc" data-pref-copy="dataDesc">ใช้ภาพนิ่งแทนวิดีโอพื้นหลัง ช่วยลดการใช้เน็ต</span></span>
+              <input class="settings-switch" id="data-saver" type="checkbox" role="switch" data-preference="dataSaver" aria-labelledby="data-setting-label" aria-describedby="data-setting-desc">
+            </label>
+          </section>
+          <div class="settings-reset">
+            <p id="preferences-status" role="status" data-pref-copy="settingsStorage">บันทึกการตั้งค่าอัตโนมัติใน browser นี้</p>
+            <button class="btn btn-ghost" id="reset-preferences" type="button" data-pref-copy="resetLabel">คืนค่าการตั้งค่าเริ่มต้น</button>
+            <p class="settings-row-desc" data-pref-copy="resetDesc">คืนค่าธีม ภาษา มุมมอง การเคลื่อนไหว และตัวกรอง รายการโปรดที่ติดดาวไว้ยังอยู่</p>
           </div>
         </div>
       </div>

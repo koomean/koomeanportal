@@ -32,14 +32,15 @@ body{min-width:0}
 .motion-toggle:hover{background:var(--panel-hover)}
 .marquee-section{position:relative;margin-bottom:26px;padding-block:2px}
 .marquee-wrapper{margin:0}
-.marquee-track{animation-duration:45s}
+.marquee-track{animation-duration:38s}
 .marquee-loop{display:flex;flex:0 0 auto}
 .marquee-card{width:244px;height:64px;margin-inline:8px;padding:0 16px;border-radius:20px}
 .marquee-content{min-width:0}
 .marquee-icon{width:32px;height:32px;flex-basis:32px;font-size:23px}
 .marquee-text{min-width:0;line-height:1.5}
 .marquee-toggle{position:absolute;right:0;top:50%;transform:translateY(-50%);width:44px;height:44px;border:1px solid var(--line-strong);border-radius:50%;background:var(--panel);color:var(--text);box-shadow:0 3px 14px #0002}
-.marquee-section:focus-within .marquee-track,.marquee-section:hover .marquee-track,.marquee-section.user-paused .marquee-track,.marquee-section.offscreen .marquee-track,.page-hidden .marquee-track{animation-play-state:paused}
+.marquee-section:has(.marquee-card:focus-visible) .marquee-track,.marquee-section.user-paused .marquee-track,.marquee-section.offscreen .marquee-track,.page-hidden .marquee-track,[data-maintenance="active"] .marquee-track{animation-play-state:paused}
+@media(hover:hover){.marquee-section:hover .marquee-track{animation-play-state:paused}}
 .toolbar{gap:10px}
 .stats{line-height:1.65}
 .status{line-height:1.3}
@@ -82,6 +83,31 @@ textarea.field{height:auto;min-height:112px;max-height:45dvh}
 .segment{max-width:100%;flex-wrap:wrap}
 .segment button{min-height:38px;white-space:normal;line-height:1.5}
 .settings-row>div{min-width:0}
+.settings-section{min-width:0;margin-top:12px;padding-top:20px;border-top:1px solid var(--line)}
+.settings-section h3{font-size:.9rem;font-weight:600;margin:0 0 6px}
+.settings-option{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:16px;min-height:64px;padding:12px 0;cursor:pointer}
+.settings-option+.settings-option{border-top:1px solid var(--line)}
+.settings-option>span{min-width:0}
+.settings-option strong,.settings-speed>label{font-size:.82rem;font-weight:600;line-height:1.6}
+.settings-option .settings-row-desc{display:block}
+.settings-switch{appearance:none;-webkit-appearance:none;position:relative;width:44px;height:26px;flex-shrink:0;margin:0;border:1px solid var(--line-strong);border-radius:99px;background:var(--bg);cursor:pointer;transition:border-color .18s var(--ease)}
+.settings-switch::before{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;border-radius:50%;background:var(--muted);transition:transform .18s var(--ease),background-color .18s var(--ease)}
+.settings-switch:checked{border-color:var(--accent)}
+.settings-switch:checked::before{transform:translateX(18px);background:var(--accent)}
+.settings-speed .filter{width:120px;height:44px}
+.settings-notice{padding:12px;border:1px solid var(--line-strong);border-radius:10px;color:var(--text-2);font-size:.75rem;line-height:1.75}
+.settings-reset{margin-top:12px;padding-top:20px;border-top:1px solid var(--line)}
+.settings-reset #preferences-status{color:var(--muted);font-size:.75rem;line-height:1.75;margin:0 0 12px}
+.settings-reset .settings-row-desc{margin-top:10px}
+.catalog-summary{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.catalog-summary .stats{margin:0;flex:1 1 220px}
+.favorites-filter{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;max-width:100%;padding:8px 12px;border:1px solid var(--line);border-radius:11px;background:var(--panel);color:var(--text-2);font-size:.75rem;line-height:1.5;transition:border-color .18s var(--ease),background-color .18s var(--ease)}
+.favorites-filter .ui-icon{width:16px;height:16px;flex-basis:16px;color:var(--accent)}
+.favorites-count{font-variant-numeric:tabular-nums;color:var(--muted)}
+.favorites-filter:hover,.favorites-filter[aria-pressed="true"]{border-color:var(--accent);background:var(--panel-2)}
+.favorites-filter[aria-pressed="true"] .ui-icon{fill:color-mix(in srgb,var(--accent) 22%,transparent)}
+.motion-toggle:disabled{opacity:.75;cursor:default}
+.state-box #show-all-apps{margin-top:14px}
 .command-item>span:first-child{min-width:0}
 .command-item strong,.command-item small{line-height:1.65;white-space:normal;overflow-wrap:anywhere}
 .command-item strong{color:var(--text)}
