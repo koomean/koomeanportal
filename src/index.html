@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#14181d" id="theme-color-meta">
+  <meta name="theme-color" content="#0e1828" id="theme-color-meta">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Koo Mean Portal</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -26,20 +26,22 @@
     }
 
     [data-theme="dark"]{
-      --bg:#14181d;
-      --topbar:#181d23;
-      --panel:#1b2027;
-      --panel-2:#20262d;
-      --panel-hover:#252c34;
-      --text:#eceef1;
-      --text-2:#c3c9d1;
+      --bg:#0e1828;
+      --topbar:#101d30;
+      --panel:#152339;
+      --panel-2:#1a2c45;
+      --panel-hover:#203650;
+      --text:#edf5ff;
+      --text-2:#c4d5e8;
       --muted:#8a93a0;
       --dim:#646d78;
-      --line:rgba(255,255,255,.09);
-      --line-strong:rgba(255,255,255,.18);
-      --accent:#d98a3d;
-      --accent-hover:#e6a15c;
-      --on-accent:#1b1206;
+      --line:rgba(160,197,239,.13);
+      --line-strong:rgba(160,197,239,.29);
+      --accent:#70cfff;
+      --accent-hover:#a0e1ff;
+      --on-accent:#082842;
+      --blue:#2563eb;
+      --sky:#70cfff;
       --ok:#5fa98c;
       --danger:#d9566b;
       --scrim:rgba(5,7,9,.72);
@@ -47,20 +49,22 @@
     }
 
     [data-theme="light"]{
-      --bg:#f1f2f4;
+      --bg:#f2f7fd;
       --topbar:#fff;
       --panel:#fff;
-      --panel-2:#f3f4f6;
-      --panel-hover:#e9ebee;
-      --text:#171a1e;
-      --text-2:#3c434c;
+      --panel-2:#edf4fc;
+      --panel-hover:#e3eefb;
+      --text:#122c49;
+      --text-2:#36516e;
       --muted:#68707a;
       --dim:#8a949f;
-      --line:rgba(15,20,25,.11);
-      --line-strong:rgba(15,20,25,.21);
-      --accent:#b96a1e;
-      --accent-hover:#9c5a18;
+      --line:rgba(27,72,125,.13);
+      --line-strong:rgba(27,72,125,.28);
+      --accent:#185cc5;
+      --accent-hover:#11499f;
       --on-accent:#fff;
+      --blue:#2563eb;
+      --sky:#70cfff;
       --ok:#3e7f68;
       --danger:#b93e52;
       --scrim:rgba(15,20,25,.48);
@@ -2022,7 +2026,7 @@
       <div class="modern-hero">
         <div class="hero-video-layer" aria-hidden="true">
           <img class="hero-poster" src="assets/hero-poster.webp" alt="" width="1120" height="630" fetchpriority="high">
-          <video id="hero-video" loop muted playsinline preload="none" hidden data-src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260505_101331_74f9b798-3f00-4e86-8a01-377aa16ffeaa.mp4"></video>
+          <video id="hero-video" loop muted playsinline preload="none" hidden data-src="assets/hero-loop.mp4"></video>
         </div>
 
         <!-- 2. Hero Text Content -->
@@ -2035,7 +2039,7 @@
           </p>
           <a class="hero-btn-contact" href="mailto:meanchannel52@koomean.com?subject=Koo%20Mean%20Portal%20Report">Contact Us</a>
         </div>
-        <button class="motion-toggle" id="video-toggle" type="button" aria-pressed="false">▶ เล่นพื้นหลัง</button>
+        <button class="motion-toggle" id="video-toggle" type="button" aria-controls="hero-video" aria-pressed="true">Ⅱ หยุดพื้นหลัง</button>
       </div>
 
       <!-- 3. Seamless Marquee Logo Scroller -->
@@ -2225,7 +2229,7 @@
 
                 <div>
                   <label class="field-label" for="admin-color">สี</label>
-                  <input class="field" id="admin-color" maxlength="9" placeholder="#d98a3d">
+                  <input class="field" id="admin-color" maxlength="9" placeholder="#2563eb">
                 </div>
               </div>
 
@@ -2707,7 +2711,7 @@
         const applied = state.theme === "auto" ? (systemDark ? "dark" : "light") : state.theme;
 
         document.documentElement.dataset.theme = applied;
-        $("theme-color-meta").content = applied === "dark" ? "#14181d" : "#f1f2f4";
+        $("theme-color-meta").content = applied === "dark" ? "#0e1828" : "#f2f7fd";
 
         document.querySelectorAll("[data-theme-value]").forEach(button => {
           button.classList.toggle("active", button.dataset.themeValue === state.theme);
@@ -2766,7 +2770,7 @@
 
       function avatar(name) {
         const letter = escapeHtml(Array.from(String(name || "U"))[0].toUpperCase());
-        return "data:image/svg+xml," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" rx="32" fill="#20262d"/><text x="32" y="43" text-anchor="middle" font-family="sans-serif" font-size="32" fill="#eceef1">${letter}</text></svg>`);
+        return "data:image/svg+xml," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" rx="32" fill="#1a2c45"/><text x="32" y="43" text-anchor="middle" font-family="sans-serif" font-size="32" fill="#edf5ff">${letter}</text></svg>`);
       }
 
       function isAdmin() {
@@ -4073,24 +4077,47 @@
         $("marquee-toggle").textContent = marqueePaused ? "▶" : "Ⅱ";
       });
       const video = $("hero-video"), videoButton = $("video-toggle");
-      let videoWanted = false, heroInView = true;
+      const motionPreference = matchMedia("(prefers-reduced-motion:reduce)");
+      let videoWanted = !motionPreference.matches, heroInView = true, videoReady = false, videoTask = null, videoUpdatePending = false;
       function updateVideoLabel() {
         videoButton.setAttribute("aria-pressed", String(videoWanted));
         videoButton.textContent = videoWanted ? (state.lang === "en" ? "Ⅱ Pause background" : "Ⅱ หยุดพื้นหลัง") : (state.lang === "en" ? "▶ Play background" : "▶ เล่นพื้นหลัง");
       }
-      videoButton.addEventListener("click", async () => {
-        videoWanted = !videoWanted;
-        updateVideoLabel();
-        if (!videoWanted) { video.pause(); return; }
+      function shouldPlayVideo() {
+        return videoWanted && videoReady && heroInView && !document.hidden && document.documentElement.dataset.maintenance !== "active";
+      }
+      function syncVideo(userInitiated = false) {
+        if (!shouldPlayVideo()) { video.pause(); return; }
+        if (videoTask) { videoUpdatePending = true; return; }
+        if (!video.paused) return;
         if (!video.src) video.src = video.dataset.src;
         video.hidden = false;
-        videoButton.disabled = true;
-        try { await video.play(); if (!videoWanted || document.hidden) video.pause(); }
-        catch { videoWanted = false; video.hidden = true; showToast("ไม่สามารถเล่นวิดีโอพื้นหลังได้", "error"); }
-        finally { videoButton.disabled = false; updateVideoLabel(); }
+        // Keep the poster visible until an actual frame plays; autoplay can be denied by the browser.
+        videoTask = video.play().then(() => {
+          if (!shouldPlayVideo()) video.pause();
+        }).catch(error => {
+          if (!shouldPlayVideo() || error.name === "AbortError") return;
+          videoWanted = false;
+          video.hidden = true;
+          if (userInitiated && error.name !== "NotAllowedError") showToast("ไม่สามารถเล่นวิดีโอพื้นหลังได้", "error");
+        }).finally(() => {
+          videoTask = null;
+          updateVideoLabel();
+          // Reconcile a pause/resume that arrived before the previous play promise settled.
+          if (videoUpdatePending) { videoUpdatePending = false; syncVideo(); }
+        });
+      }
+      video.addEventListener("playing", () => video.parentElement.classList.add("has-video"));
+      videoButton.addEventListener("click", () => {
+        videoWanted = !videoWanted;
+        videoReady = true;
+        updateVideoLabel();
+        syncVideo(true);
       });
-      const motionPreference = matchMedia("(prefers-reduced-motion:reduce)");
-      motionPreference.addEventListener?.("change", () => { if (motionPreference.matches) { videoWanted = false; video.pause(); updateVideoLabel(); } });
+      motionPreference.addEventListener?.("change", () => { if (motionPreference.matches) { videoWanted = false; syncVideo(); updateVideoLabel(); } });
+      // Render the poster and controls first; the small local loop follows the first paint.
+      requestAnimationFrame(() => setTimeout(() => { videoReady = true; syncVideo(); }, 1200));
+      new MutationObserver(() => syncVideo()).observe(document.documentElement, {attributes:true, attributeFilter:["data-maintenance"]});
       if ("IntersectionObserver" in window) {
         new IntersectionObserver(entries => {
           for (const entry of entries) {
@@ -4099,8 +4126,7 @@
         }).observe($("marquee-section"));
         const observer = new IntersectionObserver(entries => {
           heroInView = entries[0].isIntersecting;
-          if (!heroInView) video.pause();
-          else if (videoWanted && !document.hidden) video.play().catch(() => {});
+          syncVideo();
         }); observer.observe(video.closest(".modern-hero"));
       }
       let lastResume = 0;
@@ -4111,8 +4137,9 @@
       }
       document.addEventListener("visibilitychange", () => {
         document.documentElement.classList.toggle("page-hidden", document.hidden);
-        if (document.hidden) { video.pause(); cancelRetry(false); }
-        else { resumeConnection(); if (videoWanted && heroInView) video.play().catch(() => {}); }
+        if (document.hidden) cancelRetry(false);
+        else resumeConnection();
+        syncVideo();
       });
       window.addEventListener("online", resumeConnection);
       window.addEventListener("offline", () => { cancelRetry(false); setStatus("offline", t("offline")); });

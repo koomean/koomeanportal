@@ -4,7 +4,7 @@
   <meta charset="utf-8">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' https://accounts.google.com/gsi/; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; font-src 'self'; img-src 'self' https: data:; media-src 'self' https://d8j0ntlcm91z4.cloudfront.net; connect-src 'self' https://koomean-proxy.meanchannel52.workers.dev https://accounts.google.com/gsi/ https://thesvg.org/api/registry.json; frame-src https://accounts.google.com/gsi/; form-action 'none'; upgrade-insecure-requests">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#14181d" id="theme-color-meta">
+  <meta name="theme-color" content="#0e1828" id="theme-color-meta">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Koo Mean Portal</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -12,10 +12,10 @@
   <link rel="canonical" href="https://koomean.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="assets/portal-9caef0423272506a.css">
+<link rel="stylesheet" href="assets/portal-727170a6f4ba7afb.css">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/ibm-2e57acf1ca9e.woff2">
 <link rel="preload" as="image" href="assets/hero-poster.webp" fetchpriority="high">
-<script src="assets/app-345883fcbbf011ef.js" defer></script>
+<script src="assets/app-380b8d29f2a41963.js" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main-content">ข้ามไปยังรายการแอป</a>
@@ -59,7 +59,7 @@
       <div class="modern-hero">
         <div class="hero-video-layer" aria-hidden="true">
           <img class="hero-poster" src="assets/hero-poster.webp" alt="" width="1120" height="630" fetchpriority="high">
-          <video id="hero-video" loop muted playsinline preload="none" hidden data-src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260505_101331_74f9b798-3f00-4e86-8a01-377aa16ffeaa.mp4"></video>
+          <video id="hero-video" loop muted playsinline preload="none" hidden data-src="assets/hero-loop.mp4"></video>
         </div>
         <div class="hero-content-layer">
           <div id="hero-kicker" hidden>YOUR APPLICATION HUB</div>
@@ -69,7 +69,7 @@
           </p>
           <a class="hero-btn-contact" href="mailto:meanchannel52@koomean.com?subject=Koo%20Mean%20Portal%20Report">Contact Us</a>
         </div>
-        <button class="motion-toggle" id="video-toggle" type="button" aria-pressed="false">▶ เล่นพื้นหลัง</button>
+        <button class="motion-toggle" id="video-toggle" type="button" aria-controls="hero-video" aria-pressed="true">Ⅱ หยุดพื้นหลัง</button>
       </div>
       <div class="marquee-section" id="marquee-section" data-loading aria-busy="true">
         <div class="marquee-wrapper"><div class="marquee-track" id="marquee-track"></div></div>
@@ -229,7 +229,7 @@
                 </div>
                 <div>
                   <label class="field-label" for="admin-color">สี</label>
-                  <input class="field" id="admin-color" maxlength="9" placeholder="#d98a3d">
+                  <input class="field" id="admin-color" maxlength="9" placeholder="#2563eb">
                 </div>
               </div>
               <label class="check-row">
