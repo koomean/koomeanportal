@@ -154,8 +154,6 @@ textarea.field{height:auto;min-height:112px;max-height:45dvh}
 .featured{padding:2px 8px;background:transparent}
 .modal-head{background:var(--panel-2)}
 .segment button.active{background:var(--panel-2);color:var(--text);box-shadow:inset 0 0 0 1px var(--accent)}
-#global-maintenance-overlay .maintenance-mark{background:#70cfff18;color:#70cfff}
-#global-maintenance-overlay .maintenance-eyebrow{color:#a0e1ff}
 /* Every control uses the same geometry; icons do not depend on font metrics. */
 :root{--control-size:44px}
 .icon-definitions{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
@@ -208,10 +206,6 @@ textarea.field{height:auto;min-height:112px;max-height:45dvh}
 [data-theme="dark"] img[src="https://thesvg.org/icons/github/default.svg"]{filter:brightness(0) invert(1)}
 .logo-result>span:last-child{line-height:1.45;white-space:normal;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .logo-result[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
-#global-maintenance-overlay{background:#0b0e12f7}
-#global-maintenance-overlay .maintenance-card{background:#1b2027}
-#global-maintenance-overlay .maintenance-mark{background:#20262d}
-#global-maintenance-overlay .maintenance-mark .ui-icon{width:26px;height:26px}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .search input:focus-visible,.field:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media(max-width:760px){

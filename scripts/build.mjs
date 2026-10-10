@@ -19,6 +19,7 @@ html = html.replace(/<span data-ui-icon="([a-z0-9-]+)"><\/span>/g,(_,name)=>uiIc
 const scripts = [], styles = [fs.readFileSync('src/vendor.css','utf8')];
 html = html.replace(/<style>([\s\S]*?)<\/style>/g, (_,css) => { styles.push(css); return ''; });
 styles.push(fs.readFileSync('src/enhancements.css','utf8'));
+styles.push(fs.readFileSync('src/maintenance.css','utf8'));
 html = html.replace(/<script>([\s\S]*?)<\/script>/g, (_,js) => { scripts.push(js); return ''; });
 html = html.replace(/<link[^>]+href="https:\/\/(?:fonts.googleapis.com|fonts.gstatic.com|cdnjs.cloudflare.com)[^"]+"[^>]*>/g,'');
 html = html.replace(/<!--[\s\S]*?-->/g,'');
