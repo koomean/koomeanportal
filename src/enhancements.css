@@ -33,6 +33,8 @@ body{min-width:0}
 .marquee-section{position:relative;margin-bottom:26px;padding-block:2px}
 .marquee-wrapper{margin:0}
 .marquee-track{animation-duration:38s}
+/* Start percentage transforms with content present, avoiding a stale zero-width layer on iOS. */
+.marquee-section[data-loading] .marquee-track{animation:none}
 .marquee-loop{display:flex;flex:0 0 auto}
 .marquee-card{width:244px;height:64px;margin-inline:8px;padding:0 16px;border-radius:20px}
 .marquee-content{min-width:0}

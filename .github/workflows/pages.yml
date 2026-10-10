@@ -29,6 +29,10 @@ jobs:
             npx playwright install --with-deps chromium
           fi
       - run: npm run test:browser
+      - name: Prepare WebKit for iPad and iPhone motion checks
+        timeout-minutes: 5
+        run: npx playwright install --with-deps webkit
+      - run: npm run test:webkit
       - name: Verify Portal content and domain
         run: node scripts/verify-portal.mjs
       - name: Package only website files

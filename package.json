@@ -1,1 +1,1 @@
-{"name":"koomean-portal","private":true,"type":"module","scripts":{"build":"node scripts/build.mjs","test":"node --test tests/security.test.mjs","test:browser":"node tests/browser.mjs"},"devDependencies":{"esbuild":"0.28.1","playwright":"1.62.1"}}
+{"name":"koomean-portal","private":true,"type":"module","scripts":{"build":"node scripts/build.mjs","test":"node --test tests/security.test.mjs","test:browser":"node tests/browser.mjs","test:webkit":"node tests/marquee-webkit.mjs"},"devDependencies":{"esbuild":"0.28.1","playwright":"1.62.1"}}

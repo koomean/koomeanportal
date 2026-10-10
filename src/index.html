@@ -4191,15 +4191,18 @@
       function renderMarquee() {
         const track = $("marquee-track"), section = $("marquee-section");
         const publicLinks = state.links.filter(link => (link.group === 'public' || !link.group) && safeUrl(link.url));
+        section.hidden = !publicLinks.length;
+        if (!publicLinks.length) {
+          track.replaceChildren();
+        } else {
+          const loop = (duplicate) => publicLinks.map(link => {
+            const title = String(link.title || "Link");
+            return `<a href="${escapeHtml(safeUrl(link.url))}" target="_blank" rel="noopener noreferrer" class="marquee-card" title="${escapeHtml(title)}" ${duplicate ? 'aria-hidden="true" tabindex="-1"' : ''}><div class="marquee-content"><div class="marquee-icon">${getIconHtml(link.icon, title)}</div><span class="marquee-text">${escapeHtml(title)}</span></div></a>`;
+          }).join("");
+          track.innerHTML = `<div class="marquee-loop">${loop(false)}</div><div class="marquee-loop" aria-hidden="true">${loop(true)}</div>`;
+        }
         section.removeAttribute("data-loading");
         section.setAttribute("aria-busy", "false");
-        section.hidden = !publicLinks.length;
-        if (!publicLinks.length) { track.replaceChildren(); return; }
-        const loop = (duplicate) => publicLinks.map(link => {
-          const title = String(link.title || "Link");
-          return `<a href="${escapeHtml(safeUrl(link.url))}" target="_blank" rel="noopener noreferrer" class="marquee-card" title="${escapeHtml(title)}" ${duplicate ? 'aria-hidden="true" tabindex="-1"' : ''}><div class="marquee-content"><div class="marquee-icon">${getIconHtml(link.icon, title)}</div><span class="marquee-text">${escapeHtml(title)}</span></div></a>`;
-        }).join("");
-        track.innerHTML = `<div class="marquee-loop">${loop(false)}</div><div class="marquee-loop" aria-hidden="true">${loop(true)}</div>`;
       }
       $("marquee-toggle").addEventListener("click", () => {
         state.marqueeEnabled = !state.marqueeEnabled;
