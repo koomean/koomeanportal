@@ -1,7 +1,7 @@
-/* Portal keeps its IBM typography and original application layout in blue and sky. */
+/* Original charcoal surfaces; blue/sky accents and consistent vector controls. */
 :root{--radius:16px;--radius-sm:10px;--ease:cubic-bezier(.2,.7,.2,1)}
-[data-theme="dark"]{--muted:#a8bdd5;--dim:#94adc9}
-[data-theme="light"]{--muted:#516985;--dim:#58718e}
+[data-theme="dark"]{--muted:#a0a9b5;--dim:#929dab}
+[data-theme="light"]{--muted:#59636f;--dim:#626d79}
 html{scroll-padding-top:124px}
 body{min-width:0}
 .skip-link{position:fixed;top:8px;left:14px;z-index:2000;padding:10px 18px;border-radius:12px;background:var(--accent);color:var(--on-accent);transform:translateY(-160%)}
@@ -15,9 +15,9 @@ body{min-width:0}
 .header-actions{gap:clamp(5px,1vw,8px);flex-shrink:0}
 .main{padding-top:clamp(20px,4vw,36px)}
 .modern-hero{height:auto;min-height:clamp(360px,42vw,480px);border-radius:clamp(24px,4vw,40px);margin-bottom:28px;box-shadow:0 16px 40px -24px #0008;isolation:isolate}
-.hero-video-layer{opacity:.65;mix-blend-mode:normal}
-.hero-video-layer::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#12243a 0%,#12243ae0 30%,#12243a20 100%)}
-[data-theme="light"] .hero-video-layer{opacity:.64}
+.hero-video-layer{opacity:.42;mix-blend-mode:normal}
+.hero-video-layer::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--panel) 0%,transparent 110%)}
+[data-theme="light"] .hero-video-layer{opacity:.36}
 [data-theme="light"] .hero-video-layer::after{background:linear-gradient(90deg,#fff 0%,#ffffffeb 30%,#e6f3ff26 100%)}
 .hero-poster,.hero-video-layer video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;transform:none}
 .hero-video-layer video{opacity:0;transition:opacity .35s var(--ease)}
@@ -93,14 +93,14 @@ textarea.field{height:auto;min-height:112px;max-height:45dvh}
 .footer{line-height:1.75;overflow-wrap:anywhere}
 .footer>span{min-width:0;max-width:100%}
 /* Blue hierarchy: strong navigation/actions, quiet application surfaces. */
-.brand-mark{border-radius:11px;background:linear-gradient(135deg,#2563eb,#70cfff);color:#fff;box-shadow:inset 0 0 0 1px #ffffff26}
+.brand-mark{border-radius:11px;background:var(--panel);color:var(--accent);border:1px solid var(--accent);box-shadow:none}
 .brand-sub{letter-spacing:.025em;line-height:1.4}
 .topnav{gap:6px}
 .nav-link{border:1px solid transparent;border-radius:10px}
-.nav-link.active{color:var(--accent);border-color:color-mix(in srgb,var(--accent) 20%,transparent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
+.nav-link.active{color:var(--text);border-color:color-mix(in srgb,var(--accent) 40%,var(--line));background:var(--panel-2)}
 .icon-button{border-radius:12px}
-.btn-primary,.hero-btn-contact{background:#2563eb;border-color:#2563eb;color:#fff;box-shadow:0 4px 12px #091c3e1a}
-.btn-primary:hover:not(:disabled),.hero-btn-contact:hover{background:#1d52c6;border-color:#1d52c6}
+.btn-primary,.hero-btn-contact{background:var(--panel);border:1px solid var(--accent);color:var(--text);box-shadow:none}
+.btn-primary:hover:not(:disabled),.hero-btn-contact:hover{background:var(--panel-hover);border-color:var(--accent-hover)}
 .modern-hero{border-color:color-mix(in srgb,var(--accent) 24%,var(--line));box-shadow:0 20px 44px -30px #020e28b3}
 [data-theme="light"] .modern-hero{box-shadow:0 16px 34px -26px #153d6b66}
 .hero-title-modern{letter-spacing:-.035em}
@@ -113,7 +113,7 @@ textarea.field{height:auto;min-height:112px;max-height:45dvh}
 .search input,.filter,.refresh-btn,.view-switcher{border-radius:11px;background:var(--bg)}
 .search input{min-height:44px}
 .filter,.refresh-btn,.view-switcher{min-height:44px}
-.view-btn.active{background:color-mix(in srgb,var(--accent) 14%,transparent);color:var(--accent)}
+.view-btn.active{background:var(--panel-2);color:var(--accent)}
 .stats{padding-inline:4px;gap:12px}
 .group-head{margin-bottom:12px}
 .group-dot{border-radius:50%}
@@ -121,18 +121,77 @@ textarea.field{height:auto;min-height:112px;max-height:45dvh}
 .app-card::before{top:22px;bottom:22px;left:0;width:3px;border-radius:0 4px 4px 0}
 .app-card:focus-within{border-color:var(--accent)}
 .app-card-body{padding-block:20px}
-.app-icon{border-radius:13px;background:color-mix(in srgb,var(--group-color,var(--accent)) 10%,var(--panel-2));border-color:color-mix(in srgb,var(--group-color,var(--accent)) 23%,var(--line))}
+.app-icon{border-radius:13px;background:var(--panel-2);border-color:color-mix(in srgb,var(--group-color,var(--accent)) 23%,var(--line))}
 .card-action{border-radius:9px}
-.featured{padding:2px 8px;background:color-mix(in srgb,var(--accent) 7%,transparent)}
+.featured{padding:2px 8px;background:transparent}
 .modal-head{background:var(--panel-2)}
-.segment button.active{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--accent) 30%,transparent)}
+.segment button.active{background:var(--panel-2);color:var(--text);box-shadow:inset 0 0 0 1px var(--accent)}
 #global-maintenance-overlay .maintenance-mark{background:#70cfff18;color:#70cfff}
 #global-maintenance-overlay .maintenance-eyebrow{color:#a0e1ff}
+/* Every control uses the same geometry; icons do not depend on font metrics. */
+:root{--control-size:44px}
+.icon-definitions{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+.ui-icon{display:block;width:20px;height:20px;flex:0 0 20px;pointer-events:none}
+.btn{min-height:var(--control-size)}
+.icon-button{width:var(--control-size);height:var(--control-size);flex-basis:var(--control-size);color:var(--accent)}
+#auth-btn{min-height:var(--control-size);padding-block:10px}
+#auth-icon{display:flex;color:var(--accent)}
+.nav-link .ui-icon,.admin-tab .ui-icon{width:18px;height:18px;flex-basis:18px;color:var(--accent)}
+.admin-tab{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px}
+.search input{height:44px;min-height:44px;line-height:24px;padding:9px 42px;appearance:none;-webkit-appearance:none}
+.search input::-webkit-search-decoration,.search input::-webkit-search-cancel-button{appearance:none;-webkit-appearance:none;display:none}
+.search-symbol{width:20px;height:20px;left:13px;justify-content:center;color:var(--accent)}
+.search-clear{position:absolute;right:6px;top:50%;transform:translateY(-50%);width:32px;height:32px;display:grid;place-items:center;border-radius:8px;color:var(--muted)}
+.search-clear:hover{background:var(--panel-hover);color:var(--accent)}
+.search:has(.search-clear:not([hidden])) .search-kbd{display:none}
+.search-clear .ui-icon{width:16px;height:16px}
+.field:not(textarea){height:44px;min-height:44px}
+.inline-form{align-items:stretch}
+.inline-form .field{height:auto;min-height:44px}
+.refresh-btn{width:44px;height:44px;min-height:44px;color:var(--accent)}
+.refresh-btn.loading{animation:none}
+.refresh-btn.loading .ui-icon,.is-loading .ui-icon{animation:spin .8s linear infinite}
+.view-switcher{height:44px;min-height:44px;padding:3px;gap:2px}
+.view-btn{width:36px;height:36px;flex:0 0 36px;border:0;border-radius:7px}
+.modal-close{width:40px;height:40px;flex-basis:40px;border:1px solid var(--line);color:var(--accent)}
+.card-action{color:var(--accent)}
+.card-action .ui-icon,.small-action .ui-icon{width:18px;height:18px;flex-basis:18px}
+.state-icon .ui-icon{width:24px;height:24px}
+.card-action.pinned .ui-icon{fill:color-mix(in srgb,var(--accent) 22%,transparent)}
+.motion-toggle{display:inline-flex;align-items:center;justify-content:center;gap:8px;color:var(--accent)}
+.motion-toggle .ui-icon{width:16px;height:16px;flex-basis:16px}
+.marquee-toggle{display:grid;place-items:center;color:var(--accent)}
+.policy-links .ui-icon{width:16px;height:16px;flex-basis:16px;color:var(--accent)}
+.icon-picker-row{padding:12px;gap:12px;border-radius:12px;align-items:center}
+.selected-icon{width:44px;height:44px;border:1px solid var(--line-strong);border-radius:11px;color:var(--accent)}
+.selected-icon img,.selected-icon .ui-icon{width:24px;height:24px}
+.icon-picker-row .btn{min-height:44px;padding-inline:14px}
+.small-action{width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;color:var(--accent)}
+.small-action.danger{color:var(--danger)}
+.admin-role{height:36px;min-height:36px}
+#logo-modal .modal{height:min(640px,calc(100dvh - 40px))}
+#logo-modal .modal-body{display:flex;flex-direction:column;gap:16px;overflow:hidden}
+#logo-modal .search{flex:0 0 44px;margin-bottom:0!important}
+.logo-results{grid-template-columns:repeat(auto-fill,minmax(min(100%,112px),1fr));gap:12px;max-height:none;min-height:0;flex:1;align-content:start;padding:2px 4px 4px 2px;scrollbar-gutter:stable}
+.logo-result{min-height:112px;height:112px;padding:12px 8px;gap:8px;border-radius:12px;justify-content:flex-start;color:var(--text-2)}
+.logo-result>.logo-preview{display:grid;place-items:center;width:44px;height:44px;flex:0 0 44px;border-radius:10px;background:var(--panel);color:var(--accent)}
+.logo-preview img,.logo-preview .ui-icon{width:28px;height:28px}
+/* The registry’s monochrome GitHub mark needs contrast on charcoal. */
+[data-theme="dark"] img[src="https://thesvg.org/icons/github/default.svg"]{filter:brightness(0) invert(1)}
+.logo-result>span:last-child{line-height:1.45;white-space:normal;overflow-wrap:anywhere;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.logo-result[aria-pressed="true"]{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+#global-maintenance-overlay{background:#0b0e12f7}
+#global-maintenance-overlay .maintenance-card{background:#1b2027}
+#global-maintenance-overlay .maintenance-mark{background:#20262d}
+#global-maintenance-overlay .maintenance-mark .ui-icon{width:26px;height:26px}
 :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .search input:focus-visible,.field:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 @media(max-width:760px){
  .modal{border-radius:22px 22px 0 0;max-height:calc(100dvh - env(safe-area-inset-top))}
  .modern-hero{min-height:390px}
+ .toolbar{grid-template-columns:minmax(0,1fr) 44px}
+ #auth-btn{width:44px;height:44px;padding:0}
+ #logo-modal .modal{height:min(640px,calc(100dvh - env(safe-area-inset-top)))}
  .hero-content-layer{padding-bottom:74px}
  .hero-title-modern{font-size:clamp(30px,7.5vw,44px)}
  .marquee-card{width:220px;height:60px;border-radius:18px}
@@ -143,8 +202,9 @@ textarea.field{height:auto;min-height:112px;max-height:45dvh}
 @media(max-width:360px){
  .brand-mark{width:30px;height:30px;flex-basis:30px}
  .brand{gap:6px}.brand-title{font-size:.78rem;max-width:120px}
- .header-actions .icon-button{width:34px;height:38px;flex-basis:34px}
- #auth-btn{width:36px;min-height:38px}
+ .header-actions{--control-size:36px}
+ .header-actions .icon-button{width:36px;height:36px;flex-basis:36px}
+ #auth-btn{width:36px;height:36px;min-height:36px;padding:0}
  .topbar-main{gap:6px}.header-actions{gap:5px}
  .hero-content-layer{padding-inline:24px}
  .hero-title-modern{font-size:30px}

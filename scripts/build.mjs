@@ -3,6 +3,19 @@ import {createHash} from 'node:crypto';
 import {transform} from 'esbuild';
 const hash = value => createHash('sha256').update(value).digest('hex').slice(0,16);
 let html = fs.readFileSync('src/index.html','utf8').replace('/* BUILD_MAINTENANCE */',fs.readFileSync('src/maintenance.js','utf8'));
+const iconNames = fs.readdirSync('src/icons').filter(file => /^[a-z0-9-]+\.svg$/.test(file)).map(file => file.slice(0,-4)).sort();
+const uiIcon = name => {
+  if (!iconNames.includes(name)) throw new Error('Unknown UI icon: '+name);
+  return `<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-${name}"></use></svg>`;
+};
+const sprite = iconNames.map(name => {
+  const svg = fs.readFileSync(`src/icons/${name}.svg`,'utf8');
+  if (/<(?:script|foreignObject|image|use)\b|\son\w+=|\shref=/i.test(svg)) throw new Error('Unsafe SVG: '+name);
+  return `<symbol id="ui-${name}" viewBox="0 0 24 24">${svg.replace(/<!--[\s\S]*?-->/g,'').replace(/^[\s\S]*?<svg[^>]*>/,'').replace(/<\/svg>\s*$/,'').trim()}</symbol>`;
+}).join('');
+html = html.replace('/* BUILD_ICON_NAMES */ []',JSON.stringify(iconNames));
+html = html.replace('<!-- BUILD_ICON_SPRITE -->',`<svg class="icon-definitions" width="0" height="0" aria-hidden="true" focusable="false">${sprite}</svg>`);
+html = html.replace(/<span data-ui-icon="([a-z0-9-]+)"><\/span>/g,(_,name)=>uiIcon(name));
 const scripts = [], styles = [fs.readFileSync('src/vendor.css','utf8')];
 html = html.replace(/<style>([\s\S]*?)<\/style>/g, (_,css) => { styles.push(css); return ''; });
 styles.push(fs.readFileSync('src/enhancements.css','utf8'));

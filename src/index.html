@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#0e1828" id="theme-color-meta">
+  <meta name="theme-color" content="#14181d" id="theme-color-meta">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Koo Mean Portal</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -26,17 +26,17 @@
     }
 
     [data-theme="dark"]{
-      --bg:#0e1828;
-      --topbar:#101d30;
-      --panel:#152339;
-      --panel-2:#1a2c45;
-      --panel-hover:#203650;
-      --text:#edf5ff;
-      --text-2:#c4d5e8;
+      --bg:#14181d;
+      --topbar:#181d23;
+      --panel:#1b2027;
+      --panel-2:#20262d;
+      --panel-hover:#252c34;
+      --text:#eceef1;
+      --text-2:#c3c9d1;
       --muted:#8a93a0;
       --dim:#646d78;
-      --line:rgba(160,197,239,.13);
-      --line-strong:rgba(160,197,239,.29);
+      --line:rgba(255,255,255,.09);
+      --line-strong:rgba(255,255,255,.18);
       --accent:#70cfff;
       --accent-hover:#a0e1ff;
       --on-accent:#082842;
@@ -49,17 +49,17 @@
     }
 
     [data-theme="light"]{
-      --bg:#f2f7fd;
+      --bg:#f1f2f4;
       --topbar:#fff;
       --panel:#fff;
-      --panel-2:#edf4fc;
-      --panel-hover:#e3eefb;
-      --text:#122c49;
-      --text-2:#36516e;
+      --panel-2:#f3f4f6;
+      --panel-hover:#e9ebee;
+      --text:#171a1e;
+      --text-2:#3c434c;
       --muted:#68707a;
       --dim:#8a949f;
-      --line:rgba(27,72,125,.13);
-      --line-strong:rgba(27,72,125,.28);
+      --line:rgba(15,20,25,.11);
+      --line-strong:rgba(15,20,25,.21);
       --accent:#185cc5;
       --accent-hover:#11499f;
       --on-accent:#fff;
@@ -1970,12 +1970,13 @@
 </head>
 
 <body>
+  <!-- BUILD_ICON_SPRITE -->
   <a class="skip-link" href="#main-content">ข้ามไปยังรายการแอป</a>
 
 <style>
 #global-maintenance-overlay[hidden]{display:none!important}#global-maintenance-overlay{position:fixed;inset:0;z-index:2147483000;display:grid;place-items:center;padding:max(20px,env(safe-area-inset-top)) 20px max(20px,env(safe-area-inset-bottom));background:rgba(5,8,14,.97);backdrop-filter:blur(18px);color:#eef3fb;font:16px/1.7 system-ui,-apple-system,"Segoe UI",sans-serif}#global-maintenance-overlay .maintenance-card{width:min(560px,100%);padding:clamp(24px,6vw,42px);border:1px solid rgba(255,255,255,.12);border-radius:24px;background:linear-gradient(150deg,#151d2b,#10151e);box-shadow:0 28px 100px #0009;text-align:center}#global-maintenance-overlay .maintenance-mark{display:grid;place-items:center;width:52px;height:52px;margin:0 auto 18px;border-radius:17px;background:#ff74751c;color:#ff9292;font-size:25px}#global-maintenance-overlay .maintenance-eyebrow{margin:0 0 8px;color:#ffaaaa;font-size:11px;font-weight:750;letter-spacing:.16em;text-transform:uppercase}#global-maintenance-overlay h1{margin:0 0 12px;color:#f4f6fb;font-size:clamp(25px,5vw,34px);line-height:1.3;letter-spacing:-.03em}#global-maintenance-overlay .maintenance-note{margin:0;color:#bdc7d6;white-space:pre-wrap;overflow-wrap:anywhere}#global-maintenance-overlay .maintenance-count{margin:25px 0 8px;padding:17px 14px;border:1px solid rgba(255,255,255,.1);border-radius:14px;background:#ffffff06}#global-maintenance-overlay .maintenance-count span{display:block;color:#8f9db1;font-size:12px}#global-maintenance-overlay .maintenance-count strong{display:block;margin-top:3px;color:#b7d0ff;font:600 clamp(23px,6vw,32px)/1.25 ui-monospace,SFMono-Regular,Menlo,monospace;font-variant-numeric:tabular-nums}#global-maintenance-overlay .maintenance-foot{margin:14px 0 0;color:#7f8ba0;font-size:12px}
 </style>
-<div id="global-maintenance-overlay" hidden role="alertdialog" aria-modal="true" aria-labelledby="global-maintenance-title" aria-describedby="global-maintenance-note"><div class="maintenance-card"><div class="maintenance-mark" aria-hidden="true">⏳</div><p class="maintenance-eyebrow" id="global-maintenance-eyebrow"></p><h1 id="global-maintenance-title"></h1><p class="maintenance-note" id="global-maintenance-note"></p><div class="maintenance-count"><span id="global-maintenance-label"></span><strong id="global-maintenance-countdown">--:--:--</strong></div><p class="maintenance-foot" id="global-maintenance-foot"></p></div></div>
+<div id="global-maintenance-overlay" hidden role="alertdialog" aria-modal="true" aria-labelledby="global-maintenance-title" aria-describedby="global-maintenance-note"><div class="maintenance-card"><div class="maintenance-mark" aria-hidden="true"><span data-ui-icon="hourglass"></span></div><p class="maintenance-eyebrow" id="global-maintenance-eyebrow"></p><h1 id="global-maintenance-title"></h1><p class="maintenance-note" id="global-maintenance-note"></p><div class="maintenance-count"><span id="global-maintenance-label"></span><strong id="global-maintenance-countdown">--:--:--</strong></div><p class="maintenance-foot" id="global-maintenance-foot"></p></div></div>
 <script>/* BUILD_MAINTENANCE */</script>
 
 
@@ -1995,8 +1996,8 @@
         </a>
 
         <div class="header-actions">
-          <button class="icon-button" id="command-btn" aria-label="เปิด Command Palette" type="button" title="Command Palette">⌘</button>
-          <button class="icon-button" id="settings-btn" aria-label="การตั้งค่า" type="button" title="การตั้งค่า">⚙</button>
+          <button class="icon-button" id="command-btn" aria-label="เปิด Command Palette" type="button" title="Command Palette"><span data-ui-icon="command"></span></button>
+          <button class="icon-button" id="settings-btn" aria-label="การตั้งค่า" type="button" title="การตั้งค่า"><span data-ui-icon="settings-2"></span></button>
 
           <button class="user-chip" id="user-chip" type="button">
             <img id="user-avatar" alt="">
@@ -2004,7 +2005,7 @@
           </button>
 
           <button class="btn btn-primary" id="auth-btn" aria-label="เข้าสู่ระบบ" type="button">
-            <span aria-hidden="true">⇥</span>
+            <span id="auth-icon"><span data-ui-icon="log-in"></span></span>
             <span class="auth-label" id="auth-label">เข้าสู่ระบบ</span>
           </button>
         </div>
@@ -2012,9 +2013,9 @@
 
       <div class="topnav-wrap">
         <nav class="topnav" aria-label="เมนูหลัก">
-          <a class="nav-link active" href="#home">⌂ หน้าแรก</a>
-          <button class="nav-link" id="account-nav" type="button">● บัญชี</button>
-          <button class="nav-link" id="admin-nav" type="button" hidden>▦ จัดการระบบ</button>
+          <a class="nav-link active" href="#home"><span data-ui-icon="house"></span><span>หน้าแรก</span></a>
+          <button class="nav-link" id="account-nav" type="button"><span data-ui-icon="user-round"></span><span>บัญชี</span></button>
+          <button class="nav-link" id="admin-nav" type="button" hidden><span data-ui-icon="layout-grid"></span><span>จัดการระบบ</span></button>
         </nav>
       </div>
     </div>
@@ -2039,35 +2040,35 @@
           </p>
           <a class="hero-btn-contact" href="mailto:meanchannel52@koomean.com?subject=Koo%20Mean%20Portal%20Report">Contact Us</a>
         </div>
-        <button class="motion-toggle" id="video-toggle" type="button" aria-controls="hero-video" aria-pressed="true">Ⅱ หยุดพื้นหลัง</button>
+        <button class="motion-toggle" id="video-toggle" type="button" aria-controls="hero-video" aria-pressed="true"><span data-ui-icon="pause"></span><span>หยุดพื้นหลัง</span></button>
       </div>
 
       <!-- 3. Seamless Marquee Logo Scroller -->
       <div class="marquee-section" id="marquee-section" data-loading aria-busy="true">
         <div class="marquee-wrapper"><div class="marquee-track" id="marquee-track"></div></div>
-        <button class="marquee-toggle" id="marquee-toggle" type="button" aria-pressed="false" aria-label="หยุดแถบลิงก์">Ⅱ</button>
+        <button class="marquee-toggle" id="marquee-toggle" type="button" aria-pressed="false" aria-label="หยุดแถบลิงก์"><span data-ui-icon="pause"></span></button>
       </div>
     </section>
 
     <section aria-label="รายการแอปพลิเคชัน">
       <div class="toolbar">
-        <label class="search">
-          <span class="search-symbol" aria-hidden="true">⌕</span>
+        <div class="search">
+          <span class="search-symbol" aria-hidden="true"><span data-ui-icon="search"></span></span>
           <input id="app-search" aria-label="ค้นหาแอปพลิเคชัน" type="search" placeholder="ค้นหาแอปพลิเคชัน..." autocomplete="off">
           <span class="search-kbd">/</span>
-        </label>
+        <button class="search-clear" type="button" data-clear-search="app-search" aria-label="ล้างคำค้นหา" aria-controls="app-search" hidden><span data-ui-icon="x"></span></button></div>
 
         <select class="filter" id="group-filter" aria-label="กรองตามกลุ่ม">
           <option value="all">ทุกกลุ่ม</option>
         </select>
 
         <div class="view-switcher" aria-label="รูปแบบการแสดงผล">
-          <button class="view-btn active" type="button" data-view="grid" title="Grid">▦</button>
-          <button class="view-btn" type="button" data-view="list" title="List">☷</button>
-          <button class="view-btn" type="button" data-view="compact" title="Compact">▥</button>
+          <button class="view-btn active" type="button" data-view="grid" title="Grid"><span data-ui-icon="layout-grid"></span></button>
+          <button class="view-btn" type="button" data-view="list" title="List"><span data-ui-icon="list"></span></button>
+          <button class="view-btn" type="button" data-view="compact" title="Compact"><span data-ui-icon="grid-3x3"></span></button>
         </div>
 
-        <button class="refresh-btn" id="refresh-btn" type="button" title="รีเฟรช">↻</button>
+        <button class="refresh-btn" id="refresh-btn" type="button" title="รีเฟรช"><span data-ui-icon="rotate-cw"></span></button>
       </div>
 
       <div class="stats" aria-live="polite" aria-atomic="true">
@@ -2103,7 +2104,7 @@
           <h2 id="login-title">เข้าสู่ระบบ</h2>
           <p>ใช้ Google Account เพื่อดูแอปที่คุณมีสิทธิ์ใช้งาน</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><span data-ui-icon="x"></span></button>
       </header>
 
       <div class="modal-body">
@@ -2112,8 +2113,8 @@
           <p>ระบบใช้ Token ที่ตรวจสอบโดยเซิร์ฟเวอร์ และไม่มีการจัดเก็บรหัสผ่านของ Google ภายในหน้าเว็บนี้</p>
         </div>
         <div class="policy-links" aria-label="เอกสารนโยบาย">
-          <a class="btn btn-ghost" href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="login-privacy-label">นโยบายความเป็นส่วนตัว</span> ↗</a>
-          <a class="btn btn-ghost" href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="login-terms-label">ข้อกำหนดการใช้บริการ</span> ↗</a>
+          <a class="btn btn-ghost" href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="login-privacy-label">นโยบายความเป็นส่วนตัว</span><span data-ui-icon="external-link"></span></a>
+          <a class="btn btn-ghost" href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="login-terms-label">ข้อกำหนดการใช้บริการ</span><span data-ui-icon="external-link"></span></a>
         </div>
       </div>
     </section>
@@ -2127,7 +2128,7 @@
           <h2 id="register-title">ขอลงทะเบียน</h2>
           <p>บัญชีนี้ยังไม่อยู่ในระบบ กรุณาส่งข้อมูลเพิ่มเติมให้ผู้ดูแล</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><span data-ui-icon="x"></span></button>
       </header>
 
       <div class="modal-body">
@@ -2154,7 +2155,7 @@
           <h2 id="account-title">บัญชีของคุณ</h2>
           <p>จัดการข้อมูลบัญชีที่ใช้เชื่อมต่อกับ Portal</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><span data-ui-icon="x"></span></button>
       </header>
 
       <div class="modal-body">
@@ -2191,13 +2192,13 @@
           <h2 id="admin-title">จัดการระบบ</h2>
           <p id="admin-subtitle">เพิ่ม แก้ไข และจัดลำดับแอปพลิเคชัน</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><span data-ui-icon="x"></span></button>
       </header>
 
       <div class="modal-body">
         <div class="admin-tabs" role="tablist">
-          <button class="admin-tab active" id="apps-tab-btn" type="button">▦ แอปพลิเคชัน</button>
-          <button class="admin-tab" id="users-tab-btn" type="button">● ผู้ใช้งาน</button>
+          <button class="admin-tab active" id="apps-tab-btn" type="button"><span data-ui-icon="layout-grid"></span><span>แอปพลิเคชัน</span></button>
+          <button class="admin-tab" id="users-tab-btn" type="button"><span data-ui-icon="users-round"></span><span>ผู้ใช้งาน</span></button>
         </div>
 
         <div id="apps-tab">
@@ -2239,7 +2240,7 @@
               </label>
 
               <div class="icon-picker-row">
-                <div class="selected-icon" id="icon-preview"><span>◇</span></div>
+                <div class="selected-icon" id="icon-preview"><span data-ui-icon="shapes"></span></div>
                 <div class="selected-icon-copy">
                   <strong id="icon-name">ยังไม่ได้เลือกไอคอน</strong>
                   <span id="icon-value">—</span>
@@ -2271,10 +2272,10 @@
             <div class="panel-title">ผู้ใช้งานทั้งหมด</div>
             <p class="panel-copy">ค้นหาและกำหนด Role เพื่อควบคุมสิทธิ์การเข้าถึง</p>
 
-            <label class="search" style="margin-bottom:12px">
-              <span class="search-symbol">⌕</span>
+            <div class="search" style="margin-bottom:12px">
+              <span class="search-symbol" aria-hidden="true"><span data-ui-icon="search"></span></span>
               <input id="user-search" aria-label="ค้นหาผู้ใช้งาน" type="search" placeholder="ค้นหาชื่อหรืออีเมล..." autocomplete="off">
-            </label>
+            <button class="search-clear" type="button" data-clear-search="user-search" aria-label="ล้างคำค้นหา" aria-controls="user-search" hidden><span data-ui-icon="x"></span></button></div>
 
             <div class="admin-users" id="admin-users"></div>
           </section>
@@ -2291,14 +2292,14 @@
           <h2 id="logo-title">เลือกโลโก้</h2>
           <p>ค้นหาและเลือกโลโก้จากคลัง theSVG</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><span data-ui-icon="x"></span></button>
       </header>
 
       <div class="modal-body">
-        <label class="search" style="margin-bottom:12px">
-          <span class="search-symbol">⌕</span>
+        <div class="search" style="margin-bottom:12px">
+          <span class="search-symbol" aria-hidden="true"><span data-ui-icon="search"></span></span>
           <input id="logo-search" aria-label="ค้นหาโลโก้" type="search" placeholder="ค้นหา เช่น Google, Notion, OpenAI..." autocomplete="off">
-        </label>
+        <button class="search-clear" type="button" data-clear-search="logo-search" aria-label="ล้างคำค้นหา" aria-controls="logo-search" hidden><span data-ui-icon="x"></span></button></div>
         <div class="logo-results" id="logo-results"></div>
       </div>
     </section>
@@ -2312,7 +2313,7 @@
           <h2 id="settings-title">การตั้งค่า</h2>
           <p>ปรับแต่งธีม ภาษา และรูปแบบการแสดงผล</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><span data-ui-icon="x"></span></button>
       </header>
 
       <div class="modal-body">
@@ -2356,7 +2357,7 @@
           <h2 id="help-title">ช่วยเหลือและเกี่ยวกับ</h2>
           <p>ข้อมูลและคำตอบที่พบบ่อย</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><span data-ui-icon="x"></span></button>
       </header>
 
       <div class="modal-body">
@@ -2379,8 +2380,8 @@
           </div>
         </div>
         <div class="policy-links" aria-label="เอกสารนโยบาย">
-          <a class="btn btn-ghost" href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="help-privacy-label">นโยบายความเป็นส่วนตัว</span> ↗</a>
-          <a class="btn btn-ghost" href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="help-terms-label">ข้อกำหนดการใช้บริการ</span> ↗</a>
+          <a class="btn btn-ghost" href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="help-privacy-label">นโยบายความเป็นส่วนตัว</span><span data-ui-icon="external-link"></span></a>
+          <a class="btn btn-ghost" href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="help-terms-label">ข้อกำหนดการใช้บริการ</span><span data-ui-icon="external-link"></span></a>
         </div>
       </div>
     </section>
@@ -2394,21 +2395,21 @@
           <h2 id="command-title">Command Palette</h2>
           <p>ค้นหาแอปหรือเรียกใช้คำสั่งอย่างรวดเร็ว</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด">×</button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><span data-ui-icon="x"></span></button>
       </header>
 
       <div class="modal-body">
-        <label class="search" style="margin-bottom:12px">
-          <span class="search-symbol">⌕</span>
+        <div class="search" style="margin-bottom:12px">
+          <span class="search-symbol" aria-hidden="true"><span data-ui-icon="search"></span></span>
           <input id="command-search" aria-label="ค้นหาแอปหรือคำสั่ง" type="search" placeholder="พิมพ์ชื่อแอปหรือคำสั่ง..." autocomplete="off">
-        </label>
+        <button class="search-clear" type="button" data-clear-search="command-search" aria-label="ล้างคำค้นหา" aria-controls="command-search" hidden><span data-ui-icon="x"></span></button></div>
         <div class="command-results" id="command-results"></div>
       </div>
     </section>
   </div>
 
   <div class="toast" id="toast" role="status" aria-live="polite">
-    <span class="toast-symbol" id="toast-symbol">●</span>
+    <span class="toast-symbol" id="toast-symbol"><span data-ui-icon="info"></span></span>
     <span class="toast-message" id="toast-message"></span>
   </div>
 
@@ -2506,7 +2507,7 @@
         logosLoaded: false,
         busy: false,
         lang: "th",
-        theme: "auto",
+        theme: "dark",
         view: "grid",
         pinned: new Set(),
         modalStack: [],
@@ -2520,6 +2521,12 @@
       };
 
       const t = key => text[state.lang]?.[key] || text.th[key] || key;
+
+      const UI_ICON_NAMES = new Set(/* BUILD_ICON_NAMES */ []);
+      function uiIcon(name) {
+        if (!UI_ICON_NAMES.has(name)) name = "shapes";
+        return `<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-${name}"></use></svg>`;
+      }
 
       function escapeHtml(value) {
         return String(value ?? "").replace(/[&<>"'`]/g, character => ({
@@ -2592,9 +2599,7 @@
         clearTimeout(state.toastTimer);
 
         $("toast-message").textContent = message;
-        $("toast-symbol").textContent =
-          type === "success" ? "✓" :
-          type === "error" ? "!" : "●";
+        $("toast-symbol").innerHTML = uiIcon(type === "success" ? "check" : type === "error" ? "circle-alert" : "info");
 
         $("toast").className = `toast ${type} show`;
 
@@ -2685,7 +2690,7 @@
       function loadPreferences() {
         try {
           const saved = JSON.parse(localStorage.getItem(PREFS_KEY) || "{}");
-          state.theme = ["light", "dark", "auto"].includes(saved.theme) ? saved.theme : "auto";
+          state.theme = ["light", "dark", "auto"].includes(saved.theme) ? saved.theme : "dark";
           state.lang = saved.lang === "en" ? "en" : "th";
           state.view = ["grid", "list", "compact"].includes(saved.view) ? saved.view : "grid";
         } catch {}
@@ -2711,7 +2716,7 @@
         const applied = state.theme === "auto" ? (systemDark ? "dark" : "light") : state.theme;
 
         document.documentElement.dataset.theme = applied;
-        $("theme-color-meta").content = applied === "dark" ? "#0e1828" : "#f2f7fd";
+        $("theme-color-meta").content = applied === "dark" ? "#14181d" : "#f1f2f4";
 
         document.querySelectorAll("[data-theme-value]").forEach(button => {
           button.classList.toggle("active", button.dataset.themeValue === state.theme);
@@ -2770,7 +2775,7 @@
 
       function avatar(name) {
         const letter = escapeHtml(Array.from(String(name || "U"))[0].toUpperCase());
-        return "data:image/svg+xml," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" rx="32" fill="#1a2c45"/><text x="32" y="43" text-anchor="middle" font-family="sans-serif" font-size="32" fill="#edf5ff">${letter}</text></svg>`);
+        return "data:image/svg+xml," + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" rx="32" fill="#20262d"/><text x="32" y="43" text-anchor="middle" font-family="sans-serif" font-size="32" fill="#eceef1">${letter}</text></svg>`);
       }
 
       function isAdmin() {
@@ -2801,6 +2806,7 @@
         $("user-chip").classList.toggle("visible", signedIn);
         $("admin-nav").hidden = !isAdmin();
         $("auth-label").textContent = signedIn ? t("account") : t("login");
+        $("auth-icon").innerHTML = uiIcon(signedIn ? "user-round" : "log-in");
         $("auth-btn").setAttribute("aria-label", signedIn ? t("account") : t("login"));
 
         if (!signedIn) {
@@ -3092,7 +3098,7 @@
                 aria-label="รายการโปรด"
                 aria-pressed="${pinned}"
                 title="รายการโปรด"
-              >${pinned ? "★" : "☆"}</button>
+              >${uiIcon("star")}</button>
               <a
                 class="card-action"
                 href="${escapeHtml(url)}"
@@ -3100,7 +3106,7 @@
                 rel="noopener noreferrer"
                 aria-label="เปิดแอปในแท็บใหม่"
                 title="เปิดในแท็บใหม่"
-              >↗</a>
+              >${uiIcon("external-link")}</a>
             </div>
 
             <a class="app-card-body" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">
@@ -3153,7 +3159,7 @@
         if (!filtered.length) {
           root.innerHTML = `
             <div class="state-box">
-              <span class="state-icon">${query ? "⌕" : "◇"}</span>
+              <span class="state-icon">${uiIcon(query ? "search" : "shapes")}</span>
               <strong>${escapeHtml(query ? t("noResults") : t("noApps"))}</strong>
               <p>${query ? "ลองเปลี่ยนคำค้นหาหรือเลือกกลุ่มอื่น" : "เมื่อมีข้อมูล รายการแอปจะแสดงบริเวณนี้"}</p>
             </div>
@@ -3208,7 +3214,7 @@
         $("app-count").textContent = "0";
         $("applications").innerHTML = `
           <div class="state-box">
-            <span class="state-icon">!</span>
+            <span class="state-icon">${uiIcon("circle-alert")}</span>
             <strong>โหลดข้อมูลไม่สำเร็จ</strong>
             <p>${escapeHtml(message)}</p>
             <button class="btn btn-ghost" id="retry-btn" type="button" style="margin-top:14px">ลองใหม่</button>
@@ -3416,11 +3422,13 @@
 
       function refreshIconPreview() {
         const preview = $("icon-preview");
-        const iconHtmlCode = getIconHtml(state.selectedIcon, "Preview");
+        const iconHtmlCode = state.selectedIcon ? getIconHtml(state.selectedIcon, "Preview") : uiIcon("shapes");
 
         preview.innerHTML = iconHtmlCode;
         $("icon-name").textContent = state.selectedIconName || "ยังไม่ได้เลือกไอคอน";
         $("icon-value").textContent = state.selectedIcon || "—";
+        $("icon-name").title = state.selectedIconName || "ยังไม่ได้เลือกไอคอน";
+        $("icon-value").title = state.selectedIcon || "—";
       }
 
       function useManualIcon() {
@@ -3461,10 +3469,10 @@
               </div>
 
               <div class="admin-item-actions">
-                <button class="small-action" type="button" data-admin-action="up" data-row="${Number(app.rowIdx) || 0}" ${index === 0 ? "disabled" : ""} title="ขึ้น">↑</button>
-                <button class="small-action" type="button" data-admin-action="down" data-row="${Number(app.rowIdx) || 0}" ${index === state.applications.length - 1 ? "disabled" : ""} title="ลง">↓</button>
-                <button class="small-action" type="button" data-admin-action="edit" data-row="${Number(app.rowIdx) || 0}" title="แก้ไข">✎</button>
-                <button class="small-action danger" type="button" data-admin-action="delete" data-row="${Number(app.rowIdx) || 0}" title="ลบ">×</button>
+                <button class="small-action" type="button" data-admin-action="up" data-row="${Number(app.rowIdx) || 0}" ${index === 0 ? "disabled" : ""} title="ขึ้น">${uiIcon("arrow-up")}</button>
+                <button class="small-action" type="button" data-admin-action="down" data-row="${Number(app.rowIdx) || 0}" ${index === state.applications.length - 1 ? "disabled" : ""} title="ลง">${uiIcon("arrow-down")}</button>
+                <button class="small-action" type="button" data-admin-action="edit" data-row="${Number(app.rowIdx) || 0}" title="แก้ไข">${uiIcon("pencil")}</button>
+                <button class="small-action danger" type="button" data-admin-action="delete" data-row="${Number(app.rowIdx) || 0}" title="ลบ">${uiIcon("trash")}</button>
               </div>
             </div>
           `;
@@ -3501,7 +3509,7 @@
               </div>
               <div class="admin-user-controls">
                 <input class="admin-role" type="text" maxlength="50" value="${escapeHtml(user.role || "public")}" aria-label="Role">
-                <button class="small-action" type="button" data-save-user="${escapeHtml(email)}" title="บันทึก">✓</button>
+                <button class="small-action" type="button" data-save-user="${escapeHtml(email)}" title="บันทึก">${uiIcon("check")}</button>
               </div>
             </div>
           `;
@@ -3629,7 +3637,8 @@
         }
 
         button.disabled = true;
-        button.textContent = "…";
+        button.innerHTML = uiIcon("loader-circle");
+        button.classList.add("is-loading");
 
         try {
           await request("updateRole", {
@@ -3644,7 +3653,8 @@
           showToast(error.message, "error");
         } finally {
           button.disabled = false;
-          button.textContent = "✓";
+          button.innerHTML = uiIcon("check");
+          button.classList.remove("is-loading");
         }
       }
 
@@ -3693,7 +3703,7 @@
             ...(Array.isArray(item.aliases) ? item.aliases : [])
           ].filter(Boolean).join(" ").toLowerCase();
 
-          return !query || searchable.includes(query);
+          return !!svgUrl(String(item.slug || item.name || "").trim()) && (!query || searchable.includes(query));
         }).slice(0, 120);
 
         $("logo-results").innerHTML = matches.length
@@ -3702,8 +3712,8 @@
               const title = String(item.title || item.name || slug);
 
               return `
-                <button class="logo-result" type="button" data-logo="${escapeHtml(slug)}" data-logo-title="${escapeHtml(title)}">
-                  <img src="${escapeHtml(svgUrl(slug))}" alt="" loading="lazy" referrerpolicy="no-referrer">
+                <button class="logo-result" type="button" data-logo="${escapeHtml(slug)}" data-logo-title="${escapeHtml(title)}" title="${escapeHtml(title)}" aria-pressed="${state.selectedIcon === slug}">
+                  <span class="logo-preview"><img src="${escapeHtml(svgUrl(slug))}" alt="" width="28" height="28" loading="lazy" referrerpolicy="no-referrer"></span>
                   <span>${escapeHtml(title)}</span>
                 </button>
               `;
@@ -3732,7 +3742,7 @@
           .map(app => ({
             title: app.name || "Untitled",
             subtitle: app.description || app.group || "",
-            hint: "↗",
+            hint: "external-link",
             run: () => window.open(safeUrl(app.url), "_blank", "noopener,noreferrer")
           }));
 
@@ -3740,19 +3750,19 @@
           {
             title: state.user ? "เปิดบัญชี" : "เข้าสู่ระบบ",
             subtitle: "จัดการบัญชีผู้ใช้",
-            hint: "●",
+            hint: "user-round",
             run: () => state.user ? openModal("account-modal") : openLogin()
           },
           {
             title: "การตั้งค่า",
             subtitle: "ธีม ภาษา และการแสดงผล",
-            hint: "⚙",
+            hint: "settings-2",
             run: () => openModal("settings-modal")
           },
           {
             title: "รีเฟรชข้อมูล",
             subtitle: "โหลดข้อมูลล่าสุดจากเซิร์ฟเวอร์",
-            hint: "↻",
+            hint: "rotate-cw",
             run: () => refreshPortal()
           }
         ].filter(item =>
@@ -3779,13 +3789,14 @@
               <strong>${escapeHtml(item.title)}</strong>
               <small>${escapeHtml(item.subtitle)}</small>
             </span>
-            <span>${escapeHtml(item.hint)}</span>
+            <span>${uiIcon(item.hint)}</span>
           </button>
         `).join("");
       }
 
       function openCommandPalette() {
         $("command-search").value = "";
+        document.querySelector('[data-clear-search="command-search"]').hidden = true;
         buildCommandItems("");
         openModal("command-modal");
         setTimeout(() => $("command-search").focus(), 80);
@@ -4011,6 +4022,15 @@
       $("group-filter").addEventListener("change", renderApplications);
       $("user-search").addEventListener("input", debounce(renderAdminUsers, 180));
       $("logo-search").addEventListener("input", debounce(renderLogos, 160));
+      document.querySelectorAll("[data-clear-search]").forEach(button => {
+        const input = $(button.dataset.clearSearch);
+        input.addEventListener("input", () => { button.hidden = !input.value; });
+        button.addEventListener("click", () => {
+          input.value = "";
+          input.dispatchEvent(new Event("input", {bubbles:true}));
+          input.focus();
+        });
+      });
       $("command-search").addEventListener("input", event => buildCommandItems(event.target.value));
 
       document.querySelectorAll("button[data-view]").forEach(button => {
@@ -4047,11 +4067,11 @@
         const image = event.target;
 
         if (image.closest(".app-icon,.admin-item-icon,.selected-icon")) {
-          image.parentElement.innerHTML = '<span class="fallback-icon">◇</span>';
+          image.parentElement.innerHTML = uiIcon("shapes");
         } else if (image.classList.contains("admin-user-avatar") || ["user-avatar","account-avatar"].includes(image.id)) {
           if (!image.dataset.fallback) { image.dataset.fallback = "true"; image.src = avatar("U"); }
         } else if (image.closest(".logo-result")) {
-          image.style.visibility = "hidden";
+          image.outerHTML = uiIcon("shapes");
         }
       }, true);
 
@@ -4074,14 +4094,15 @@
         $("marquee-section").classList.toggle("user-paused", marqueePaused);
         $("marquee-toggle").setAttribute("aria-pressed", String(marqueePaused));
         $("marquee-toggle").setAttribute("aria-label", marqueePaused ? "เล่นแถบลิงก์" : "หยุดแถบลิงก์");
-        $("marquee-toggle").textContent = marqueePaused ? "▶" : "Ⅱ";
+        $("marquee-toggle").innerHTML = uiIcon(marqueePaused ? "play" : "pause");
       });
       const video = $("hero-video"), videoButton = $("video-toggle");
       const motionPreference = matchMedia("(prefers-reduced-motion:reduce)");
       let videoWanted = !motionPreference.matches, heroInView = true, videoReady = false, videoTask = null, videoUpdatePending = false;
       function updateVideoLabel() {
         videoButton.setAttribute("aria-pressed", String(videoWanted));
-        videoButton.textContent = videoWanted ? (state.lang === "en" ? "Ⅱ Pause background" : "Ⅱ หยุดพื้นหลัง") : (state.lang === "en" ? "▶ Play background" : "▶ เล่นพื้นหลัง");
+        const label = videoWanted ? (state.lang === "en" ? "Pause background" : "หยุดพื้นหลัง") : (state.lang === "en" ? "Play background" : "เล่นพื้นหลัง");
+        videoButton.innerHTML = uiIcon(videoWanted ? "pause" : "play") + `<span>${label}</span>`;
       }
       function shouldPlayVideo() {
         return videoWanted && videoReady && heroInView && !document.hidden && document.documentElement.dataset.maintenance !== "active";
