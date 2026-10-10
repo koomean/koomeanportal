@@ -140,7 +140,7 @@ textarea.field{height:auto;min-height:112px;max-height:45dvh}
 .toolbar{padding:10px;border:1px solid var(--line);border-radius:18px;background:var(--panel)}
 .search input,.filter,.refresh-btn,.view-switcher{border-radius:11px;background:var(--bg)}
 .search input{min-height:44px}
-.filter,.refresh-btn,.view-switcher{min-height:44px}
+.filter,.refresh-btn,.view-switcher{height:44px;min-height:44px}
 .view-btn.active{background:var(--panel-2);color:var(--accent)}
 .stats{padding-inline:4px;gap:12px}
 .group-head{margin-bottom:12px}

@@ -7,7 +7,7 @@ Keep the empty rail's animation disabled while `data-loading` is present. Insert
 Validation:
 
 - A held bootstrap response failed the new empty-track guard before the fix and passed afterward.
-- `npm run test:webkit`: 24 checks, including iPad portrait/landscape and iPhone startup without a tap, delayed data, saved pause/play across reload, touch focus, reduced motion and empty links.
+- `npm run test:webkit`: 27 checks, including iPad portrait/landscape and iPhone startup without a tap, delayed data, saved pause/play across reload, touch focus, reduced motion, empty links and equal toolbar control heights.
 - `npm run test:browser`: 86 existing Chrome checks.
 - `npm test`: 5 security checks; Portal domain/build guard passes.
 - Native iPadOS 27.0 simulator (Xcode, iPad Pro 11 M5): capture pixels without a debugger, JS animation inspection or interaction. Delayed baseline gives 0 changed rail pixels; fixed built source gives 43,922 changed pixels between captures 1.5 seconds apart. Removing masks, promoting layers, removing the wrapper transform or removing the initial time seek individually did not fix the delayed baseline.
