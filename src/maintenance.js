@@ -2,24 +2,37 @@
   const overlay = document.getElementById('global-maintenance-overlay');
   if (!overlay) return;
   const api = 'https://koomean-proxy.meanchannel52.workers.dev';
-  const english = (navigator.languages?.[0] || navigator.language || 'th').toLowerCase().startsWith('en');
+  function selectedLanguage() {
+    try {
+      const saved = JSON.parse(localStorage.getItem('koomean_portal_prefs_v3') || '{}');
+      if (['th','en'].includes(saved?.lang)) return saved.lang;
+    } catch {}
+    return document.documentElement.lang === 'en' ? 'en' : 'th';
+  }
+  let english = selectedLanguage() === 'en';
   const app = overlay.dataset.app;
-  const fallback = english ? overlay.dataset.noteEn : overlay.dataset.noteTh;
-  const copy = english ? {
+  const translations = {en: {
     title: 'We’ll be back soon', state: 'Maintenance in progress', label: 'Back online in',
     foot: 'This page will return automatically when the service is available again.',
     refresh: 'Check again', waiting: 'Checking whether the service is ready…',
     offline: 'Unable to connect right now. We’ll try again automatically.', thanks: 'Thank you for your patience', days: 'days'
-  } : {
+  }, th: {
     title: 'เราจะกลับมาเร็ว ๆ นี้', state: 'กำลังดูแลระบบ', label: 'เปิดให้บริการอีกครั้งใน',
     foot: 'หน้านี้จะกลับมาใช้งานได้โดยอัตโนมัติเมื่อระบบพร้อม',
     refresh: 'ตรวจสอบอีกครั้ง', waiting: 'กำลังตรวจสอบการเปิดระบบ…',
     offline: 'ยังเชื่อมต่อไม่ได้ ระบบจะลองตรวจสอบอีกครั้งอัตโนมัติ', thanks: 'ขอบคุณที่รอพบกันอีกครั้ง', days: 'วัน'
-  };
+  }};
+  let copy = translations[english ? 'en' : 'th'];
   const node = key => overlay.querySelector('[data-maintenance="'+key+'"]');
-  for (const key of ['title','state','label','foot','refresh','thanks']) node(key).textContent = copy[key];
-  overlay.setAttribute('lang', english ? 'en' : 'th');
+  function applyLanguage(language) {
+    english = language === 'en';
+    copy = translations[english ? 'en' : 'th'];
+    for (const key of ['title','state','label','foot','refresh','thanks']) node(key).textContent = copy[key];
+    overlay.setAttribute('lang', english ? 'en' : 'th');
+    if (lastState) show(lastState);
+  }
   let active = false, deadline = 0, offset = 0, timer = 0, ticker = 0, busy = false, nextPoll = 0, limitedUntil = 0;
+  let lastState = null;
   const now = () => Date.now() + offset;
   function tick() {
     if (!active) return;
@@ -31,9 +44,10 @@
     node('foot').textContent = deadline && !total ? copy.waiting : copy.foot;
   }
   function show(state) {
+    lastState = state;
     deadline = Number(state.reopenAt) || 0;
     offset = Number.isFinite(state.serverTime) ? state.serverTime-Date.now() : 0;
-    node('note').textContent = state.note || fallback || app;
+    node('note').textContent = state.note || (english ? overlay.dataset.noteEn : overlay.dataset.noteTh) || app;
     node('deadline').textContent = deadline ? new Intl.DateTimeFormat(english?'en-GB':'th-TH',{dateStyle:'long',timeStyle:'short'}).format(deadline) : '';
     if (!active) {
       active = true; overlay.hidden = false;
@@ -81,5 +95,7 @@
   });
   window.addEventListener('offline',()=>clearTimeout(timer));
   window.addEventListener('online',()=>poll());
+  window.addEventListener('koo-language-change',event=>applyLanguage(event.detail));
+  applyLanguage(selectedLanguage());
   poll();
 })();

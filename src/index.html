@@ -7,7 +7,7 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Koo Mean Portal</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <meta name="description" content="ศูนย์รวมแอปพลิเคชันและเครื่องมือ Koo Mean เข้าถึงบริการและจัดการบัญชีของคุณได้ในที่เดียว">
+  <meta name="description" content="ศูนย์รวมแอปพลิเคชันและเครื่องมือ Koo Mean เข้าถึงบริการและจัดการบัญชีของคุณได้ในที่เดียว" data-i18n-content="pageDescription">
   <link rel="canonical" href="https://koomean.com/">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1968,7 +1968,7 @@
 
 <body>
   <!-- BUILD_ICON_SPRITE -->
-  <a class="skip-link" href="#main-content">ข้ามไปยังรายการแอป</a>
+  <a class="skip-link" href="#main-content" data-i18n="skipApps">ข้ามไปยังรายการแอป</a>
 
 <div id="global-maintenance-overlay" class="km-maintenance" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="global-maintenance-title" aria-describedby="global-maintenance-note" data-app="Koo Mean Portal" data-note-th="เรากำลังดูแลพื้นที่รวมแอปของคุณ เพื่อให้กลับมาใช้งานได้อย่างราบรื่น" data-note-en="We’re looking after your app hub. Your apps will be available again soon.">
   <div class="maintenance-shell">
@@ -1998,26 +1998,26 @@
         </a>
 
         <div class="header-actions">
-          <button class="icon-button" id="command-btn" aria-label="เปิด Command Palette" type="button" title="Command Palette"><span data-ui-icon="command"></span></button>
-          <button class="icon-button" id="settings-btn" aria-label="การตั้งค่า" type="button" title="การตั้งค่า"><span data-ui-icon="settings-2"></span></button>
+          <button class="icon-button" id="command-btn" aria-label="เปิด Command Palette" type="button" title="Command Palette" data-i18n-aria-label="openCommands"><span data-ui-icon="command"></span></button>
+          <button class="icon-button" id="settings-btn" aria-label="การตั้งค่า" type="button" title="การตั้งค่า" data-i18n-aria-label="settings" data-i18n-title="settings"><span data-ui-icon="settings-2"></span></button>
 
           <button class="user-chip" id="user-chip" type="button">
             <img id="user-avatar" alt="">
             <span id="user-name"></span>
           </button>
 
-          <button class="btn btn-primary" id="auth-btn" aria-label="เข้าสู่ระบบ" type="button">
+          <button class="btn btn-primary" id="auth-btn" aria-label="เข้าสู่ระบบ" type="button" data-i18n-aria-label="login">
             <span id="auth-icon"><span data-ui-icon="log-in"></span></span>
-            <span class="auth-label" id="auth-label">เข้าสู่ระบบ</span>
+            <span class="auth-label" id="auth-label" data-i18n="login">เข้าสู่ระบบ</span>
           </button>
         </div>
       </div>
 
       <div class="topnav-wrap">
-        <nav class="topnav" aria-label="เมนูหลัก">
-          <a class="nav-link active" href="#home"><span data-ui-icon="house"></span><span>หน้าแรก</span></a>
-          <button class="nav-link" id="account-nav" type="button"><span data-ui-icon="user-round"></span><span>บัญชี</span></button>
-          <button class="nav-link" id="admin-nav" type="button" hidden><span data-ui-icon="layout-grid"></span><span>จัดการระบบ</span></button>
+        <nav class="topnav" aria-label="เมนูหลัก" data-i18n-aria-label="mainMenu">
+          <a class="nav-link active" href="#home"><span data-ui-icon="house"></span><span data-i18n="home">หน้าแรก</span></a>
+          <button class="nav-link" id="account-nav" type="button"><span data-ui-icon="user-round"></span><span data-i18n="account">บัญชี</span></button>
+          <button class="nav-link" id="admin-nav" type="button" hidden><span data-ui-icon="layout-grid"></span><span data-i18n="admin">จัดการระบบ</span></button>
         </nav>
       </div>
     </div>
@@ -2051,25 +2051,25 @@
       </div>
     </section>
 
-    <section aria-label="รายการแอปพลิเคชัน">
+    <section aria-label="รายการแอปพลิเคชัน" data-i18n-aria-label="appCollection">
       <div class="toolbar">
         <div class="search">
           <span class="search-symbol" aria-hidden="true"><span data-ui-icon="search"></span></span>
-          <input id="app-search" aria-label="ค้นหาแอปพลิเคชัน" type="search" placeholder="ค้นหาแอปพลิเคชัน..." autocomplete="off">
+          <input id="app-search" aria-label="ค้นหาแอปพลิเคชัน" type="search" placeholder="ค้นหาแอปพลิเคชัน..." autocomplete="off" data-i18n-aria-label="searchApps" data-i18n-placeholder="searchAppsPlaceholder">
           <span class="search-kbd">/</span>
-        <button class="search-clear" type="button" data-clear-search="app-search" aria-label="ล้างคำค้นหา" aria-controls="app-search" hidden><span data-ui-icon="x"></span></button></div>
+        <button class="search-clear" type="button" data-clear-search="app-search" aria-label="ล้างคำค้นหา" aria-controls="app-search" hidden data-i18n-aria-label="clearSearch"><span data-ui-icon="x"></span></button></div>
 
-        <select class="filter" id="group-filter" aria-label="กรองตามกลุ่ม">
+        <select class="filter" id="group-filter" aria-label="กรองตามกลุ่ม" data-i18n-aria-label="filterGroups">
           <option value="all">ทุกกลุ่ม</option>
         </select>
 
-        <div class="view-switcher" aria-label="รูปแบบการแสดงผล">
-          <button class="view-btn active" type="button" data-view="grid" title="Grid"><span data-ui-icon="layout-grid"></span></button>
-          <button class="view-btn" type="button" data-view="list" title="List"><span data-ui-icon="list"></span></button>
-          <button class="view-btn" type="button" data-view="compact" title="Compact"><span data-ui-icon="grid-3x3"></span></button>
+        <div class="view-switcher" aria-label="รูปแบบการแสดงผล" data-i18n-aria-label="layout">
+          <button class="view-btn active" type="button" data-view="grid" title="Grid" data-i18n-title="grid"><span data-ui-icon="layout-grid"></span></button>
+          <button class="view-btn" type="button" data-view="list" title="List" data-i18n-title="list"><span data-ui-icon="list"></span></button>
+          <button class="view-btn" type="button" data-view="compact" title="Compact" data-i18n-title="compact"><span data-ui-icon="grid-3x3"></span></button>
         </div>
 
-        <button class="refresh-btn" id="refresh-btn" type="button" title="รีเฟรช"><span data-ui-icon="rotate-cw"></span></button>
+        <button class="refresh-btn" id="refresh-btn" type="button" title="รีเฟรช" data-i18n-title="refresh"><span data-ui-icon="rotate-cw"></span></button>
       </div>
 
       <div class="catalog-summary">
@@ -2082,7 +2082,7 @@
         <span id="updated-at"></span>
       </div>
       <button id="favorites-filter" class="favorites-filter" type="button" aria-pressed="false" aria-controls="applications">
-        <span data-ui-icon="star"></span><span id="favorites-label">รายการโปรด</span><span id="favorites-count" class="favorites-count">0</span>
+        <span data-ui-icon="star"></span><span id="favorites-label" data-i18n="favorites">รายการโปรด</span><span id="favorites-count" class="favorites-count">0</span>
       </button>
       </div>
 
@@ -2098,7 +2098,7 @@
 
     <footer class="footer">
       <span>Koo Mean Portal</span>
-      <span>ข้อมูลและสิทธิ์การเข้าถึงจัดการจากระบบส่วนกลาง · <button id="help-btn" type="button">ช่วยเหลือ</button></span>
+      <span><span data-i18n="footer">ข้อมูลและสิทธิ์การเข้าถึงจัดการจากระบบส่วนกลาง</span> · <button id="help-btn" type="button" data-i18n="help">ช่วยเหลือ</button></span>
     </footer>
   </main>
 
@@ -2107,20 +2107,20 @@
     <section class="modal">
       <header class="modal-head">
         <div class="modal-title">
-          <h2 id="login-title">เข้าสู่ระบบ</h2>
-          <p>ใช้ Google Account เพื่อดูแอปที่คุณมีสิทธิ์ใช้งาน</p>
+          <h2 id="login-title" data-i18n="login">เข้าสู่ระบบ</h2>
+          <p data-i18n="loginDescription">ใช้ Google Account เพื่อดูแอปที่คุณมีสิทธิ์ใช้งาน</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><span data-ui-icon="x"></span></button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด" data-i18n-aria-label="close"><span data-ui-icon="x"></span></button>
       </header>
 
       <div class="modal-body">
         <div id="google-button" style="min-height:48px;display:flex;justify-content:center;align-items:center"></div>
         <div class="help-item" style="margin-top:16px">
-          <p>ระบบใช้ Token ที่ตรวจสอบโดยเซิร์ฟเวอร์ และไม่มีการจัดเก็บรหัสผ่านของ Google ภายในหน้าเว็บนี้</p>
+          <p data-i18n="loginSecurity">ระบบใช้ Token ที่ตรวจสอบโดยเซิร์ฟเวอร์ และไม่มีการจัดเก็บรหัสผ่านของ Google ภายในหน้าเว็บนี้</p>
         </div>
-        <div class="policy-links" aria-label="เอกสารนโยบาย">
-          <a class="btn btn-ghost" href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="login-privacy-label">นโยบายความเป็นส่วนตัว</span><span data-ui-icon="external-link"></span></a>
-          <a class="btn btn-ghost" href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="login-terms-label">ข้อกำหนดการใช้บริการ</span><span data-ui-icon="external-link"></span></a>
+        <div class="policy-links" aria-label="เอกสารนโยบาย" data-i18n-aria-label="policyDocuments">
+          <a class="btn btn-ghost" href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="login-privacy-label" data-i18n="privacy">นโยบายความเป็นส่วนตัว</span><span data-ui-icon="external-link"></span></a>
+          <a class="btn btn-ghost" href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="login-terms-label" data-i18n="terms">ข้อกำหนดการใช้บริการ</span><span data-ui-icon="external-link"></span></a>
         </div>
       </div>
     </section>
@@ -2131,24 +2131,24 @@
     <section class="modal">
       <header class="modal-head">
         <div class="modal-title">
-          <h2 id="register-title">ขอลงทะเบียน</h2>
-          <p>บัญชีนี้ยังไม่อยู่ในระบบ กรุณาส่งข้อมูลเพิ่มเติมให้ผู้ดูแล</p>
+          <h2 id="register-title" data-i18n="registerTitle">ขอลงทะเบียน</h2>
+          <p data-i18n="registerDescription">บัญชีนี้ยังไม่อยู่ในระบบ กรุณาส่งข้อมูลเพิ่มเติมให้ผู้ดูแล</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><span data-ui-icon="x"></span></button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด" data-i18n-aria-label="close"><span data-ui-icon="x"></span></button>
       </header>
 
       <div class="modal-body">
-        <label class="field-label" for="register-note">ข้อมูลเพิ่มเติม (ไม่บังคับ)</label>
-        <textarea class="field" id="register-note" maxlength="500" placeholder="เช่น ทีม หน้าที่ หรือแอปที่ต้องการใช้งาน"></textarea>
+        <label class="field-label" for="register-note" data-i18n="registerNote">ข้อมูลเพิ่มเติม (ไม่บังคับ)</label>
+        <textarea class="field" id="register-note" maxlength="500" placeholder="เช่น ทีม หน้าที่ หรือแอปที่ต้องการใช้งาน" data-i18n-placeholder="registerNotePlaceholder"></textarea>
         <label class="check-row register-consent" for="register-terms-accepted">
           <input id="register-terms-accepted" type="checkbox" required>
-          <span><span id="register-consent-prefix">ฉันยอมรับ</span> <a href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="register-terms-label">ข้อกำหนดการใช้บริการ</span></a> <span id="register-consent-and">และรับทราบ</span> <a href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="register-privacy-label">นโยบายความเป็นส่วนตัว</span></a></span>
+          <span><span id="register-consent-prefix" data-i18n="consentPrefix">ฉันยอมรับ</span> <a href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="register-terms-label" data-i18n="terms">ข้อกำหนดการใช้บริการ</span></a> <span id="register-consent-and" data-i18n="consentAnd">และรับทราบ</span> <a href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="register-privacy-label" data-i18n="privacy">นโยบายความเป็นส่วนตัว</span></a></span>
         </label>
       </div>
 
       <footer class="modal-footer">
-        <button class="btn btn-ghost" type="button" data-close-modal>ยกเลิก</button>
-        <button class="btn btn-primary" id="register-btn" type="button" disabled>ส่งคำขอ</button>
+        <button class="btn btn-ghost" type="button" data-close-modal data-i18n="cancel">ยกเลิก</button>
+        <button class="btn btn-primary" id="register-btn" type="button" disabled data-i18n="sendRequest">ส่งคำขอ</button>
       </footer>
     </section>
   </div>
@@ -2158,10 +2158,10 @@
     <section class="modal medium">
       <header class="modal-head">
         <div class="modal-title">
-          <h2 id="account-title">บัญชีของคุณ</h2>
-          <p>จัดการข้อมูลบัญชีที่ใช้เชื่อมต่อกับ Portal</p>
+          <h2 id="account-title" data-i18n="accountTitle">บัญชีของคุณ</h2>
+          <p data-i18n="accountDescription">จัดการข้อมูลบัญชีที่ใช้เชื่อมต่อกับ Portal</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><span data-ui-icon="x"></span></button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด" data-i18n-aria-label="close"><span data-ui-icon="x"></span></button>
       </header>
 
       <div class="modal-body">
@@ -2175,17 +2175,17 @@
         </div>
 
         <section class="account-section">
-          <div class="section-title">ชื่อที่แสดง</div>
-          <p class="section-copy">ชื่อจะถูกบันทึกในบัญชีส่วนกลางและใช้ในระบบที่เชื่อมต่อกัน</p>
+          <div class="section-title" data-i18n="displayName">ชื่อที่แสดง</div>
+          <p class="section-copy" data-i18n="displayNameDescription">ชื่อจะถูกบันทึกในบัญชีส่วนกลางและใช้ในระบบที่เชื่อมต่อกัน</p>
           <div class="inline-form">
-            <input class="field" id="new-name" aria-label="ชื่อที่แสดง" type="text" maxlength="50" autocomplete="name" placeholder="กรอกชื่อที่ต้องการแสดง">
-            <button class="btn btn-primary" id="save-name-btn" type="button">บันทึก</button>
+            <input class="field" id="new-name" aria-label="ชื่อที่แสดง" type="text" maxlength="50" autocomplete="name" placeholder="กรอกชื่อที่ต้องการแสดง" data-i18n-aria-label="displayName" data-i18n-placeholder="displayNamePlaceholder">
+            <button class="btn btn-primary" id="save-name-btn" type="button" data-i18n="save">บันทึก</button>
           </div>
         </section>
       </div>
 
       <footer class="modal-footer">
-        <button class="btn btn-ghost" id="logout-btn" type="button">ออกจากระบบ</button>
+        <button class="btn btn-ghost" id="logout-btn" type="button" data-i18n="signOut">ออกจากระบบ</button>
       </footer>
     </section>
   </div>
@@ -2195,28 +2195,28 @@
     <section class="modal wide">
       <header class="modal-head">
         <div class="modal-title">
-          <h2 id="admin-title">จัดการระบบ</h2>
-          <p id="admin-subtitle">เพิ่ม แก้ไข และจัดลำดับแอปพลิเคชัน</p>
+          <h2 id="admin-title" data-i18n="admin">จัดการระบบ</h2>
+          <p id="admin-subtitle" data-i18n="adminAppsDescription">เพิ่ม แก้ไข และจัดลำดับแอปพลิเคชัน</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><span data-ui-icon="x"></span></button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด" data-i18n-aria-label="close"><span data-ui-icon="x"></span></button>
       </header>
 
       <div class="modal-body">
         <div class="admin-tabs" role="tablist">
-          <button class="admin-tab active" id="apps-tab-btn" type="button"><span data-ui-icon="layout-grid"></span><span>แอปพลิเคชัน</span></button>
-          <button class="admin-tab" id="users-tab-btn" type="button"><span data-ui-icon="users-round"></span><span>ผู้ใช้งาน</span></button>
+          <button class="admin-tab active" id="apps-tab-btn" type="button"><span data-ui-icon="layout-grid"></span><span data-i18n="applications">แอปพลิเคชัน</span></button>
+          <button class="admin-tab" id="users-tab-btn" type="button"><span data-ui-icon="users-round"></span><span data-i18n="users">ผู้ใช้งาน</span></button>
         </div>
 
         <div id="apps-tab">
           <div class="admin-layout">
             <section class="panel">
               <div class="panel-title" id="admin-form-title">เพิ่มแอปพลิเคชัน</div>
-              <p class="panel-copy">ระบบจะตรวจสอบ URL ซ้ำและตรวจสอบรูปแบบข้อมูลก่อนบันทึก</p>
+              <p class="panel-copy" data-i18n="appValidation">ระบบจะตรวจสอบ URL ซ้ำและตรวจสอบรูปแบบข้อมูลก่อนบันทึก</p>
 
               <div class="form-grid">
                 <div>
-                  <label class="field-label" for="admin-name">ชื่อแอป</label>
-                  <input class="field" id="admin-name" maxlength="100" placeholder="เช่น Dashboard">
+                  <label class="field-label" for="admin-name" data-i18n="appName">ชื่อแอป</label>
+                  <input class="field" id="admin-name" maxlength="100" placeholder="เช่น Dashboard" data-i18n-placeholder="appNamePlaceholder">
                 </div>
 
                 <div>
@@ -2225,24 +2225,24 @@
                 </div>
 
                 <div class="full">
-                  <label class="field-label" for="admin-description">คำอธิบาย</label>
-                  <textarea class="field" id="admin-description" maxlength="300" placeholder="อธิบายสั้น ๆ"></textarea>
+                  <label class="field-label" for="admin-description" data-i18n="description">คำอธิบาย</label>
+                  <textarea class="field" id="admin-description" maxlength="300" placeholder="อธิบายสั้น ๆ" data-i18n-placeholder="descriptionPlaceholder"></textarea>
                 </div>
 
                 <div>
-                  <label class="field-label" for="admin-group">กลุ่ม / Role</label>
+                  <label class="field-label" for="admin-group" data-i18n="groupRole">กลุ่ม / Role</label>
                   <input class="field" id="admin-group" maxlength="50" value="public">
                 </div>
 
                 <div>
-                  <label class="field-label" for="admin-color">สี</label>
+                  <label class="field-label" for="admin-color" data-i18n="color">สี</label>
                   <input class="field" id="admin-color" maxlength="9" placeholder="#2563eb">
                 </div>
               </div>
 
               <label class="check-row">
                 <input id="admin-starred" type="checkbox">
-                <span>แนะนำแอปนี้</span>
+                <span data-i18n="featureApp">แนะนำแอปนี้</span>
               </label>
 
               <div class="icon-picker-row">
@@ -2251,23 +2251,23 @@
                   <strong id="icon-name">ยังไม่ได้เลือกไอคอน</strong>
                   <span id="icon-value">—</span>
                 </div>
-                <button class="btn btn-ghost" id="choose-logo-btn" type="button">เลือกโลโก้</button>
+                <button class="btn btn-ghost" id="choose-logo-btn" type="button" data-i18n="chooseLogo">เลือกโลโก้</button>
               </div>
 
               <div class="inline-form" style="margin-bottom:12px">
-                <input class="field" id="manual-icon" maxlength="50" placeholder="theSVG slug หรือ fab fa-facebook">
-                <button class="btn btn-ghost" id="use-icon-btn" type="button">ใช้ slug</button>
+                <input class="field" id="manual-icon" maxlength="50" placeholder="theSVG slug หรือ fab fa-facebook" data-i18n-placeholder="iconPlaceholder">
+                <button class="btn btn-ghost" id="use-icon-btn" type="button" data-i18n="useSlug">ใช้ slug</button>
               </div>
 
               <div class="admin-form-actions">
                 <button class="btn btn-primary" id="admin-submit-btn" type="button">เพิ่มแอป</button>
-                <button class="btn btn-ghost" id="admin-cancel-btn" type="button" hidden>ยกเลิกแก้ไข</button>
+                <button class="btn btn-ghost" id="admin-cancel-btn" type="button" hidden data-i18n="cancelEdit">ยกเลิกแก้ไข</button>
               </div>
             </section>
 
             <section class="panel">
-              <div class="panel-title">ลำดับแอป</div>
-              <p class="panel-copy">ใช้ปุ่มขึ้นลงเพื่อกำหนดลำดับ โดยปุ่มจะตัดบรรทัดอัตโนมัติเมื่อพื้นที่ไม่พอ</p>
+              <div class="panel-title" data-i18n="appOrder">ลำดับแอป</div>
+              <p class="panel-copy" data-i18n="appOrderDescription">ใช้ปุ่มขึ้นลงเพื่อกำหนดลำดับ โดยปุ่มจะตัดบรรทัดอัตโนมัติเมื่อพื้นที่ไม่พอ</p>
               <div class="admin-items" id="admin-items"></div>
             </section>
           </div>
@@ -2275,13 +2275,13 @@
 
         <div id="users-tab" hidden>
           <section class="panel">
-            <div class="panel-title">ผู้ใช้งานทั้งหมด</div>
-            <p class="panel-copy">ค้นหาและกำหนด Role เพื่อควบคุมสิทธิ์การเข้าถึง</p>
+            <div class="panel-title" data-i18n="allUsers">ผู้ใช้งานทั้งหมด</div>
+            <p class="panel-copy" data-i18n="userPermissionsDescription">ค้นหาและกำหนด Role เพื่อควบคุมสิทธิ์การเข้าถึง</p>
 
             <div class="search" style="margin-bottom:12px">
               <span class="search-symbol" aria-hidden="true"><span data-ui-icon="search"></span></span>
-              <input id="user-search" aria-label="ค้นหาผู้ใช้งาน" type="search" placeholder="ค้นหาชื่อหรืออีเมล..." autocomplete="off">
-            <button class="search-clear" type="button" data-clear-search="user-search" aria-label="ล้างคำค้นหา" aria-controls="user-search" hidden><span data-ui-icon="x"></span></button></div>
+              <input id="user-search" aria-label="ค้นหาผู้ใช้งาน" type="search" placeholder="ค้นหาชื่อหรืออีเมล..." autocomplete="off" data-i18n-aria-label="searchUsers" data-i18n-placeholder="searchUsersPlaceholder">
+            <button class="search-clear" type="button" data-clear-search="user-search" aria-label="ล้างคำค้นหา" aria-controls="user-search" hidden data-i18n-aria-label="clearSearch"><span data-ui-icon="x"></span></button></div>
 
             <div class="admin-users" id="admin-users"></div>
           </section>
@@ -2295,17 +2295,17 @@
     <section class="modal medium">
       <header class="modal-head">
         <div class="modal-title">
-          <h2 id="logo-title">เลือกโลโก้</h2>
-          <p>ค้นหาและเลือกโลโก้จากคลัง theSVG</p>
+          <h2 id="logo-title" data-i18n="chooseLogo">เลือกโลโก้</h2>
+          <p data-i18n="logoDescription">ค้นหาและเลือกโลโก้จากคลัง theSVG</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><span data-ui-icon="x"></span></button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด" data-i18n-aria-label="close"><span data-ui-icon="x"></span></button>
       </header>
 
       <div class="modal-body">
         <div class="search" style="margin-bottom:12px">
           <span class="search-symbol" aria-hidden="true"><span data-ui-icon="search"></span></span>
-          <input id="logo-search" aria-label="ค้นหาโลโก้" type="search" placeholder="ค้นหา เช่น Google, Notion, OpenAI..." autocomplete="off">
-        <button class="search-clear" type="button" data-clear-search="logo-search" aria-label="ล้างคำค้นหา" aria-controls="logo-search" hidden><span data-ui-icon="x"></span></button></div>
+          <input id="logo-search" aria-label="ค้นหาโลโก้" type="search" placeholder="ค้นหา เช่น Google, Notion, OpenAI..." autocomplete="off" data-i18n-aria-label="searchLogos" data-i18n-placeholder="searchLogosPlaceholder">
+        <button class="search-clear" type="button" data-clear-search="logo-search" aria-label="ล้างคำค้นหา" aria-controls="logo-search" hidden data-i18n-aria-label="clearSearch"><span data-ui-icon="x"></span></button></div>
         <div class="logo-results" id="logo-results"></div>
       </div>
     </section>
@@ -2316,36 +2316,36 @@
     <section class="modal medium">
       <header class="modal-head">
         <div class="modal-title">
-          <h2 id="settings-title">การตั้งค่า</h2>
-          <p>ปรับแต่งธีม ภาษา และรูปแบบการแสดงผล</p>
+          <h2 id="settings-title" data-i18n="settings">การตั้งค่า</h2>
+          <p data-i18n="settingsDescription">ปรับแต่งธีม ภาษา และรูปแบบการแสดงผล</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><span data-ui-icon="x"></span></button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด" data-i18n-aria-label="close"><span data-ui-icon="x"></span></button>
       </header>
 
       <div class="modal-body">
         <div class="settings-grid">
           <div class="settings-row">
-            <div><div class="settings-row-title">มุมมองแอป</div><div class="settings-row-desc">เปลี่ยนการจัดวางรายการแอป</div></div>
-            <div class="segment" aria-label="มุมมองแอป"><button type="button" data-view="grid">กริด</button><button type="button" data-view="list">รายการ</button><button type="button" data-view="compact">กระชับ</button></div>
+            <div><div class="settings-row-title" data-i18n="appView">มุมมองแอป</div><div class="settings-row-desc" data-i18n="appViewDescription">เปลี่ยนการจัดวางรายการแอป</div></div>
+            <div class="segment" aria-label="มุมมองแอป" data-i18n-aria-label="appView"><button type="button" data-view="grid" data-i18n="grid">กริด</button><button type="button" data-view="list" data-i18n="list">รายการ</button><button type="button" data-view="compact" data-i18n="compact">กระชับ</button></div>
           </div>
           <div class="settings-row">
             <div>
-              <div class="settings-row-title">ธีม</div>
-              <div class="settings-row-desc">เลือกธีมสว่าง มืด หรือปรับตามระบบ</div>
+              <div class="settings-row-title" data-i18n="theme">ธีม</div>
+              <div class="settings-row-desc" data-i18n="themeDescription">เลือกธีมสว่าง มืด หรือปรับตามระบบ</div>
             </div>
-            <div class="segment" id="theme-segment">
-              <button type="button" data-theme-value="light">สว่าง</button>
-              <button type="button" data-theme-value="dark">มืด</button>
-              <button type="button" data-theme-value="auto">อัตโนมัติ</button>
+            <div class="segment" id="theme-segment" aria-label="ธีม" data-i18n-aria-label="theme">
+              <button type="button" data-theme-value="light" data-i18n="light">สว่าง</button>
+              <button type="button" data-theme-value="dark" data-i18n="dark">มืด</button>
+              <button type="button" data-theme-value="auto" data-i18n="auto">อัตโนมัติ</button>
             </div>
           </div>
 
           <div class="settings-row">
             <div>
-              <div class="settings-row-title">ภาษา</div>
-              <div class="settings-row-desc">เปลี่ยนภาษาหลักของส่วนติดต่อ</div>
+              <div class="settings-row-title" data-i18n="language">ภาษา</div>
+              <div class="settings-row-desc" data-i18n="languageDescription">เปลี่ยนภาษาหลักของส่วนติดต่อ</div>
             </div>
-            <div class="segment" id="language-segment">
+            <div class="segment" id="language-segment" aria-label="ภาษา" data-i18n-aria-label="language">
               <button type="button" data-language-value="th">ไทย</button>
               <button type="button" data-language-value="en">English</button>
             </div>
@@ -2388,34 +2388,34 @@
     <section class="modal medium">
       <header class="modal-head">
         <div class="modal-title">
-          <h2 id="help-title">ช่วยเหลือและเกี่ยวกับ</h2>
-          <p>ข้อมูลและคำตอบที่พบบ่อย</p>
+          <h2 id="help-title" data-i18n="helpTitle">ช่วยเหลือและเกี่ยวกับ</h2>
+          <p data-i18n="helpDescription">ข้อมูลและคำตอบที่พบบ่อย</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><span data-ui-icon="x"></span></button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด" data-i18n-aria-label="close"><span data-ui-icon="x"></span></button>
       </header>
 
       <div class="modal-body">
         <div class="settings-grid">
           <div class="help-item">
-            <strong>Koo Mean Portal คืออะไร?</strong>
-            <p>ศูนย์รวมแอปพลิเคชันสำหรับผู้ใช้ที่ได้รับอนุญาต โดยจะแสดงเฉพาะรายการที่ตรงกับสิทธิ์ของบัญชี</p>
+            <strong data-i18n="helpWhatTitle">Koo Mean Portal คืออะไร?</strong>
+            <p data-i18n="helpWhat">ศูนย์รวมแอปพลิเคชันสำหรับผู้ใช้ที่ได้รับอนุญาต โดยจะแสดงเฉพาะรายการที่ตรงกับสิทธิ์ของบัญชี</p>
           </div>
           <div class="help-item">
-            <strong>เข้าสู่ระบบไม่ได้?</strong>
-            <p>ตรวจสอบบัญชี Google และสิทธิ์ของอีเมล หากยังไม่อยู่ในระบบ คุณสามารถส่งคำขอลงทะเบียนได้</p>
+            <strong data-i18n="helpLoginTitle">เข้าสู่ระบบไม่ได้?</strong>
+            <p data-i18n="helpLogin">ตรวจสอบบัญชี Google และสิทธิ์ของอีเมล หากยังไม่อยู่ในระบบ คุณสามารถส่งคำขอลงทะเบียนได้</p>
           </div>
           <div class="help-item">
-            <strong>ไม่เห็นแอปบางรายการ?</strong>
-            <p>การมองเห็นแอปขึ้นอยู่กับ Role และ Group ที่กำหนดให้บัญชีของคุณ</p>
+            <strong data-i18n="helpAppsTitle">ไม่เห็นแอปบางรายการ?</strong>
+            <p data-i18n="helpApps">การมองเห็นแอปขึ้นอยู่กับ Role และ Group ที่กำหนดให้บัญชีของคุณ</p>
           </div>
           <div class="help-item">
-            <strong>ปุ่มลัด</strong>
-            <p>กด / เพื่อค้นหา, R เพื่อรีเฟรช, Ctrl/⌘ + K เพื่อเปิด Command Palette และ Esc เพื่อปิดหน้าต่างล่าสุด</p>
+            <strong data-i18n="shortcuts">ปุ่มลัด</strong>
+            <p data-i18n="shortcutsDescription">กด / เพื่อค้นหา, R เพื่อรีเฟรช, Ctrl/⌘ + K เพื่อเปิด Command Palette และ Esc เพื่อปิดหน้าต่างล่าสุด</p>
           </div>
         </div>
-        <div class="policy-links" aria-label="เอกสารนโยบาย">
-          <a class="btn btn-ghost" href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="help-privacy-label">นโยบายความเป็นส่วนตัว</span><span data-ui-icon="external-link"></span></a>
-          <a class="btn btn-ghost" href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="help-terms-label">ข้อกำหนดการใช้บริการ</span><span data-ui-icon="external-link"></span></a>
+        <div class="policy-links" aria-label="เอกสารนโยบาย" data-i18n-aria-label="policyDocuments">
+          <a class="btn btn-ghost" href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="help-privacy-label" data-i18n="privacy">นโยบายความเป็นส่วนตัว</span><span data-ui-icon="external-link"></span></a>
+          <a class="btn btn-ghost" href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="help-terms-label" data-i18n="terms">ข้อกำหนดการใช้บริการ</span><span data-ui-icon="external-link"></span></a>
         </div>
       </div>
     </section>
@@ -2427,16 +2427,16 @@
       <header class="modal-head">
         <div class="modal-title">
           <h2 id="command-title">Command Palette</h2>
-          <p>ค้นหาแอปหรือเรียกใช้คำสั่งอย่างรวดเร็ว</p>
+          <p data-i18n="commandDescription">ค้นหาแอปหรือเรียกใช้คำสั่งอย่างรวดเร็ว</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><span data-ui-icon="x"></span></button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด" data-i18n-aria-label="close"><span data-ui-icon="x"></span></button>
       </header>
 
       <div class="modal-body">
         <div class="search" style="margin-bottom:12px">
           <span class="search-symbol" aria-hidden="true"><span data-ui-icon="search"></span></span>
-          <input id="command-search" aria-label="ค้นหาแอปหรือคำสั่ง" type="search" placeholder="พิมพ์ชื่อแอปหรือคำสั่ง..." autocomplete="off">
-        <button class="search-clear" type="button" data-clear-search="command-search" aria-label="ล้างคำค้นหา" aria-controls="command-search" hidden><span data-ui-icon="x"></span></button></div>
+          <input id="command-search" aria-label="ค้นหาแอปหรือคำสั่ง" type="search" placeholder="พิมพ์ชื่อแอปหรือคำสั่ง..." autocomplete="off" data-i18n-aria-label="searchCommands" data-i18n-placeholder="searchCommandsPlaceholder">
+        <button class="search-clear" type="button" data-clear-search="command-search" aria-label="ล้างคำค้นหา" aria-controls="command-search" hidden data-i18n-aria-label="clearSearch"><span data-ui-icon="x"></span></button></div>
         <div class="command-results" id="command-results"></div>
       </div>
     </section>
@@ -2503,6 +2503,8 @@
       let preferencesStatus = "settingsStorage";
 
       const $ = id => document.getElementById(id);
+
+      /* BUILD_I18N */
 
       const text = {
         th: {
@@ -2585,7 +2587,17 @@
         commandItems: []
       };
 
-      const t = key => text[state.lang]?.[key] || text.th[key] || key;
+      const t = key => text[state.lang]?.[key] || uiText[key]?.[state.lang === "en" ? 1 : 0] || text.th[key] || key;
+
+      function localizeMessage(message) {
+        const raw = String(message || "");
+        for (const [key, pair] of Object.entries(uiText)) if (pair.includes(raw)) return t(key);
+        for (const key of Object.keys(text.th)) if ([text.th[key], text.en[key]].includes(raw)) return t(key);
+        for (const prefix of [text.th.duplicateUrl, text.en.duplicateUrl]) if (raw.startsWith(prefix + ": ")) return t("duplicateUrl") + raw.slice(prefix.length);
+        for (const key of Object.keys(preferenceText.th)) if ([preferenceText.th[key], preferenceText.en[key]].includes(raw)) return prefCopy(key);
+        return raw;
+      }
+      let connectionMode = "connecting", connectionKey = "connecting", updatedAt = 0, loadError = null;
 
       const UI_ICON_NAMES = new Set(/* BUILD_ICON_NAMES */ []);
       function uiIcon(name) {
@@ -2663,7 +2675,7 @@
       function showToast(message, type = "info") {
         clearTimeout(state.toastTimer);
 
-        $("toast-message").textContent = message;
+        $("toast-message").textContent = localizeMessage(message);
         $("toast-symbol").innerHTML = uiIcon(type === "success" ? "check" : type === "error" ? "circle-alert" : "info");
 
         $("toast").className = `toast ${type} show`;
@@ -2673,12 +2685,14 @@
         }, 3300);
       }
 
-      function setStatus(mode, label) {
+      function setStatus(mode, key) {
+        connectionMode = mode;
+        connectionKey = key;
         const status = $("connection-status");
         status.classList.remove("connecting", "offline");
 
         if (mode) status.classList.add(mode);
-        $("status-text").textContent = label;
+        $("status-text").textContent = t(key);
       }
 
       function getFocusable(container) {
@@ -2805,6 +2819,15 @@
 
       function applyLanguage() {
         document.documentElement.lang = state.lang;
+        document.querySelectorAll("[data-i18n]").forEach(node => {
+          // Preserve the loading indicator of an in-flight form submission.
+          node.textContent = node.matches("button:disabled") && localizeMessage(node.textContent) === t("loading") ? t("loading") : t(node.dataset.i18n);
+        });
+        for (const attribute of ["aria-label", "placeholder", "title", "content"]) {
+          document.querySelectorAll(`[data-i18n-${attribute}]`).forEach(node => {
+            node.setAttribute(attribute, t(node.getAttribute(`data-i18n-${attribute}`)));
+          });
+        }
         document.querySelectorAll("[data-pref-copy]").forEach(node => { node.textContent = prefCopy(node.dataset.prefCopy); });
         $("preferences-status").textContent = prefCopy(preferencesStatus);
         $("auth-label").textContent = state.user ? t("account") : t("login");
@@ -2815,14 +2838,15 @@
           ? "Your everyday apps, links and tools, together in one place. Choose a service from the collection below."
           : "แอป ลิงก์ และเครื่องมือที่ใช้ประจำ รวมไว้ในที่เดียว เลือกเปิดบริการที่ต้องการจากรายการด้านล่าง";
         $("hero-contact").textContent = english ? "Contact us" : "ติดต่อเรา";
-        $("login-privacy-label").textContent = english ? "Privacy Policy" : "นโยบายความเป็นส่วนตัว";
-        $("login-terms-label").textContent = english ? "Terms of Service" : "ข้อกำหนดการใช้บริการ";
-        $("help-privacy-label").textContent = english ? "Privacy Policy" : "นโยบายความเป็นส่วนตัว";
-        $("help-terms-label").textContent = english ? "Terms of Service" : "ข้อกำหนดการใช้บริการ";
-        $("register-privacy-label").textContent = english ? "Privacy Policy" : "นโยบายความเป็นส่วนตัว";
-        $("register-terms-label").textContent = english ? "Terms of Service" : "ข้อกำหนดการใช้บริการ";
-        $("register-consent-prefix").textContent = english ? "I agree to the" : "ฉันยอมรับ";
-        $("register-consent-and").textContent = english ? "and acknowledge the" : "และรับทราบ";
+        $("auth-btn").setAttribute("aria-label", state.user ? t("account") : t("login"));
+        setStatus(connectionMode, connectionKey);
+        if (updatedAt) $("updated-at").textContent = new Date(updatedAt).toLocaleTimeString(state.lang === "th" ? "th-TH" : "en-US", {hour:"2-digit", minute:"2-digit"});
+        $("toast-message").textContent = localizeMessage($("toast-message").textContent);
+        renderWelcome();
+        $("admin-form-title").textContent = t(state.editingRow !== null ? "editApplication" : "addApplication");
+        if (!state.busy) $("admin-submit-btn").textContent = t(state.editingRow !== null ? "saveChanges" : "addApp");
+        $("admin-subtitle").textContent = t($("users-tab").hidden ? "adminAppsDescription" : "adminUsersDescription");
+        refreshIconPreview();
 
         document.querySelectorAll("[data-language-value]").forEach(button => {
           button.classList.toggle("active", button.dataset.languageValue === state.lang);
@@ -2830,7 +2854,14 @@
         });
 
         renderApplications();
+        if (loadError && !state.applications.length) renderError(loadError);
+        renderAdminItems();
+        renderAdminUsers();
+        if (state.logosLoaded) renderLogos();
+        if (state.modalStack.includes("command-modal")) buildCommandItems($("command-search").value);
+        if (state.modalStack.includes("login-modal")) openLogin();
         applyMotionPreferences();
+        window.dispatchEvent(new CustomEvent("koo-language-change", {detail:state.lang}));
       }
 
       function saveSession() { clearSession(); }
@@ -2864,7 +2895,7 @@
         return Boolean(state.user && state.verified && roles.includes("admin"));
       }
 
-      function applyUser() {
+      function renderWelcome() {
         const signedIn = Boolean(state.user);
 
         let firstName = "";
@@ -2876,9 +2907,15 @@
         const heroTitle = $("hero-title");
         if (heroTitle) {
           heroTitle.innerHTML = firstName
-            ? `Welcome ${escapeHtml(firstName)}<br />To Koo Mean Portal`
+            ? `${escapeHtml(t("welcome"))} ${escapeHtml(firstName)}<br />${escapeHtml(t("welcomePortal"))}`
             : `Koo Mean<br />Portal`;
         }
+      }
+
+      function applyUser() {
+        const signedIn = Boolean(state.user);
+        const firstName = Array.from(String(state.user?.name || state.user?.email?.split("@")[0] || "").split(" ")[0]).slice(0, 32).join("");
+        renderWelcome();
 
         $("user-chip").classList.toggle("visible", signedIn);
         $("admin-nav").hidden = !isAdmin();
@@ -2945,7 +2982,7 @@
           try {
             data = await response.json();
           } catch {
-            throw new Error("เซิร์ฟเวอร์ตอบกลับด้วยข้อมูลที่ไม่ถูกต้อง");
+            throw new Error(t("invalidResponse"));
           }
 
           if (epoch !== authEpoch) throw staleError();
@@ -3000,7 +3037,7 @@
         const sequence = ++portalSequence;
         if (userInitiated) cancelRetry(true);
 
-        setStatus("connecting", t("connecting"));
+        setStatus("connecting", "connecting");
         $("applications").setAttribute("aria-busy", "true");
 
         try {
@@ -3021,7 +3058,7 @@
             state.links = Array.isArray(data.links) ? data.links : [];
             renderApplications(); renderMarquee();
             applyUser();
-            setStatus("offline", "ต้องลงทะเบียน");
+            setStatus("offline", "registrationRequired");
             openModal("register-modal");
             return false;
           }
@@ -3034,6 +3071,7 @@
           state.profile = data.spaceProfile || data.profile || null;
 
           cancelRetry(true);
+          loadError = null;
           saveSession();
           scheduleSessionExpiry();
           applyUser();
@@ -3043,18 +3081,18 @@
           renderAdminItems(); renderAdminUsers();
           if (!isAdmin()) { closeModal("logo-modal", false); closeModal("admin-modal", false); }
 
-          setStatus("", t("connected"));
-          $("updated-at").textContent = new Date().toLocaleTimeString(
+          setStatus("", "connected");
+          $("updated-at").textContent = new Date(updatedAt = Date.now()).toLocaleTimeString(
             state.lang === "th" ? "th-TH" : "en-US",
             {hour: "2-digit", minute: "2-digit"}
           );
 
-          if (freshLogin) showToast("เข้าสู่ระบบสำเร็จ", "success");
+          if (freshLogin) showToast(t("loginSuccess"), "success");
           return true;
         } catch (error) {
           if (error.stale || sequence !== portalSequence) return false;
           if (document.documentElement.dataset.maintenance === "active") { cancelRetry(); return false; }
-          setStatus("offline", t("offline"));
+          setStatus("offline", "offline");
           if (!state.applications.length) renderError(error.message);
           showToast(error.message, "error");
 
@@ -3080,6 +3118,7 @@
       }
 
       function clearPortalData() {
+        loadError = null;
         state.applications = [];
         state.links = [];
         state.users = [];
@@ -3172,17 +3211,17 @@
                 class="card-action ${pinned ? "pinned" : ""}"
                 type="button"
                 data-pin-url="${escapeHtml(url)}"
-                aria-label="รายการโปรด"
+                aria-label="${escapeHtml(t("favorites"))}"
                 aria-pressed="${pinned}"
-                title="รายการโปรด"
+                title="${escapeHtml(t("favorites"))}"
               >${uiIcon("star")}</button>
               <a
                 class="card-action"
                 href="${escapeHtml(url)}"
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="เปิดแอปในแท็บใหม่"
-                title="เปิดในแท็บใหม่"
+                aria-label="${escapeHtml(t("openNewTab"))}"
+                title="${escapeHtml(t("openNewTabTitle"))}"
               >${uiIcon("external-link")}</a>
             </div>
 
@@ -3190,16 +3229,22 @@
               ${iconHtml(app)}
               <div class="app-info">
                 <div class="app-name-row">
-                  <span class="app-name" title="${escapeHtml(app.name || "Untitled")}">${highlight(app.name || "Untitled", query)}</span>
+                  <span class="app-name" title="${escapeHtml(app.name || t("untitled"))}">${highlight(app.name || t("untitled"), query)}</span>
                   ${app.starred === true || String(app.starred).toLowerCase() === "true"
                     ? `<span class="featured">${escapeHtml(t("featured"))}</span>`
                     : ""}
                 </div>
-                <div class="app-description">${highlight(app.description || "", query)}</div>
+                <div class="app-description">${highlight(appDescription(app), query)}</div>
               </div>
             </a>
           </article>
         `;
+      }
+
+      function appDescription(app) {
+        // Translate the original Portal catalog copy without changing editable data.
+        if (canonicalUrl(safeUrl(app.url)) === "https://blog.koomean.com/" && app.description === "blog ของ koomean") return t("blogDescription");
+        return String(app.description || "");
       }
 
       function renderApplications() {
@@ -3230,7 +3275,7 @@
         const selectedGroup = filter.value;
 
         const filtered = validApps.filter(app => {
-          const searchable = `${app.name || ""} ${app.description || ""} ${app.group || ""}`.toLowerCase();
+          const searchable = `${app.name || ""} ${app.description || ""} ${appDescription(app)} ${app.group || ""}`.toLowerCase();
           return (!query || searchable.includes(query)) &&
             (selectedGroup === "all" || groupKey(app) === selectedGroup) &&
             (!state.favoritesOnly || state.pinned.has(canonicalUrl(app.url)));
@@ -3243,7 +3288,7 @@
             <div class="state-box">
               <span class="state-icon">${uiIcon(state.favoritesOnly ? "star" : query ? "search" : "shapes")}</span>
               <strong>${escapeHtml(state.favoritesOnly ? prefCopy(favoriteCount ? "noFavoriteResults" : "noFavorites") : query ? t("noResults") : t("noApps"))}</strong>
-              <p>${escapeHtml(state.favoritesOnly ? prefCopy(favoriteCount ? "noFavoriteResultsDesc" : "noFavoritesDesc") : query ? "ลองเปลี่ยนคำค้นหาหรือเลือกกลุ่มอื่น" : "เมื่อมีข้อมูล รายการแอปจะแสดงบริเวณนี้")}</p>
+              <p>${escapeHtml(state.favoritesOnly ? prefCopy(favoriteCount ? "noFavoriteResultsDesc" : "noFavoritesDesc") : query ? t("emptySearchDescription") : t("emptyAppsDescription"))}</p>
               ${state.favoritesOnly ? `<button class="btn btn-ghost" id="show-all-apps" type="button">${escapeHtml(prefCopy("showAll"))}</button>` : ""}
             </div>
           `;
@@ -3303,13 +3348,14 @@
       }
 
       function renderError(message) {
+        loadError = message;
         $("app-count").textContent = "0";
         $("applications").innerHTML = `
           <div class="state-box">
             <span class="state-icon">${uiIcon("circle-alert")}</span>
-            <strong>โหลดข้อมูลไม่สำเร็จ</strong>
-            <p>${escapeHtml(message)}</p>
-            <button class="btn btn-ghost" id="retry-btn" type="button" style="margin-top:14px">ลองใหม่</button>
+            <strong>${escapeHtml(t("loadFailed"))}</strong>
+            <p>${escapeHtml(localizeMessage(message))}</p>
+            <button class="btn btn-ghost" id="retry-btn" type="button" style="margin-top:14px">${escapeHtml(t("retry"))}</button>
           </div>
         `;
 
@@ -3339,7 +3385,7 @@
         googleTask = new Promise((resolve, reject) => {
           const script = document.createElement("script");
           const timer = setTimeout(() => fail(), 10000);
-          function fail() { clearTimeout(timer); script.remove(); googleTask = null; reject(new Error("Google Sign-In unavailable")); }
+          function fail() { clearTimeout(timer); script.remove(); googleTask = null; reject(new Error(t("googleUnavailable"))); }
           script.src = "https://accounts.google.com/gsi/client";
           script.async = true;
           script.onload = () => { clearTimeout(timer); window.google?.accounts?.id ? resolve() : fail(); };
@@ -3358,14 +3404,14 @@
           google.accounts.id.initialize({client_id: GOOGLE_CLIENT_ID, callback: handleGoogleCredential, auto_select:false});
           container.replaceChildren();
           google.accounts.id.renderButton(container, {
-            type:"standard",size:"large",theme:document.documentElement.dataset.theme === "dark" ? "filled_black" : "outline",shape:"pill",text:"signin_with",logo_alignment:"left",
+            locale:state.lang,type:"standard",size:"large",theme:document.documentElement.dataset.theme === "dark" ? "filled_black" : "outline",shape:"pill",text:"signin_with",logo_alignment:"left",
             width:Math.min(320, container.clientWidth)
           });
         } catch {
-          container.textContent = state.lang === "en" ? "Google Sign-In could not load." : "โหลด Google Sign-In ไม่สำเร็จ";
+          container.textContent = t("googleFailed");
           const retry = document.createElement("button");
           retry.type = "button"; retry.className = "btn btn-ghost";
-          retry.textContent = state.lang === "en" ? "Try again" : "ลองใหม่";
+          retry.textContent = t("retry");
           retry.addEventListener("click", openLogin); container.appendChild(retry);
         }
       }
@@ -3374,7 +3420,7 @@
         const claims = decodeJwt(response.credential);
 
         if (!claims?.email || tokenExpired(response.credential)) {
-          showToast("Google Session ไม่ถูกต้องหรือหมดอายุ", "error");
+          showToast(t("googleSessionInvalid"), "error");
           return;
         }
 
@@ -3407,7 +3453,7 @@
 
         [...state.modalStack].reverse().forEach(id => closeModal(id, false));
 
-        if (showMessage) showToast("ออกจากระบบแล้ว", "success");
+        if (showMessage) showToast(t("signedOut"), "success");
 
         loadPortal(false, true);
       }
@@ -3417,7 +3463,7 @@
         const name = $("new-name").value.trim();
 
         if (!name) {
-          showToast("กรุณากรอกชื่อที่ต้องการแสดง", "error");
+          showToast(t("nameRequired"), "error");
           $("new-name").focus();
           return;
         }
@@ -3430,7 +3476,7 @@
           const data = await request("updateUserName", {newName: name});
 
           if (data.success === false) {
-            throw new Error(data.message || "บันทึกไม่สำเร็จ");
+            throw new Error(data.message || t("saveFailed"));
           }
 
           state.user.name = data.name || name;
@@ -3442,7 +3488,7 @@
           showToast(error.message, "error");
         } finally {
           button.disabled = false;
-          button.textContent = "บันทึก";
+          button.textContent = t("save");
         }
       }
 
@@ -3450,7 +3496,7 @@
         if (!state.token || $("register-btn").disabled) return;
         const button = $("register-btn");
         if (!$("register-terms-accepted").checked) {
-          showToast(state.lang === "en" ? "Please accept the Terms of Service and acknowledge the Privacy Policy to continue." : "กรุณายอมรับข้อกำหนดและรับทราบนโยบายความเป็นส่วนตัวก่อนสมัคร", "error");
+          showToast(t("consentRequired"), "error");
           $("register-terms-accepted").focus();
           return;
         }
@@ -3466,13 +3512,13 @@
 
           closeModal("register-modal");
           await loadPortal(false, true);
-          showToast("ลงทะเบียนเรียบร้อยแล้ว", "success");
+          showToast(t("registrationSuccess"), "success");
         } catch (error) {
           if (error.stale) return;
           showToast(error.message, "error");
         } finally {
           button.disabled = false;
-          button.textContent = "ส่งคำขอ";
+          button.textContent = t("sendRequest");
         }
       }
 
@@ -3486,8 +3532,8 @@
 
         $("admin-group").value = "public";
         $("admin-starred").checked = false;
-        $("admin-form-title").textContent = "เพิ่มแอปพลิเคชัน";
-        $("admin-submit-btn").textContent = "เพิ่มแอป";
+        $("admin-form-title").textContent = t("addApplication");
+        $("admin-submit-btn").textContent = t("addApp");
         $("admin-cancel-btn").hidden = true;
 
         refreshIconPreview();
@@ -3506,8 +3552,8 @@
         $("admin-starred").checked =
           app.starred === true || String(app.starred).toLowerCase() === "true";
 
-        $("admin-form-title").textContent = "แก้ไขแอปพลิเคชัน";
-        $("admin-submit-btn").textContent = "บันทึกการแก้ไข";
+        $("admin-form-title").textContent = t("editApplication");
+        $("admin-submit-btn").textContent = t("saveChanges");
         $("admin-cancel-btn").hidden = false;
 
         refreshIconPreview();
@@ -3518,9 +3564,10 @@
         const iconHtmlCode = state.selectedIcon ? getIconHtml(state.selectedIcon, "Preview") : uiIcon("shapes");
 
         preview.innerHTML = iconHtmlCode;
-        $("icon-name").textContent = state.selectedIconName || "ยังไม่ได้เลือกไอคอน";
+        const iconName = state.selectedIconName === `Custom / theSVG · ${state.selectedIcon}` ? `${t("customIcon")} · ${state.selectedIcon}` : state.selectedIconName || t("noIcon");
+        $("icon-name").textContent = iconName;
         $("icon-value").textContent = state.selectedIcon || "—";
-        $("icon-name").title = state.selectedIconName || "ยังไม่ได้เลือกไอคอน";
+        $("icon-name").title = iconName;
         $("icon-value").title = state.selectedIcon || "—";
       }
 
@@ -3528,7 +3575,7 @@
         const slug = $("manual-icon").value.trim();
 
         if (!slug) {
-          showToast("กรุณากรอกชื่อไอคอน", "error");
+          showToast(t("iconRequired"), "error");
           return;
         }
 
@@ -3543,7 +3590,7 @@
 
         if (!isAdmin()) { root.replaceChildren(); return; }
         if (!state.applications.length) {
-          root.innerHTML = '<div class="state-box" style="padding:24px 10px"><p>ยังไม่มีข้อมูล</p></div>';
+          root.innerHTML = `<div class="state-box" style="padding:24px 10px"><p>${escapeHtml(t("noData"))}</p></div>`;
           return;
         }
 
@@ -3562,10 +3609,10 @@
               </div>
 
               <div class="admin-item-actions">
-                <button class="small-action" type="button" data-admin-action="up" data-row="${Number(app.rowIdx) || 0}" ${index === 0 ? "disabled" : ""} title="ขึ้น">${uiIcon("arrow-up")}</button>
-                <button class="small-action" type="button" data-admin-action="down" data-row="${Number(app.rowIdx) || 0}" ${index === state.applications.length - 1 ? "disabled" : ""} title="ลง">${uiIcon("arrow-down")}</button>
-                <button class="small-action" type="button" data-admin-action="edit" data-row="${Number(app.rowIdx) || 0}" title="แก้ไข">${uiIcon("pencil")}</button>
-                <button class="small-action danger" type="button" data-admin-action="delete" data-row="${Number(app.rowIdx) || 0}" title="ลบ">${uiIcon("trash")}</button>
+                <button class="small-action" type="button" data-admin-action="up" data-row="${Number(app.rowIdx) || 0}" ${index === 0 ? "disabled" : ""} title="${escapeHtml(t("moveUp"))}">${uiIcon("arrow-up")}</button>
+                <button class="small-action" type="button" data-admin-action="down" data-row="${Number(app.rowIdx) || 0}" ${index === state.applications.length - 1 ? "disabled" : ""} title="${escapeHtml(t("moveDown"))}">${uiIcon("arrow-down")}</button>
+                <button class="small-action" type="button" data-admin-action="edit" data-row="${Number(app.rowIdx) || 0}" title="${escapeHtml(t("edit"))}">${uiIcon("pencil")}</button>
+                <button class="small-action danger" type="button" data-admin-action="delete" data-row="${Number(app.rowIdx) || 0}" title="${escapeHtml(t("delete"))}">${uiIcon("trash")}</button>
               </div>
             </div>
           `;
@@ -3584,7 +3631,7 @@
         });
 
         if (!users.length) {
-          root.innerHTML = '<div class="state-box" style="padding:24px 10px"><p>ไม่พบผู้ใช้งาน</p></div>';
+          root.innerHTML = `<div class="state-box" style="padding:24px 10px"><p>${escapeHtml(t("noUsers"))}</p></div>`;
           return;
         }
 
@@ -3602,7 +3649,7 @@
               </div>
               <div class="admin-user-controls">
                 <input class="admin-role" type="text" maxlength="50" value="${escapeHtml(user.role || "public")}" aria-label="Role">
-                <button class="small-action" type="button" data-save-user="${escapeHtml(email)}" title="บันทึก">${uiIcon("check")}</button>
+                <button class="small-action" type="button" data-save-user="${escapeHtml(email)}" title="${escapeHtml(t("save"))}">${uiIcon("check")}</button>
               </div>
             </div>
           `;
@@ -3678,7 +3725,7 @@
         } finally {
           state.busy = false;
           button.disabled = false;
-          button.textContent = state.editingRow !== null ? "บันทึกการแก้ไข" : "เพิ่มแอป";
+          button.textContent = state.editingRow !== null ? t("saveChanges") : t("addApp");
         }
       }
 
@@ -3695,7 +3742,7 @@
         }
 
         if (action === "delete") {
-          if (!confirm(`ลบแอป "${app.name || "—"}" ใช่หรือไม่?`)) return;
+          if (!confirm(t("deleteConfirmation").replace("{name}", app.name || "—"))) return;
         }
 
         state.busy = true;
@@ -3724,7 +3771,7 @@
         const role = input.value.trim();
 
         if (!role) {
-          showToast("กรุณากรอก Role", "error");
+          showToast(t("roleRequired"), "error");
           input.focus();
           return;
         }
@@ -3758,13 +3805,13 @@
         }
 
         $("logo-results").innerHTML =
-          '<div class="state-box" style="grid-column:1/-1;padding:25px 10px"><p>กำลังโหลดโลโก้...</p></div>';
+          `<div class="state-box" style="grid-column:1/-1;padding:25px 10px"><p data-i18n="loadingLogos">${escapeHtml(t("loadingLogos"))}</p></div>`;
 
         try {
           if (!isAdmin()) return;
           const response = await fetch("https://thesvg.org/api/registry.json", {cache:"force-cache",credentials:"omit",signal:AbortSignal.timeout(10000)});
 
-          if (!response.ok) throw new Error("โหลดโลโก้ไม่สำเร็จ");
+          if (!response.ok) throw new Error(t("logosFailed"));
 
           const data = await response.json();
 
@@ -3778,8 +3825,8 @@
         } catch (error) {
           $("logo-results").innerHTML = `
             <div class="state-box" style="grid-column:1/-1;padding:25px 10px">
-              <strong>โหลดโลโก้ไม่สำเร็จ</strong>
-              <p>คุณยังสามารถกรอกชื่อไอคอน (เช่น fa-facebook) ด้วยตนเองได้ที่ปุ่มด้านนอก</p>
+              <strong data-i18n="logosFailed">${escapeHtml(t("logosFailed"))}</strong>
+              <p data-i18n="logosFailedDescription">${escapeHtml(t("logosFailedDescription"))}</p>
             </div>
           `;
         }
@@ -3811,7 +3858,7 @@
                 </button>
               `;
             }).join("")
-          : '<div class="state-box" style="grid-column:1/-1;padding:25px 10px"><p>ไม่พบโลโก้</p></div>';
+          : `<div class="state-box" style="grid-column:1/-1;padding:25px 10px"><p>${escapeHtml(t("noLogos"))}</p></div>`;
       }
 
       function showAdminTab(tab) {
@@ -3822,8 +3869,8 @@
         $("apps-tab-btn").classList.toggle("active", apps);
         $("users-tab-btn").classList.toggle("active", !apps);
         $("admin-subtitle").textContent = apps
-          ? "เพิ่ม แก้ไข และจัดลำดับแอปพลิเคชัน"
-          : "จัดการผู้ใช้งานและสิทธิ์การเข้าถึง";
+          ? t("adminAppsDescription")
+          : t("adminUsersDescription");
       }
 
       function buildCommandItems(query = "") {
@@ -3831,30 +3878,30 @@
 
         const apps = state.applications
           .filter(app => safeUrl(app.url))
-          .filter(app => `${app.name || ""} ${app.description || ""}`.toLowerCase().includes(normalized))
+          .filter(app => `${app.name || ""} ${app.description || ""} ${appDescription(app)}`.toLowerCase().includes(normalized))
           .map(app => ({
-            title: app.name || "Untitled",
-            subtitle: app.description || app.group || "",
+            title: app.name || t("untitled"),
+            subtitle: appDescription(app) || groupName(groupKey(app)),
             hint: "external-link",
             run: () => window.open(safeUrl(app.url), "_blank", "noopener,noreferrer")
           }));
 
         const actions = [
           {
-            title: state.user ? "เปิดบัญชี" : "เข้าสู่ระบบ",
-            subtitle: "จัดการบัญชีผู้ใช้",
+            title: state.user ? t("openAccount") : t("login"),
+            subtitle: t("manageAccount"),
             hint: "user-round",
             run: () => state.user ? openModal("account-modal") : openLogin()
           },
           {
-            title: "การตั้งค่า",
-            subtitle: "ธีม ภาษา และการแสดงผล",
+            title: t("settings"),
+            subtitle: t("customizeSettings"),
             hint: "settings-2",
             run: () => openModal("settings-modal")
           },
           {
-            title: "รีเฟรชข้อมูล",
-            subtitle: "โหลดข้อมูลล่าสุดจากเซิร์ฟเวอร์",
+            title: t("refreshData"),
+            subtitle: t("refreshDescription"),
             hint: "rotate-cw",
             run: () => refreshPortal()
           }
@@ -3872,7 +3919,7 @@
         const root = $("command-results");
 
         if (!state.commandItems.length) {
-          root.innerHTML = '<div class="state-box" style="padding:24px 10px"><p>ไม่พบรายการ</p></div>';
+          root.innerHTML = `<div class="state-box" style="padding:24px 10px"><p>${escapeHtml(t("noCommands"))}</p></div>`;
           return;
         }
 
@@ -4067,7 +4114,7 @@
 
       $("admin-nav").addEventListener("click", () => {
         if (!isAdmin()) {
-          showToast("ต้องใช้บัญชีผู้ดูแลระบบ", "error");
+          showToast(t("adminRequired"), "error");
           return;
         }
 
@@ -4273,7 +4320,7 @@
           if (!shouldPlayVideo() || error.name === "AbortError") return;
           videoWanted = false;
           video.hidden = true;
-          if (userInitiated && error.name !== "NotAllowedError") showToast("ไม่สามารถเล่นวิดีโอพื้นหลังได้", "error");
+          if (userInitiated && error.name !== "NotAllowedError") showToast(t("videoFailed"), "error");
         }).finally(() => {
           videoTask = null;
           updateVideoLabel();
@@ -4317,7 +4364,7 @@
         syncVideo();
       });
       window.addEventListener("online", resumeConnection);
-      window.addEventListener("offline", () => { cancelRetry(false); setStatus("offline", t("offline")); });
+      window.addEventListener("offline", () => { cancelRetry(false); setStatus("offline", "offline"); });
 
       async function init() {
         loadPreferences();

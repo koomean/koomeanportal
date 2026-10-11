@@ -3,16 +3,16 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
 const source=fs.readFileSync(new URL('../src/maintenance.js',import.meta.url),'utf8');
-async function setup(initial={active:false}) {
+async function setup(initial={active:false}, lang='th') {
   const nodes=new Map();
   for(const key of ['title','state','label','foot','refresh','thanks','days','countdown','note','deadline','button'])nodes.set(key,{textContent:'',hidden:false,listeners:{},addEventListener(name,fn){this.listeners[name]=fn;}});
-  const overlay={hidden:true,dataset:{app:'Koo Mean SITE',noteTh:'ข้อความเริ่มต้น'},querySelector(selector){return nodes.get(selector.match(/"(.*?)"/)[1]);},setAttribute(){},focus(){this.focused=true;},contains(target){return target===this||[...nodes.values()].includes(target)}};
+  const overlay={hidden:true,dataset:{app:'Koo Mean SITE',noteTh:'ข้อความเริ่มต้น',noteEn:'Default message'},querySelector(selector){return nodes.get(selector.match(/"(.*?)"/)[1]);},setAttribute(){},focus(){this.focused=true;},contains(target){return target===this||[...nodes.values()].includes(target)}};
   const content={tagName:'MAIN',inert:false};
   let time=1000000,state=initial,fail=false,calls=0,reloads=0,status=200;
   const events={},timeouts=new Map(),intervals=new Map();let seq=0;
   const document={hidden:false,body:{children:[overlay,content],style:{}},documentElement:{dataset:{}},getElementById(){return overlay;},addEventListener(name,fn){events[name]=fn;}};
   class ClockDate extends Date {static now(){return time}}
-  vm.runInNewContext(source,{document,navigator:{languages:['th'],onLine:true},Date:ClockDate,Intl,URLSearchParams,AbortSignal,location:{reload(){reloads++;}},window:{addEventListener(name,fn){events[name]=fn;}},setTimeout(fn,ms){const id=++seq;timeouts.set(id,{fn,ms});return id;},clearTimeout(id){timeouts.delete(id);},setInterval(fn,ms){const id=++seq;intervals.set(id,{fn,ms});return id;},clearInterval(id){intervals.delete(id);},async fetch(){calls++;if(fail)throw new Error('Offline');return{status,ok:status===200,headers:{get(){return'60';}},async json(){return{maintenance:state};}};}});
+  vm.runInNewContext(source,{document,localStorage:{getItem(){return JSON.stringify({lang});}},navigator:{languages:['th'],onLine:true},Date:ClockDate,Intl,URLSearchParams,AbortSignal,location:{reload(){reloads++;}},window:{addEventListener(name,fn){events[name]=fn;}},setTimeout(fn,ms){const id=++seq;timeouts.set(id,{fn,ms});return id;},clearTimeout(id){timeouts.delete(id);},setInterval(fn,ms){const id=++seq;intervals.set(id,{fn,ms});return id;},clearInterval(id){intervals.delete(id);},async fetch(){calls++;if(fail)throw new Error('Offline');return{status,ok:status===200,headers:{get(){return'60';}},async json(){return{maintenance:state};}};}});
   const flush=()=>new Promise(resolve=>setImmediate(resolve));await flush();
   return {overlay,content,nodes,document,events,timeouts,intervals,flush,get calls(){return calls;},get reloads(){return reloads;},setState(value){state=value;},setTime(value){time=value;},setFail(value){fail=value;},setStatus(value){status=value;},async check(){nodes.get('button').listeners.click();await flush();},tick(){[...intervals.values()].filter(x=>x.ms===1000).forEach(x=>x.fn());}};
 }
@@ -40,6 +40,17 @@ test('hidden tabs stop polling and cannot issue manual requests',async()=>{
 });
 test('normal startup leaves the website visible and does not reload',async()=>{
   const x=await setup();assert.equal(x.overlay.hidden,true);assert.equal(x.content.inert,false);assert.equal(x.reloads,0);assert.ok([...x.timeouts.values()].some(x=>x.ms===60000));
+});
+
+test('countdown follows saved Portal language and switches without reopening or polling',async()=>{
+ const x=await setup({active:true,reopenAt:1060000,serverTime:1000000},'en');
+ assert.equal(x.nodes.get('title').textContent,'We’ll be back soon');
+ assert.equal(x.nodes.get('note').textContent,'Default message');
+ const calls=x.calls;
+ x.events['koo-language-change']({detail:'th'});
+ assert.equal(x.nodes.get('title').textContent,'เราจะกลับมาเร็ว ๆ นี้');
+ assert.equal(x.nodes.get('countdown').textContent,'00 : 01 : 00');
+ assert.equal(x.content.inert,true);assert.equal(x.reloads,0);assert.equal(x.calls,calls);
 });
 
 test('countdown inherits the website theme without a theme selector',()=>{

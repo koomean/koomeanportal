@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {transform} from 'esbuild';
 const hash = value => createHash('sha256').update(value).digest('hex').slice(0,16);
-let html = fs.readFileSync('src/index.html','utf8').replace('/* BUILD_THEME */',fs.readFileSync('src/theme.js','utf8')).replace('/* BUILD_MAINTENANCE */',fs.readFileSync('src/maintenance.js','utf8'));
+let html = fs.readFileSync('src/index.html','utf8').replace('/* BUILD_THEME */',fs.readFileSync('src/theme.js','utf8')).replace('/* BUILD_MAINTENANCE */',fs.readFileSync('src/maintenance.js','utf8')).replace('/* BUILD_I18N */',fs.readFileSync('src/i18n.js','utf8'));
 const iconNames = fs.readdirSync('src/icons').filter(file => /^[a-z0-9-]+\.svg$/.test(file)).map(file => file.slice(0,-4)).sort();
 const uiIcon = name => {
   if (!iconNames.includes(name)) throw new Error('Unknown UI icon: '+name);

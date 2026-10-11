@@ -8,14 +8,14 @@
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Koo Mean Portal</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
-  <meta name="description" content="ศูนย์รวมแอปพลิเคชันและเครื่องมือ Koo Mean เข้าถึงบริการและจัดการบัญชีของคุณได้ในที่เดียว">
+  <meta name="description" content="ศูนย์รวมแอปพลิเคชันและเครื่องมือ Koo Mean เข้าถึงบริการและจัดการบัญชีของคุณได้ในที่เดียว" data-i18n-content="pageDescription">
   <link rel="canonical" href="https://koomean.com/">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="assets/portal-4f8750047543314f.css">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="assets/ibm-2e57acf1ca9e.woff2">
 <link rel="preload" as="image" href="assets/hero-poster.webp" fetchpriority="high">
-<script src="assets/app-e6c7adb6a4be320f.js" defer></script>
+<script src="assets/app-3d6894acbade0f58.js" defer></script>
 </head>
 <body>
   <svg class="icon-definitions" width="0" height="0" aria-hidden="true" focusable="false"><symbol id="ui-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14" />
@@ -62,7 +62,7 @@
   <circle cx="10" cy="8" r="5" />
   <path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3" /></symbol><symbol id="ui-x" viewBox="0 0 24 24"><path d="M18 6 6 18" />
   <path d="m6 6 12 12" /></symbol></svg>
-  <a class="skip-link" href="#main-content">ข้ามไปยังรายการแอป</a>
+  <a class="skip-link" href="#main-content" data-i18n="skipApps">ข้ามไปยังรายการแอป</a>
 <div id="global-maintenance-overlay" class="km-maintenance" hidden tabindex="-1" role="dialog" aria-modal="true" aria-labelledby="global-maintenance-title" aria-describedby="global-maintenance-note" data-app="Koo Mean Portal" data-note-th="เรากำลังดูแลพื้นที่รวมแอปของคุณ เพื่อให้กลับมาใช้งานได้อย่างราบรื่น" data-note-en="We’re looking after your app hub. Your apps will be available again soon.">
   <div class="maintenance-shell">
     <header class="maintenance-header"><div class="maintenance-brand"><span class="maintenance-brand-symbol"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 13a5 5 0 0 0 7 .5l3-3a5 5 0 0 0-7-7l-2 2M14 11a5 5 0 0 0-7-.5l-3 3a5 5 0 0 0 7 7l2-2"/></svg></span><div><span class="maintenance-brand-name">Koo Mean</span><span class="maintenance-brand-app">Portal</span></div></div><div class="maintenance-header-actions"><span class="maintenance-state" data-maintenance="state"></span></div></header>
@@ -85,23 +85,23 @@
           </span>
         </a>
         <div class="header-actions">
-          <button class="icon-button" id="command-btn" aria-label="เปิด Command Palette" type="button" title="Command Palette"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-command"></use></svg></button>
-          <button class="icon-button" id="settings-btn" aria-label="การตั้งค่า" type="button" title="การตั้งค่า"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-settings-2"></use></svg></button>
+          <button class="icon-button" id="command-btn" aria-label="เปิด Command Palette" type="button" title="Command Palette" data-i18n-aria-label="openCommands"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-command"></use></svg></button>
+          <button class="icon-button" id="settings-btn" aria-label="การตั้งค่า" type="button" title="การตั้งค่า" data-i18n-aria-label="settings" data-i18n-title="settings"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-settings-2"></use></svg></button>
           <button class="user-chip" id="user-chip" type="button">
             <img id="user-avatar" alt="">
             <span id="user-name"></span>
           </button>
-          <button class="btn btn-primary" id="auth-btn" aria-label="เข้าสู่ระบบ" type="button">
+          <button class="btn btn-primary" id="auth-btn" aria-label="เข้าสู่ระบบ" type="button" data-i18n-aria-label="login">
             <span id="auth-icon"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-log-in"></use></svg></span>
-            <span class="auth-label" id="auth-label">เข้าสู่ระบบ</span>
+            <span class="auth-label" id="auth-label" data-i18n="login">เข้าสู่ระบบ</span>
           </button>
         </div>
       </div>
       <div class="topnav-wrap">
-        <nav class="topnav" aria-label="เมนูหลัก">
-          <a class="nav-link active" href="#home"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-house"></use></svg><span>หน้าแรก</span></a>
-          <button class="nav-link" id="account-nav" type="button"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-user-round"></use></svg><span>บัญชี</span></button>
-          <button class="nav-link" id="admin-nav" type="button" hidden><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-layout-grid"></use></svg><span>จัดการระบบ</span></button>
+        <nav class="topnav" aria-label="เมนูหลัก" data-i18n-aria-label="mainMenu">
+          <a class="nav-link active" href="#home"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-house"></use></svg><span data-i18n="home">หน้าแรก</span></a>
+          <button class="nav-link" id="account-nav" type="button"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-user-round"></use></svg><span data-i18n="account">บัญชี</span></button>
+          <button class="nav-link" id="admin-nav" type="button" hidden><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-layout-grid"></use></svg><span data-i18n="admin">จัดการระบบ</span></button>
         </nav>
       </div>
     </div>
@@ -128,22 +128,22 @@
         <button class="marquee-toggle" id="marquee-toggle" type="button" aria-pressed="false" aria-label="หยุดแถบลิงก์"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-pause"></use></svg></button>
       </div>
     </section>
-    <section aria-label="รายการแอปพลิเคชัน">
+    <section aria-label="รายการแอปพลิเคชัน" data-i18n-aria-label="appCollection">
       <div class="toolbar">
         <div class="search">
           <span class="search-symbol" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-search"></use></svg></span>
-          <input id="app-search" aria-label="ค้นหาแอปพลิเคชัน" type="search" placeholder="ค้นหาแอปพลิเคชัน..." autocomplete="off">
+          <input id="app-search" aria-label="ค้นหาแอปพลิเคชัน" type="search" placeholder="ค้นหาแอปพลิเคชัน..." autocomplete="off" data-i18n-aria-label="searchApps" data-i18n-placeholder="searchAppsPlaceholder">
           <span class="search-kbd">/</span>
-        <button class="search-clear" type="button" data-clear-search="app-search" aria-label="ล้างคำค้นหา" aria-controls="app-search" hidden><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button></div>
-        <select class="filter" id="group-filter" aria-label="กรองตามกลุ่ม">
+        <button class="search-clear" type="button" data-clear-search="app-search" aria-label="ล้างคำค้นหา" aria-controls="app-search" hidden data-i18n-aria-label="clearSearch"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button></div>
+        <select class="filter" id="group-filter" aria-label="กรองตามกลุ่ม" data-i18n-aria-label="filterGroups">
           <option value="all">ทุกกลุ่ม</option>
         </select>
-        <div class="view-switcher" aria-label="รูปแบบการแสดงผล">
-          <button class="view-btn active" type="button" data-view="grid" title="Grid"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-layout-grid"></use></svg></button>
-          <button class="view-btn" type="button" data-view="list" title="List"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-list"></use></svg></button>
-          <button class="view-btn" type="button" data-view="compact" title="Compact"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-grid-3x3"></use></svg></button>
+        <div class="view-switcher" aria-label="รูปแบบการแสดงผล" data-i18n-aria-label="layout">
+          <button class="view-btn active" type="button" data-view="grid" title="Grid" data-i18n-title="grid"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-layout-grid"></use></svg></button>
+          <button class="view-btn" type="button" data-view="list" title="List" data-i18n-title="list"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-list"></use></svg></button>
+          <button class="view-btn" type="button" data-view="compact" title="Compact" data-i18n-title="compact"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-grid-3x3"></use></svg></button>
         </div>
-        <button class="refresh-btn" id="refresh-btn" type="button" title="รีเฟรช"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-rotate-cw"></use></svg></button>
+        <button class="refresh-btn" id="refresh-btn" type="button" title="รีเฟรช" data-i18n-title="refresh"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-rotate-cw"></use></svg></button>
       </div>
       <div class="catalog-summary">
       <div class="stats" aria-live="polite" aria-atomic="true">
@@ -155,7 +155,7 @@
         <span id="updated-at"></span>
       </div>
       <button id="favorites-filter" class="favorites-filter" type="button" aria-pressed="false" aria-controls="applications">
-        <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-star"></use></svg><span id="favorites-label">รายการโปรด</span><span id="favorites-count" class="favorites-count">0</span>
+        <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-star"></use></svg><span id="favorites-label" data-i18n="favorites">รายการโปรด</span><span id="favorites-count" class="favorites-count">0</span>
       </button>
       </div>
       <noscript><p class="state-box">เปิด JavaScript เพื่อค้นหาแอปและเข้าสู่ระบบ หรือไปที่ <a href="https://blog.koomean.com/">Koo Mean Blog</a> และ <a href="https://link.koomean.com/">Koo Mean Site</a></p></noscript>
@@ -169,26 +169,26 @@
     </section>
     <footer class="footer">
       <span>Koo Mean Portal</span>
-      <span>ข้อมูลและสิทธิ์การเข้าถึงจัดการจากระบบส่วนกลาง · <button id="help-btn" type="button">ช่วยเหลือ</button></span>
+      <span><span data-i18n="footer">ข้อมูลและสิทธิ์การเข้าถึงจัดการจากระบบส่วนกลาง</span> · <button id="help-btn" type="button" data-i18n="help">ช่วยเหลือ</button></span>
     </footer>
   </main>
   <div class="modal-backdrop" id="login-modal" hidden inert aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="login-title">
     <section class="modal">
       <header class="modal-head">
         <div class="modal-title">
-          <h2 id="login-title">เข้าสู่ระบบ</h2>
-          <p>ใช้ Google Account เพื่อดูแอปที่คุณมีสิทธิ์ใช้งาน</p>
+          <h2 id="login-title" data-i18n="login">เข้าสู่ระบบ</h2>
+          <p data-i18n="loginDescription">ใช้ Google Account เพื่อดูแอปที่คุณมีสิทธิ์ใช้งาน</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด" data-i18n-aria-label="close"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button>
       </header>
       <div class="modal-body">
         <div id="google-button" style="min-height:48px;display:flex;justify-content:center;align-items:center"></div>
         <div class="help-item" style="margin-top:16px">
-          <p>ระบบใช้ Token ที่ตรวจสอบโดยเซิร์ฟเวอร์ และไม่มีการจัดเก็บรหัสผ่านของ Google ภายในหน้าเว็บนี้</p>
+          <p data-i18n="loginSecurity">ระบบใช้ Token ที่ตรวจสอบโดยเซิร์ฟเวอร์ และไม่มีการจัดเก็บรหัสผ่านของ Google ภายในหน้าเว็บนี้</p>
         </div>
-        <div class="policy-links" aria-label="เอกสารนโยบาย">
-          <a class="btn btn-ghost" href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="login-privacy-label">นโยบายความเป็นส่วนตัว</span><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-external-link"></use></svg></a>
-          <a class="btn btn-ghost" href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="login-terms-label">ข้อกำหนดการใช้บริการ</span><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-external-link"></use></svg></a>
+        <div class="policy-links" aria-label="เอกสารนโยบาย" data-i18n-aria-label="policyDocuments">
+          <a class="btn btn-ghost" href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="login-privacy-label" data-i18n="privacy">นโยบายความเป็นส่วนตัว</span><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-external-link"></use></svg></a>
+          <a class="btn btn-ghost" href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="login-terms-label" data-i18n="terms">ข้อกำหนดการใช้บริการ</span><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-external-link"></use></svg></a>
         </div>
       </div>
     </section>
@@ -197,22 +197,22 @@
     <section class="modal">
       <header class="modal-head">
         <div class="modal-title">
-          <h2 id="register-title">ขอลงทะเบียน</h2>
-          <p>บัญชีนี้ยังไม่อยู่ในระบบ กรุณาส่งข้อมูลเพิ่มเติมให้ผู้ดูแล</p>
+          <h2 id="register-title" data-i18n="registerTitle">ขอลงทะเบียน</h2>
+          <p data-i18n="registerDescription">บัญชีนี้ยังไม่อยู่ในระบบ กรุณาส่งข้อมูลเพิ่มเติมให้ผู้ดูแล</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด" data-i18n-aria-label="close"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button>
       </header>
       <div class="modal-body">
-        <label class="field-label" for="register-note">ข้อมูลเพิ่มเติม (ไม่บังคับ)</label>
-        <textarea class="field" id="register-note" maxlength="500" placeholder="เช่น ทีม หน้าที่ หรือแอปที่ต้องการใช้งาน"></textarea>
+        <label class="field-label" for="register-note" data-i18n="registerNote">ข้อมูลเพิ่มเติม (ไม่บังคับ)</label>
+        <textarea class="field" id="register-note" maxlength="500" placeholder="เช่น ทีม หน้าที่ หรือแอปที่ต้องการใช้งาน" data-i18n-placeholder="registerNotePlaceholder"></textarea>
         <label class="check-row register-consent" for="register-terms-accepted">
           <input id="register-terms-accepted" type="checkbox" required>
-          <span><span id="register-consent-prefix">ฉันยอมรับ</span> <a href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="register-terms-label">ข้อกำหนดการใช้บริการ</span></a> <span id="register-consent-and">และรับทราบ</span> <a href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="register-privacy-label">นโยบายความเป็นส่วนตัว</span></a></span>
+          <span><span id="register-consent-prefix" data-i18n="consentPrefix">ฉันยอมรับ</span> <a href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="register-terms-label" data-i18n="terms">ข้อกำหนดการใช้บริการ</span></a> <span id="register-consent-and" data-i18n="consentAnd">และรับทราบ</span> <a href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="register-privacy-label" data-i18n="privacy">นโยบายความเป็นส่วนตัว</span></a></span>
         </label>
       </div>
       <footer class="modal-footer">
-        <button class="btn btn-ghost" type="button" data-close-modal>ยกเลิก</button>
-        <button class="btn btn-primary" id="register-btn" type="button" disabled>ส่งคำขอ</button>
+        <button class="btn btn-ghost" type="button" data-close-modal data-i18n="cancel">ยกเลิก</button>
+        <button class="btn btn-primary" id="register-btn" type="button" disabled data-i18n="sendRequest">ส่งคำขอ</button>
       </footer>
     </section>
   </div>
@@ -220,10 +220,10 @@
     <section class="modal medium">
       <header class="modal-head">
         <div class="modal-title">
-          <h2 id="account-title">บัญชีของคุณ</h2>
-          <p>จัดการข้อมูลบัญชีที่ใช้เชื่อมต่อกับ Portal</p>
+          <h2 id="account-title" data-i18n="accountTitle">บัญชีของคุณ</h2>
+          <p data-i18n="accountDescription">จัดการข้อมูลบัญชีที่ใช้เชื่อมต่อกับ Portal</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด" data-i18n-aria-label="close"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button>
       </header>
       <div class="modal-body">
         <div class="user-detail">
@@ -235,16 +235,16 @@
           </div>
         </div>
         <section class="account-section">
-          <div class="section-title">ชื่อที่แสดง</div>
-          <p class="section-copy">ชื่อจะถูกบันทึกในบัญชีส่วนกลางและใช้ในระบบที่เชื่อมต่อกัน</p>
+          <div class="section-title" data-i18n="displayName">ชื่อที่แสดง</div>
+          <p class="section-copy" data-i18n="displayNameDescription">ชื่อจะถูกบันทึกในบัญชีส่วนกลางและใช้ในระบบที่เชื่อมต่อกัน</p>
           <div class="inline-form">
-            <input class="field" id="new-name" aria-label="ชื่อที่แสดง" type="text" maxlength="50" autocomplete="name" placeholder="กรอกชื่อที่ต้องการแสดง">
-            <button class="btn btn-primary" id="save-name-btn" type="button">บันทึก</button>
+            <input class="field" id="new-name" aria-label="ชื่อที่แสดง" type="text" maxlength="50" autocomplete="name" placeholder="กรอกชื่อที่ต้องการแสดง" data-i18n-aria-label="displayName" data-i18n-placeholder="displayNamePlaceholder">
+            <button class="btn btn-primary" id="save-name-btn" type="button" data-i18n="save">บันทึก</button>
           </div>
         </section>
       </div>
       <footer class="modal-footer">
-        <button class="btn btn-ghost" id="logout-btn" type="button">ออกจากระบบ</button>
+        <button class="btn btn-ghost" id="logout-btn" type="button" data-i18n="signOut">ออกจากระบบ</button>
       </footer>
     </section>
   </div>
@@ -252,46 +252,46 @@
     <section class="modal wide">
       <header class="modal-head">
         <div class="modal-title">
-          <h2 id="admin-title">จัดการระบบ</h2>
-          <p id="admin-subtitle">เพิ่ม แก้ไข และจัดลำดับแอปพลิเคชัน</p>
+          <h2 id="admin-title" data-i18n="admin">จัดการระบบ</h2>
+          <p id="admin-subtitle" data-i18n="adminAppsDescription">เพิ่ม แก้ไข และจัดลำดับแอปพลิเคชัน</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด" data-i18n-aria-label="close"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button>
       </header>
       <div class="modal-body">
         <div class="admin-tabs" role="tablist">
-          <button class="admin-tab active" id="apps-tab-btn" type="button"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-layout-grid"></use></svg><span>แอปพลิเคชัน</span></button>
-          <button class="admin-tab" id="users-tab-btn" type="button"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-users-round"></use></svg><span>ผู้ใช้งาน</span></button>
+          <button class="admin-tab active" id="apps-tab-btn" type="button"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-layout-grid"></use></svg><span data-i18n="applications">แอปพลิเคชัน</span></button>
+          <button class="admin-tab" id="users-tab-btn" type="button"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-users-round"></use></svg><span data-i18n="users">ผู้ใช้งาน</span></button>
         </div>
         <div id="apps-tab">
           <div class="admin-layout">
             <section class="panel">
               <div class="panel-title" id="admin-form-title">เพิ่มแอปพลิเคชัน</div>
-              <p class="panel-copy">ระบบจะตรวจสอบ URL ซ้ำและตรวจสอบรูปแบบข้อมูลก่อนบันทึก</p>
+              <p class="panel-copy" data-i18n="appValidation">ระบบจะตรวจสอบ URL ซ้ำและตรวจสอบรูปแบบข้อมูลก่อนบันทึก</p>
               <div class="form-grid">
                 <div>
-                  <label class="field-label" for="admin-name">ชื่อแอป</label>
-                  <input class="field" id="admin-name" maxlength="100" placeholder="เช่น Dashboard">
+                  <label class="field-label" for="admin-name" data-i18n="appName">ชื่อแอป</label>
+                  <input class="field" id="admin-name" maxlength="100" placeholder="เช่น Dashboard" data-i18n-placeholder="appNamePlaceholder">
                 </div>
                 <div>
                   <label class="field-label" for="admin-url">URL</label>
                   <input class="field" id="admin-url" type="url" maxlength="500" placeholder="https://...">
                 </div>
                 <div class="full">
-                  <label class="field-label" for="admin-description">คำอธิบาย</label>
-                  <textarea class="field" id="admin-description" maxlength="300" placeholder="อธิบายสั้น ๆ"></textarea>
+                  <label class="field-label" for="admin-description" data-i18n="description">คำอธิบาย</label>
+                  <textarea class="field" id="admin-description" maxlength="300" placeholder="อธิบายสั้น ๆ" data-i18n-placeholder="descriptionPlaceholder"></textarea>
                 </div>
                 <div>
-                  <label class="field-label" for="admin-group">กลุ่ม / Role</label>
+                  <label class="field-label" for="admin-group" data-i18n="groupRole">กลุ่ม / Role</label>
                   <input class="field" id="admin-group" maxlength="50" value="public">
                 </div>
                 <div>
-                  <label class="field-label" for="admin-color">สี</label>
+                  <label class="field-label" for="admin-color" data-i18n="color">สี</label>
                   <input class="field" id="admin-color" maxlength="9" placeholder="#2563eb">
                 </div>
               </div>
               <label class="check-row">
                 <input id="admin-starred" type="checkbox">
-                <span>แนะนำแอปนี้</span>
+                <span data-i18n="featureApp">แนะนำแอปนี้</span>
               </label>
               <div class="icon-picker-row">
                 <div class="selected-icon" id="icon-preview"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-shapes"></use></svg></div>
@@ -299,32 +299,32 @@
                   <strong id="icon-name">ยังไม่ได้เลือกไอคอน</strong>
                   <span id="icon-value">—</span>
                 </div>
-                <button class="btn btn-ghost" id="choose-logo-btn" type="button">เลือกโลโก้</button>
+                <button class="btn btn-ghost" id="choose-logo-btn" type="button" data-i18n="chooseLogo">เลือกโลโก้</button>
               </div>
               <div class="inline-form" style="margin-bottom:12px">
-                <input class="field" id="manual-icon" maxlength="50" placeholder="theSVG slug หรือ fab fa-facebook">
-                <button class="btn btn-ghost" id="use-icon-btn" type="button">ใช้ slug</button>
+                <input class="field" id="manual-icon" maxlength="50" placeholder="theSVG slug หรือ fab fa-facebook" data-i18n-placeholder="iconPlaceholder">
+                <button class="btn btn-ghost" id="use-icon-btn" type="button" data-i18n="useSlug">ใช้ slug</button>
               </div>
               <div class="admin-form-actions">
                 <button class="btn btn-primary" id="admin-submit-btn" type="button">เพิ่มแอป</button>
-                <button class="btn btn-ghost" id="admin-cancel-btn" type="button" hidden>ยกเลิกแก้ไข</button>
+                <button class="btn btn-ghost" id="admin-cancel-btn" type="button" hidden data-i18n="cancelEdit">ยกเลิกแก้ไข</button>
               </div>
             </section>
             <section class="panel">
-              <div class="panel-title">ลำดับแอป</div>
-              <p class="panel-copy">ใช้ปุ่มขึ้นลงเพื่อกำหนดลำดับ โดยปุ่มจะตัดบรรทัดอัตโนมัติเมื่อพื้นที่ไม่พอ</p>
+              <div class="panel-title" data-i18n="appOrder">ลำดับแอป</div>
+              <p class="panel-copy" data-i18n="appOrderDescription">ใช้ปุ่มขึ้นลงเพื่อกำหนดลำดับ โดยปุ่มจะตัดบรรทัดอัตโนมัติเมื่อพื้นที่ไม่พอ</p>
               <div class="admin-items" id="admin-items"></div>
             </section>
           </div>
         </div>
         <div id="users-tab" hidden>
           <section class="panel">
-            <div class="panel-title">ผู้ใช้งานทั้งหมด</div>
-            <p class="panel-copy">ค้นหาและกำหนด Role เพื่อควบคุมสิทธิ์การเข้าถึง</p>
+            <div class="panel-title" data-i18n="allUsers">ผู้ใช้งานทั้งหมด</div>
+            <p class="panel-copy" data-i18n="userPermissionsDescription">ค้นหาและกำหนด Role เพื่อควบคุมสิทธิ์การเข้าถึง</p>
             <div class="search" style="margin-bottom:12px">
               <span class="search-symbol" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-search"></use></svg></span>
-              <input id="user-search" aria-label="ค้นหาผู้ใช้งาน" type="search" placeholder="ค้นหาชื่อหรืออีเมล..." autocomplete="off">
-            <button class="search-clear" type="button" data-clear-search="user-search" aria-label="ล้างคำค้นหา" aria-controls="user-search" hidden><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button></div>
+              <input id="user-search" aria-label="ค้นหาผู้ใช้งาน" type="search" placeholder="ค้นหาชื่อหรืออีเมล..." autocomplete="off" data-i18n-aria-label="searchUsers" data-i18n-placeholder="searchUsersPlaceholder">
+            <button class="search-clear" type="button" data-clear-search="user-search" aria-label="ล้างคำค้นหา" aria-controls="user-search" hidden data-i18n-aria-label="clearSearch"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button></div>
             <div class="admin-users" id="admin-users"></div>
           </section>
         </div>
@@ -335,16 +335,16 @@
     <section class="modal medium">
       <header class="modal-head">
         <div class="modal-title">
-          <h2 id="logo-title">เลือกโลโก้</h2>
-          <p>ค้นหาและเลือกโลโก้จากคลัง theSVG</p>
+          <h2 id="logo-title" data-i18n="chooseLogo">เลือกโลโก้</h2>
+          <p data-i18n="logoDescription">ค้นหาและเลือกโลโก้จากคลัง theSVG</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด" data-i18n-aria-label="close"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button>
       </header>
       <div class="modal-body">
         <div class="search" style="margin-bottom:12px">
           <span class="search-symbol" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-search"></use></svg></span>
-          <input id="logo-search" aria-label="ค้นหาโลโก้" type="search" placeholder="ค้นหา เช่น Google, Notion, OpenAI..." autocomplete="off">
-        <button class="search-clear" type="button" data-clear-search="logo-search" aria-label="ล้างคำค้นหา" aria-controls="logo-search" hidden><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button></div>
+          <input id="logo-search" aria-label="ค้นหาโลโก้" type="search" placeholder="ค้นหา เช่น Google, Notion, OpenAI..." autocomplete="off" data-i18n-aria-label="searchLogos" data-i18n-placeholder="searchLogosPlaceholder">
+        <button class="search-clear" type="button" data-clear-search="logo-search" aria-label="ล้างคำค้นหา" aria-controls="logo-search" hidden data-i18n-aria-label="clearSearch"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button></div>
         <div class="logo-results" id="logo-results"></div>
       </div>
     </section>
@@ -353,34 +353,34 @@
     <section class="modal medium">
       <header class="modal-head">
         <div class="modal-title">
-          <h2 id="settings-title">การตั้งค่า</h2>
-          <p>ปรับแต่งธีม ภาษา และรูปแบบการแสดงผล</p>
+          <h2 id="settings-title" data-i18n="settings">การตั้งค่า</h2>
+          <p data-i18n="settingsDescription">ปรับแต่งธีม ภาษา และรูปแบบการแสดงผล</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด" data-i18n-aria-label="close"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button>
       </header>
       <div class="modal-body">
         <div class="settings-grid">
           <div class="settings-row">
-            <div><div class="settings-row-title">มุมมองแอป</div><div class="settings-row-desc">เปลี่ยนการจัดวางรายการแอป</div></div>
-            <div class="segment" aria-label="มุมมองแอป"><button type="button" data-view="grid">กริด</button><button type="button" data-view="list">รายการ</button><button type="button" data-view="compact">กระชับ</button></div>
+            <div><div class="settings-row-title" data-i18n="appView">มุมมองแอป</div><div class="settings-row-desc" data-i18n="appViewDescription">เปลี่ยนการจัดวางรายการแอป</div></div>
+            <div class="segment" aria-label="มุมมองแอป" data-i18n-aria-label="appView"><button type="button" data-view="grid" data-i18n="grid">กริด</button><button type="button" data-view="list" data-i18n="list">รายการ</button><button type="button" data-view="compact" data-i18n="compact">กระชับ</button></div>
           </div>
           <div class="settings-row">
             <div>
-              <div class="settings-row-title">ธีม</div>
-              <div class="settings-row-desc">เลือกธีมสว่าง มืด หรือปรับตามระบบ</div>
+              <div class="settings-row-title" data-i18n="theme">ธีม</div>
+              <div class="settings-row-desc" data-i18n="themeDescription">เลือกธีมสว่าง มืด หรือปรับตามระบบ</div>
             </div>
-            <div class="segment" id="theme-segment">
-              <button type="button" data-theme-value="light">สว่าง</button>
-              <button type="button" data-theme-value="dark">มืด</button>
-              <button type="button" data-theme-value="auto">อัตโนมัติ</button>
+            <div class="segment" id="theme-segment" aria-label="ธีม" data-i18n-aria-label="theme">
+              <button type="button" data-theme-value="light" data-i18n="light">สว่าง</button>
+              <button type="button" data-theme-value="dark" data-i18n="dark">มืด</button>
+              <button type="button" data-theme-value="auto" data-i18n="auto">อัตโนมัติ</button>
             </div>
           </div>
           <div class="settings-row">
             <div>
-              <div class="settings-row-title">ภาษา</div>
-              <div class="settings-row-desc">เปลี่ยนภาษาหลักของส่วนติดต่อ</div>
+              <div class="settings-row-title" data-i18n="language">ภาษา</div>
+              <div class="settings-row-desc" data-i18n="languageDescription">เปลี่ยนภาษาหลักของส่วนติดต่อ</div>
             </div>
-            <div class="segment" id="language-segment">
+            <div class="segment" id="language-segment" aria-label="ภาษา" data-i18n-aria-label="language">
               <button type="button" data-language-value="th">ไทย</button>
               <button type="button" data-language-value="en">English</button>
             </div>
@@ -421,33 +421,33 @@
     <section class="modal medium">
       <header class="modal-head">
         <div class="modal-title">
-          <h2 id="help-title">ช่วยเหลือและเกี่ยวกับ</h2>
-          <p>ข้อมูลและคำตอบที่พบบ่อย</p>
+          <h2 id="help-title" data-i18n="helpTitle">ช่วยเหลือและเกี่ยวกับ</h2>
+          <p data-i18n="helpDescription">ข้อมูลและคำตอบที่พบบ่อย</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด" data-i18n-aria-label="close"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button>
       </header>
       <div class="modal-body">
         <div class="settings-grid">
           <div class="help-item">
-            <strong>Koo Mean Portal คืออะไร?</strong>
-            <p>ศูนย์รวมแอปพลิเคชันสำหรับผู้ใช้ที่ได้รับอนุญาต โดยจะแสดงเฉพาะรายการที่ตรงกับสิทธิ์ของบัญชี</p>
+            <strong data-i18n="helpWhatTitle">Koo Mean Portal คืออะไร?</strong>
+            <p data-i18n="helpWhat">ศูนย์รวมแอปพลิเคชันสำหรับผู้ใช้ที่ได้รับอนุญาต โดยจะแสดงเฉพาะรายการที่ตรงกับสิทธิ์ของบัญชี</p>
           </div>
           <div class="help-item">
-            <strong>เข้าสู่ระบบไม่ได้?</strong>
-            <p>ตรวจสอบบัญชี Google และสิทธิ์ของอีเมล หากยังไม่อยู่ในระบบ คุณสามารถส่งคำขอลงทะเบียนได้</p>
+            <strong data-i18n="helpLoginTitle">เข้าสู่ระบบไม่ได้?</strong>
+            <p data-i18n="helpLogin">ตรวจสอบบัญชี Google และสิทธิ์ของอีเมล หากยังไม่อยู่ในระบบ คุณสามารถส่งคำขอลงทะเบียนได้</p>
           </div>
           <div class="help-item">
-            <strong>ไม่เห็นแอปบางรายการ?</strong>
-            <p>การมองเห็นแอปขึ้นอยู่กับ Role และ Group ที่กำหนดให้บัญชีของคุณ</p>
+            <strong data-i18n="helpAppsTitle">ไม่เห็นแอปบางรายการ?</strong>
+            <p data-i18n="helpApps">การมองเห็นแอปขึ้นอยู่กับ Role และ Group ที่กำหนดให้บัญชีของคุณ</p>
           </div>
           <div class="help-item">
-            <strong>ปุ่มลัด</strong>
-            <p>กด / เพื่อค้นหา, R เพื่อรีเฟรช, Ctrl/⌘ + K เพื่อเปิด Command Palette และ Esc เพื่อปิดหน้าต่างล่าสุด</p>
+            <strong data-i18n="shortcuts">ปุ่มลัด</strong>
+            <p data-i18n="shortcutsDescription">กด / เพื่อค้นหา, R เพื่อรีเฟรช, Ctrl/⌘ + K เพื่อเปิด Command Palette และ Esc เพื่อปิดหน้าต่างล่าสุด</p>
           </div>
         </div>
-        <div class="policy-links" aria-label="เอกสารนโยบาย">
-          <a class="btn btn-ghost" href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="help-privacy-label">นโยบายความเป็นส่วนตัว</span><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-external-link"></use></svg></a>
-          <a class="btn btn-ghost" href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="help-terms-label">ข้อกำหนดการใช้บริการ</span><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-external-link"></use></svg></a>
+        <div class="policy-links" aria-label="เอกสารนโยบาย" data-i18n-aria-label="policyDocuments">
+          <a class="btn btn-ghost" href="https://privacypolicy.koomean.com" target="_blank" rel="noopener noreferrer"><span id="help-privacy-label" data-i18n="privacy">นโยบายความเป็นส่วนตัว</span><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-external-link"></use></svg></a>
+          <a class="btn btn-ghost" href="https://termsofservice.koomean.com" target="_blank" rel="noopener noreferrer"><span id="help-terms-label" data-i18n="terms">ข้อกำหนดการใช้บริการ</span><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-external-link"></use></svg></a>
         </div>
       </div>
     </section>
@@ -457,15 +457,15 @@
       <header class="modal-head">
         <div class="modal-title">
           <h2 id="command-title">Command Palette</h2>
-          <p>ค้นหาแอปหรือเรียกใช้คำสั่งอย่างรวดเร็ว</p>
+          <p data-i18n="commandDescription">ค้นหาแอปหรือเรียกใช้คำสั่งอย่างรวดเร็ว</p>
         </div>
-        <button class="modal-close" type="button" data-close-modal aria-label="ปิด"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button>
+        <button class="modal-close" type="button" data-close-modal aria-label="ปิด" data-i18n-aria-label="close"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button>
       </header>
       <div class="modal-body">
         <div class="search" style="margin-bottom:12px">
           <span class="search-symbol" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-search"></use></svg></span>
-          <input id="command-search" aria-label="ค้นหาแอปหรือคำสั่ง" type="search" placeholder="พิมพ์ชื่อแอปหรือคำสั่ง..." autocomplete="off">
-        <button class="search-clear" type="button" data-clear-search="command-search" aria-label="ล้างคำค้นหา" aria-controls="command-search" hidden><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button></div>
+          <input id="command-search" aria-label="ค้นหาแอปหรือคำสั่ง" type="search" placeholder="พิมพ์ชื่อแอปหรือคำสั่ง..." autocomplete="off" data-i18n-aria-label="searchCommands" data-i18n-placeholder="searchCommandsPlaceholder">
+        <button class="search-clear" type="button" data-clear-search="command-search" aria-label="ล้างคำค้นหา" aria-controls="command-search" hidden data-i18n-aria-label="clearSearch"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button></div>
         <div class="command-results" id="command-results"></div>
       </div>
     </section>
