@@ -2,6 +2,8 @@
 
 Active source is `src/index.html`; root `index.html` is the generated Pages artifact. Deploy only `koomean/koomeanportal` with CNAME `koomean.com`. Do not copy Blog/Site builds here.
 
+The 11 October visual refresh uses a muted steel accent, neutral controls and quieter hero media in both themes. It keeps the existing page order, app catalog and saved preferences. Product-led hero copy replaces the generic welcome; controls and cards no longer compete with the application logos. See [design direction and online skills](DESIGN-2026-10-11.md); these color/style choices supersede the earlier blue-outline notes.
+
 ```sh
 npm ci --ignore-scripts
 npm run build
