@@ -136,5 +136,8 @@ const uiText = {
   consentRequired: ["กรุณายอมรับข้อกำหนดและรับทราบนโยบายความเป็นส่วนตัวก่อนสมัคร", "Please accept the Terms of Service and acknowledge the Privacy Policy to continue."],
   untitled: ["ไม่มีชื่อ", "Untitled"],
   customIcon: ["กำหนดเอง / theSVG", "Custom / theSVG"],
+  browseApps: ["สำรวจแอปทั้งหมด", "Browse applications"],
+  interfaceMotion: ["เอฟเฟ็กต์การใช้งาน", "Interface effects"],
+  interfaceMotionDescription: ["การตอบสนองของปุ่ม การ์ด และหน้าต่าง", "Button, card and dialog feedback"],
   blogDescription: ["blog ของ koomean", "Koo Mean’s blog"]
 };

@@ -51,6 +51,7 @@ try {
       return rects.every(rect => rect.height === 44) && rects.every(rect => rects.every(other => Math.abs(rect.top - other.top) > 1 || Math.abs(rect.bottom - other.bottom) < 1));
     }));
     await page.locator('#marquee-toggle').tap();
+    ok(name + ': editable search text stays at least 16px', await page.evaluate(() => ['#app-search','#new-name','#manual-icon','#group-filter','#marquee-speed','#command-search'].every(selector => parseFloat(getComputedStyle(document.querySelector(selector)).fontSize) >= 16)));
     ok(name + ': pause is saved', await page.evaluate(() => JSON.parse(localStorage.getItem('koomean_portal_prefs_v3')).marqueeEnabled === false));
     await page.reload(); await rendered(page);
     ok(name + ': saved pause survives reload', await page.locator('#marquee-track').evaluate(track => getComputedStyle(track).animationPlayState === 'paused'));

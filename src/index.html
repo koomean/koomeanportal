@@ -10,8 +10,6 @@
   <meta name="description" content="ศูนย์รวมแอปพลิเคชันและเครื่องมือ Koo Mean เข้าถึงบริการและจัดการบัญชีของคุณได้ในที่เดียว" data-i18n-content="pageDescription">
   <link rel="canonical" href="https://koomean.com/">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Thai:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -1998,8 +1996,8 @@
         </a>
 
         <div class="header-actions">
-          <button class="icon-button" id="command-btn" aria-label="เปิด Command Palette" type="button" title="Command Palette" data-i18n-aria-label="openCommands"><span data-ui-icon="command"></span></button>
-          <button class="icon-button" id="settings-btn" aria-label="การตั้งค่า" type="button" title="การตั้งค่า" data-i18n-aria-label="settings" data-i18n-title="settings"><span data-ui-icon="settings-2"></span></button>
+          <button class="icon-button" id="command-btn" aria-controls="command-modal" aria-haspopup="dialog" aria-expanded="false" aria-label="เปิด Command Palette" type="button" title="Command Palette" data-i18n-aria-label="openCommands"><span data-ui-icon="command"></span></button>
+          <button class="icon-button" id="settings-btn" aria-controls="settings-modal" aria-haspopup="dialog" aria-expanded="false" aria-label="การตั้งค่า" type="button" title="การตั้งค่า" data-i18n-aria-label="settings" data-i18n-title="settings"><span data-ui-icon="settings-2"></span></button>
 
           <button class="user-chip" id="user-chip" type="button">
             <img id="user-avatar" alt="">
@@ -2039,7 +2037,8 @@
           <p class="hero-subtitle-modern" id="hero-copy">
             แอป ลิงก์ และเครื่องมือที่ใช้ประจำ รวมไว้ในที่เดียว เลือกเปิดบริการที่ต้องการจากรายการด้านล่าง
           </p>
-          <a class="hero-btn-contact" id="hero-contact" href="mailto:meanchannel52@koomean.com?subject=Koo%20Mean%20Portal%20Report">ติดต่อเรา</a>
+          <div class="hero-actions"><a class="hero-browse" href="#app-catalog"><span data-i18n="browseApps">สำรวจแอปทั้งหมด</span><span data-ui-icon="arrow-down"></span></a>
+          <a class="hero-btn-contact" id="hero-contact" href="mailto:meanchannel52@koomean.com?subject=Koo%20Mean%20Portal%20Report">ติดต่อเรา</a></div>
         </div>
         <button class="motion-toggle" id="video-toggle" type="button" aria-controls="hero-video" aria-pressed="true"><span data-ui-icon="pause"></span><span>หยุดพื้นหลัง</span></button>
       </div>
@@ -2051,7 +2050,7 @@
       </div>
     </section>
 
-    <section aria-label="รายการแอปพลิเคชัน" data-i18n-aria-label="appCollection">
+    <section id="app-catalog" tabindex="-1" aria-label="รายการแอปพลิเคชัน" data-i18n-aria-label="appCollection">
       <div class="toolbar">
         <div class="search">
           <span class="search-symbol" aria-hidden="true"><span data-ui-icon="search"></span></span>
@@ -2364,7 +2363,11 @@
               <span><strong id="video-setting-label" data-pref-copy="videoLabel">เล่นวิดีโอพื้นหลัง</strong><span class="settings-row-desc" id="video-setting-desc" data-pref-copy="videoDesc">เล่นอัตโนมัติเมื่อเปิดหน้าเว็บ</span></span>
               <input class="settings-switch" id="video-enabled" type="checkbox" role="switch" data-preference="videoEnabled" aria-labelledby="video-setting-label" aria-describedby="video-setting-desc" checked>
             </label>
-            <p class="settings-notice" id="motion-notice" data-pref-copy="motionNotice" hidden>อุปกรณ์ของคุณเปิดการลดการเคลื่อนไหว แถบลิงก์จะแสดงนิ่งและวิดีโอจะไม่เล่นอัตโนมัติ</p>
+            <label class="settings-option" for="interface-motion">
+              <span><strong id="interface-motion-label" data-i18n="interfaceMotion">เอฟเฟ็กต์การใช้งาน</strong><span class="settings-row-desc" id="interface-motion-desc" data-i18n="interfaceMotionDescription">การตอบสนองของปุ่ม การ์ด และหน้าต่าง</span></span>
+              <input class="settings-switch" id="interface-motion" type="checkbox" role="switch" data-preference="interfaceMotion" aria-labelledby="interface-motion-label" aria-describedby="interface-motion-desc" checked>
+            </label>
+            <p class="settings-notice" id="motion-notice" data-pref-copy="motionNotice" hidden>อุปกรณ์ของคุณเปิดการลดการเคลื่อนไหว เอฟเฟ็กต์และแถบลิงก์จะแสดงนิ่ง วิดีโอจะไม่เล่นอัตโนมัติ</p>
           </section>
           <section class="settings-section" aria-labelledby="data-settings-title">
             <h3 id="data-settings-title" data-pref-copy="dataTitle">การใช้ข้อมูล</h3>
@@ -2468,7 +2471,7 @@
       const SESSION_KEY = "koomean_portal_session_v2";
       const PREFS_KEY = "koomean_portal_prefs_v3";
       const PINNED_KEY = "koomean_pinned_apps_v1";
-      const DEFAULT_PREFERENCES = Object.freeze({theme:"auto", lang:"th", view:"grid", marqueeEnabled:true, marqueeSpeed:"normal", videoEnabled:true, dataSaver:false, favoritesOnly:false});
+      const DEFAULT_PREFERENCES = Object.freeze({theme:"auto", lang:"th", view:"grid", marqueeEnabled:true, marqueeSpeed:"normal", videoEnabled:true, interfaceMotion:true, dataSaver:false, favoritesOnly:false});
       const MARQUEE_SPEEDS = Object.freeze({slow:52, normal:38, fast:28});
 
       const preferenceText = {
@@ -2476,7 +2479,7 @@
           motionTitle:"การเคลื่อนไหว", marqueeLabel:"เลื่อนแถบลิงก์อัตโนมัติ", marqueeDesc:"แถบ YouTube, GitHub และโซเชียลต่าง ๆ",
           speedLabel:"ความเร็วแถบลิงก์", speedSlow:"ช้า", speedNormal:"ปกติ", speedFast:"เร็ว",
           videoLabel:"เล่นวิดีโอพื้นหลัง", videoDesc:"เล่นอัตโนมัติเมื่อเปิดหน้าเว็บ",
-          motionNotice:"อุปกรณ์ของคุณเปิดการลดการเคลื่อนไหว แถบลิงก์จะแสดงนิ่งและวิดีโอจะไม่เล่นอัตโนมัติ",
+          motionNotice:"อุปกรณ์ของคุณเปิดการลดการเคลื่อนไหว เอฟเฟ็กต์และแถบลิงก์จะแสดงนิ่ง วิดีโอจะไม่เล่นอัตโนมัติ",
           dataTitle:"การใช้ข้อมูล", dataLabel:"โหมดประหยัดข้อมูล", dataDesc:"ใช้ภาพนิ่งแทนวิดีโอพื้นหลัง ช่วยลดการใช้เน็ต",
           settingsStorage:"บันทึกการตั้งค่าอัตโนมัติใน browser นี้", settingsSaved:"บันทึกการตั้งค่าใน browser นี้แล้ว",
           settingsNotSaved:"browser ไม่อนุญาตให้บันทึก การตั้งค่าครั้งนี้จะใช้ได้จนกว่าจะปิดหรือโหลดหน้าใหม่",
@@ -2489,7 +2492,7 @@
           motionTitle:"Motion", marqueeLabel:"Scroll social links automatically", marqueeDesc:"YouTube, GitHub and other social links",
           speedLabel:"Link scrolling speed", speedSlow:"Slow", speedNormal:"Normal", speedFast:"Fast",
           videoLabel:"Play background video", videoDesc:"Start automatically when you open the page",
-          motionNotice:"Your device requests reduced motion. Links stay still and video does not start automatically.",
+          motionNotice:"Your device requests reduced motion. Interface effects and links stay still, and video does not start automatically.",
           dataTitle:"Data usage", dataLabel:"Save data", dataDesc:"Use a still background without downloading the video",
           settingsStorage:"Settings are saved automatically in this browser", settingsSaved:"Settings saved in this browser",
           settingsNotSaved:"This browser blocked saving. These settings last until you close or reload the page.",
@@ -2726,6 +2729,7 @@
         backdrop.hidden = false;
         backdrop.style.zIndex = String(100 + state.modalStack.length * 10);
         backdrop.classList.add("open");
+        document.querySelectorAll(`[aria-controls="${id}"][aria-expanded]`).forEach(button => button.setAttribute("aria-expanded", "true"));
         document.body.classList.add("modal-open");
         syncModalState();
 
@@ -2744,6 +2748,7 @@
         // Tear down the GIS frame before hiding it so pending provider callbacks cannot run in a hidden frame.
         if (id === "login-modal") $("google-button").replaceChildren();
         backdrop.classList.remove("open");
+        document.querySelectorAll(`[aria-controls="${id}"][aria-expanded]`).forEach(button => button.setAttribute("aria-expanded", "false"));
         backdrop.hidden = true;
         backdrop.style.zIndex = "";
 
@@ -2773,7 +2778,7 @@
           state.lang = saved.lang === "en" ? "en" : "th";
           state.view = ["grid", "list", "compact"].includes(saved.view) ? saved.view : "grid";
           state.marqueeSpeed = typeof saved.marqueeSpeed === "string" && Object.hasOwn(MARQUEE_SPEEDS, saved.marqueeSpeed) ? saved.marqueeSpeed : "normal";
-          for (const key of ["marqueeEnabled", "videoEnabled", "dataSaver", "favoritesOnly"]) {
+          for (const key of ["marqueeEnabled", "videoEnabled", "interfaceMotion", "dataSaver", "favoritesOnly"]) {
             state[key] = typeof saved[key] === "boolean" ? saved[key] : DEFAULT_PREFERENCES[key];
           }
         } catch {}
@@ -3362,6 +3367,18 @@
         $("retry-btn")?.addEventListener("click", () => loadPortal(false, true));
       }
 
+      const interfaceAnimations = new WeakMap();
+      function animateInterface(element, keyframes, duration = 210) {
+        if (!element || document.documentElement.dataset.motion !== "on" || typeof element.animate !== "function") return;
+        interfaceAnimations.get(element)?.cancel();
+        const animation = element.animate(keyframes, {duration, easing:"cubic-bezier(.22,.75,.25,1)"});
+        interfaceAnimations.set(element, animation);
+      }
+
+      function animateCatalog() {
+        animateInterface($("applications"), [{opacity:.65, transform:"translateY(5px)"}, {opacity:1, transform:"none"}]);
+      }
+
       function togglePinned(url) {
         const canonical = safeUrl(url) && canonicalUrl(url);
         if (!canonical) return;
@@ -3377,6 +3394,7 @@
         renderApplications();
         const target = [...document.querySelectorAll("[data-pin-url]")].find(node => node.dataset.pinUrl === focusedUrl);
         (target || $("favorites-filter")).focus({preventScroll:true});
+        animateInterface(target?.querySelector(".ui-icon"), [{transform:"scale(.8)"}, {transform:"scale(1.15)", offset:.6}, {transform:"scale(1)"}], 240);
       }
 
       function loadGoogle() {
@@ -4159,11 +4177,12 @@
       });
 
       $("app-search").addEventListener("input", debounce(renderApplications, 130));
-      $("group-filter").addEventListener("change", renderApplications);
+      $("group-filter").addEventListener("change", () => { renderApplications(); animateCatalog(); });
       $("favorites-filter").addEventListener("click", () => {
         state.favoritesOnly = !state.favoritesOnly;
         savePreferences();
         renderApplications();
+        animateCatalog();
       });
       $("user-search").addEventListener("input", debounce(renderAdminUsers, 180));
       $("logo-search").addEventListener("input", debounce(renderLogos, 160));
@@ -4183,6 +4202,7 @@
           state.view = button.dataset.view;
           savePreferences();
           applyView();
+          animateCatalog();
         });
       });
 
@@ -4273,6 +4293,10 @@
       const motionPreference = matchMedia("(prefers-reduced-motion:reduce)");
       let videoWanted = false, heroInView = true, videoReady = false, videoTask = null, videoUpdatePending = false;
       function applyMotionPreferences(userInitiated = false) {
+        document.documentElement.dataset.motion = state.interfaceMotion && !motionPreference.matches && !state.dataSaver ? "on" : "off";
+        if (document.documentElement.dataset.motion === "off") {
+          document.querySelectorAll("#applications, .card-action .ui-icon").forEach(element => interfaceAnimations.get(element)?.cancel());
+        }
         document.querySelectorAll("[data-preference]").forEach(input => { input.checked = state[input.dataset.preference]; });
         $("marquee-speed").value = state.marqueeSpeed;
         $("motion-notice").hidden = !motionPreference.matches;
