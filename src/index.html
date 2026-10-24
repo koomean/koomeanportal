@@ -2040,13 +2040,13 @@
           <div class="hero-actions"><a class="hero-browse" href="#app-catalog"><span data-i18n="browseApps">สำรวจแอปทั้งหมด</span><span data-ui-icon="arrow-down"></span></a>
           <a class="hero-btn-contact" id="hero-contact" href="mailto:meanchannel52@koomean.com?subject=Koo%20Mean%20Portal%20Report">ติดต่อเรา</a></div>
         </div>
-        <button class="motion-toggle" id="video-toggle" type="button" aria-controls="hero-video" aria-pressed="true"><span data-ui-icon="pause"></span><span>หยุดพื้นหลัง</span></button>
+
       </div>
 
       <!-- 3. Seamless Marquee Logo Scroller -->
       <div class="marquee-section" id="marquee-section" data-loading aria-busy="true">
         <div class="marquee-wrapper"><div class="marquee-track" id="marquee-track"></div></div>
-        <button class="marquee-toggle" id="marquee-toggle" type="button" aria-pressed="false" aria-label="หยุดแถบลิงก์"><span data-ui-icon="pause"></span></button>
+
       </div>
     </section>
 
@@ -2484,7 +2484,7 @@
           settingsStorage:"บันทึกการตั้งค่าอัตโนมัติใน browser นี้", settingsSaved:"บันทึกการตั้งค่าใน browser นี้แล้ว",
           settingsNotSaved:"browser ไม่อนุญาตให้บันทึก การตั้งค่าครั้งนี้จะใช้ได้จนกว่าจะปิดหรือโหลดหน้าใหม่",
           resetLabel:"คืนค่าการตั้งค่าเริ่มต้น", resetDesc:"คืนค่าธีม ภาษา มุมมอง การเคลื่อนไหว และตัวกรอง รายการโปรดที่ติดดาวไว้ยังอยู่",
-          resetDone:"คืนค่าการตั้งค่าเริ่มต้นแล้ว", saverButton:"โหมดประหยัดข้อมูล", showAll:"ดูแอปทั้งหมด",
+          resetDone:"คืนค่าการตั้งค่าเริ่มต้นแล้ว", showAll:"ดูแอปทั้งหมด",
           noFavorites:"ยังไม่มีรายการโปรด", noFavoritesDesc:"กดดาวบนแอปที่คุณใช้บ่อยเพื่อเก็บไว้ที่นี่",
           noFavoriteResults:"ไม่พบรายการโปรดที่ตรงกับตัวกรอง", noFavoriteResultsDesc:"ลองเปลี่ยนคำค้นหา กลุ่ม หรือดูแอปทั้งหมด"
         },
@@ -2497,7 +2497,7 @@
           settingsStorage:"Settings are saved automatically in this browser", settingsSaved:"Settings saved in this browser",
           settingsNotSaved:"This browser blocked saving. These settings last until you close or reload the page.",
           resetLabel:"Restore default settings", resetDesc:"Reset theme, language, layout, motion and filters. Your starred favorites are kept.",
-          resetDone:"Default settings restored", saverButton:"Data saver is on", showAll:"Show all apps",
+          resetDone:"Default settings restored", showAll:"Show all apps",
           noFavorites:"No favorites yet", noFavoritesDesc:"Star the apps you use often to keep them here.",
           noFavoriteResults:"No favorites match these filters", noFavoriteResultsDesc:"Try another search or group, or show all apps."
         }
@@ -4284,12 +4284,7 @@
         section.removeAttribute("data-loading");
         section.setAttribute("aria-busy", "false");
       }
-      $("marquee-toggle").addEventListener("click", () => {
-        state.marqueeEnabled = !state.marqueeEnabled;
-        savePreferences();
-        applyMotionPreferences();
-      });
-      const video = $("hero-video"), videoButton = $("video-toggle");
+      const video = $("hero-video");
       const motionPreference = matchMedia("(prefers-reduced-motion:reduce)");
       let videoWanted = false, heroInView = true, videoReady = false, videoTask = null, videoUpdatePending = false;
       function applyMotionPreferences(userInitiated = false) {
@@ -4300,11 +4295,8 @@
         document.querySelectorAll("[data-preference]").forEach(input => { input.checked = state[input.dataset.preference]; });
         $("marquee-speed").value = state.marqueeSpeed;
         $("motion-notice").hidden = !motionPreference.matches;
-        const section = $("marquee-section"), track = $("marquee-track"), button = $("marquee-toggle");
+        const section = $("marquee-section"), track = $("marquee-track");
         section.classList.toggle("user-paused", !state.marqueeEnabled);
-        button.setAttribute("aria-pressed", String(!state.marqueeEnabled));
-        button.setAttribute("aria-label", state.lang === "en" ? (state.marqueeEnabled ? "Pause social links" : "Play social links") : (state.marqueeEnabled ? "หยุดแถบลิงก์" : "เล่นแถบลิงก์"));
-        button.innerHTML = uiIcon(state.marqueeEnabled ? "pause" : "play");
         const duration = MARQUEE_SPEEDS[state.marqueeSpeed] * 1000;
         const animation = track.getAnimations()[0];
         const oldDuration = animation?.effect.getTiming().duration;
@@ -4317,16 +4309,7 @@
           video.parentElement.classList.remove("has-video");
           if (video.hasAttribute("src")) { video.removeAttribute("src"); video.load(); }
         }
-        updateVideoLabel();
         syncVideo(userInitiated);
-      }
-      function updateVideoLabel() {
-        const playing = videoWanted && !state.dataSaver;
-        videoButton.disabled = state.dataSaver;
-        videoButton.title = state.dataSaver ? prefCopy("dataDesc") : "";
-        videoButton.setAttribute("aria-pressed", String(playing));
-        const label = state.dataSaver ? prefCopy("saverButton") : playing ? (state.lang === "en" ? "Pause background" : "หยุดพื้นหลัง") : (state.lang === "en" ? "Play background" : "เล่นพื้นหลัง");
-        videoButton.innerHTML = uiIcon(playing ? "pause" : "play") + `<span>${label}</span>`;
       }
       function shouldPlayVideo() {
         return videoWanted && !state.dataSaver && videoReady && heroInView && !document.hidden && document.documentElement.dataset.maintenance !== "active";
@@ -4347,21 +4330,13 @@
           if (userInitiated && error.name !== "NotAllowedError") showToast(t("videoFailed"), "error");
         }).finally(() => {
           videoTask = null;
-          updateVideoLabel();
           // Reconcile a pause/resume that arrived before the previous play promise settled.
           if (videoUpdatePending) { videoUpdatePending = false; syncVideo(); }
         });
       }
       video.addEventListener("playing", () => { if (shouldPlayVideo()) video.parentElement.classList.add("has-video"); else video.pause(); });
-      videoButton.addEventListener("click", () => {
-        videoWanted = !videoWanted;
-        state.videoEnabled = videoWanted;
-        videoReady = true;
-        savePreferences();
-        applyMotionPreferences(true);
-      });
       motionPreference.addEventListener?.("change", () => { videoWanted = state.videoEnabled && !motionPreference.matches; applyMotionPreferences(); });
-      // Render the poster and controls first; the small local loop follows the first paint.
+      // Render the poster first; the small local loop follows the first paint.
       requestAnimationFrame(() => setTimeout(() => { videoReady = true; syncVideo(); }, 1200));
       new MutationObserver(() => syncVideo()).observe(document.documentElement, {attributes:true, attributeFilter:["data-maintenance"]});
       if ("IntersectionObserver" in window) {

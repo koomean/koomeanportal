@@ -32,6 +32,7 @@ async function setup(device, {paused = false, reduced = false, empty = false} = 
 async function rendered(page) {
   await page.waitForFunction(() => document.getElementById('marquee-section').getAttribute('aria-busy') === 'false');
 }
+async function setRail(page, enabled) { await page.locator('#settings-btn').tap(); await page.locator('#marquee-enabled').setChecked(enabled); await page.keyboard.press('Escape'); await page.waitForFunction(() => !document.querySelector('.modal-backdrop.open')); }
 async function moving(page) {
   const sample = () => page.locator('#marquee-track').evaluate(track => ({time:track.getAnimations()[0]?.currentTime, transform:getComputedStyle(track).transform, state:getComputedStyle(track).animationPlayState}));
   const before = await sample();
@@ -46,16 +47,17 @@ try {
     ok(name + ': an empty rail has no animation while bootstrap is pending', await page.locator('#marquee-track').evaluate(track => !track.children.length && getComputedStyle(track).animationName === 'none'));
     env.release(); await rendered(page);
     ok(name + ': delayed links start moving without any tap', await moving(page));
+    ok(name + ': on-page playback buttons are absent', await page.locator('#video-toggle,#marquee-toggle').count() === 0);
     ok(name + ': toolbar controls have equal heights and aligned row edges', await page.evaluate(() => {
       const rects = ['#app-search','#group-filter','.view-switcher','#refresh-btn'].map(selector => document.querySelector(selector).getBoundingClientRect()).filter(rect => rect.width > 0);
       return rects.every(rect => rect.height === 44) && rects.every(rect => rects.every(other => Math.abs(rect.top - other.top) > 1 || Math.abs(rect.bottom - other.bottom) < 1));
     }));
-    await page.locator('#marquee-toggle').tap();
+    await setRail(page, false);
     ok(name + ': editable search text stays at least 16px', await page.evaluate(() => ['#app-search','#new-name','#manual-icon','#group-filter','#marquee-speed','#command-search'].every(selector => parseFloat(getComputedStyle(document.querySelector(selector)).fontSize) >= 16)));
     ok(name + ': pause is saved', await page.evaluate(() => JSON.parse(localStorage.getItem('koomean_portal_prefs_v3')).marqueeEnabled === false));
     await page.reload(); await rendered(page);
     ok(name + ': saved pause survives reload', await page.locator('#marquee-track').evaluate(track => getComputedStyle(track).animationPlayState === 'paused'));
-    await page.locator('#marquee-toggle').tap();
+    await setRail(page, true);
     ok(name + ': play resumes despite touch focus', await moving(page));
     await page.reload(); await rendered(page);
     ok(name + ': saved play starts on the next visit without a tap', await moving(page));
