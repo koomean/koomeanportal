@@ -54,7 +54,7 @@ async function within(page,selector){return page.locator(selector).evaluateAll(n
 async function go(page,route){
  if(new URL(page.url()).pathname===route)return;
  if(!await page.locator('.portal-sidebar').isVisible())await page.locator('#menu-toggle').click();
- await page.locator(`.portal-sidebar .side-nav [data-route="${route}"]`).click();
+ await page.locator(`.portal-sidebar ${route==='/help/'?'.sidebar-bottom':'.side-nav'} [data-route="${route}"]`).click();
  await page.waitForURL('https://koomean.com'+route);
  await page.waitForFunction(path=>document.documentElement.dataset.route===path,route);
 }
@@ -89,7 +89,11 @@ try{
  await go(page,'/settings/');ok('Settings is a focused page with active navigation and no modal isolation',await page.locator('#settings-modal').isVisible()&&!await page.locator('#main-content').evaluate(e=>e.inert)&&await page.locator('.side-nav [data-route="/settings/"]').getAttribute('aria-current')==='page'&&await page.evaluate(()=>document.activeElement.id==='page-heading'));await page.keyboard.press('Escape');ok('Escape does not dismiss the settings page',new URL(page.url()).pathname==='/settings/'&&await page.locator('#settings-modal').isVisible());await go(page,'/');ok('Leaving settings hides its content from the accessibility tree',await page.locator('#settings-modal').evaluate(e=>e.hidden&&e.inert&&e.getAttribute('aria-hidden')==='true'));
  await page.locator('#command-btn').click();ok('A real dialog isolates the workspace and sidebar',await page.locator('#main-content').evaluate(e=>e.inert)&&await page.locator('#portal-sidebar').evaluate(e=>e.inert)&&await page.locator('#command-modal').evaluate(e=>e.contains(document.activeElement)));await page.keyboard.press('Shift+Tab');ok('Keyboard wraps inside the active dialog',await page.locator('#command-modal').evaluate(e=>e.contains(document.activeElement)));await close(page);ok('Dialog close restores its trigger focus',await page.evaluate(()=>document.activeElement.id==='command-btn'));
  await page.keyboard.press('Control+k');await page.locator('#command-search').fill('VeryLong');ok('Command palette long text stays inside its row',(await within(page,'.command-item>span:first-child')).length===0);await close(page);
- await env.login();ok('Only server verified admin response enables admin UI',await page.locator('#admin-nav').isVisible());ok('Token and account data are not persisted',await page.evaluate(()=>![...Object.values(localStorage)].some(s=>s.includes('fixture@example.invalid')||s.includes('exp'))));
+ await env.login();ok('Only server verified admin response enables admin UI',await page.locator('#admin-nav').isVisible());
+ const navigationCalls=calls.length;await go(page,'/settings/');await go(page,'/account/');
+ ok('Internal page navigation keeps the verified account without another bootstrap',await page.locator('#account-email').textContent()===user.email&&calls.length===navigationCalls);
+ await page.goBack();ok('Browser back restores the previous page and active navigation',new URL(page.url()).pathname==='/settings/'&&await page.locator('#settings-modal').isVisible()&&await page.locator('.side-nav [data-route="/settings/"]').getAttribute('aria-current')==='page');await go(page,'/');
+ok('Token and account data are not persisted',await page.evaluate(()=>![...Object.values(localStorage)].some(s=>s.includes('fixture@example.invalid')||s.includes('exp'))));
  for(const width of [280,320,390,520,768,1024,1440]){
   await page.setViewportSize({width,height:900});
   for(const view of ['grid','list','compact']){
@@ -110,6 +114,16 @@ try{
  await go(page,'/');const countBefore=await page.locator('.app-card').count();env.setRate(true);await page.locator('#refresh-btn').click();await page.waitForFunction(()=>!document.querySelector('#refresh-btn').disabled);const rateCalls=calls.length;await page.locator('#refresh-btn').click();ok('429 preserves visible apps and honors Retry-After',await page.locator('.app-card').count()===countBefore&&calls.length===rateCalls);
  ok('No application runtime error during interactions',env.errors.length===0);
  await env.context.close();
+ for(const route of ['/apps/','/favorites/','/account/','/settings/','/help/','/admin/']){
+  const direct=await setup({path:route});
+  ok('Direct page '+route+' serves HTTP 200 with its own route',direct.navigation.status()===200&&await direct.page.evaluate(route=>document.documentElement.dataset.route===route&&document.title!=='Koo Mean Portal',route));
+  if(['/account/','/admin/'].includes(route))ok('Direct protected page '+route+' hides account content',await direct.page.locator('#route-guard').isVisible()&&await direct.page.locator(route==='/admin/'?'#admin-modal':'#account-modal').isHidden());
+  await direct.context.close();
+ }
+ const missing=await setup({path:'/apps/no-such-page'});
+ ok('Unknown nested page retains its URL and serves HTTP 404 with the custom page',missing.navigation.status()===404&&new URL(missing.page.url()).pathname==='/apps/no-such-page'&&await missing.page.locator('#not-found').isVisible()&&await missing.page.locator('#home').isHidden()&&await missing.page.locator('#app-catalog').isHidden()&&await missing.page.title()==='404 · Koo Mean Portal');
+ ok('Nested 404 loads its root-relative stylesheet',await missing.page.locator('.missing-illustration').evaluate(e=>parseFloat(getComputedStyle(e).fontSize)>=100));
+ await missing.page.locator('#not-found a[data-route="/"]').click();ok('404 recovery opens the home page',new URL(missing.page.url()).pathname==='/'&&await missing.page.locator('#home').isVisible());await missing.context.close();
  const prefs=await setup(),pp=prefs.page;await pp.mouse.move(0,0);
  const railTime=await pp.locator('.marquee-track').evaluate(e=>e.getAnimations()[0].currentTime);await pp.waitForFunction(time=>document.querySelector('.marquee-track').getAnimations()[0].currentTime>time+100,railTime);
  ok('Social links start moving without interaction at the faster default speed',await pp.locator('.marquee-track').evaluate(e=>getComputedStyle(e).animationDuration==='38s'&&getComputedStyle(e).animationPlayState==='running'));

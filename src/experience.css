@@ -876,7 +876,7 @@ kbd {
 .marquee-section.offscreen .marquee-track,
 .page-hidden .marquee-track,
 [data-maintenance=active] .marquee-track,
-.marquee-section:has(a:focus-visible) .marquee-track {
+.marquee-section:has(.marquee-card:focus) .marquee-track {
   animation-play-state: paused;
 }
 @media (hover: hover) {
