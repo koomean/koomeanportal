@@ -973,6 +973,7 @@ kbd {
 }
 .view-switcher {
   display: flex;
+  height: 44px;
   align-items: center;
   background: var(--panel);
   border: 1px solid var(--line);
