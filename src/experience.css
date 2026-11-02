@@ -3053,7 +3053,8 @@ textarea.field {
   .search input,
   .field,
   .admin-role,
-  .filter {
+  .filter,
+  .settings-speed .filter {
     font-size: 16px;
   }
 }
