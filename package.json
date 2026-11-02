@@ -4,9 +4,10 @@
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node --test tests/security.test.mjs tests/maintenance.test.mjs tests/i18n.test.mjs",
+    "test": "node --test tests/security.test.mjs tests/maintenance.test.mjs tests/i18n.test.mjs tests/routes.test.mjs",
     "test:browser": "node tests/browser.mjs",
-    "test:webkit": "node tests/marquee-webkit.mjs"
+    "test:webkit": "node tests/marquee-webkit.mjs",
+    "preview": "node scripts/preview.mjs"
   },
   "devDependencies": {
     "esbuild": "0.28.1",

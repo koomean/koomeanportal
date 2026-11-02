@@ -15,8 +15,12 @@ async function setup(device, {paused = false, reduced = false, empty = false} = 
   let release;
   const responseReady = new Promise(resolve => { release = resolve; });
   await page.route('https://koomean.com/**', route => {
-    const file = path.join(root, new URL(route.request().url()).pathname.replace(/^\/$/, '/index.html'));
-    return file.startsWith(root + '/') && fs.existsSync(file) ? route.fulfill({path:file}) : route.fulfill({status:404});
+    const url=new URL(route.request().url());
+    let file=path.resolve(root,'.'+url.pathname),status=200;
+    if(!file.startsWith(root+'/')&&file!==root)return route.fulfill({status:404});
+    if(fs.existsSync(file)&&fs.statSync(file).isDirectory())file=path.join(file,'index.html');
+    if(!fs.existsSync(file)){file=path.join(root,'404.html');status=404;}
+    return route.fulfill({status,path:file});
   });
   await page.route('https://koomean-proxy.meanchannel52.workers.dev/**', async route => {
     const params = new URLSearchParams(route.request().postData());
@@ -32,7 +36,12 @@ async function setup(device, {paused = false, reduced = false, empty = false} = 
 async function rendered(page) {
   await page.waitForFunction(() => document.getElementById('marquee-section').getAttribute('aria-busy') === 'false');
 }
-async function setRail(page, enabled) { await page.locator('#settings-btn').tap(); await page.locator('#marquee-enabled').setChecked(enabled); await page.keyboard.press('Escape'); await page.waitForFunction(() => !document.querySelector('.modal-backdrop.open')); }
+async function go(page,route) {
+  if(!await page.locator('.portal-sidebar').isVisible())await page.locator('#menu-toggle').tap();
+  await page.locator(`.side-nav a[data-route="${route}"]`).tap();
+  await page.waitForURL('https://koomean.com'+route);
+}
+async function setRail(page,enabled) {await go(page,'/settings/');await page.locator('#marquee-enabled').setChecked(enabled);await go(page,'/');}
 async function moving(page) {
   const sample = () => page.locator('#marquee-track').evaluate(track => ({time:track.getAnimations()[0]?.currentTime, transform:getComputedStyle(track).transform, state:getComputedStyle(track).animationPlayState}));
   const before = await sample();
@@ -49,8 +58,8 @@ try {
     ok(name + ': delayed links start moving without any tap', await moving(page));
     ok(name + ': on-page playback buttons are absent', await page.locator('#video-toggle,#marquee-toggle').count() === 0);
     ok(name + ': toolbar controls have equal heights and aligned row edges', await page.evaluate(() => {
-      const rects = ['#app-search','#group-filter','.view-switcher','#refresh-btn'].map(selector => document.querySelector(selector).getBoundingClientRect()).filter(rect => rect.width > 0);
-      return rects.every(rect => rect.height === 44) && rects.every(rect => rects.every(other => Math.abs(rect.top - other.top) > 1 || Math.abs(rect.bottom - other.bottom) < 1));
+      const rects = ['.toolbar>.search','#group-filter','.view-switcher','#refresh-btn'].map(selector => document.querySelector(selector).getBoundingClientRect()).filter(rect => rect.width > 0);
+      return rects.every(rect => Math.abs(rect.height - rects[0].height) < 1) && rects.every(rect => rects.every(other => Math.abs(rect.top - other.top) > 1 || Math.abs(rect.bottom - other.bottom) < 1));
     }));
     await setRail(page, false);
     ok(name + ': editable search text stays at least 16px', await page.evaluate(() => ['#app-search','#new-name','#manual-icon','#group-filter','#marquee-speed','#command-search'].every(selector => parseFloat(getComputedStyle(document.querySelector(selector)).fontSize) >= 16)));

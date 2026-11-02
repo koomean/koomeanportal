@@ -1,11 +1,21 @@
 {
-  "htmlBytes": 49526,
+  "htmlBytes": 56334,
+  "routes": [
+    "/",
+    "/apps/",
+    "/favorites/",
+    "/account/",
+    "/settings/",
+    "/help/",
+    "/admin/"
+  ],
+  "notFound": "404.html",
   "css": {
-    "file": "portal-5f6fbfadb828193c.css",
-    "bytes": 169830
+    "file": "portal-b943362c04c3c9c1.css",
+    "bytes": 151531
   },
   "js": {
-    "file": "app-69e3bb4d8dc6146b.js",
-    "bytes": 81372
+    "file": "app-bae7e8fef775e3ab.js",
+    "bytes": 91816
   }
 }

@@ -19,7 +19,7 @@ function setup(lang = 'en') {
       return nodes.get(id);
     },
     isAdmin:()=>true, uiIcon:()=>'<svg></svg>', iconHtml:()=>'', getIconHtml:()=>'<svg></svg>',
-    renderCommandItems(){}, openModal(){}, openLogin(){}, refreshPortal(){},
+    renderCommandItems(){}, openModal(){}, openLogin(){}, refreshPortal(){}, currentPortalRoute:()=> '/',
     window:{open(){}}, loadError:null
   });
   vm.runInContext(copy + '\n' + source.slice(source.indexOf('      const text = {'), source.indexOf('      const state = {')) + '\n' +

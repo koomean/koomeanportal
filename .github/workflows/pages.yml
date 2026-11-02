@@ -38,13 +38,15 @@ jobs:
       - name: Package only website files
         run: |
           mkdir _site
-          cp index.html CNAME _site/
+          cp index.html 404.html CNAME _site/
+          cp -R apps favorites account settings help admin _site/
           cp -R assets _site/assets
           cp -R licenses _site/licenses
       - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4
         with:
           path: _site
   deploy:
+    if: github.ref == 'refs/heads/main'
     needs: build
     runs-on: ubuntu-latest
     permissions:
