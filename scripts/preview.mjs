@@ -7,6 +7,8 @@ import {randomUUID} from 'node:crypto';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const port = Number(process.env.PORTAL_PREVIEW_PORT || 4173);
+const bootstrapDelay = Number(process.env.PORTAL_PREVIEW_BOOTSTRAP_DELAY_MS || 0);
+if (!Number.isFinite(bootstrapDelay) || bootstrapDelay < 0 || bootstrapDelay > 10000) throw new Error('PORTAL_PREVIEW_BOOTSTRAP_DELAY_MS must be between 0 and 10000');
 if (!Number.isInteger(port) || port < 1024 || port > 65535) throw new Error('PORTAL_PREVIEW_PORT must be between 1024 and 65535');
 const apiURL = 'https://koomean-proxy.meanchannel52.workers.dev';
 const routeNames = new Set(['apps', 'favorites', 'account', 'settings', 'help', 'admin']);
@@ -71,6 +73,7 @@ async function handleAPI(req, res) {
   if (rawToken && !authenticated) return json(res, 401, {authError:true,message:'Unknown preview identity'});
   if (action === 'maintenanceStatus') return json(res,200,{maintenance:{active:model.maintenance,note:'กำลังทดสอบหน้าปิดปรับปรุงในพรีวิว',reopenAt:Date.now()+120000,serverTime:Date.now()}});
   if (action === 'bootstrap') {
+    if (bootstrapDelay) await new Promise(resolve=>setTimeout(resolve,bootstrapDelay));
     if (model.rateLimited) return json(res,429,{message:'Fixture rate limit. Turn it off in preview controls.'},{'Retry-After':'5'});
     const data = snapshot(authenticated);
     if (authenticated && model.delayNext) {

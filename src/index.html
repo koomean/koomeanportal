@@ -44,7 +44,7 @@
     <nav class="side-nav" aria-label="เมนูหลัก" data-i18n-aria-label="mainMenu">
       <a class="nav-link" href="/" data-route="/"><span data-ui-icon="house"></span><span data-i18n="home">หน้าแรก</span></a>
       <a class="nav-link" href="/apps/" data-route="/apps/"><span data-ui-icon="layout-grid"></span><span data-i18n="allApplications">แอปทั้งหมด</span></a>
-      <a class="nav-link" href="/favorites/" data-route="/favorites/"><span data-ui-icon="star"></span><span data-i18n="favorites">รายการโปรด</span><span class="nav-count" id="sidebar-favorites-count">0</span></a>
+      <a class="nav-link" href="/favorites/" data-route="/favorites/"><span data-ui-icon="star"></span><span data-i18n="favorites">รายการโปรด</span><span class="nav-count" id="sidebar-favorites-count">—</span></a>
       <span class="nav-divider"></span>
       <a class="nav-link" id="account-nav" href="/account/" data-route="/account/"><span data-ui-icon="user-round"></span><span data-i18n="account">บัญชี</span></a>
       <a class="nav-link" href="/settings/" data-route="/settings/"><span data-ui-icon="settings-2"></span><span data-i18n="settings">การตั้งค่า</span></a>
@@ -89,6 +89,7 @@
       <div class="section-heading social-heading"><h2 data-i18n="stayConnected">เชื่อมต่อกับ Koo Mean</h2><span data-i18n="socialDescription">เรื่องราวและสิ่งที่กำลังทำ</span></div>
       <!-- 3. Seamless Marquee Logo Scroller -->
       <div class="marquee-section" id="marquee-section" data-loading aria-busy="true">
+        <div class="data-loading" id="social-loading" role="status"><span class="loading-spinner" aria-hidden="true"></span><span data-i18n="loadingLinks">กำลังโหลดลิงก์...</span></div>
         <div class="marquee-wrapper"><div class="marquee-track" id="marquee-track"></div></div>
 
       </div>
@@ -126,18 +127,13 @@
         <span id="updated-at"></span>
       </div>
       <button id="favorites-filter" class="favorites-filter" type="button" aria-pressed="false" aria-controls="applications">
-        <span data-ui-icon="star"></span><span id="favorites-label" data-i18n="favorites">รายการโปรด</span><span id="favorites-count" class="favorites-count">0</span>
+        <span data-ui-icon="star"></span><span id="favorites-label" data-i18n="favorites">รายการโปรด</span><span id="favorites-count" class="favorites-count">—</span>
       </button>
       </div>
 
       <noscript><p class="state-box">เปิด JavaScript เพื่อค้นหาแอปและเข้าสู่ระบบ หรือไปที่ <a href="https://blog.koomean.com/">Koo Mean Blog</a> และ <a href="https://link.koomean.com/">Koo Mean Site</a></p></noscript>
-      <div id="applications" aria-busy="true">
-        <div class="skeleton-grid">
-          <div class="skeleton"></div>
-          <div class="skeleton"></div>
-          <div class="skeleton"></div>
-        </div>
-      </div>
+      <div class="data-loading" id="catalog-loading" role="status"><span class="loading-spinner" aria-hidden="true"></span><span data-i18n="loadingApplications">กำลังโหลดแอป...</span></div>
+      <div id="applications" aria-busy="true"></div>
     </section>
 
     <div id="route-outlet"></div>
@@ -621,6 +617,7 @@
         verified: false,
         applications: [],
         links: [],
+        dataStatus: "loading",
         users: [],
         profile: null,
         editingRow: null,
@@ -914,7 +911,8 @@
         });
 
         renderApplications();
-        if (loadError && !state.applications.length) renderError(loadError);
+        if (state.dataStatus === "error" && loadError && !state.applications.length) renderError(loadError);
+        renderMarquee(false);
         renderAdminItems();
         renderAdminUsers();
         if (state.logosLoaded) renderLogos();
@@ -1099,8 +1097,11 @@
         const sequence = ++portalSequence;
         if (userInitiated) cancelRetry(true);
 
+        state.dataStatus = "loading";
+        loadError = null;
         setStatus("connecting", "connecting");
-        $("applications").setAttribute("aria-busy", "true");
+        renderApplications();
+        renderMarquee(false);
 
         try {
           const data = await request("bootstrap");
@@ -1118,6 +1119,7 @@
             clearPortalData();
             state.applications = Array.isArray(data.applications) ? data.applications : [];
             state.links = Array.isArray(data.links) ? data.links : [];
+            state.dataStatus = "ready";
             renderApplications(); renderMarquee();
             applyUser();
             setStatus("offline", "registrationRequired");
@@ -1131,6 +1133,7 @@
           state.links = Array.isArray(data.links) ? data.links : [];
           state.users = Array.isArray(data.allUsers) ? data.allUsers : [];
           state.profile = data.spaceProfile || data.profile || null;
+          state.dataStatus = "ready";
 
           cancelRetry(true);
           loadError = null;
@@ -1154,8 +1157,11 @@
         } catch (error) {
           if (error.stale || sequence !== portalSequence) return false;
           if (document.documentElement.dataset.maintenance === "active") { cancelRetry(); return false; }
+          state.dataStatus = "error";
+          loadError = error.message;
           setStatus("offline", "offline");
-          if (!state.applications.length) renderError(error.message);
+          renderApplications();
+          renderMarquee(false);
           showToast(error.message, "error");
 
           if (error.message !== t("sessionExpired")) {
@@ -1173,6 +1179,7 @@
       }
 
       function clearPortalData() {
+        state.dataStatus = "loading";
         loadError = null;
         state.applications = [];
         state.links = [];
@@ -1313,10 +1320,13 @@
         const previousGroup = filter.value;
 
         const validApps = state.applications.filter(app => safeUrl(app.url));
+        const pending = state.dataStatus === "loading";
+        root.setAttribute("aria-busy", String(pending));
         const favoriteCount = validApps.filter(app => state.pinned.has(canonicalUrl(app.url))).length;
+        const knownFavoriteCount = pending && !validApps.length ? "—" : String(favoriteCount);
         $("favorites-label").textContent = t("favorites");
-        $("favorites-count").textContent = String(favoriteCount);
-        $("sidebar-favorites-count").textContent = String(favoriteCount);
+        $("favorites-count").textContent = knownFavoriteCount;
+        $("sidebar-favorites-count").textContent = knownFavoriteCount;
         $("favorites-filter").setAttribute("aria-pressed", String(favoritesOnly));
         const groups = [...new Set(validApps.map(groupKey))].sort((a, b) => {
           if (a === "public") return -1;
@@ -1339,7 +1349,12 @@
             (!favoritesOnly || state.pinned.has(canonicalUrl(app.url)));
         });
 
-        $("app-count").textContent = String(filtered.length);
+        const loading = $("catalog-loading");
+        loading.hidden = !pending;
+        loading.classList.toggle("loading-inline", pending && filtered.length > 0);
+        $("app-count").textContent = pending && !filtered.length ? "—" : String(filtered.length);
+        if (pending && !filtered.length) { root.innerHTML = ""; return; }
+        if (state.dataStatus === "error" && !validApps.length && loadError) { renderError(loadError); return; }
 
         if (!filtered.length) {
           root.innerHTML = `
@@ -1408,7 +1423,7 @@
 
       function renderError(message) {
         loadError = message;
-        $("app-count").textContent = "0";
+        $("app-count").textContent = "—";
         $("applications").innerHTML = `
           <div class="state-box">
             <span class="state-icon">${uiIcon("circle-alert")}</span>
@@ -2325,21 +2340,26 @@
         }
       }, true);
 
-      function renderMarquee() {
+      function renderMarquee(renderLinks = true) {
         const track = $("marquee-track"), section = $("marquee-section");
+        const pending = state.dataStatus === "loading";
         const publicLinks = state.links.filter(link => (link.group === 'public' || !link.group) && safeUrl(link.url));
-        section.hidden = !publicLinks.length;
-        if (!publicLinks.length) {
-          track.replaceChildren();
-        } else {
-          const loop = (duplicate) => publicLinks.map(link => {
-            const title = String(link.title || "Link");
-            return `<a href="${escapeHtml(safeUrl(link.url))}" target="_blank" rel="noopener noreferrer" class="marquee-card" title="${escapeHtml(title)}" ${duplicate ? 'aria-hidden="true" tabindex="-1"' : ''}><div class="marquee-content"><div class="marquee-icon">${getIconHtml(link.icon, title)}</div><span class="marquee-text">${escapeHtml(title)}</span></div></a>`;
-          }).join("");
-          track.innerHTML = `<div class="marquee-loop">${loop(false)}</div><div class="marquee-loop" aria-hidden="true">${loop(true)}</div>`;
+        section.hidden = !pending && !publicLinks.length;
+        $("social-loading").hidden = !pending;
+        $("social-loading").classList.toggle("loading-inline", pending && publicLinks.length > 0);
+        if (renderLinks) {
+          if (!publicLinks.length) track.replaceChildren();
+          else {
+            const loop = (duplicate) => publicLinks.map(link => {
+              const title = String(link.title || "Link");
+              return `<a href="${escapeHtml(safeUrl(link.url))}" target="_blank" rel="noopener noreferrer" class="marquee-card" title="${escapeHtml(title)}" ${duplicate ? 'aria-hidden="true" tabindex="-1"' : ''}><div class="marquee-content"><div class="marquee-icon">${getIconHtml(link.icon, title)}</div><span class="marquee-text">${escapeHtml(title)}</span></div></a>`;
+            }).join("");
+            track.innerHTML = `<div class="marquee-loop">${loop(false)}</div><div class="marquee-loop" aria-hidden="true">${loop(true)}</div>`;
+          }
         }
-        section.removeAttribute("data-loading");
-        section.setAttribute("aria-busy", "false");
+        if (pending && !publicLinks.length) section.setAttribute("data-loading", "");
+        else section.removeAttribute("data-loading");
+        section.setAttribute("aria-busy", String(pending));
       }
       const video = $("hero-video");
       const motionPreference = matchMedia("(prefers-reduced-motion:reduce)");

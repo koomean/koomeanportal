@@ -10,10 +10,10 @@
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <meta name="description" content="ศูนย์รวมแอปพลิเคชันและเครื่องมือ Koo Mean เข้าถึงบริการและจัดการบัญชีของคุณได้ในที่เดียว" data-i18n-content="pageDescription">
   <link rel="canonical" href="https://koomean.com/">
-<link rel="stylesheet" href="/assets/portal-aa6be2f8698143b3.css">
+<link rel="stylesheet" href="/assets/portal-1d2b024d55f8ef42.css">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/ibm-2e57acf1ca9e.woff2">
 <link rel="preload" as="image" href="/assets/hero-poster.webp" fetchpriority="high">
-<script src="/assets/app-bae7e8fef775e3ab.js" defer></script>
+<script src="/assets/app-c51f09d6562ef380.js" defer></script>
 </head>
 <body>
   <svg class="icon-definitions" width="0" height="0" aria-hidden="true" focusable="false"><symbol id="ui-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14" />
@@ -78,7 +78,7 @@
     <nav class="side-nav" aria-label="เมนูหลัก" data-i18n-aria-label="mainMenu">
       <a class="nav-link" href="/" data-route="/"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-house"></use></svg><span data-i18n="home">หน้าแรก</span></a>
       <a class="nav-link" href="/apps/" data-route="/apps/"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-layout-grid"></use></svg><span data-i18n="allApplications">แอปทั้งหมด</span></a>
-      <a class="nav-link" href="/favorites/" data-route="/favorites/"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-star"></use></svg><span data-i18n="favorites">รายการโปรด</span><span class="nav-count" id="sidebar-favorites-count">0</span></a>
+      <a class="nav-link" href="/favorites/" data-route="/favorites/"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-star"></use></svg><span data-i18n="favorites">รายการโปรด</span><span class="nav-count" id="sidebar-favorites-count">—</span></a>
       <span class="nav-divider"></span>
       <a class="nav-link" id="account-nav" href="/account/" data-route="/account/"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-user-round"></use></svg><span data-i18n="account">บัญชี</span></a>
       <a class="nav-link" href="/settings/" data-route="/settings/"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-settings-2"></use></svg><span data-i18n="settings">การตั้งค่า</span></a>
@@ -121,6 +121,7 @@
       </div>
       <div class="section-heading social-heading"><h2 data-i18n="stayConnected">เชื่อมต่อกับ Koo Mean</h2><span data-i18n="socialDescription">เรื่องราวและสิ่งที่กำลังทำ</span></div>
       <div class="marquee-section" id="marquee-section" data-loading aria-busy="true">
+        <div class="data-loading" id="social-loading" role="status"><span class="loading-spinner" aria-hidden="true"></span><span data-i18n="loadingLinks">กำลังโหลดลิงก์...</span></div>
         <div class="marquee-wrapper"><div class="marquee-track" id="marquee-track"></div></div>
       </div>
     </section>
@@ -152,17 +153,12 @@
         <span id="updated-at"></span>
       </div>
       <button id="favorites-filter" class="favorites-filter" type="button" aria-pressed="false" aria-controls="applications">
-        <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-star"></use></svg><span id="favorites-label" data-i18n="favorites">รายการโปรด</span><span id="favorites-count" class="favorites-count">0</span>
+        <svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-star"></use></svg><span id="favorites-label" data-i18n="favorites">รายการโปรด</span><span id="favorites-count" class="favorites-count">—</span>
       </button>
       </div>
       <noscript><p class="state-box">เปิด JavaScript เพื่อค้นหาแอปและเข้าสู่ระบบ หรือไปที่ <a href="https://blog.koomean.com/">Koo Mean Blog</a> และ <a href="https://link.koomean.com/">Koo Mean Site</a></p></noscript>
-      <div id="applications" aria-busy="true">
-        <div class="skeleton-grid">
-          <div class="skeleton"></div>
-          <div class="skeleton"></div>
-          <div class="skeleton"></div>
-        </div>
-      </div>
+      <div class="data-loading" id="catalog-loading" role="status"><span class="loading-spinner" aria-hidden="true"></span><span data-i18n="loadingApplications">กำลังโหลดแอป...</span></div>
+      <div id="applications" aria-busy="true"></div>
     </section>
     <div id="route-outlet"></div>
     <section class="route-guard" id="route-guard" hidden></section>

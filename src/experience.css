@@ -3077,3 +3077,42 @@ textarea.field {
   overflow-wrap: anywhere;
   max-width: 100%;
 }
+
+/* Data remains pending until the current bootstrap response settles. */
+.data-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  min-height: 150px;
+  padding: 28px 18px;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 12px;
+}
+.loading-spinner {
+  display: inline-block;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--line-strong);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .85s linear infinite;
+}
+.data-loading.loading-inline {
+  justify-content: flex-start;
+  min-height: 42px;
+  padding: 10px 14px;
+  margin-bottom: 14px;
+}
+.data-loading.loading-inline .loading-spinner {
+  flex-basis: 18px;
+  width: 18px;
+  height: 18px;
+}
+#social-loading {min-height: 60px; padding: 14px 18px; border-radius: 10px;}
+#social-loading.loading-inline {position: absolute; right: 8px; top: 9px; z-index: 2; min-height: 40px; padding: 8px 12px; margin: 0;}
+@media(prefers-reduced-motion:reduce) {.loading-spinner {animation: none;}}

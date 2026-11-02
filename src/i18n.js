@@ -1,6 +1,8 @@
 // Interface copy only. Account names, roles and administrator-authored app data
 // remain data; never use translated values in API requests or permission checks.
 const uiText = {
+  loadingApplications: ["กำลังโหลดแอป...", "Loading applications..."],
+  loadingLinks: ["กำลังโหลดลิงก์...", "Loading links..."],
   allApplications: ["แอปทั้งหมด", "All applications"],
   yourWorkspace: ["พื้นที่ของคุณ", "Your workspace"],
   workspaceNote: ["พื้นที่เดียว สำหรับทุกวันที่ใช้งาน", "A place for your everyday"],

@@ -15,7 +15,11 @@ async function setup(options={}){
  if(options.rawPreferences)await page.addInitScript(value=>localStorage.setItem('koomean_portal_prefs_v3',value),options.rawPreferences);
  if(options.clock)await page.clock.install();
  if(options.blockAutoplay)await page.addInitScript(()=>{const play=HTMLMediaElement.prototype.play;let blocked=false;HTMLMediaElement.prototype.play=function(){if(!blocked){blocked=true;return Promise.reject(new DOMException('Autoplay disabled','NotAllowedError'))}return play.call(this)}});
- const calls=[],errors=[],consoleErrors=[],media=[];page.on('request',r=>{if(r.resourceType()==='media')media.push(r.url())});let signedRole='admin',rateLimited=false,requiresRegistration=false,registered=false,maintenance=false,gate=null,initialToolbarY=null;
+ const calls=[],errors=[],consoleErrors=[],media=[];page.on('request',r=>{if(r.resourceType()==='media')media.push(r.url())});let signedRole='admin',rateLimited=false,requiresRegistration=false,registered=false,maintenance=false,gate=null,anonymousGate=null,initialToolbarY=null;
+ let releaseInitial=()=>{},initialStarted=()=>{},bootstrapCount=0;
+ const initialResponse=options.holdInitial?new Promise(resolve=>{releaseInitial=resolve}):null;
+ const initialReady=options.holdInitial?new Promise(resolve=>{initialStarted=resolve}):null;
+ function delayedGate(){let resolve,started,finished;const promise=new Promise(r=>resolve=r),ready=new Promise(r=>started=r),settled=new Promise(r=>finished=r);return{promise,started,finished,handle:{release:resolve,ready,settled}};}
  page.on('pageerror',e=>{errors.push(e.message);runtimeErrors.push(e.message)});page.on('console',e=>{if(e.type()==='error')consoleErrors.push(e.text())});
  if(options.storage)await page.addInitScript(()=>{localStorage.setItem('koomean_portal_session_v2',JSON.stringify({token:'legacy-private-token',user:{role:'admin',email:'old@example.invalid'}}))});
  if(options.blockStorage)await page.addInitScript(()=>{Storage.prototype.setItem=()=>{throw new DOMException('Unavailable')};Storage.prototype.getItem=()=>{throw new DOMException('Unavailable')};Storage.prototype.removeItem=()=>{throw new DOMException('Unavailable')}});
@@ -36,19 +40,22 @@ async function setup(options={}){
   const params=new URLSearchParams(r.request().postData()),action=params.get('action');calls.push({action,authenticated:params.has('idToken'),params:Object.fromEntries([...params].filter(([key])=>key!=='idToken'))});
   if(action==='maintenanceStatus')return r.fulfill({json:{maintenance:{active:maintenance,note:'ทดสอบปิดปรับปรุง',reopenAt:Date.now()+60000}}});
   if(action==='bootstrap'){
-   const authenticated=params.has('idToken');
+   const authenticated=params.has('idToken'),firstBootstrap=bootstrapCount++===0;
    if(!authenticated && initialToolbarY===null)initialToolbarY=(await page.locator('.toolbar').boundingBox())?.y??null;
-   const data={applications:apps.filter(app=>authenticated||app.group==='public').concat(authenticated?[{rowIdx:99,name:'PrivateAdmin',url:'https://example.invalid/private',group:signedRole}]:[]),links,user:authenticated?{...user,role:signedRole}:{role:'public'},allUsers:authenticated&&signedRole==='admin'?[{...user,email:'x'.repeat(120)+'@example.invalid'}]:[]};
+   const data={applications:options.emptyBootstrap?[]:apps.filter(app=>authenticated||app.group==='public').concat(authenticated?[{rowIdx:99,name:'PrivateAdmin',url:'https://example.invalid/private',group:signedRole}]:[]),links:options.emptyBootstrap?[]:links,user:authenticated?{...user,role:signedRole}:{role:'public'},allUsers:authenticated&&signedRole==='admin'?[{...user,email:'x'.repeat(120)+'@example.invalid'}]:[]};
    if(authenticated&&requiresRegistration&&!registered)data.requireRegistration=true;
-   if(gate&&authenticated){const current=gate;gate=null;current.started();await current.promise;}
-   try{return await r.fulfill(rateLimited?{status:429,headers:{'Retry-After':'90'},json:{message:'Slow down'}}:{json:data})}catch{return}
+   if(firstBootstrap&&initialResponse){initialStarted();await initialResponse;}
+   const held=authenticated?gate:anonymousGate;
+   if(held){if(authenticated)gate=null;else anonymousGate=null;held.started();await held.promise;}
+   try{return await r.fulfill(rateLimited?{status:429,headers:{'Retry-After':'90'},json:{message:'Slow down'}}:options.bootstrapFailure?{status:503,json:{message:'Fixture bootstrap unavailable'}}:{json:data})}catch{return}finally{held?.finished();}
   }
   if(action==='register'){registered=true;return r.fulfill({json:{success:true}})}
   if(action==='updateUserName')return r.fulfill({json:{success:true,name:params.get('newName')}});
   return r.fulfill({json:{success:true}});
  });
- const navigation=await page.goto('https://koomean.com'+(options.path||'/'),{waitUntil:'domcontentloaded'});await page.waitForFunction(()=>document.querySelector('#applications').getAttribute('aria-busy')==='false');
- return {page,context,calls,errors,consoleErrors,media,navigation,get initialToolbarY(){return initialToolbarY},setRole:role=>signedRole=role,setRate:v=>rateLimited=v,setRegistration:v=>requiresRegistration=v,setMaintenance:v=>maintenance=v,delayNext:()=>{let resolve,started;const promise=new Promise(r=>resolve=r);const ready=new Promise(r=>started=r);gate={promise,started};return{release:resolve,ready}},login:async(role='admin')=>{signedRole=role;await page.evaluate(token=>window.handleGoogleCredential({credential:token}),token(role));await page.waitForFunction(()=>document.querySelector('#applications').getAttribute('aria-busy')==='false');}};
+ const navigation=await page.goto('https://koomean.com'+(options.path||'/'),{waitUntil:'domcontentloaded'});
+ if(initialReady)await initialReady;else await page.waitForFunction(()=>document.querySelector('#applications').getAttribute('aria-busy')==='false');
+ return {page,context,calls,errors,consoleErrors,media,navigation,get initialToolbarY(){return initialToolbarY},setRole:role=>signedRole=role,setRate:v=>rateLimited=v,setRegistration:v=>requiresRegistration=v,setMaintenance:v=>maintenance=v,releaseInitial,delayNext:()=>{gate=delayedGate();return gate.handle},delayNextAnonymous:()=>{anonymousGate=delayedGate();return anonymousGate.handle},login:async(role='admin')=>{signedRole=role;await page.evaluate(token=>window.handleGoogleCredential({credential:token}),token(role));await page.waitForFunction(()=>document.querySelector('#applications').getAttribute('aria-busy')==='false');}};
 }
 async function within(page,selector){return page.locator(selector).evaluateAll(nodes=>nodes.filter(e=>e.offsetParent!==null).map(e=>{const r=e.getBoundingClientRect(),p=e.parentElement.getBoundingClientRect();return{selector:e.className||e.id,right:r.right,left:r.left,width:r.width,parentRight:p.right,parentLeft:p.left,scroll:e.scrollWidth,client:e.clientWidth}}).filter(r=>r.right>r.parentRight+2||r.left<r.parentLeft-2))}
 async function go(page,route){
@@ -72,6 +79,24 @@ async function setPlayback(page, selector, enabled){
 }
 
 try{
+ const loading=await setup({holdInitial:true});const lp=loading.page;
+ ok('Pending first bootstrap shows accessible spinning loaders instead of an empty catalog',await lp.locator('#catalog-loading').isVisible()&&await lp.locator('#catalog-loading').getAttribute('role')==='status'&&await lp.locator('#catalog-loading .loading-spinner').evaluate(e=>getComputedStyle(e).animationName==='spin')&&await lp.locator('#social-loading').isVisible()&&await lp.locator('#applications').getAttribute('aria-busy')==='true'&&await lp.locator('#applications .state-box').count()===0&&await lp.locator('#app-count').textContent()==='—');
+ await lp.locator('#app-search').fill('Case A');await lp.waitForTimeout(160);await go(lp,'/apps/');
+ ok('Search and catalog navigation cannot turn pending data into no results',await lp.locator('#catalog-loading').isVisible()&&await lp.locator('#applications .state-box').count()===0&&await lp.locator('#applications').getAttribute('aria-busy')==='true');
+ await go(lp,'/settings/');await lp.locator('[data-language-value="en"]').click();await go(lp,'/');
+ ok('Language changes translate pending loaders and preserve the social loading state',await lp.locator('#catalog-loading').isVisible()&&!/[\u0e00-\u0e7f]/.test(await lp.locator('#catalog-loading').innerText())&&await lp.locator('#social-loading').isVisible()&&await lp.locator('#marquee-section').getAttribute('data-loading')!==null);
+ await go(lp,'/favorites/');ok('Favorites do not show a false empty state before bootstrap completes',await lp.locator('#catalog-loading').isVisible()&&await lp.locator('#applications .state-box').count()===0);
+ await go(lp,'/apps/');loading.releaseInitial();await lp.waitForFunction(()=>document.getElementById('applications').getAttribute('aria-busy')==='false');
+ ok('A completed response replaces loaders with the matching filtered application',await lp.locator('#catalog-loading').isHidden()&&await lp.locator('#social-loading').isHidden()&&await lp.locator('.app-card').count()===1&&await lp.locator('.app-name').textContent()==='Case A');await loading.context.close();
+ const empty=await setup({emptyBootstrap:true});ok('A successful empty response shows a genuine empty state after loading ends',await empty.page.locator('#catalog-loading').isHidden()&&await empty.page.locator('#social-loading').isHidden()&&await empty.page.locator('#applications .state-box').isVisible()&&await empty.page.locator('#retry-btn').count()===0&&await empty.page.locator('#app-count').textContent()==='0');await empty.context.close();
+ const failed=await setup({bootstrapFailure:true});ok('A failed first response stops loading and shows retry instead of an empty catalog',await failed.page.locator('#catalog-loading').isHidden()&&await failed.page.locator('#social-loading').isHidden()&&await failed.page.locator('#retry-btn').isVisible()&&await failed.page.locator('#applications').innerText().then(text=>text.includes('Fixture bootstrap unavailable')));await failed.context.close();
+ const refreshLoading=await setup();const rlp=refreshLoading.page,heldRefresh=refreshLoading.delayNextAnonymous();await rlp.locator('#refresh-btn').click();await heldRefresh.ready;
+ ok('Refresh retains usable applications while displaying loading status',await rlp.locator('.app-card').count()===4&&await rlp.locator('#catalog-loading').isVisible()&&await rlp.locator('#social-loading').isVisible()&&await rlp.locator('#applications').getAttribute('aria-busy')==='true');heldRefresh.release();await rlp.waitForFunction(()=>document.getElementById('applications').getAttribute('aria-busy')==='false');
+ ok('Refresh completion removes its loaders without losing the catalog',await rlp.locator('#catalog-loading').isHidden()&&await rlp.locator('#social-loading').isHidden()&&await rlp.locator('.app-card').count()===4);
+ await refreshLoading.login();const oldAuthenticated=refreshLoading.delayNext();await rlp.locator('#refresh-btn').click();await oldAuthenticated.ready;const newAnonymous=refreshLoading.delayNextAnonymous();await go(rlp,'/account/');await rlp.locator('#logout-btn').click();await newAnonymous.ready;await go(rlp,'/apps/');
+ oldAuthenticated.release();await oldAuthenticated.settled;
+ ok('A superseded authenticated request cannot clear a newer anonymous loading state',await rlp.locator('#catalog-loading').isVisible()&&await rlp.locator('#applications').getAttribute('aria-busy')==='true'&&await rlp.locator('.app-card').count()===0&&await rlp.locator('#applications .state-box').count()===0&&await rlp.locator('#admin-nav').isHidden());newAnonymous.release();await rlp.waitForFunction(()=>document.getElementById('applications').getAttribute('aria-busy')==='false');
+ ok('The current anonymous response completes loading without restoring private applications',await rlp.locator('#catalog-loading').isHidden()&&await rlp.locator('.app-card').count()===4&&!await rlp.locator('#applications').innerText().then(text=>text.includes('PrivateAdmin')));await refreshLoading.context.close();
  const env=await setup({storage:true});const {page,calls}=env;
  ok('Legacy token is removed without restoring unverified identity',await page.evaluate(()=>localStorage.getItem('koomean_portal_session_v2')===null)&&await page.locator('#admin-nav').isHidden());
  ok('Public link rail reserves layout space before the API responds',Math.abs((await page.locator('.toolbar').boundingBox()).y-env.initialToolbarY)<1);

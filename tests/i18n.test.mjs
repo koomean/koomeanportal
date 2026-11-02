@@ -88,3 +88,36 @@ test('Existing UI errors and original catalog copy translate without modifying a
   assert.equal(app.description,'blog ของ koomean');
   assert.equal(x.context.appDescription({...app,description:'Custom content'}),'Custom content');
 });
+
+
+test('Pending catalog data shows loading rather than a false empty search or favorites state', () => {
+  const x=setup();x.state.dataStatus='loading';
+  for(const query of ['', 'not yet loaded']){
+    x.node('app-search').value=query;
+    for(const favoritesOnly of [false,true]){
+      x.state.favoritesOnly=favoritesOnly;x.context.renderApplications();
+      assert.equal(x.node('catalog-loading').hidden,false);
+      assert.equal(x.node('app-count').textContent,'—');
+      assert.equal(x.node('applications').innerHTML,'');
+    }
+  }
+});
+
+test('A settled empty catalog shows the real empty state and removes loading', () => {
+  const x=setup();x.state.dataStatus='ready';x.context.renderApplications();
+  assert.equal(x.node('catalog-loading').hidden,true);
+  assert.match(x.node('applications').innerHTML,/No applications/);
+});
+
+test('Refresh retains available cards while loading and a failed empty load stays an error', () => {
+  const x=setup();x.state.dataStatus='loading';
+  x.state.applications=[{url:'https://example.com/',name:'Retained app',group:'public'}];
+  x.context.renderApplications();
+  assert.equal(x.node('catalog-loading').hidden,false);
+  assert.match(x.node('applications').innerHTML,/Retained app/);
+  x.state.applications=[];x.state.dataStatus='error';x.context.renderError('Cannot connect to the server');
+  x.context.renderApplications();
+  assert.equal(x.node('catalog-loading').hidden,true);
+  assert.match(x.node('applications').innerHTML,/Cannot connect to the server/);
+  assert.doesNotMatch(x.node('applications').innerHTML,/No applications/);
+});
