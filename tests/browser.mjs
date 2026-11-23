@@ -16,6 +16,7 @@ async function setup(options={}){
  if(options.clock)await page.clock.install();
  if(options.blockAutoplay)await page.addInitScript(()=>{const play=HTMLMediaElement.prototype.play;let blocked=false;HTMLMediaElement.prototype.play=function(){if(!blocked){blocked=true;return Promise.reject(new DOMException('Autoplay disabled','NotAllowedError'))}return play.call(this)}});
  const calls=[],errors=[],consoleErrors=[],media=[];page.on('request',r=>{if(r.resourceType()==='media')media.push(r.url())});let signedRole='admin',rateLimited=false,requiresRegistration=false,registered=false,maintenance=false,gate=null,anonymousGate=null,initialToolbarY=null;
+ const fixtures=apps.map(app=>({...app}));
  let releaseInitial=()=>{},initialStarted=()=>{},bootstrapCount=0;
  const initialResponse=options.holdInitial?new Promise(resolve=>{releaseInitial=resolve}):null;
  const initialReady=options.holdInitial?new Promise(resolve=>{initialStarted=resolve}):null;
@@ -35,14 +36,14 @@ async function setup(options={}){
   return r.fulfill({status,path:file});
  });
  await page.route('https://accounts.google.com/gsi/client',async r=>{calls.push({action:'google'});if(options.googleDelay)await new Promise(resolve=>setTimeout(resolve,options.googleDelay));return r.fulfill({contentType:'application/javascript',body:`window.google={accounts:{id:{initialize:()=>{},renderButton:element=>{const b=document.createElement('button');b.textContent='Google fixture sign-in';element.appendChild(b)},disableAutoSelect:()=>{}}}}`})});
- await page.route('https://thesvg.org/**',r=>r.request().url().includes('registry')?r.fulfill({json:[{title:'GitHub',slug:'github'},{title:'Google',slug:'google'},{title:'Notion',slug:'notion'},{title:'OpenAI',slug:'openai'},{title:'Malicious',slug:'javascript:alert(1)'}]}):r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><circle cx="12" cy="12" r="10" fill="#888"/></svg>'}));
+ await page.route('https://thesvg.org/**',r=>r.request().url().includes('registry')?r.fulfill({json:options.logoRegistry??[{title:'GitHub',slug:'github'},{title:'Google',slug:'google'},{title:'Notion',slug:'notion'},{title:'OpenAI',slug:'openai'},{title:'Malicious',slug:'javascript:alert(1)'}]}):r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><circle cx="12" cy="12" r="10" fill="#888"/></svg>'}));
  await page.route('https://koomean-proxy.meanchannel52.workers.dev/**',async r=>{
   const params=new URLSearchParams(r.request().postData()),action=params.get('action');calls.push({action,authenticated:params.has('idToken'),params:Object.fromEntries([...params].filter(([key])=>key!=='idToken'))});
   if(action==='maintenanceStatus')return r.fulfill({json:{maintenance:{active:maintenance,note:'ทดสอบปิดปรับปรุง',reopenAt:Date.now()+60000}}});
   if(action==='bootstrap'){
    const authenticated=params.has('idToken'),firstBootstrap=bootstrapCount++===0;
    if(!authenticated && initialToolbarY===null)initialToolbarY=(await page.locator('.toolbar').boundingBox())?.y??null;
-   const data={applications:options.emptyBootstrap?[]:apps.filter(app=>authenticated||app.group==='public').concat(authenticated?[{rowIdx:99,name:'PrivateAdmin',url:'https://example.invalid/private',group:signedRole}]:[]),links:options.emptyBootstrap?[]:links,user:authenticated?{...user,role:signedRole}:{role:'public'},allUsers:authenticated&&signedRole==='admin'?[{...user,email:'x'.repeat(120)+'@example.invalid'}]:[]};
+   const data={applications:options.emptyBootstrap?[]:fixtures.filter(app=>authenticated||app.group==='public').concat(authenticated?[{rowIdx:99,name:'PrivateAdmin',url:'https://example.invalid/private',group:signedRole}]:[]),links:options.emptyBootstrap?[]:links,user:authenticated?{...user,role:signedRole}:{role:'public'},allUsers:authenticated&&signedRole==='admin'?[{...user,email:'x'.repeat(120)+'@example.invalid'}]:[]};
    if(authenticated&&requiresRegistration&&!registered)data.requireRegistration=true;
    if(firstBootstrap&&initialResponse){initialStarted();await initialResponse;}
    const held=authenticated?gate:anonymousGate;
@@ -51,6 +52,12 @@ async function setup(options={}){
   }
   if(action==='register'){registered=true;return r.fulfill({json:{success:true}})}
   if(action==='updateUserName')return r.fulfill({json:{success:true,name:params.get('newName')}});
+  if(action==='addApplication'||action==='updateApplication'){
+   const rowIdx=action==='addApplication'?Math.max(...fixtures.map(app=>app.rowIdx))+1:Number(params.get('rowIdx'));
+   const entry={rowIdx,name:params.get('name'),url:params.get('url'),icon:params.get('icon'),group:params.get('group')};
+   if(action==='addApplication')fixtures.push(entry);
+   else Object.assign(fixtures.find(app=>app.rowIdx===rowIdx),entry);
+  }
   return r.fulfill({json:{success:true}});
  });
  const navigation=await page.goto('https://koomean.com'+(options.path||'/'),{waitUntil:'domcontentloaded'});
@@ -79,6 +86,74 @@ async function setPlayback(page, selector, enabled){
 }
 
 try{
+ const logos=await setup({logoRegistry:{icons:Array.from({length:130},(_,i)=>({
+  title:`Fixture logo ${i}`,slug:`fixture-logo-${i}`,categories:['Design']
+ }))}});
+ const logoPage=logos.page;
+ await logos.login();
+ await go(logoPage,'/admin/');
+ await logoPage.locator('#choose-logo-btn').click();
+ await logoPage.waitForSelector('.logo-result');
+ ok('An admin can choose a logo file from the logo dialog',await logoPage.locator('#logo-upload').isVisible());
+ const firstLogoPage=await logoPage.locator('.logo-result').count();
+ await logoPage.locator('#logo-more').click();
+ ok('Browsing loads additional logos while keeping the previous results',await logoPage.locator('.logo-result').count()>firstLogoPage&&await logoPage.locator('[data-logo="fixture-logo-0"]').isVisible());
+ await logoPage.locator('#logo-search').fill('Fixture logo 129 Design');
+ const searchLogo=logoPage.locator('[data-logo="fixture-logo-129"]');
+ await searchLogo.waitFor();
+ ok('Search reaches logos beyond the initial browse results',await logoPage.locator('.logo-result').count()===1);
+ await searchLogo.click();
+ ok('Choosing a registry logo applies it to the form preview',await logoPage.locator('#icon-preview img').getAttribute('src')==='https://thesvg.org/icons/fixture-logo-129/default.svg');
+ await logoPage.locator('#choose-logo-btn').click();
+
+ const [unsupportedFileChooser]=await Promise.all([
+  logoPage.waitForEvent('filechooser'),
+  logoPage.locator('#logo-upload').click()
+ ]);
+ await unsupportedFileChooser.setFiles({name:'unsupported.svg',mimeType:'image/svg+xml',buffer:Buffer.from('<svg xmlns="http://www.w3.org/2000/svg"/>')});
+ await logoPage.waitForFunction(()=>document.querySelector('#logo-upload-error')?.textContent.trim());
+ ok('Unsupported image files keep the picker open and show a file error',await logoPage.locator('#logo-modal').isVisible()&&await logoPage.locator('#logo-upload-error').isVisible());
+ const imageBase64=await logoPage.evaluate(()=>{
+  const canvas=document.createElement('canvas');
+  canvas.width=96;
+  canvas.height=48;
+  const context=canvas.getContext('2d');
+  context.fillStyle='#287aed';
+  context.fillRect(0,0,96,48);
+  return canvas.toDataURL().split(',')[1];
+ });
+ const [imageFileChooser]=await Promise.all([
+  logoPage.waitForEvent('filechooser'),
+  logoPage.locator('#logo-upload').click()
+ ]);
+ await imageFileChooser.setFiles({name:'custom-logo.png',mimeType:'image/png',buffer:Buffer.from(imageBase64,'base64')});
+ await logoPage.waitForFunction(()=>{
+  const image=document.querySelector('#icon-preview img');
+  return /^data:image\/(?:png|webp);base64,/.test(image?.src??'')&&image.naturalWidth>0;
+ });
+ const savedIcon=await logoPage.locator('#icon-preview img').getAttribute('src');
+ ok('A supported file is decoded and shown in the app preview',await logoPage.locator('#logo-modal').isHidden());
+
+ const appUrl='https://example.invalid/custom-logo';
+ await logoPage.locator('#admin-name').fill('App with custom logo');
+ await logoPage.locator('#admin-url').fill(appUrl);
+ await logoPage.locator('#admin-submit-btn').click();
+ const row=logoPage.locator('.admin-item').filter({hasText:'App with custom logo'});
+ await row.waitFor();
+ ok('Adding an app saves the uploaded image as its logo',logos.calls.find(call=>call.action==='addApplication')?.params.icon===savedIcon);
+ await row.locator('[data-admin-action="edit"]').click();
+ ok('Editing an existing app restores its uploaded logo',await logoPage.locator('#icon-preview img').getAttribute('src')===savedIcon);
+ await logoPage.locator('#admin-name').fill('Renamed app with custom logo');
+ await logoPage.locator('#admin-submit-btn').click();
+ await logoPage.locator('.admin-item').filter({hasText:'Renamed app with custom logo'}).waitFor();
+ ok('Editing metadata preserves the existing uploaded logo',logos.calls.find(call=>call.action==='updateApplication')?.params.icon===savedIcon);
+ await go(logoPage,'/apps/');
+ const catalogIcon=logoPage.locator(`.app-card-body[href="${appUrl}"] .app-icon img`);
+ await catalogIcon.scrollIntoViewIfNeeded();
+ await catalogIcon.evaluate(image=>image.decode());
+ ok('The uploaded logo renders on the saved application card',await catalogIcon.getAttribute('src')===savedIcon);
+ await logos.context.close();
+
  const loading=await setup({holdInitial:true});const lp=loading.page;
  ok('Pending first bootstrap shows accessible spinning loaders instead of an empty catalog',await lp.locator('#catalog-loading').isVisible()&&await lp.locator('#catalog-loading').getAttribute('role')==='status'&&await lp.locator('#catalog-loading .loading-spinner').evaluate(e=>getComputedStyle(e).animationName==='spin')&&await lp.locator('#social-loading').isVisible()&&await lp.locator('#applications').getAttribute('aria-busy')==='true'&&await lp.locator('#applications .state-box').count()===0&&await lp.locator('#app-count').textContent()==='—');
  await lp.locator('#app-search').fill('Case A');await lp.waitForTimeout(160);await go(lp,'/apps/');
@@ -117,7 +192,7 @@ try{
  ok('Malicious names, descriptions and icon classes stay inert',await page.evaluate(()=>!window.__xss)&&await page.locator('#applications img[onerror],#applications [onclick]').count()===0);
  await page.locator('#app-search').fill('<img');await page.waitForFunction(()=>document.querySelectorAll('.app-card').length===1);ok('Search safely highlights raw HTML-like text',await page.locator('.app-name mark').textContent()==='<img'&&await page.locator('.app-name img').count()===0);await page.locator('[data-clear-search="app-search"]').click();await page.waitForFunction(()=>document.querySelectorAll('.app-card').length===4);ok('Search clear restores results and returns focus to the input',await page.locator('[data-clear-search="app-search"]').isHidden()&&await page.evaluate(()=>document.activeElement.id==='app-search'));
  await page.locator('[data-pin-url="https://example.invalid/Docs"]').click();ok('Favorites preserve case-sensitive URL identity and keyboard focus',await page.locator('[data-pin-url="https://example.invalid/Docs"]').getAttribute('aria-pressed')==='true'&&await page.locator('[data-pin-url="https://example.invalid/docs"]').getAttribute('aria-pressed')==='false'&&await page.evaluate(()=>document.activeElement?.dataset.pinUrl==='https://example.invalid/Docs'));
- await page.locator('#app-search').fill('no such app');await page.waitForFunction(()=>document.querySelectorAll('.app-card').length===0);ok('Empty search offers a readable state',await page.locator('.state-box').isVisible());await page.locator('#app-search').fill('');await page.waitForFunction(()=>document.querySelectorAll('.app-card').length===4);
+ await page.locator('#app-search').fill('no such app');await page.waitForFunction(()=>document.querySelectorAll('.app-card').length===0);ok('Empty search offers a readable state',await page.locator('#applications .state-box').isVisible());await page.locator('#app-search').fill('');await page.waitForFunction(()=>document.querySelectorAll('.app-card').length===4);
  await go(page,'/settings/');ok('Settings is a focused page with active navigation and no modal isolation',await page.locator('#settings-modal').isVisible()&&!await page.locator('#main-content').evaluate(e=>e.inert)&&await page.locator('.side-nav [data-route="/settings/"]').getAttribute('aria-current')==='page'&&await page.evaluate(()=>document.activeElement.id==='page-heading'));await page.keyboard.press('Escape');ok('Escape does not dismiss the settings page',new URL(page.url()).pathname==='/settings/'&&await page.locator('#settings-modal').isVisible());await go(page,'/');ok('Leaving settings hides its content from the accessibility tree',await page.locator('#settings-modal').evaluate(e=>e.hidden&&e.inert&&e.getAttribute('aria-hidden')==='true'));
  await page.locator('#command-btn').click();await page.waitForFunction(()=>document.getElementById('command-modal').contains(document.activeElement));ok('A real dialog isolates the workspace and sidebar',await page.locator('#main-content').evaluate(e=>e.inert)&&await page.locator('#portal-sidebar').evaluate(e=>e.inert)&&await page.locator('#command-modal').evaluate(e=>e.contains(document.activeElement)));await page.keyboard.press('Shift+Tab');ok('Keyboard wraps inside the active dialog',await page.locator('#command-modal').evaluate(e=>e.contains(document.activeElement)));await close(page);ok('Dialog close restores its trigger focus',await page.evaluate(()=>document.activeElement.id==='command-btn'));
  await page.keyboard.press('Control+k');await page.locator('#command-search').fill('VeryLong');ok('Command palette long text stays inside its row',(await within(page,'.command-item>span:first-child')).length===0);await close(page);

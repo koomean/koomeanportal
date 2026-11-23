@@ -23,8 +23,9 @@ function setup(lang = 'en') {
     window:{open(){}}, loadError:null
   });
   vm.runInContext(copy + '\n' + source.slice(source.indexOf('      const text = {'), source.indexOf('      const state = {')) + '\n' +
+    source.match(/const MAX_SAVED_LOGO_LENGTH = [^\n]+/)[0] + '\n' +
     source.match(/const t = key =>[^\n]+/)[0] + '\nthis.translate = t; this.dictionary = uiText;', context);
-  for (const name of ['escapeHtml','safeUrl','canonicalUrl','validColor','highlight','localizeMessage','groupKey','groupName','groupColor','appDescription','cardHtml','renderApplications','renderError','renderAdminItems','renderAdminUsers','refreshIconPreview','buildCommandItems','renderWelcome']) {
+  for (const name of ['escapeHtml','safeUrl','canonicalUrl','validColor','highlight','localizeMessage','groupKey','groupName','groupColor','appDescription','cardHtml','renderApplications','renderError','renderAdminItems','renderAdminUsers','uploadedLogoUrl','refreshIconPreview','buildCommandItems','renderWelcome']) {
     vm.runInContext(sourceFunction(name), context);
   }
   return {context, nodes, state, node:context.$, t:context.translate};

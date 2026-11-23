@@ -11,10 +11,10 @@
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
   <meta name="description" content="ศูนย์รวมแอปพลิเคชันและเครื่องมือ Koo Mean เข้าถึงบริการและจัดการบัญชีของคุณได้ในที่เดียว" data-i18n-content="pageDescription">
   <link rel="canonical" href="https://koomean.com/">
-<link rel="stylesheet" href="/assets/portal-1d2b024d55f8ef42.css">
+<link rel="stylesheet" href="/assets/portal-4c1be92d44a71ff7.css">
 <link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/ibm-2e57acf1ca9e.woff2">
 <link rel="preload" as="image" href="/assets/hero-poster.webp" fetchpriority="high">
-<script src="/assets/app-c51f09d6562ef380.js" defer></script>
+<script src="/assets/app-f91bbd4f0d8fe323.js" defer></script>
 </head>
 <body>
   <svg class="icon-definitions" width="0" height="0" aria-hidden="true" focusable="false"><symbol id="ui-arrow-down" viewBox="0 0 24 24"><path d="M12 5v14" />
@@ -302,7 +302,7 @@
                 <button class="btn btn-ghost" id="choose-logo-btn" type="button" data-i18n="chooseLogo">เลือกโลโก้</button>
               </div>
               <div class="inline-form" style="margin-bottom:12px">
-                <input class="field" id="manual-icon" maxlength="50" placeholder="theSVG slug หรือ fab fa-facebook" data-i18n-placeholder="iconPlaceholder">
+                <input class="field" id="manual-icon" maxlength="200" placeholder="theSVG slug หรือ fab fa-facebook" data-i18n-placeholder="iconPlaceholder">
                 <button class="btn btn-ghost" id="use-icon-btn" type="button" data-i18n="useSlug">ใช้ slug</button>
               </div>
               <div class="admin-form-actions">
@@ -336,16 +336,24 @@
       <header class="modal-head">
         <div class="modal-title">
           <h2 id="logo-title" data-i18n="chooseLogo">เลือกโลโก้</h2>
-          <p data-i18n="logoDescription">ค้นหาและเลือกโลโก้จากคลัง theSVG</p>
+          <p data-i18n="logoDescription">เลือกจากคลัง theSVG หรือใช้โลโก้ของคุณเอง</p>
         </div>
         <button class="modal-close" type="button" data-close-modal aria-label="ปิด" data-i18n-aria-label="close"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button>
       </header>
       <div class="modal-body">
-        <div class="search" style="margin-bottom:12px">
+        <div class="logo-upload">
+          <button class="btn btn-ghost" id="logo-upload" type="button" aria-describedby="logo-upload-hint" data-i18n="uploadLogo">อัปโหลดโลโก้</button>
+          <input id="logo-upload-input" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp" hidden>
+          <p id="logo-upload-hint" data-i18n="logoUploadHint">PNG, JPG หรือ WebP สูงสุด 5 MB</p>
+        </div>
+        <p class="logo-upload-status" id="logo-upload-error" role="status"></p>
+        <div class="search">
           <span class="search-symbol" aria-hidden="true"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-search"></use></svg></span>
           <input id="logo-search" aria-label="ค้นหาโลโก้" type="search" placeholder="ค้นหา เช่น Google, Notion, OpenAI..." autocomplete="off" data-i18n-aria-label="searchLogos" data-i18n-placeholder="searchLogosPlaceholder">
         <button class="search-clear" type="button" data-clear-search="logo-search" aria-label="ล้างคำค้นหา" aria-controls="logo-search" hidden data-i18n-aria-label="clearSearch"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><use href="#ui-x"></use></svg></button></div>
-        <div class="logo-results" id="logo-results"></div>
+        <div class="state-box logo-library-status" id="logo-library-status" role="status" hidden></div>
+        <div class="logo-results" id="logo-results" hidden></div>
+        <button class="btn btn-ghost logo-more" id="logo-more" type="button" aria-controls="logo-results" data-i18n="moreLogos" hidden>แสดงโลโก้เพิ่มเติม</button>
       </div>
     </section>
   </div>

@@ -1977,6 +1977,7 @@ textarea.field {
 .selected-icon-copy span {
   font-size: 11px;
   color: var(--muted);
+  overflow-wrap: anywhere;
 }
 .icon-picker-row .btn {
   font-size: 11px;
@@ -2073,6 +2074,37 @@ textarea.field {
   padding: 7px 10px;
   min-height: 36px;
 }
+.logo-upload {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px 12px;
+  padding: 12px;
+  margin-block-end: 14px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--panel-2);
+}
+.logo-upload p,
+.logo-upload-status {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+.logo-upload-status:not(:empty) {
+  margin-block: -5px 14px;
+}
+.logo-upload-status[data-error] {
+  color: var(--danger);
+}
+.logo-library-status {
+  padding: 24px 10px;
+  margin-block-start: 14px;
+}
+.logo-more {
+  width: 100%;
+  margin-block-start: 12px;
+}
 .logo-results {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -2093,7 +2125,8 @@ textarea.field {
   min-width: 0;
   color: var(--text-2);
 }
-.logo-result:hover {
+.logo-result:hover,
+.logo-result[aria-pressed="true"] {
   border-color: var(--accent);
   background: var(--panel-2);
 }
@@ -3065,6 +3098,10 @@ textarea.field {
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 8px;
+}
+[data-theme="dark"] .logo-preview {
+  background: #78899d;
 }
 .logo-preview img {
   width: 30px;
