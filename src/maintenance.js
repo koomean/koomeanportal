@@ -14,12 +14,12 @@
   const translations = {en: {
     title: 'We’ll be back soon', state: 'Maintenance in progress', label: 'Back online in',
     foot: 'This page will return automatically when the service is available again.',
-    refresh: 'Check again', waiting: 'Checking whether the service is ready…',
+    refresh: 'Check again', status: 'View service status', waiting: 'Checking whether the service is ready…',
     offline: 'Unable to connect right now. We’ll try again automatically.', thanks: 'Thank you for your patience', days: 'days'
   }, th: {
     title: 'เราจะกลับมาเร็ว ๆ นี้', state: 'กำลังดูแลระบบ', label: 'เปิดให้บริการอีกครั้งใน',
     foot: 'หน้านี้จะกลับมาใช้งานได้โดยอัตโนมัติเมื่อระบบพร้อม',
-    refresh: 'ตรวจสอบอีกครั้ง', waiting: 'กำลังตรวจสอบการเปิดระบบ…',
+    refresh: 'ตรวจสอบอีกครั้ง', status: 'ดูสถานะบริการ', waiting: 'กำลังตรวจสอบการเปิดระบบ…',
     offline: 'ยังเชื่อมต่อไม่ได้ ระบบจะลองตรวจสอบอีกครั้งอัตโนมัติ', thanks: 'ขอบคุณที่รอพบกันอีกครั้ง', days: 'วัน'
   }};
   let copy = translations[english ? 'en' : 'th'];
@@ -27,7 +27,7 @@
   function applyLanguage(language) {
     english = language === 'en';
     copy = translations[english ? 'en' : 'th'];
-    for (const key of ['title','state','label','foot','refresh','thanks']) node(key).textContent = copy[key];
+    for (const key of ['title','state','label','foot','refresh','status','thanks']) node(key).textContent = copy[key];
     overlay.setAttribute('lang', english ? 'en' : 'th');
     if (lastState) show(lastState);
   }

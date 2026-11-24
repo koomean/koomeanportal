@@ -1,5 +1,5 @@
 {
-  "htmlBytes": 57445,
+  "htmlBytes": 57650,
   "routes": [
     "/",
     "/apps/",
@@ -11,11 +11,11 @@
   ],
   "notFound": "404.html",
   "css": {
-    "file": "portal-4c1be92d44a71ff7.css",
-    "bytes": 153038
+    "file": "portal-0117e5252a254ffe.css",
+    "bytes": 153373
   },
   "js": {
-    "file": "app-f91bbd4f0d8fe323.js",
-    "bytes": 95639
+    "file": "app-17c3d50c12784835.js",
+    "bytes": 95765
   }
 }
