@@ -29,10 +29,13 @@ jobs:
             npx playwright install --with-deps chromium
           fi
       - run: npm run test:browser
-      - name: Prepare WebKit for iPad and iPhone motion checks
-        timeout-minutes: 5
-        run: npx playwright install --with-deps webkit
-      - run: npm run test:webkit
+      - name: Run WebKit checks with bundled system dependencies
+        timeout-minutes: 15
+        run: |
+          playwright_version=$(node -p 'require("playwright/package.json").version')
+          docker run --rm --init --volume "$PWD:/portal:ro" --workdir /portal \
+            --env PORTAL_REPORT_DIR=/tmp/portal-test-results \
+            "mcr.microsoft.com/playwright:v${playwright_version}-noble" npm run test:webkit
       - name: Verify Portal content and domain
         run: node scripts/verify-portal.mjs
       - name: Package only website files
