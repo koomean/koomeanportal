@@ -35,6 +35,7 @@ async function setup(options={}){
   if(!fs.existsSync(file)){file=path.join(root,'404.html');status=404;}
   return r.fulfill({status,path:file});
  });
+ await page.route('https://koomean-status.meanchannel52.workers.dev/api/presence', r=>r.fulfill({status:204,headers:{'access-control-allow-origin':'https://koomean.com','access-control-allow-methods':'POST','access-control-allow-headers':'Content-Type'}}));
  await page.route('https://accounts.google.com/gsi/client',async r=>{calls.push({action:'google'});if(options.googleDelay)await new Promise(resolve=>setTimeout(resolve,options.googleDelay));return r.fulfill({contentType:'application/javascript',body:`window.google={accounts:{id:{initialize:()=>{},renderButton:element=>{const b=document.createElement('button');b.textContent='Google fixture sign-in';element.appendChild(b)},disableAutoSelect:()=>{}}}}`})});
  await page.route('https://thesvg.org/**',r=>r.request().url().includes('registry')?r.fulfill({json:options.logoRegistry??[{title:'GitHub',slug:'github'},{title:'Google',slug:'google'},{title:'Notion',slug:'notion'},{title:'OpenAI',slug:'openai'},{title:'Malicious',slug:'javascript:alert(1)'}]}):r.fulfill({contentType:'image/svg+xml',body:'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"><circle cx="12" cy="12" r="10" fill="#888"/></svg>'}));
  await page.route('https://koomean-proxy.meanchannel52.workers.dev/**',async r=>{
@@ -200,7 +201,10 @@ try{
  const navigationCalls=calls.length;await go(page,'/settings/');await go(page,'/account/');
  ok('Internal page navigation keeps the verified account without another bootstrap',await page.locator('#account-email').textContent()===user.email&&calls.length===navigationCalls);
  await page.goBack();ok('Browser back restores the previous page and active navigation',new URL(page.url()).pathname==='/settings/'&&await page.locator('#settings-modal').isVisible()&&await page.locator('.side-nav [data-route="/settings/"]').getAttribute('aria-current')==='page');await go(page,'/');
-ok('Token and account data are not persisted',await page.evaluate(()=>![...Object.values(localStorage)].some(s=>s.includes('fixture@example.invalid')||s.includes('exp'))));
+ ok('Token and account data are not persisted',await page.evaluate(({email,idToken})=>{
+  const values=[...Object.values(localStorage),...Object.values(sessionStorage)];
+  return values.every(value=>!value.includes(email)&&!value.includes(idToken)&&!/"exp"\s*:/.test(value));
+ },{email:user.email,idToken:token('admin')}));
  for(const width of [280,320,390,520,768,1024,1440]){
   await page.setViewportSize({width,height:900});
   for(const view of ['grid','list','compact']){

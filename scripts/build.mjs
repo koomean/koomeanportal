@@ -20,7 +20,8 @@ const sprite = iconNames.map(name => {
 html = html.replace('/* BUILD_ICON_NAMES */ []',JSON.stringify(iconNames));
 html = html.replace('<!-- BUILD_ICON_SPRITE -->',`<svg class="icon-definitions" width="0" height="0" aria-hidden="true" focusable="false">${sprite}</svg>`);
 html = html.replace(/<span data-ui-icon="([a-z0-9-]+)"><\/span>/g,(_,name)=>uiIcon(name));
-const scripts = [], styles = [fs.readFileSync('src/vendor.css','utf8')];
+// Keep the vendored tracker in sync with Koo Mean Status public/presence.js.
+const scripts = [fs.readFileSync('src/presence.js','utf8')], styles = [fs.readFileSync('src/vendor.css','utf8')];
 html = html.replace(/<style>([\s\S]*?)<\/style>/g, (_,css) => { styles.push(css); return ''; });
 styles.push(fs.readFileSync('src/enhancements.css','utf8'));
 styles.push(fs.readFileSync('src/experience.css','utf8'));
@@ -34,7 +35,7 @@ fs.mkdirSync('assets',{recursive:true});
 // Keep published content-hashed assets: cached HTML and open tabs still reference them.
 const cssFile = 'portal-'+hash(css)+'.css', jsFile = 'app-'+hash(js)+'.js';
 fs.writeFileSync('assets/'+cssFile,css); fs.writeFileSync('assets/'+jsFile,js);
-const csp = "default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' https://accounts.google.com/gsi/; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; font-src 'self'; img-src 'self' https: data:; media-src 'self' https://d8j0ntlcm91z4.cloudfront.net; connect-src 'self' https://koomean-proxy.meanchannel52.workers.dev https://accounts.google.com/gsi/ https://thesvg.org/api/registry.json; frame-src https://accounts.google.com/gsi/; form-action 'none'; upgrade-insecure-requests";
+const csp = "default-src 'self'; base-uri 'none'; object-src 'none'; script-src 'self' https://accounts.google.com/gsi/; script-src-attr 'none'; style-src 'self' 'unsafe-inline' https://accounts.google.com/gsi/style; font-src 'self'; img-src 'self' https: data:; media-src 'self' https://d8j0ntlcm91z4.cloudfront.net; connect-src 'self' https://koomean-proxy.meanchannel52.workers.dev https://koomean-status.meanchannel52.workers.dev/api/presence https://accounts.google.com/gsi/ https://thesvg.org/api/registry.json; frame-src https://accounts.google.com/gsi/; form-action 'none'; upgrade-insecure-requests";
 html = html.replace('<meta charset="utf-8">','<meta charset="utf-8">\n<meta http-equiv="Content-Security-Policy" content="'+csp+'">');
 html = html.replace('</head>',`<link rel="stylesheet" href="/assets/${cssFile}">\n<link rel="preload" as="font" type="font/woff2" crossorigin href="/assets/ibm-2e57acf1ca9e.woff2">\n<link rel="preload" as="image" href="/assets/hero-poster.webp" fetchpriority="high">\n<script src="/assets/${jsFile}" defer></script>\n</head>`);
 html = html.replace(/\n\s*\n/g,'\n'); fs.writeFileSync('index.html',html);

@@ -22,6 +22,7 @@ async function setup(device, {paused = false, reduced = false, empty = false} = 
     if(!fs.existsSync(file)){file=path.join(root,'404.html');status=404;}
     return route.fulfill({status,path:file});
   });
+  await page.route('https://koomean-status.meanchannel52.workers.dev/api/presence', route=>route.fulfill({status:204,headers:{'access-control-allow-origin':'https://koomean.com','access-control-allow-methods':'POST','access-control-allow-headers':'Content-Type'}}));
   await page.route('https://koomean-proxy.meanchannel52.workers.dev/**', async route => {
     const params = new URLSearchParams(route.request().postData());
     assert.equal(params.has('idToken'), false, 'Motion checks remain anonymous');

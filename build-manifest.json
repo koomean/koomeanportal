@@ -1,5 +1,5 @@
 {
-  "htmlBytes": 57650,
+  "htmlBytes": 57712,
   "routes": [
     "/",
     "/apps/",
@@ -15,7 +15,7 @@
     "bytes": 153373
   },
   "js": {
-    "file": "app-17c3d50c12784835.js",
-    "bytes": 95765
+    "file": "app-459d22be73cd06a2.js",
+    "bytes": 97016
   }
 }
